@@ -1,20 +1,27 @@
 # Dependencies
 node_modules/
+apps/**/node_modules/
 
 # Build output
 dist/
 build/
 coverage/
 .astro/
+apps/**/dist/
+apps/**/build/
 
 # Environment files
 .env
 .env.*
 !.env.example
+apps/**/.env
+apps/**/.env.*
+!apps/**/.env.example
 
 # IDE
 .vscode/
 .idea/
+apps/**/.vscode/
 
 # Operating System
 .DS_Store
@@ -32,15 +39,32 @@ docs/
 
 # pnpm
 pnpm-lock.yaml
+apps/**/pnpm-lock.yaml
 
 # Turbo
 .turbo/
 
 # Vite
 .vite/
+apps/**/.vite/
 
 # Prisma
 prisma/migrations/
+apps/api/node_modules/.prisma/
+apps/**/prisma/migrations/
 
 # TypeScript
 *.tsbuildinfo
+apps/**/*.tsbuildinfo
+
+# OS / Editor temp files
+*~
+*.swp
+*.swo
+
+# Test
+.nyc_output/
+.vercel
+
+# Docker
+.docker/

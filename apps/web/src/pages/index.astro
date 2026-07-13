@@ -1,17 +1,392 @@
 ---
-
+import '@/styles/global.css';
 ---
 
+<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Campus Peer Support — Mental Health Awareness for First-Year Students</title>
+    <meta
+      name="description"
+      content="Anonymous peer support platform for first-year university students. Connect with verified mentors, share experiences, and access mental health resources."
+    />
+  </head>
+  <body class="bg-background-100 text-primary min-h-screen font-sans antialiased">
+    <header class="bg-background-100 sticky top-0 z-50 border-b border-gray-300">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+          <div class="flex items-center gap-2">
+            <svg
+              class="text-primary h-8 w-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              ></path>
+            </svg>
+            <span class="text-heading-20 font-semibold">Campus Peer Support</span>
+          </div>
+          <nav class="hidden items-center gap-6 md:flex">
+            <a
+              href="/login"
+              class="text-label-14 hover:text-primary text-gray-700 transition-colors">Sign In</a
+            >
+            <a
+              href="/register"
+              class="text-label-14 text-background-100 bg-primary hover:bg-gray-1000 rounded-sm px-4 py-2 font-medium transition-colors"
+              >Get Started</a
+            >
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="relative overflow-hidden py-20 sm:py-32 lg:py-40">
+        <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="mx-auto max-w-3xl text-center">
+            <span
+              class="text-label-13 mb-6 inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 font-medium text-blue-700"
+            >
+              <span class="relative flex h-2 w-2">
+                <span
+                  class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"
+                ></span>
+                <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
+              </span>
+              Phase 0: Platform Initialized
+            </span>
+            <h1
+              class="text-heading-48 sm:text-heading-56 lg:text-heading-72 text-primary mb-6 font-semibold leading-tight tracking-tight"
+            >
+              Anonymous Peer Support<br />
+              <span class="text-tertiary">for First-Year Students</span>
+            </h1>
+            <p
+              class="text-copy-18 sm:text-copy-20 mx-auto mb-10 max-w-2xl leading-relaxed text-gray-700"
+            >
+              A safe, anonymous space to share experiences, connect with verified mentors, and
+              access mental health resources — built exclusively for your campus community.
+            </p>
+            <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <a
+                href="/register"
+                class="text-button-14 text-background-100 bg-primary hover:bg-gray-1000 focus:ring-primary w-full rounded-sm px-8 py-3 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto"
+              >
+                Join Anonymously
+              </a>
+              <a
+                href="/resources"
+                class="text-button-14 text-primary bg-background-100 focus:ring-primary w-full rounded-sm border border-gray-400 px-8 py-3 font-medium transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto"
+              >
+                Browse Resources
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+          <div
+            class="absolute left-1/4 top-1/4 h-96 w-96 animate-pulse rounded-full bg-blue-100 opacity-20 blur-3xl"
+          >
+          </div>
+          <div
+            class="absolute bottom-1/4 right-1/4 h-96 w-96 animate-pulse rounded-full bg-green-100 opacity-20 blur-3xl"
+            style="animation-delay: 1s;"
+          >
+          </div>
+          <div
+            class="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-teal-100 opacity-15 blur-3xl"
+            style="animation-delay: 2s;"
+          >
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-background-200 border-y border-gray-300 py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+            <article
+              class="bg-background-100 rounded-md border border-gray-300 p-6 transition-colors hover:border-gray-400"
+            >
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-blue-100">
+                <svg
+                  class="h-6 w-6 text-blue-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                  ></path>
+                </svg>
+              </div>
+              <h3 class="text-heading-16 text-primary mb-2 font-semibold">Anonymous Identity</h3>
+              <p class="text-copy-14 text-gray-600">
+                Every student gets a consistent anonymous persona (e.g., "Anonymous Sparrow") — your
+                real identity is never visible to peers.
+              </p>
+            </article>
+
+            <article
+              class="bg-background-100 rounded-md border border-gray-300 p-6 transition-colors hover:border-gray-400"
+            >
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-green-100">
+                <svg
+                  class="h-6 w-6 text-green-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-heading-16 text-primary mb-2 font-semibold">Verified Mentors</h3>
+              <p class="text-copy-14 text-gray-600">
+                Connect with campus-verified mentors who display a "Verified Mentor" badge — real
+                support from trusted guides.
+              </p>
+            </article>
+
+            <article
+              class="bg-background-100 rounded-md border border-gray-300 p-6 transition-colors hover:border-gray-400"
+            >
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-teal-100">
+                <svg
+                  class="h-6 w-6 text-teal-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                  ></path>
+                </svg>
+              </div>
+              <h3 class="text-heading-16 text-primary mb-2 font-semibold">Resource Hub</h3>
+              <p class="text-copy-14 text-gray-600">
+                Access counseling centers, emergency contacts, self-help PDFs, stress management
+                guides, and external helplines — all in one place.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="mb-16 text-center">
+            <h2 class="text-heading-32 text-primary mb-4 font-semibold">How It Works</h2>
+            <p class="text-copy-16 mx-auto max-w-2xl text-gray-600">
+              Simple steps to start your anonymous support journey
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div class="relative">
+              <div
+                class="bg-primary text-background-100 text-heading-20 absolute left-1/2 top-0 z-10 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full font-bold"
+              >
+                1
+              </div>
+              <div class="pt-14 text-center">
+                <h3 class="text-heading-20 text-primary mb-2 font-semibold">
+                  Register with University Email
+                </h3>
+                <p class="text-copy-14 text-gray-600">
+                  Sign up using your @university.edu email. Your email is verified but never shown
+                  to other users.
+                </p>
+              </div>
+            </div>
+
+            <div class="relative">
+              <div
+                class="bg-primary text-background-100 text-heading-20 absolute left-1/2 top-0 z-10 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full font-bold"
+              >
+                2
+              </div>
+              <div class="pt-14 text-center">
+                <h3 class="text-heading-20 text-primary mb-2 font-semibold">
+                  Get Your Anonymous Name
+                </h3>
+                <p class="text-copy-14 text-gray-600">
+                  Receive a unique anonymous identity (e.g., "Anonymous Sparrow") used across all
+                  posts, chats, and meetings.
+                </p>
+              </div>
+            </div>
+
+            <div class="relative">
+              <div
+                class="bg-primary text-background-100 text-heading-20 absolute left-1/2 top-0 z-10 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full font-bold"
+              >
+                3
+              </div>
+              <div class="pt-14 text-center">
+                <h3 class="text-heading-20 text-primary mb-2 font-semibold">Connect & Share</h3>
+                <p class="text-copy-14 text-gray-600">
+                  Post anonymously, chat with mentors, join meetings, attend workshops, and access
+                  resources — all under your anonymous identity.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="absolute left-1/2 top-10 -z-10 hidden h-0.5 w-full bg-gray-300 md:block"
+            style="width: 60%; margin-left: -30%;"
+          >
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-background-200 border-y border-gray-300 py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 class="text-heading-32 text-primary mb-4 font-semibold">Ready to Get Started?</h2>
+          <p class="text-copy-16 mx-auto mb-8 max-w-2xl text-gray-600">
+            Join thousands of first-year students finding support, community, and resources on your
+            campus.
+          </p>
+          <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+              href="/register"
+              class="text-button-14 text-background-100 bg-primary hover:bg-gray-1000 focus:ring-primary w-full rounded-sm px-8 py-3 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto"
+            >
+              Create Anonymous Account
+            </a>
+            <a
+              href="/login"
+              class="text-button-14 text-primary bg-background-100 focus:ring-primary w-full rounded-sm border border-gray-400 px-8 py-3 font-medium transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto"
+            >
+              Sign In
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-primary text-background-100 py-12">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 grid grid-cols-1 gap-8 md:grid-cols-4">
+          <div class="md:col-span-2">
+            <div class="mb-4 flex items-center gap-2">
+              <svg
+                class="h-8 w-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                ></path>
+              </svg>
+              <span class="text-heading-20 font-semibold">Campus Peer Support</span>
+            </div>
+            <p class="text-copy-14 max-w-xs text-gray-300">
+              Anonymous peer support platform for first-year university students. Built with care
+              for your campus community.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="text-label-14 mb-4 font-medium">Platform</h4>
+            <ul class="text-copy-14 space-y-2 text-gray-300">
+              <li>
+                <a href="/posts" class="hover:text-background-100 transition-colors">Discussions</a>
+              </li>
+              <li>
+                <a href="/chat" class="hover:text-background-100 transition-colors">Mentor Chat</a>
+              </li>
+              <li>
+                <a href="/meetings" class="hover:text-background-100 transition-colors">Meetings</a>
+              </li>
+              <li>
+                <a href="/workshops" class="hover:text-background-100 transition-colors"
+                  >Workshops</a
+                >
+              </li>
+              <li>
+                <a href="/resources" class="hover:text-background-100 transition-colors"
+                  >Resources</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-label-14 mb-4 font-medium">Support</h4>
+            <ul class="text-copy-14 space-y-2 text-gray-300">
+              <li>
+                <a href="/help" class="hover:text-background-100 transition-colors">Help Center</a>
+              </li>
+              <li>
+                <a href="/privacy" class="hover:text-background-100 transition-colors"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a href="/terms" class="hover:text-background-100 transition-colors"
+                  >Terms of Service</a
+                >
+              </li>
+              <li>
+                <a href="/safety" class="hover:text-background-100 transition-colors"
+                  >Safety Guidelines</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col items-center justify-between gap-4 border-t border-gray-800 pt-8 md:flex-row"
+        >
+          <p class="text-copy-13 text-gray-400">
+            &copy; 2025 Campus Peer Support. All rights reserved.
+          </p>
+          <div class="flex items-center gap-4">
+            <a
+              href="#"
+              class="hover:text-background-100 text-gray-400 transition-colors"
+              aria-label="GitHub"
+            >
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.305-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>

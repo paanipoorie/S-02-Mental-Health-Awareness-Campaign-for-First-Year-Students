@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: campus-peer-support-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: campus_peer_support
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/api.Dockerfile
+    container_name: campus-peer-support-api
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: 'postgresql://postgres:postgres@postgres:5432/campus_peer_support?schema=public'
+      JWT_SECRET: 'your-super-secret-jwt-secret-change-in-production-min-32-chars'
+      JWT_EXPIRES_IN: 15m
+      JWT_REFRESH_SECRET: 'your-super-secret-refresh-secret-change-in-production-min-32-chars'
+      JWT_REFRESH_EXPIRES_IN: 7d
+      BCRYPT_SALT_ROUNDS: 12
+      UNIVERSITY_EMAIL_DOMAIN: university.edu
+      FRONTEND_URL: http://localhost:4321
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX_REQUESTS: 100
+    ports:
+      - '3001:3001'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '--spider', 'http://localhost:3001/api/health']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web:
+    build:
+      context: ..
+      dockerfile: docker/web.Dockerfile
+    container_name: campus-peer-support-web
+    environment:
+      NODE_ENV: development
+      PORT: 4321
+      PUBLIC_API_URL: http://localhost:3001/api
+    ports:
+      - '4321:4321'
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

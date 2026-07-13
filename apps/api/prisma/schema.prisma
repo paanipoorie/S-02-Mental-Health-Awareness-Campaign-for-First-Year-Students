@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Temporary model for Phase 0 to enable Prisma Client generation
+// Full schema will be added in Phase 1
+model HealthCheck {
+  id        String   @id @default(cuid())
+  status    String   @default("ok")
+  checkedAt DateTime @default(now()) @db.Timestamptz(6)
+}

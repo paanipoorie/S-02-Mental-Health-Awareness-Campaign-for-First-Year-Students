@@ -13,13 +13,13 @@ This project aims to design, implement, and evaluate a structured mental health 
 
 ## 🎯 Objectives
 
-* Assess baseline mental health awareness among first-year students.
-* Measure knowledge of available mental health resources.
-* Reduce stigma associated with seeking psychological support.
-* Conduct peer-led awareness workshops.
-* Create an accessible mental health resource map.
-* Evaluate campaign impact using pre/post surveys.
-* Build a reusable toolkit for future student organizers.
+- Assess baseline mental health awareness among first-year students.
+- Measure knowledge of available mental health resources.
+- Reduce stigma associated with seeking psychological support.
+- Conduct peer-led awareness workshops.
+- Create an accessible mental health resource map.
+- Evaluate campaign impact using pre/post surveys.
+- Build a reusable toolkit for future student organizers.
 
 ---
 
@@ -90,21 +90,21 @@ This project aims to design, implement, and evaluate a structured mental health 
 
 ## Surveys
 
-* Pre-campaign awareness survey
-* Post-campaign awareness survey
-* Data analysis
-* Visualizations
-* Insights report
+- Pre-campaign awareness survey
+- Post-campaign awareness survey
+- Data analysis
+- Visualizations
+- Insights report
 
 ---
 
 ## Campaign Material
 
-* Awareness Posters
-* Instagram Posts
-* Social Media Graphics
-* Short Awareness Video
-* Digital Content
+- Awareness Posters
+- Instagram Posts
+- Social Media Graphics
+- Short Awareness Video
+- Digital Content
 
 ---
 
@@ -116,9 +116,9 @@ This project aims to design, implement, and evaluate a structured mental health 
 
 Topics
 
-* Understanding stress
-* Recognizing anxiety
-* Healthy coping techniques
+- Understanding stress
+- Recognizing anxiety
+- Healthy coping techniques
 
 ---
 
@@ -128,9 +128,9 @@ Topics
 
 Topics
 
-* Sleep hygiene
-* Daily routines
-* Digital wellness
+- Sleep hygiene
+- Daily routines
+- Digital wellness
 
 ---
 
@@ -140,9 +140,9 @@ Topics
 
 Topics
 
-* Breaking misconceptions
-* When to seek help
-* Available university resources
+- Breaking misconceptions
+- When to seek help
+- Available university resources
 
 ---
 
@@ -150,11 +150,11 @@ Topics
 
 A printable and digital guide containing:
 
-* University Counseling Services
-* Emergency Contacts
-* Online Mental Health Resources
-* Crisis Support Information
-* Self-help Resources
+- University Counseling Services
+- Emergency Contacts
+- Online Mental Health Resources
+- Crisis Support Information
+- Self-help Resources
 
 ---
 
@@ -162,12 +162,12 @@ A printable and digital guide containing:
 
 A reusable package for future student organizations containing:
 
-* Posters
-* Workshop guides
-* Survey templates
-* Event checklist
-* Promotion strategy
-* Documentation templates
+- Posters
+- Workshop guides
+- Survey templates
+- Event checklist
+- Promotion strategy
+- Documentation templates
 
 ---
 
@@ -187,29 +187,29 @@ A reusable package for future student organizations containing:
 
 This project follows recommendations and best practices from:
 
-* World Health Organization (WHO)
-* National Institute of Mental Health and Neurosciences (NIMHANS)
-* University mental health awareness frameworks
-* Peer-support and student wellbeing literature
+- World Health Organization (WHO)
+- National Institute of Mental Health and Neurosciences (NIMHANS)
+- University mental health awareness frameworks
+- Peer-support and student wellbeing literature
 
 ---
 
 # 🚀 Progress Tracker
 
-* [ ] Literature Review
-* [ ] Stakeholder Meetings
-* [ ] Survey Design
-* [ ] Pre-Campaign Survey
-* [ ] Poster Design
-* [ ] Social Media Campaign
-* [ ] Workshop 1
-* [ ] Workshop 2
-* [ ] Workshop 3
-* [ ] Resource Map
-* [ ] Post Survey
-* [ ] Data Analysis
-* [ ] Final Report
-* [ ] Campaign Toolkit
+- [ ] Literature Review
+- [ ] Stakeholder Meetings
+- [ ] Survey Design
+- [ ] Pre-Campaign Survey
+- [ ] Poster Design
+- [ ] Social Media Campaign
+- [ ] Workshop 1
+- [ ] Workshop 2
+- [ ] Workshop 3
+- [ ] Resource Map
+- [ ] Post Survey
+- [ ] Data Analysis
+- [ ] Final Report
+- [ ] Campaign Toolkit
 
 ---
 
