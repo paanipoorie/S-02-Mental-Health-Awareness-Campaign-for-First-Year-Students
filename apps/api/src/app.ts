@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import { env, isDevelopment } from './config/env.js';
 import { prisma } from './prisma/client.js';
 import healthRoutes from './routes/health.routes.js';
+import authRoutes from './routes/auth.routes.js';
 
 export function createApp(): Application {
   const app = express();
@@ -43,6 +44,7 @@ export function createApp(): Application {
   });
 
   app.use(`${env.API_PREFIX}/health`, healthRoutes);
+  app.use(`${env.API_PREFIX}/auth`, authRoutes);
 
   app.get(`${env.API_PREFIX}`, (_req: Request, res: Response) => {
     res.json({
