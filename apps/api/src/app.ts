@@ -8,6 +8,7 @@ import { env, isDevelopment } from './config/env.js';
 import { prisma } from './prisma/client.js';
 import healthRoutes from './routes/health.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import { AuthError } from './services/auth.service.js';
 
 export function createApp(): Application {
   const app = express();
@@ -67,13 +68,60 @@ export function createApp(): Application {
     });
   });
 
-  app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+  app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     console.error('Unhandled error:', err);
+
+    // Handle known error types
+    if (err instanceof AuthError) {
+      res.status(err.statusCode).json({
+        success: false,
+        error: {
+          code: err.code,
+          message: err.message,
+        },
+      });
+      return;
+    }
+
+    // Handle validation errors (from validate middleware)
+    if (err && typeof err === 'object' && 'name' in err && err.name === 'ValidationError') {
+      const validationErr = err as {
+        statusCode?: number;
+        code?: string;
+        message?: string;
+        details?: unknown;
+      };
+      res.status(validationErr.statusCode || 400).json({
+        success: false,
+        error: {
+          code: validationErr.code || 'VALIDATION_ERROR',
+          message: validationErr.message || 'Validation failed',
+          details: validationErr.details,
+        },
+      });
+      return;
+    }
+
+    // Handle Zod validation errors (direct schema.parse)
+    if (err && typeof err === 'object' && 'name' in err && err.name === 'ZodError') {
+      const zodErr = err as unknown as { errors: unknown };
+      res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Validation failed',
+          details: zodErr.errors,
+        },
+      });
+      return;
+    }
+
     res.status(500).json({
       success: false,
       error: {
         code: 'INTERNAL_SERVER_ERROR',
-        message: isDevelopment ? err.message : 'An unexpected error occurred',
+        message:
+          isDevelopment && err instanceof Error ? err.message : 'An unexpected error occurred',
       },
     });
   });

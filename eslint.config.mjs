@@ -8,14 +8,14 @@ import astroParser from 'astro-eslint-parser';
 export default tseslint.config(
   {
     ignores: [
-      'node_modules/',
-      'dist/',
-      'build/',
-      '.astro/',
-      'coverage/',
-      '*.config.*',
-      '*.lock',
-      'pnpm-lock.yaml',
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/.astro/**',
+      '**/coverage/**',
+      '**/*.config.*',
+      '**/*.lock',
+      '**/pnpm-lock.yaml',
     ],
   },
   ...tseslint.configs.recommended,

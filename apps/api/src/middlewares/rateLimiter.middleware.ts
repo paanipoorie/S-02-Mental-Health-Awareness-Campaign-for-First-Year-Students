@@ -1,6 +1,6 @@
-import type { Request, Response } from 'express';
-import rateLimit, { type RateLimitRequestHandler } from 'express-rate-limit';
-import { env } from '../config/env.js';
+import type { Request, Response, NextFunction } from 'express';
+import rateLimit, { type RateLimitRequestHandler, ipKeyGenerator } from 'express-rate-limit';
+import { env, isTest } from '../config/env.js';
 
 export interface RateLimiterConfig {
   windowMs?: number | undefined;
@@ -13,6 +13,13 @@ export interface RateLimiterConfig {
 }
 
 export function createRateLimiter(config: RateLimiterConfig = {}): RateLimitRequestHandler {
+  // Disable rate limiting in test environment
+  if (isTest) {
+    return ((_req: Request, _res: Response, next: NextFunction) => {
+      next();
+    }) as RateLimitRequestHandler;
+  }
+
   const {
     windowMs = env.RATE_LIMIT_WINDOW_MS,
     maxRequests = env.RATE_LIMIT_MAX_REQUESTS,
@@ -47,7 +54,7 @@ export function createRateLimiter(config: RateLimiterConfig = {}): RateLimitRequ
 }
 
 function defaultKeyGenerator(req: Request): string {
-  return req.ip ?? req.socket.remoteAddress ?? 'unknown';
+  return ipKeyGenerator(req.ip ?? req.socket.remoteAddress ?? 'unknown');
 }
 
 export const authRateLimiter = createRateLimiter({

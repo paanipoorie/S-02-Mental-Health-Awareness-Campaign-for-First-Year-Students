@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from 'express';
-import type { AnyZodObject } from 'zod';
+import type { ZodTypeAny } from 'zod';
 import { ZodError } from 'zod';
 
-export function validateBody(schema: AnyZodObject) {
+export function validateBody(schema: ZodTypeAny) {
   return (req: Request, _res: Response, next: NextFunction): void => {
     try {
-      schema.parse({ body: req.body });
+      schema.parse({ body: req.body, cookies: req.cookies });
       next();
     } catch (error) {
       if (error instanceof ZodError) {
@@ -26,7 +26,7 @@ export function validateBody(schema: AnyZodObject) {
   };
 }
 
-export function validateQuery(schema: AnyZodObject) {
+export function validateQuery(schema: ZodTypeAny) {
   return (req: Request, _res: Response, next: NextFunction): void => {
     try {
       schema.parse({ query: req.query });
@@ -50,7 +50,7 @@ export function validateQuery(schema: AnyZodObject) {
   };
 }
 
-export function validateParams(schema: AnyZodObject) {
+export function validateParams(schema: ZodTypeAny) {
   return (req: Request, _res: Response, next: NextFunction): void => {
     try {
       schema.parse({ params: req.params });

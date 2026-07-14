@@ -38,11 +38,21 @@ export const loginSchema = z.object({
   }),
 });
 
-export const refreshTokenSchema = z.object({
-  body: z.object({
-    refreshToken: z.string().min(1, 'Refresh token is required'),
-  }),
-});
+export const refreshTokenSchema = z
+  .object({
+    body: z.object({
+      refreshToken: z.string().optional(),
+    }),
+    cookies: z
+      .object({
+        refreshToken: z.string().optional(),
+      })
+      .optional(),
+  })
+  .refine(data => data.body?.refreshToken || data.cookies?.refreshToken, {
+    message: 'Refresh token is required (in body or cookie)',
+    path: ['refreshToken'],
+  });
 
 export const logoutSchema = z.object({
   body: z.object({

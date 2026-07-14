@@ -1,21 +1,11 @@
 import type { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken, type TokenPayload } from '../utils/jwt.js';
 import { Role } from '@campus-peer-support/shared-types';
+import { AuthError } from '../services/auth.service.js';
+import { prisma } from '../prisma/client.js';
 
 export interface AuthenticatedRequest extends Request {
   user: TokenPayload & { role: Role };
-}
-
-export class AuthError extends Error {
-  public readonly statusCode: number;
-  public readonly code: string;
-
-  constructor(message: string, code: string, statusCode: number = 401) {
-    super(message);
-    this.name = 'AuthError';
-    this.code = code;
-    this.statusCode = statusCode;
-  }
 }
 
 function extractTokenFromHeader(req: Request): string | null {
@@ -91,7 +81,11 @@ export function requireRole(...allowedRoles: Role[]) {
   };
 }
 
-export function requireVerifiedMentor(req: Request, _res: Response, next: NextFunction): void {
+export async function requireVerifiedMentor(
+  req: Request,
+  _res: Response,
+  next: NextFunction
+): Promise<void> {
   if (!req.user) {
     return next(new AuthError('Authentication required', 'MISSING_AUTH', 401));
   }
@@ -100,7 +94,18 @@ export function requireVerifiedMentor(req: Request, _res: Response, next: NextFu
     return next(new AuthError('Mentor access required', 'FORBIDDEN', 403));
   }
 
-  next();
-}
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: { isVerifiedMentor: true },
+    });
 
-export { AuthError as AuthMiddlewareError };
+    if (!user || !user.isVerifiedMentor) {
+      return next(new AuthError('Mentor not verified', 'FORBIDDEN', 403));
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+}

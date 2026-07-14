@@ -5,7 +5,6 @@ import {
   UrgencyLevel,
   EmotionContext,
   PostCategory,
-  ChatStatus,
   MeetingType,
   MeetingHostType,
   MeetingCategory,
@@ -150,7 +149,12 @@ async function main() {
       anonymousIdentity: true,
     },
   });
-  console.log('Seeded Students:', student1.universityEmail, student2.universityEmail, student3.universityEmail);
+  console.log(
+    'Seeded Students:',
+    student1.universityEmail,
+    student2.universityEmail,
+    student3.universityEmail
+  );
 
   const student1IdentityId = student1.anonymousIdentity!.id;
   const student2IdentityId = student2.anonymousIdentity!.id;
@@ -189,7 +193,7 @@ async function main() {
     data: {
       anonymousIdentityId: student1IdentityId,
       title: 'Feeling lonely in the hostel',
-      body: 'It is my first week here and I haven\'t made any friends. I really miss home and family.',
+      body: "It is my first week here and I haven't made any friends. I really miss home and family.",
       category: PostCategory.HOMESICKNESS,
       emotion: EmotionType.LONELY,
       urgencyLevel: UrgencyLevel.MEDIUM,
@@ -200,7 +204,7 @@ async function main() {
     data: {
       anonymousIdentityId: student2IdentityId,
       title: 'Overwhelmed by academic load',
-      body: 'The midterms are approaching and I don\'t think I can pass the calculus courses. There is too much syllabus.',
+      body: "The midterms are approaching and I don't think I can pass the calculus courses. There is too much syllabus.",
       category: PostCategory.ACADEMICS,
       emotion: EmotionType.ANXIOUS,
       urgencyLevel: UrgencyLevel.HIGH,
@@ -213,7 +217,7 @@ async function main() {
       {
         postId: post1.id,
         anonymousIdentityId: mentor2.id, // Mentor uses User.id
-        body: 'Hey, it\'s completely normal to feel this way in your first week. Transitioning is tough. I suggest visiting the student lounge or joining the local board game club this Friday. Hang in there!',
+        body: "Hey, it's completely normal to feel this way in your first week. Transitioning is tough. I suggest visiting the student lounge or joining the local board game club this Friday. Hang in there!",
       },
       {
         postId: post1.id,
@@ -229,17 +233,18 @@ async function main() {
       {
         postId: post2.id,
         anonymousIdentityId: mentor1.id,
-        body: 'Hi, please don\'t panic. There are peer tutoring sessions every Tuesday in the library. Let me know if you would like me to connect you with a math tutor.',
+        body: "Hi, please don't panic. There are peer tutoring sessions every Tuesday in the library. Let me know if you would like me to connect you with a math tutor.",
       },
     ],
   });
   console.log('Seeded Posts and Replies.');
 
   // 6. Seed Meetings
-  const meeting1 = await prisma.meeting.create({
+  await prisma.meeting.create({
     data: {
       title: 'Mindfulness and Stress Management Session',
-      description: 'A small group session to learn breathing exercises and mindfulness techniques to tackle midterm anxiety.',
+      description:
+        'A small group session to learn breathing exercises and mindfulness techniques to tackle midterm anxiety.',
       hostType: MeetingHostType.MENTOR,
       hostUserId: mentor1.id,
       date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days in future
@@ -259,10 +264,11 @@ async function main() {
     },
   });
 
-  const meeting2 = await prisma.meeting.create({
+  await prisma.meeting.create({
     data: {
       title: 'First-Year Hostel Meetup',
-      description: 'An informal meetup for students living in Hostel A to chat and share experiences.',
+      description:
+        'An informal meetup for students living in Hostel A to chat and share experiences.',
       hostType: MeetingHostType.STUDENT,
       hostIdentityId: student3IdentityId,
       date: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day in future
@@ -284,10 +290,11 @@ async function main() {
   console.log('Seeded Meetings and RSVPs.');
 
   // 7. Seed Workshops
-  const workshop1 = await prisma.workshop.create({
+  await prisma.workshop.create({
     data: {
       title: 'Navigating Academic Stress & Building Resilience',
-      description: 'A campus-wide workshop on handling workload transition from high school to university, time management tips, and peer networking.',
+      description:
+        'A campus-wide workshop on handling workload transition from high school to university, time management tips, and peer networking.',
       mentorId: mentor2.id,
       date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days in future
       time: '10:00',
@@ -299,9 +306,18 @@ async function main() {
       registrations: {
         createMany: {
           data: [
-            { anonymousIdentityId: student1IdentityId, status: WorkshopRegistrationStatus.REGISTERED },
-            { anonymousIdentityId: student2IdentityId, status: WorkshopRegistrationStatus.REGISTERED },
-            { anonymousIdentityId: student3IdentityId, status: WorkshopRegistrationStatus.REGISTERED },
+            {
+              anonymousIdentityId: student1IdentityId,
+              status: WorkshopRegistrationStatus.REGISTERED,
+            },
+            {
+              anonymousIdentityId: student2IdentityId,
+              status: WorkshopRegistrationStatus.REGISTERED,
+            },
+            {
+              anonymousIdentityId: student3IdentityId,
+              status: WorkshopRegistrationStatus.REGISTERED,
+            },
           ],
         },
       },
@@ -316,7 +332,8 @@ async function main() {
         title: 'University Counseling Center Contacts',
         description: 'Professional individual counseling services for students.',
         category: ResourceCategory.COUNSELING_CENTER,
-        content: 'Location: Student Center, 3rd Floor. Hours: Mon-Fri 9:00 AM - 5:00 PM. Email: counseling@university.edu',
+        content:
+          'Location: Student Center, 3rd Floor. Hours: Mon-Fri 9:00 AM - 5:00 PM. Email: counseling@university.edu',
         isActive: true,
       },
       {
@@ -330,7 +347,8 @@ async function main() {
         title: 'Academic & Faculty Advising Program',
         description: 'Mentorship program for curriculum guidance and course adjustment.',
         category: ResourceCategory.FACULTY_ADVISORS,
-        content: 'Contact your department head to be assigned a faculty advisor, or visit Admin block Room 102.',
+        content:
+          'Contact your department head to be assigned a faculty advisor, or visit Admin block Room 102.',
         isActive: true,
       },
       {
@@ -344,7 +362,8 @@ async function main() {
         title: 'Campus Recreational & Peer Support Clubs',
         description: 'Directory of student-run clubs and interest groups.',
         category: ResourceCategory.CAMPUS_CLUBS,
-        content: 'Join clubs like Board Games, Hiking, or Debate to meet new peers. Visit Student Council office.',
+        content:
+          'Join clubs like Board Games, Hiking, or Debate to meet new peers. Visit Student Council office.',
         isActive: true,
       },
       {
@@ -359,21 +378,24 @@ async function main() {
         title: 'Daily Stress Management Exercises',
         description: 'Simple daily habits to keep your stress levels under control.',
         category: ResourceCategory.STRESS_MANAGEMENT,
-        content: '1. 4-7-8 breathing technique.\n2. Progressive muscle relaxation.\n3. 15-minute screen-free walks.',
+        content:
+          '1. 4-7-8 breathing technique.\n2. Progressive muscle relaxation.\n3. 15-minute screen-free walks.',
         isActive: true,
       },
       {
         title: 'Sleep Hygiene Guidelines',
         description: 'Steps to ensure high-quality rest during exams.',
         category: ResourceCategory.SLEEP_HYGIENE,
-        content: 'Maintain a sleep schedule, limit caffeine after 2:00 PM, and turn off mobile screens 30 minutes before sleep.',
+        content:
+          'Maintain a sleep schedule, limit caffeine after 2:00 PM, and turn off mobile screens 30 minutes before sleep.',
         isActive: true,
       },
       {
         title: 'National Crisis Helplines',
         description: 'Free, confidential 24/7 external support lines.',
         category: ResourceCategory.EXTERNAL_HELPLINES,
-        content: 'National Suicide Prevention Lifeline: 988. Crisis Text Line: Text HOME to 741741.',
+        content:
+          'National Suicide Prevention Lifeline: 988. Crisis Text Line: Text HOME to 741741.',
         isActive: true,
       },
     ],
@@ -384,7 +406,7 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
+  .catch(e => {
     console.error('Error during seed run:', e);
     process.exit(1);
   })

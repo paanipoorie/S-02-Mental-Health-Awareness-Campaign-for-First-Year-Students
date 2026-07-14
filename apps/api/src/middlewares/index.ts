@@ -3,7 +3,6 @@ export {
   optionalAuthMiddleware,
   requireRole,
   requireVerifiedMentor,
-  AuthError,
 } from './auth.middleware.js';
 export {
   authRateLimiter,

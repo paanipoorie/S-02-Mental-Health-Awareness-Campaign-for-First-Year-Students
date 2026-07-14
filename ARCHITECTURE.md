@@ -8,25 +8,25 @@ The Campus Anonymous Peer Support Platform is a privacy-first mental health awar
 
 ### Target Users
 
-- **Primary**: First-year university students experiencing transition stress, homesickness, academic pressure, loneliness, anxiety, or other mental health challenges
-- **Secondary**: Verified mentors (senior students, faculty advisors, trained peer supporters) who provide guidance and support
-- **Administrative**: Platform administrators who manage mentor verification, content moderation, and platform analytics
+- **Primary**: First-year university students experiencing transition stress, homesickness, academic pressure, loneliness, anxiety, or other mental health challenges.
+- **Secondary**: Verified mentors (senior students, faculty advisors, trained peer supporters) who provide guidance and support.
+- **Administrative**: Platform administrators who manage mentor verification, content moderation, and platform analytics.
 
 ### Core Goals
 
-1. **Reduce stigma** around mental health by normalizing anonymous peer discussions
-2. **Increase awareness** of available campus mental health resources
-3. **Enable early intervention** through emotional status tracking and mentor prioritization
-4. **Build community** through anonymous posts, real-time chat, meetings, and workshops
-5. **Maintain absolute privacy** — student identities are never exposed to peers or mentors
+1. **Reduce stigma** around mental health by normalizing anonymous peer discussions.
+2. **Increase awareness** of available campus mental health resources.
+3. **Enable early intervention** through emotional status tracking and mentor prioritization.
+4. **Build community** through anonymous posts, real-time chat, meetings, and workshops.
+5. **Maintain absolute privacy** — student identities are never exposed to peers or mentors.
 
 ### Privacy-First Philosophy
 
-- **Zero identity exposure**: Student real identities (email, name, ID) are never visible to other students or mentors
-- **Anonymous identity layer**: Every student receives a persistent, human-readable anonymous identity (e.g., "Anonymous Sparrow") used across all platform features
-- **Strict database separation**: Feature tables reference `AnonymousIdentity.id`, never `User.id`
-- **Service-layer enforcement**: Auth service is the only component allowed to join `AnonymousIdentity → User`
-- **Audit logging**: All admin actions are logged for accountability
+- **Zero identity exposure**: Student real identities (email, name, ID) are never visible to other students or mentors.
+- **Anonymous identity layer**: Every student receives a persistent, human-readable anonymous identity (e.g., "Anonymous Calm Sparrow") used across all platform features.
+- **Strict database separation**: Feature tables reference `AnonymousIdentity.id`, never `User.id` for student-generated content.
+- **Service-layer enforcement**: Auth service is the only component allowed to query or resolve `AnonymousIdentity ↔ User` relationships.
+- **Audit logging**: All admin actions are logged for accountability.
 
 ---
 
@@ -40,9 +40,9 @@ The Campus Anonymous Peer Support Platform is a privacy-first mental health awar
 │  │   Frontend   │◄───│   Client     │───►│   REST API   │                   │
 │  └──────┬───────┘    └──────┬───────┘    └──────┬───────┘                   │
 └─────────┼───────────────────┼────────────────────┼───────────────────────────┘
-          │                   │                    │
-          │ HTTPS             │ WebSocket          │ HTTPS
-          ▼                   ▼                    ▼
+           │                   │                    │
+           │ HTTPS             │ WebSocket          │ HTTPS
+           ▼                   ▼                    ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            EXPRESS BACKEND (apps/api)                       │
 │                                                                             │
@@ -69,7 +69,7 @@ The Campus Anonymous Peer Support Platform is a privacy-first mental health awar
 │  ┌──────────┐ ┌──────────────┐ ┌─────────┐ ┌──────────┐ ┌──────────────┐  │
 │  │  User    │ │Anonymous     │ │  Post   │ │  Chat    │ │  Meeting/    │  │
 │  │          │ │  Identity    │ │         │ │          │ │  Workshop    │  │
-│  └──────────┘ └──────────────┘ └─────────┘ └──────────┘ └──────────────┘  │
+│  │  └──────────┘ └──────────────┘ └─────────┘ └──────────┘ └──────────────┘  │
 │  ┌──────────┐ ┌──────────────┐ ┌─────────┐ ┌──────────┐ ┌──────────────┐  │
 │  │ Emotion  │ │  Mentor      │ │ Resource│ │ Admin    │ │ Notification │  │
 │  │   Log    │ │  Profile     │ │         │ │ Action   │ │              │  │
@@ -114,23 +114,24 @@ campus-peer-support/
 │       │   ├── config/         # Environment configuration (env.ts)
 │       │   ├── routes/         # API route definitions (/api/*)
 │       │   ├── controllers/    # Request handlers, response formatting
-│       │   ├── services/       # Business logic, data access, external integrations
+│       │   ├── services/       # Business logic, data access, cross-service calls
 │       │   ├── middlewares/    # Auth, RBAC, validation, error handling, rate limiting
 │       │   ├── validators/     # Zod schemas for request validation
-│       │   ├── utils/          # Helpers (jwt, hash, logger, ApiError)
+│       │   ├── utils/          # Helpers (jwt, hash, anonymousIdentity)
 │       │   ├── sockets/        # Socket.io setup, event handlers
-│       │   ├── prisma/         # Prisma client, schema, seed
-│       │   ├── types/          # Express request augmentation
+│       │   ├── prisma/         # Prisma client configuration
+│       │   ├── types/          # Express request augmentation (express.d.ts)
 │       │   ├── app.ts          # Express app factory
 │       │   └── server.ts       # Entry point, server startup
 │       ├── prisma/
-│       │   └── schema.prisma   # Database schema
+│       │   ├── schema.prisma   # Database schema
+│       │   └── seed.ts         # Seeding script
 │       └── tsconfig.json
 │
 ├── packages/
 │   └── shared-types/           # Shared TypeScript types & enums
 │       ├── src/
-│       │   ├── enums.ts        # Role, EmotionType, UrgencyLevel, MeetingType, etc.
+│       │   ├── enums.ts        # Role, EmotionType, UrgencyLevel, etc.
 │       │   ├── entities.ts     # Shared DTO interfaces
 │       │   └── index.ts        # Barrel export
 │       └── package.json
@@ -152,94 +153,55 @@ campus-peer-support/
 └── README.md                   # Project documentation
 ```
 
-### Why This Structure?
-
-| Directory               | Purpose          | Reasoning                                                             |
-| ----------------------- | ---------------- | --------------------------------------------------------------------- |
-| `apps/web`              | Frontend         | Astro's file-based routing, island architecture for interactivity     |
-| `apps/api`              | Backend          | Express with layered architecture (routes → controllers → services)   |
-| `packages/shared-types` | Type safety      | Single source of truth for enums, DTOs shared across frontend/backend |
-| `docker/`               | Containerization | Separate Dockerfiles for web/api, compose for local dev               |
-| `docs/`                 | Documentation    | Architecture, design system, roadmap in one place                     |
-
 ---
 
 ## 4. Request Flow
 
 ### REST API Request Lifecycle
 
+The lifecycle of an API request traverses the frontend client, the backend routing, validation, middleware stack, and the service layer down to the database before resolving.
+
 ```
-Browser (Astro)
-       │
-       ▼
-┌──────────────────┐
-│  Astro Page/     │  1. User interaction (form submit, link click)
-│  API Endpoint    │
-└────────┬─────────┘
-         │ fetch() with JWT in Authorization header / httpOnly cookie
-         ▼
-┌──────────────────┐
-│  Express API     │  2. Request hits Express server
-│  (apps/api)      │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Global Middleware│  3. helmet, cors, compression, cookie-parser, body-parser
-│  Stack            │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Auth Middleware  │  4. Verify JWT → attach req.user { userId, role, email }
-│  (auth.middleware)│
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  RBAC Middleware  │  5. requireRole(['STUDENT']), requireVerifiedMentor()
-│  (role.middleware)│
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Validation       │  6. Zod schema validates body/query/params
-│  Middleware       │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Route Handler    │  7. Controller method invoked
-│  (Controller)     │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Service Layer    │  8. Business logic, data access, cross-service calls
-│  (Service)        │     Uses Prisma Client for DB operations
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  Prisma ORM       │  9. Type-safe database queries
-│  (schema.prisma)  │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  PostgreSQL       │  10. Data persisted / retrieved
-└────────┬─────────┘
-         │
-         ▼
-    Response flows back through layers
-         │
-         ▼
-┌──────────────────┐
-│  Error Middleware │  Centralized error handling (ApiError, ZodError, PrismaError)
-└────────┬─────────┘
-         │
-         ▼
-    JSON Response to Client
+Client (Browser / Astro)
+      │
+      │ fetch() with JWT in Authorization header / httpOnly cookie
+      ▼
+Express Router (api/src/routes/)
+      │ Route match established (e.g. POST /api/auth/login)
+      ▼
+Rate Limiter Middleware (api/src/middlewares/rateLimiter.middleware.ts)
+      │ Rejects request with 429 if rate limit threshold exceeded
+      ▼
+Validation Middleware (api/src/middlewares/validate.middleware.ts)
+      │ Validates payload schemas (zod-based validators)
+      ▼
+Authentication Middleware (api/src/middlewares/auth.middleware.ts)
+      │ Verifies JWT access token; attaches decoded user to req.user
+      ▼
+Authorization Middleware (api/src/middlewares/auth.middleware.ts)
+      │ Guards routes via requireRole() or requireVerifiedMentor() (queries DB)
+      ▼
+Controller Layer (api/src/controllers/)
+      │ Maps request payload to service inputs; Thin controller
+      ▼
+Service Layer (api/src/services/)
+      │ Domain & Business logic; Database transaction boundaries
+      ▼
+Prisma ORM (api/src/prisma/client.ts)
+      │ Prepares & executes type-safe queries
+      ▼
+PostgreSQL Database
+      │ Persists or retrieves records
+      ▼
+Service returns data to Controller
+      ▼
+Controller sends standardized response JSON
+      │ Format: { success: true, data: ... }
+      ▼
+Error Middleware (api/src/app.ts)
+      │ Catches errors and formats consistent JSON: { success: false, error: ... }
+      ▼
+JSON Response received by Client
 ```
 
 ### Socket.io Communication Flow
@@ -273,97 +235,62 @@ Client (Socket.io)                    Server (Socket.io)
       │  11. notification:new              │  (if other user offline/different tab)
 ```
 
-**Key Socket.io Design Decisions:**
-
-- JWT authentication during handshake (not after connect)
-- Room per chat thread (`thread:${threadId}`)
-- Mentor presence broadcast via `presence:update` events
-- All socket payloads use `AnonymousIdentity` references, never `User`
-
 ---
 
 ## 5. Authentication Architecture
 
-### Overview
-
-Authentication follows a JWT-based session model with strict separation between real identity (auth layer) and anonymous identity (feature layer).
-
-### Registration Flow (Student)
+Authentication is stateless and uses JSON Web Tokens (JWT) for secure session tracking. It enforces domain verification to restrict registration to university members.
 
 ```
-POST /api/auth/register
-  │
-  ▼
-Validate university email domain (@university.edu)
-  │
-  ▼
-Hash password (bcrypt, 12 rounds)
-  │
-  ▼
-Create User { role: STUDENT, isVerifiedMentor: false }
-  │
-  ▼
-Auto-create AnonymousIdentity
-  │  - displayName: "Anonymous Sparrow" (adjective + noun from word banks)
-  │  - avatarSeed: random integer for consistent avatar generation
-  │  - userId: 1:1 link to User
-  ▼
-Return JWT (access + optional refresh token)
+                  ┌─────────────────────────────────────┐
+                  │          Register / Login           │
+                  └──────────────────┬──────────────────┘
+                                     │
+                                     ▼
+                  ┌─────────────────────────────────────┐
+                  │ Verify university.edu Email Domain  │
+                  └──────────────────┬──────────────────┘
+                                     │
+                                     ▼
+                  ┌─────────────────────────────────────┐
+                  │   Bcrypt Hash (12 rounds) Verify    │
+                  └──────────────────┬──────────────────┘
+                                     │
+                                     ▼
+                ┌────────────────────┴────────────────────┐
+                ▼                                         ▼
+      Role === STUDENT?                         Role === MENTOR/ADMIN?
+  ┌─────────────┴─────────────┐             ┌─────────────┴─────────────┐
+  │ Create User               │             │ Create User               │
+  │ Auto-create Anon Identity │             │ No Anonymous Identity     │
+  └─────────────┬─────────────┘             └─────────────┬─────────────┘
+                │                                         │
+                └────────────────────┬────────────────────┘
+                                     │
+                                     ▼
+                  ┌─────────────────────────────────────┐
+                  │  Generate Access & Refresh Tokens   │
+                  └─────────────────────────────────────┘
 ```
 
-### Login Flow
+### Access Token Lifecycle
 
-```
-POST /api/auth/login
-  │
-  ▼
-Verify credentials
-  │
-  ▼
-Issue JWT payload: { userId, role, email }
-  │
-  ▼
-Client stores tokens (httpOnly cookie preferred)
-```
+- **Scope**: Short-lived access credential containing `userId`, `role`, and `email` payload.
+- **Expiration**: 15 minutes.
+- **Storage**: In-memory on client side (to prevent XSS leakage). Sent as `Bearer <token>` inside the `Authorization` header.
 
-### Protected Route Access
+### Refresh Token Lifecycle
 
-```
-Request + JWT
-     │
-     ▼
-auth.middleware.ts → verify JWT → attach req.user { userId, role, email }
-     │
-     ▼
-Route handler → Service layer
-     │
-     ▼
-Service needing anonymous identity:
-  identityService.getAnonymousIdentity(userId)
-     │
-     ▼
-Returns { anonymousIdentityId, displayName, avatarSeed }
-```
+- **Scope**: Long-lived credential used strictly to obtain new access tokens without requiring re-authentication.
+- **Expiration**: 7 days.
+- **Storage**: Stored in a secure, `httpOnly`, `sameSite: 'lax'` cookie (with `secure: true` in production) to prevent CSRF and script access.
+- **Rotation**: Validated, rotated upon reuse check, and cleared upon logout.
 
-### Identity Separation Enforcement
+### Middleware Flow
 
-| Layer                                  | Can Access `User`         | Can Access `AnonymousIdentity` |
-| -------------------------------------- | ------------------------- | ------------------------------ |
-| Auth Middleware                        | ✅ (for JWT verification) | ❌                             |
-| Auth Service                           | ✅ (registration, login)  | ✅ (creation)                  |
-| Identity Service                       | ❌                        | ✅ (lookup, creation)          |
-| Feature Services (Post, Chat, Meeting) | ❌                        | ✅ (only)                      |
-| Controllers                            | ❌                        | ✅ (via service)               |
-| Frontend                               | Never                     | ✅ (via API responses)         |
-
-**Critical Rule**: No feature service or controller ever receives or returns `User.id` or `User.universityEmail` for student-generated content. Only `AnonymousIdentity` fields are exposed.
-
-### Token Management
-
-- **Access Token**: 15 min expiry, stored in memory (not localStorage)
-- **Refresh Token**: 7 day expiry, httpOnly secure cookie
-- **Rotation**: Refresh rotates access token; old refresh token invalidated
-- **Secrets**: `JWT_SECRET`, `JWT_REFRESH_SECRET` from environment (min 32 chars)
+1. **authMiddleware**: Resolves the authorization token from the request header or cookie. Decodes the token, handles expired/malformed states, and attaches user info to `req.user`.
+2. **requireRole**: Ensures only specific roles (e.g. `STUDENT`, `ADMIN`) are permitted to access endpoint targets.
+3. **requireVerifiedMentor**: Restricts access to mentors whose profiles have been vetted and validated in the database (`isVerifiedMentor === true`).
 
 ---
 
@@ -371,215 +298,209 @@ Returns { anonymousIdentityId, displayName, avatarSeed }
 
 ### Design Philosophy
 
-The anonymous identity system is the **core privacy primitive** of the platform. It exists to solve a fundamental tension: students need persistent reputation and recognition within the community, but must never be linkable to their real identity.
+Students seeking support face severe psychological barriers. To eliminate fear of academic exposure or social stigma, the platform establishes **Absolute Anonymity** for students. Real student identities are strictly separated from feature layers.
 
-### Data Model
+### Identity Isolation
 
-```prisma
-model User {
-  id                    String   @id @default(cuid())
-  universityEmail       String   @unique
-  passwordHash          String
-  role                  Role     @default(STUDENT)
-  isVerifiedMentor      Boolean  @default(false)
-  isActive              Boolean  @default(true)
-  createdAt             DateTime @default(now())
-  anonymousIdentity     AnonymousIdentity?
-}
+1. **Model Decoupling**: All student activities (writing posts, posting replies, messaging, logging emotions, registering for workshops) reference an `AnonymousIdentity.id` field. They _never_ reference a `User.id` directly.
+2. **Data-Store Separation**: Only the auth/identity services can query the 1:1 relationship between `User` and `AnonymousIdentity` (e.g. when fetching profile details via `GET /api/auth/me`).
+3. **Stateless JWTs**: While the client session maintains a cryptographically signed JWT containing `userId` and `email`, these identifiers are processed server-side only and are never echoed back in student responses.
 
-model AnonymousIdentity {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  displayName     String   @unique  // "Anonymous Sparrow"
-  avatarSeed      Int      // deterministic avatar generation
-  createdAt       DateTime @default(now())
+### Mentors vs. Students
 
-  // Relations to all student-generated content
-  posts           Post[]
-  postReplies     PostReply[]
-  emotionLogs     EmotionLog[]
-  chatThreads     ChatThread[]
-  chatMessages    ChatMessage[]
-  meetingAttendees MeetingAttendee[]
-  workshopRegistrations WorkshopRegistration[]
-}
-```
+- **Students**: Remain strictly anonymous to prevent peer-to-peer or peer-to-mentor profiling. They operate under their generated display names (e.g., "Anonymous Calm Sparrow") and random avatar seeds.
+- **Mentors & Admins**: Do _not_ have anonymous identities. Their contributions carry verified badges (e.g., "Verified Mentor") along with their professional credentials (real name, department) to build platform trust, safety, and legitimacy.
 
-### Identity Generation Algorithm
+### Privacy Guarantees
 
-```typescript
-// packages/shared-types/src/anonymousIdentity.ts
-const ADJECTIVES = ['gentle', 'bright', 'calm', 'wise', 'kind', ...];
-const NOUNS = ['sparrow', 'willow', 'river', 'meadow', 'star', ...];
-
-function generateAnonymousName(): string {
-  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
-  const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
-  return `Anonymous ${capitalize(adj)} ${capitalize(noun)}`;
-}
-
-// Ensures uniqueness via DB constraint + retry loop
-```
-
-### Why This Design?
-
-1. **Human-readable**: "Anonymous Sparrow" feels personal, not robotic
-2. **Persistent**: Same identity across all features (posts, chat, meetings)
-3. **Non-reversible**: No algorithmic way to derive `User` from `AnonymousIdentity`
-4. **Database-enforced**: 1:1 User↔AnonymousIdentity, FK on all content tables
-5. **Mentor distinction**: Mentors use real names (with verified badge), students never see mentor emails
-
-### Exposure Rules
-
-| Context               | Student Sees                          | Mentor Sees                           |
-| --------------------- | ------------------------------------- | ------------------------------------- |
-| Post author           | "Anonymous Sparrow"                   | "Anonymous Sparrow"                   |
-| Post reply (student)  | "Anonymous Willow"                    | "Anonymous Willow"                    |
-| Post reply (mentor)   | "Verified Mentor" badge + mentor name | "Verified Mentor" + mentor name       |
-| Chat peer             | "Anonymous Sparrow"                   | "Anonymous Sparrow" + current emotion |
-| Meeting attendee      | "Anonymous Sparrow"                   | "Anonymous Sparrow"                   |
-| Workshop registration | "Anonymous Sparrow"                   | "Anonymous Sparrow"                   |
+- Student emails and real database IDs are never leaked to external client payloads.
+- Anonymized names are generated using a unique word-bank algorithm combinatorics, ensuring student profiles remain persistent but untraceable to their LDAP accounts.
 
 ---
 
-## 7. Data Flow
+## 7. Database Architecture
 
-### Student Creates Post
+The database is built on PostgreSQL, using Prisma ORM to manage schema migrations and model relationships. The tables are partitioned into Identity, Content, Communication, Events, and Administrative blocks.
 
-```
-Student (Browser)
-     │
-     ▼
-POST /api/posts { title, body, emotion?, urgencyLevel?, category }
-     │
-     ▼
-Auth Middleware → req.user { userId, role: STUDENT }
-     │
-     ▼
-PostController.create()
-     │
-     ▼
-PostService.create()
-     │
-     ├── identityService.getAnonymousIdentity(userId) → { anonymousIdentityId, displayName }
-     ├── prisma.post.create({ anonymousIdentityId, title, body, ... })
-     │
-     ▼
-Return Post with author: { anonymousDisplayName, avatarSeed }
-     │
-     ▼
-Frontend renders PostCard with anonymous name
-```
+### Database Schema Models
 
-### Mentor Replies to Post
+#### 1. User
 
-```
-Mentor (Browser)
-     │
-     ▼
-POST /api/posts/:id/replies { body }
-     │
-     ▼
-Auth Middleware → req.user { userId, role: MENTOR }
-     │
-     ▼
-PostController.reply()
-     │
-     ▼
-PostService.createReply()
-     │
-     ├── Verify mentor is verified (isVerifiedMentor)
-     ├── Get mentor profile (name, department)
-     ├── prisma.postReply.create({ anonymousIdentityId: mentorUserId, body })
-     │   Note: Mentor uses their User.id as "identity" since mentors aren't anonymous
-     │
-     ▼
-Return Reply with author: { name: "Dr. Smith", role: "MENTOR", isVerified: true, department }
-     │
-     ▼
-Frontend renders Reply with "Verified Mentor" badge
-```
+Stores core credentials and access roles.
 
-### Student Starts Anonymous Chat (Auto Mentor Assignment)
+- `id` (String, PK, cuid)
+- `universityEmail` (String, Unique)
+- `passwordHash` (String)
+- `role` (Role enum: STUDENT, MENTOR, ADMIN)
+- `isVerifiedMentor` (Boolean)
+- `isActive` (Boolean)
+- `createdAt` (DateTime)
 
-```
-Student (Browser)
-     │
-     ▼
-POST /api/chats { }  (empty body = student-initiated)
-     │
-     ▼
-ChatController.createThread()
-     │
-     ▼
-ChatService.createThread()
-     │
-     ├── identityService.getAnonymousIdentity(studentUserId)
-     ├── mentorAssignmentService.findAvailableMentor()
-     │     └── Strategy: least active AVAILABLE mentor (by active chat count)
-     ├── prisma.chatThread.create({ studentIdentityId, mentorId, status: ACTIVE })
-     │
-     ▼
-Return ChatThread with mentor info (name, verified, department)
-     │
-     ▼
-Frontend opens ChatWindow, connects Socket.io
-     │
-     ├── Socket: chat:join { threadId }
-     ├── Server: verify JWT, authorize participant, join room
-     │
-     ▼
-Real-time messaging via Socket.io events
-```
+#### 2. AnonymousIdentity
 
-### Meeting/Workshop Flow
+Provides student anonymity. Linked 1:1 with User.
 
-```
-Mentor creates Workshop
-     │
-     ▼
-POST /api/workshops { title, date, time, meetingType, link/location, maxAttendees }
-     │
-     ▼
-WorkshopService.create()
-     │
-     ├── req.user.role === MENTOR (verified)
-     ├── prisma.workshop.create({ mentorId: req.user.userId, ... })
-     │
-     ▼
-Student registers
-     │
-     ▼
-POST /api/workshops/:id/register
-     │
-     ▼
-WorkshopService.register()
-     │
-     ├── identityService.getAnonymousIdentity(studentUserId)
-     ├── Check capacity (registrations < maxAttendees)
-     ├── prisma.workshopRegistration.create({ workshopId, anonymousIdentityId })
-     │
-     ▼
-Confirmation with registration status
-```
+- `id` (String, PK, cuid)
+- `userId` (String, FK User, Unique)
+- `displayName` (String, Unique)
+- `avatarSeed` (Int)
+- `createdAt` (DateTime)
 
-### Resource Hub Access
+#### 3. MentorProfile
 
-```
-GET /api/resources?category=EMERGENCY_CONTACTS
-     │
-     ▼
-ResourceController.list()
-     │
-     ▼
-ResourceService.getResources()
-     │
-     ├── prisma.resource.findMany({ where: { category, isActive: true } })
-     │
-     ▼
-Return paginated resources (public content, no auth required for read)
-```
+Stores details of verified campus mentors.
+
+- `id` (String, PK, cuid)
+- `userId` (String, FK User, Unique)
+- `department` (String)
+- `bio` (String)
+- `specialties` (String[])
+- `availabilityStatus` (MentorAvailabilityStatus enum)
+- `lastSeenAt` (DateTime, Nullable)
+
+#### 4. EmotionLog
+
+Tracks student emotional logs for dashboard visualization and prioritization.
+
+- `id` (String, PK, cuid)
+- `anonymousIdentityId` (String, FK AnonymousIdentity)
+- `emotion` (EmotionType enum)
+- `urgencyLevel` (UrgencyLevel enum, Nullable)
+- `context` (EmotionContext enum)
+- `createdAt` (DateTime)
+
+#### 5. Post
+
+Handles student forum posts.
+
+- `id` (String, PK, cuid)
+- `anonymousIdentityId` (String, FK AnonymousIdentity)
+- `title` (String)
+- `body` (String)
+- `category` (PostCategory enum)
+- `emotion` (EmotionType enum, Nullable)
+- `urgencyLevel` (UrgencyLevel enum, Nullable)
+- `createdAt` (DateTime)
+- `updatedAt` (DateTime)
+- `isDeleted` (Boolean)
+
+#### 6. PostReply
+
+Stores forum replies.
+
+- `id` (String, PK, cuid)
+- `postId` (String, FK Post)
+- `anonymousIdentityId` (String) - Can be AnonymousIdentity.id (student) or User.id (mentor)
+- `body` (String)
+- `createdAt` (DateTime)
+- `isDeleted` (Boolean)
+
+#### 7. ChatThread
+
+Connects a student and a mentor in a private channel.
+
+- `id` (String, PK, cuid)
+- `studentIdentityId` (String, FK AnonymousIdentity)
+- `mentorId` (String, FK User, Nullable)
+- `status` (ChatStatus enum: ACTIVE, CLOSED)
+- `createdAt` (DateTime)
+
+#### 8. ChatMessage
+
+Individual chat messages.
+
+- `id` (String, PK, cuid)
+- `chatThreadId` (String, FK ChatThread)
+- `senderType` (String) - Polymorphic: 'ANONYMOUS_IDENTITY' or 'MENTOR'
+- `senderId` (String) - Resolves to AnonymousIdentity.id or User.id
+- `body` (String)
+- `createdAt` (DateTime)
+- `readAt` (DateTime, Nullable)
+
+#### 9. Meeting
+
+Group sessions or office hours hosted by mentors or students.
+
+- `id` (String, PK, cuid)
+- `title` (String)
+- `description` (String)
+- `hostType` (MeetingHostType enum: STUDENT, MENTOR)
+- `hostIdentityId` (String, FK AnonymousIdentity, Nullable)
+- `hostUserId` (String, FK User, Nullable)
+- `date` (DateTime)
+- `time` (String)
+- `durationMinutes` (Int)
+- `meetingType` (MeetingType enum: ONLINE, OFFLINE)
+- `meetingLink` (String, Nullable)
+- `location` (String, Nullable)
+- `category` (MeetingCategory enum)
+- `createdAt` (DateTime)
+
+#### 10. MeetingAttendee
+
+Tracks meeting signups.
+
+- `id` (String, PK, cuid)
+- `meetingId` (String, FK Meeting)
+- `anonymousIdentityId` (String, FK AnonymousIdentity)
+- `joinedAt` (DateTime)
+
+#### 11. Workshop
+
+Mentor-led educational webinars.
+
+- `id` (String, PK, cuid)
+- `title` (String)
+- `description` (String)
+- `mentorId` (String, FK User)
+- `date` (DateTime)
+- `time` (String)
+- `durationMinutes` (Int)
+- `meetingType` (MeetingType enum)
+- `meetingLink` (String, Nullable)
+- `location` (String, Nullable)
+- `category` (WorkshopCategory enum)
+- `maxAttendees` (Int, Nullable)
+- `resources` (String, Nullable)
+- `createdAt` (DateTime)
+- `updatedAt` (DateTime)
+
+#### 12. WorkshopRegistration
+
+Student registrations for mentor workshops.
+
+- `id` (String, PK, cuid)
+- `workshopId` (String, FK Workshop)
+- `anonymousIdentityId` (String, FK AnonymousIdentity)
+- `status` (WorkshopRegistrationStatus enum: REGISTERED, ATTENDED, CANCELLED)
+- `registeredAt` (DateTime)
+- `attendedAt` (DateTime, Nullable)
+
+#### 13. Resource
+
+Publicly accessible self-help materials or contact hubs.
+
+- `id` (String, PK, cuid)
+- `title` (String)
+- `description` (String)
+- `category` (ResourceCategory enum)
+- `content` (String)
+- `link` (String, Nullable)
+- `isActive` (Boolean)
+- `createdAt` (DateTime)
+- `updatedAt` (DateTime)
+
+#### 14. AdminActionLog
+
+Secures audit logging for administrative adjustments.
+
+- `id` (String, PK, cuid)
+- `adminUserId` (String, FK User)
+- `actionType` (String)
+- `targetType` (String)
+- `targetId` (String)
+- `notes` (String, Nullable)
+- `createdAt` (DateTime)
 
 ---
 
@@ -599,18 +520,18 @@ Return paginated resources (public content, no auth required for read)
 
 ### `apps/api/src/`
 
-| Directory      | Responsibility                                                                                                           |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `config/`      | `env.ts` — validated environment variables (Zod)                                                                         |
-| `routes/`      | Route registration; thin, only maps HTTP method+path to controller                                                       |
-| `controllers/` | Request/response handling; calls services, formats JSON, handles errors                                                  |
-| `services/`    | **Business logic lives here**; data access, cross-service coordination, transactions                                     |
-| `middlewares/` | `auth.middleware.ts`, `role.middleware.ts`, `validate.middleware.ts`, `error.middleware.ts`, `rateLimiter.middleware.ts` |
-| `validators/`  | Zod schemas per feature (auth.validator.ts, post.validator.ts, etc.)                                                     |
-| `utils/`       | `jwt.ts`, `hash.ts`, `logger.ts`, `ApiError.ts`, `anonymousIdentity.ts`                                                  |
-| `sockets/`     | `index.ts` (io setup, auth handshake), `chat.socket.ts`, `presence.socket.ts`, `notification.socket.ts`                  |
-| `prisma/`      | `client.ts` (singleton PrismaClient), `schema.prisma`, `seed.ts`                                                         |
-| `types/`       | `express.d.ts` — `declare module 'express' { interface Request { user: AuthUser } }`                                     |
+| Directory      | Responsibility                                                                                          |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| `config/`      | `env.ts` — validated environment variables (Zod)                                                        |
+| `routes/`      | Route registration; thin, only maps HTTP method+path to controller                                      |
+| `controllers/` | Request/response handling; calls services, formats JSON, handles errors                                 |
+| `services/`    | **Business logic lives here**; data access, cross-service coordination, transactions                    |
+| `middlewares/` | `auth.middleware.ts`, `rateLimiter.middleware.ts`, `validate.middleware.ts`                             |
+| `validators/`  | Zod schemas per feature (auth.validator.ts)                                                             |
+| `utils/`       | `jwt.ts`, `hash.ts`, `anonymousIdentity.ts`                                                             |
+| `sockets/`     | `index.ts` (io setup, auth handshake), `chat.socket.ts`, `presence.socket.ts`, `notification.socket.ts` |
+| `prisma/`      | `client.ts` (singleton PrismaClient)                                                                    |
+| `types/`       | `express.d.ts` — Express request augmentation (`Request.user`)                                          |
 
 ### `packages/shared-types/src/`
 
@@ -653,7 +574,6 @@ Return paginated resources (public content, no auth required for read)
 | **Zod**           | Schema validation at runtime + TypeScript inference; used in validators and env config.                                           |
 | **Socket.io**     | Real-time chat, presence, notifications; fallback transports; room-based architecture.                                            |
 | **Helmet + CORS** | Security headers, origin restriction.                                                                                             |
-| **Pino/Winston**  | Structured logging with redaction (no passwords/JWTs in logs).                                                                    |
 
 ### Shared: pnpm Monorepo
 
@@ -682,20 +602,20 @@ Return paginated resources (public content, no auth required for read)
 
 ### Horizontal Scaling
 
-- **Stateless API**: Express servers share nothing; scale behind load balancer
-- **Socket.io**: Redis adapter for multi-instance WebSocket broadcasting (Phase 14+)
-- **Database**: Read replicas for analytics/dashboard queries; connection pooling via PgBouncer
+- **Stateless API**: Express servers share nothing; scale behind load balancer.
+- **Socket.io**: Redis adapter for multi-instance WebSocket broadcasting (Phase 14+).
+- **Database**: Read replicas for analytics/dashboard queries; connection pooling via PgBouncer.
 
 ### Database Optimization
 
-- **Indexes**: Composite indexes on `(anonymousIdentityId, createdAt)`, `(status, createdAt)` for feeds
-- **Partitioning**: `EmotionLog`, `ChatMessage`, `Notification` by month for high-volume tables
-- **Materialized Views**: Mentor dashboard aggregations (emotion trends, priority feeds)
+- **Indexes**: Composite indexes on `(anonymousIdentityId, createdAt)`, `(status, createdAt)` for feeds.
+- **Partitioning**: `EmotionLog`, `ChatMessage`, `Notification` by month for high-volume tables.
+- **Materialized Views**: Mentor dashboard aggregations (emotion trends, priority feeds).
 
 ### Caching Strategy
 
-- **Redis**: Session cache, rate limit counters, mentor presence, dashboard aggregates
-- **CDN**: Static assets, Astro pre-rendered pages
+- **Redis**: Session cache, rate limit counters, mentor presence, dashboard aggregates.
+- **CDN**: Static assets, Astro pre-rendered pages.
 
 ### Feature Evolution
 
@@ -709,9 +629,9 @@ Return paginated resources (public content, no auth required for read)
 
 ### Privacy Preservation at Scale
 
-- **Zero-knowledge proofs** for mentor verification (prove credential without revealing identity)
-- **Differential privacy** on aggregate emotion trends
-- **Client-side encryption** for chat messages (optional E2EE)
+- **Zero-knowledge proofs** for mentor verification (prove credential without revealing identity).
+- **Differential privacy** on aggregate emotion trends.
+- **Client-side encryption** for chat messages (optional E2EE).
 
 ---
 
