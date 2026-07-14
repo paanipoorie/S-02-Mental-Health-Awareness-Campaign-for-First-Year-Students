@@ -1,10 +1,21 @@
-import jwt from 'jsonwebtoken';
+import jwt, { type SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env.js';
 
 export interface TokenPayload {
   userId: string;
   role: string;
+  email: string;
 }
+
+const signOptions: SignOptions = {
+  expiresIn: env.JWT_EXPIRES_IN as
+    `${number}` | `${number}s` | `${number}m` | `${number}h` | `${number}d`,
+};
+
+const refreshSignOptions: SignOptions = {
+  expiresIn: env.JWT_REFRESH_EXPIRES_IN as
+    `${number}` | `${number}s` | `${number}m` | `${number}h` | `${number}d`,
+};
 
 /**
  * Signs an access token.
@@ -12,9 +23,7 @@ export interface TokenPayload {
  * @returns The signed JWT.
  */
 export function signAccessToken(payload: TokenPayload): string {
-  return jwt.sign(payload, env.JWT_SECRET, {
-    expiresIn: env.JWT_EXPIRES_IN as any,
-  });
+  return jwt.sign(payload, env.JWT_SECRET, signOptions);
 }
 
 /**
@@ -23,9 +32,7 @@ export function signAccessToken(payload: TokenPayload): string {
  * @returns The signed JWT.
  */
 export function signRefreshToken(payload: TokenPayload): string {
-  return jwt.sign(payload, env.JWT_REFRESH_SECRET, {
-    expiresIn: env.JWT_REFRESH_EXPIRES_IN as any,
-  });
+  return jwt.sign(payload, env.JWT_REFRESH_SECRET, refreshSignOptions);
 }
 
 /**
