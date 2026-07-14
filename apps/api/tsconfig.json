@@ -31,7 +31,6 @@
       "@middlewares/*": ["src/middlewares/*"],
       "@utils/*": ["src/utils/*"],
       "@validators/*": ["src/validators/*"],
-      "@prisma/*": ["src/prisma/*"],
       "@sockets/*": ["src/sockets/*"],
       "@types/*": ["src/types/*"]
     },
