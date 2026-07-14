@@ -33,6 +33,7 @@ model User {
   chatThreads       ChatThread[]
   meetings          Meeting[]
   workshops         Workshop[]
+  adminLogs         AdminActionLog[]
 }
 
 model AnonymousIdentity {
@@ -138,6 +139,18 @@ enum WorkshopRegistrationStatus {
   REGISTERED
   ATTENDED
   CANCELLED
+}
+
+enum ResourceCategory {
+  COUNSELING_CENTER
+  EMERGENCY_CONTACTS
+  FACULTY_ADVISORS
+  STUDENT_WELFARE
+  CAMPUS_CLUBS
+  SELF_HELP_PDFS
+  STRESS_MANAGEMENT
+  SLEEP_HYGIENE
+  EXTERNAL_HELPLINES
 }
 
 model EmotionLog {
@@ -255,4 +268,27 @@ model WorkshopRegistration {
   status              WorkshopRegistrationStatus @default(REGISTERED)
   registeredAt        DateTime                   @default(now()) @db.Timestamptz(6)
   attendedAt          DateTime?                  @db.Timestamptz(6)
+}
+
+model Resource {
+  id          String           @id @default(cuid())
+  title       String
+  description String
+  category    ResourceCategory
+  content     String
+  link        String?
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime         @updatedAt @db.Timestamptz(6)
+}
+
+model AdminActionLog {
+  id          String   @id @default(cuid())
+  adminUserId String
+  adminUser   User     @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  actionType  String
+  targetType  String
+  targetId    String
+  notes       String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
 }
