@@ -33,12 +33,14 @@ model User {
 }
 
 model AnonymousIdentity {
-  id          String   @id @default(cuid())
-  userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  displayName String   @unique
+  id          String       @id @default(cuid())
+  userId      String       @unique
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName String       @unique
   avatarSeed  Int
-  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+  posts       Post[]
+  emotionLogs EmotionLog[]
 }
 
 model MentorProfile {
@@ -50,4 +52,78 @@ model MentorProfile {
   specialties        String[]
   availabilityStatus MentorAvailabilityStatus @default(OFFLINE)
   lastSeenAt         DateTime?                @db.Timestamptz(6)
+}
+
+enum EmotionType {
+  HAPPY
+  EXCITED
+  CONFUSED
+  HOMESICK
+  LONELY
+  SCARED
+  ANXIOUS
+  BURNT_OUT
+  OVERWHELMED
+  STRESSED
+}
+
+enum UrgencyLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum EmotionContext {
+  POST
+  CHAT
+  STANDALONE
+}
+
+enum PostCategory {
+  ACADEMICS
+  HOSTEL
+  HOMESICKNESS
+  FRIENDS
+  RELATIONSHIPS
+  TIME_MANAGEMENT
+  EXAMS
+  SLEEP
+  CLUBS
+  FINANCIAL
+  GENERAL
+}
+
+model EmotionLog {
+  id                  String            @id @default(cuid())
+  anonymousIdentityId String
+  anonymousIdentity   AnonymousIdentity @relation(fields: [anonymousIdentityId], references: [id], onDelete: Cascade)
+  emotion             EmotionType
+  urgencyLevel        UrgencyLevel?
+  context             EmotionContext
+  createdAt           DateTime          @default(now()) @db.Timestamptz(6)
+}
+
+model Post {
+  id                  String            @id @default(cuid())
+  anonymousIdentityId String
+  anonymousIdentity   AnonymousIdentity @relation(fields: [anonymousIdentityId], references: [id], onDelete: Cascade)
+  title               String
+  body                String
+  category            PostCategory
+  emotion             EmotionType?
+  urgencyLevel        UrgencyLevel?
+  createdAt           DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime          @updatedAt @db.Timestamptz(6)
+  isDeleted           Boolean           @default(false)
+  replies             PostReply[]
+}
+
+model PostReply {
+  id                  String   @id @default(cuid())
+  postId              String
+  post                Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  anonymousIdentityId String
+  body                String
+  createdAt           DateTime @default(now()) @db.Timestamptz(6)
+  isDeleted           Boolean  @default(false)
 }
