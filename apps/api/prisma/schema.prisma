@@ -30,17 +30,24 @@ model User {
   createdAt         DateTime           @default(now()) @db.Timestamptz(6)
   anonymousIdentity AnonymousIdentity?
   mentorProfile     MentorProfile?
+  chatThreads       ChatThread[]
+  meetings          Meeting[]
+  workshops         Workshop[]
 }
 
 model AnonymousIdentity {
-  id          String       @id @default(cuid())
-  userId      String       @unique
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  displayName String       @unique
-  avatarSeed  Int
-  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
-  posts       Post[]
-  emotionLogs EmotionLog[]
+  id                    String                 @id @default(cuid())
+  userId                String                 @unique
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName           String                 @unique
+  avatarSeed            Int
+  createdAt             DateTime               @default(now()) @db.Timestamptz(6)
+  posts                 Post[]
+  emotionLogs           EmotionLog[]
+  chatThreads           ChatThread[]
+  meetings              Meeting[]
+  meetingAttendees      MeetingAttendee[]
+  workshopRegistrations WorkshopRegistration[]
 }
 
 model MentorProfile {
@@ -93,6 +100,46 @@ enum PostCategory {
   GENERAL
 }
 
+enum ChatStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum MeetingType {
+  ONLINE
+  OFFLINE
+}
+
+enum MeetingHostType {
+  STUDENT
+  MENTOR
+}
+
+enum MeetingCategory {
+  STUDY_GROUP
+  PEER_DISCUSSION
+  MENTOR_OFFICE_HOURS
+  SOCIAL
+  WORKSHOP
+  GENERAL
+}
+
+enum WorkshopCategory {
+  MENTAL_HEALTH
+  STRESS_MANAGEMENT
+  STUDY_SKILLS
+  TIME_MANAGEMENT
+  MINDFULNESS
+  CAREER_GUIDANCE
+  GENERAL
+}
+
+enum WorkshopRegistrationStatus {
+  REGISTERED
+  ATTENDED
+  CANCELLED
+}
+
 model EmotionLog {
   id                  String            @id @default(cuid())
   anonymousIdentityId String
@@ -126,4 +173,86 @@ model PostReply {
   body                String
   createdAt           DateTime @default(now()) @db.Timestamptz(6)
   isDeleted           Boolean  @default(false)
+}
+
+model ChatThread {
+  id                String            @id @default(cuid())
+  studentIdentityId String
+  studentIdentity   AnonymousIdentity @relation(fields: [studentIdentityId], references: [id], onDelete: Cascade)
+  mentorId          String?
+  mentor            User?             @relation(fields: [mentorId], references: [id], onDelete: SetNull)
+  status            ChatStatus        @default(ACTIVE)
+  createdAt         DateTime          @default(now()) @db.Timestamptz(6)
+  messages          ChatMessage[]
+}
+
+model ChatMessage {
+  id           String     @id @default(cuid())
+  chatThreadId String
+  chatThread   ChatThread @relation(fields: [chatThreadId], references: [id], onDelete: Cascade)
+  senderType   String
+  senderId     String
+  body         String
+  createdAt    DateTime   @default(now()) @db.Timestamptz(6)
+  readAt       DateTime?  @db.Timestamptz(6)
+}
+
+model Meeting {
+  id             String             @id @default(cuid())
+  title          String
+  description    String
+  hostType       MeetingHostType
+  hostIdentityId String?
+  hostIdentity   AnonymousIdentity? @relation(fields: [hostIdentityId], references: [id], onDelete: Cascade)
+  hostUserId     String?
+  hostUser       User?              @relation(fields: [hostUserId], references: [id], onDelete: Cascade)
+  date           DateTime           @db.Timestamptz(6)
+  time           String
+  durationMinutes Int
+  meetingType    MeetingType
+  meetingLink    String?
+  location       String?
+  category       MeetingCategory
+  createdAt      DateTime           @default(now()) @db.Timestamptz(6)
+  attendees      MeetingAttendee[]
+}
+
+model MeetingAttendee {
+  id                  String            @id @default(cuid())
+  meetingId           String
+  meeting             Meeting           @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  anonymousIdentityId String
+  anonymousIdentity   AnonymousIdentity @relation(fields: [anonymousIdentityId], references: [id], onDelete: Cascade)
+  joinedAt            DateTime          @default(now()) @db.Timestamptz(6)
+}
+
+model Workshop {
+  id             String                 @id @default(cuid())
+  title          String
+  description    String
+  mentorId       String
+  mentor         User                   @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  date           DateTime               @db.Timestamptz(6)
+  time           String
+  durationMinutes Int
+  meetingType    MeetingType
+  meetingLink    String?
+  location       String?
+  category       WorkshopCategory
+  maxAttendees   Int?
+  resources      String?
+  createdAt      DateTime               @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime               @updatedAt @db.Timestamptz(6)
+  registrations  WorkshopRegistration[]
+}
+
+model WorkshopRegistration {
+  id                  String                     @id @default(cuid())
+  workshopId          String
+  workshop            Workshop                   @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  anonymousIdentityId String
+  anonymousIdentity   AnonymousIdentity          @relation(fields: [anonymousIdentityId], references: [id], onDelete: Cascade)
+  status              WorkshopRegistrationStatus @default(REGISTERED)
+  registeredAt        DateTime                   @default(now()) @db.Timestamptz(6)
+  attendedAt          DateTime?                  @db.Timestamptz(6)
 }
