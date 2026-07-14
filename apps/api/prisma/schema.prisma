@@ -8,10 +8,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Temporary model for Phase 0 to enable Prisma Client generation
-// Full schema will be added in Phase 1
-model HealthCheck {
-  id        String   @id @default(cuid())
-  status    String   @default("ok")
-  checkedAt DateTime @default(now()) @db.Timestamptz(6)
+enum Role {
+  STUDENT
+  MENTOR
+  ADMIN
+}
+
+enum MentorAvailabilityStatus {
+  AVAILABLE
+  BUSY
+  OFFLINE
+}
+
+model User {
+  id                String             @id @default(cuid())
+  universityEmail   String             @unique
+  passwordHash      String
+  role              Role               @default(STUDENT)
+  isVerifiedMentor  Boolean            @default(false)
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now()) @db.Timestamptz(6)
+  anonymousIdentity AnonymousIdentity?
+  mentorProfile     MentorProfile?
+}
+
+model AnonymousIdentity {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName String   @unique
+  avatarSeed  Int
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model MentorProfile {
+  id                 String                   @id @default(cuid())
+  userId             String                   @unique
+  user               User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department         String
+  bio                String
+  specialties        String[]
+  availabilityStatus MentorAvailabilityStatus @default(OFFLINE)
+  lastSeenAt         DateTime?                @db.Timestamptz(6)
 }
