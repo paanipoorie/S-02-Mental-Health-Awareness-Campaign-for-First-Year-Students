@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^6.0.1",
+    "@campus-peer-support/shared-types": "workspace:*",
     "@nanostores/react": "^1.1.0",
     "@tailwindcss/vite": "^4.3.2",
     "@types/react": "^19.2.17",

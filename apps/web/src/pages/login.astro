@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { LoginForm } from '../components/auth/LoginForm';
+---
+
+<BaseLayout title="Sign In | Campus Anonymous Peer Support">
+  <div class="py-12 flex flex-col items-center justify-center">
+    <LoginForm client:load />
+  </div>
+</BaseLayout>
