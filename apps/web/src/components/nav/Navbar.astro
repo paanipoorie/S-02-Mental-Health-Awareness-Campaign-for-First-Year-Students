@@ -1,0 +1,124 @@
+---
+import RoleBadge from './RoleBadge.astro';
+
+interface Props {
+  currentRole?: 'STUDENT' | 'MENTOR' | 'ADMIN' | null;
+  displayName?: string;
+  isVerified?: boolean;
+}
+
+const { currentRole = null, displayName = '', isVerified = false } = Astro.props;
+---
+
+<header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800/80 transition-all">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo & Brand -->
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 group">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform">
+            <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-base font-bold bg-gradient-to-r from-teal-300 via-indigo-200 to-purple-300 bg-clip-text text-transparent">
+              Campus Sanctuary
+            </span>
+            <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Anonymous Peer Support</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Navigation Links based on role -->
+      <nav class="hidden md:flex items-center gap-1">
+        {currentRole === 'STUDENT' && (
+          <>
+            <a href="/dashboard" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Dashboard</a>
+            <a href="/discussions" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Discussions</a>
+            <a href="/chat" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Peer Support Chat</a>
+            <a href="/workshops" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Workshops</a>
+            <a href="/resources" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Resources</a>
+          </>
+        )}
+
+        {currentRole === 'MENTOR' && (
+          <>
+            <a href="/mentor/dashboard" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Mentor Dashboard</a>
+            <a href="/mentor/chats" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Active Chats</a>
+            <a href="/mentor/workshops" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Hosted Workshops</a>
+            <a href="/resources" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Resources</a>
+          </>
+        )}
+
+        {currentRole === 'ADMIN' && (
+          <>
+            <a href="/admin/dashboard" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Admin Dashboard</a>
+            <a href="/admin/mentors" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Verify Mentors</a>
+            <a href="/resources" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Manage Resources</a>
+          </>
+        )}
+
+        {!currentRole && (
+          <>
+            <a href="/resources" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors">Resources</a>
+          </>
+        )}
+      </nav>
+
+      <!-- User Action / Auth CTA -->
+      <div class="flex items-center gap-3">
+        {currentRole ? (
+          <div class="flex items-center gap-3 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800">
+            <RoleBadge role={currentRole} isVerified={isVerified} />
+            {displayName && (
+              <span class="text-xs font-semibold text-slate-200 truncate max-w-[140px]">
+                {displayName}
+              </span>
+            )}
+            <button
+              id="logout-btn"
+              class="text-xs text-slate-400 hover:text-rose-400 transition-colors ml-1 font-medium"
+              title="Sign Out"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div class="flex items-center gap-2">
+            <a
+              href="/login"
+              class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all border border-slate-800"
+            >
+              Sign In
+            </a>
+            <a
+              href="/register"
+              class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 shadow-md shadow-teal-500/20 transition-all"
+            >
+              Get Started
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  import { clearAuthUser } from '../../stores/authStore';
+
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await fetch('http://localhost:3000/api/auth/logout', { method: 'POST' });
+      } catch (err) {
+        console.error('Logout error:', err);
+      } finally {
+        clearAuthUser();
+        window.location.href = '/login';
+      }
+    });
+  }
+</script>

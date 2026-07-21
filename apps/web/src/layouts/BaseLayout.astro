@@ -1,0 +1,54 @@
+---
+import Navbar from '../components/nav/Navbar.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentRole?: 'STUDENT' | 'MENTOR' | 'ADMIN' | null;
+  displayName?: string;
+  isVerified?: boolean;
+}
+
+const {
+  title = 'Campus Anonymous Peer Support',
+  description = 'A safe, confidential anonymous peer support platform for first-year students.',
+  currentRole = null,
+  displayName = '',
+  isVerified = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-slate-950 text-slate-100 font-['Plus_Jakarta_Sans',sans-serif] antialiased min-h-screen flex flex-col selection:bg-teal-500/30 selection:text-teal-200">
+    <Navbar currentRole={currentRole} displayName={displayName} isVerified={isVerified} />
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <slot />
+    </main>
+
+    <footer class="border-t border-slate-900 bg-slate-950/80 py-6 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <span>© 2026 Campus Anonymous Peer Support. Strictly Confidential & Safe Space.</span>
+        <div class="flex items-center gap-4 text-slate-400">
+          <a href="/resources" class="hover:text-slate-200 transition-colors">Helplines</a>
+          <a href="/privacy" class="hover:text-slate-200 transition-colors">Privacy Guarantee</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
