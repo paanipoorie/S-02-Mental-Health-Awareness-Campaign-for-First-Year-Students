@@ -1,75 +1,53 @@
 import type { Request, Response, NextFunction } from 'express';
-import type { ZodTypeAny } from 'zod';
-import { ZodError } from 'zod';
+import { type ZodTypeAny, ZodError } from 'zod';
+import { ApiError } from '../utils/ApiError.js';
 
-export function validateBody(schema: ZodTypeAny) {
-  return (req: Request, _res: Response, next: NextFunction): void => {
+export interface ValidationSchema {
+  body?: ZodTypeAny;
+  query?: ZodTypeAny;
+  params?: ZodTypeAny;
+}
+
+export function validate(schema: ZodTypeAny | ValidationSchema) {
+  return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
     try {
-      schema.parse({ body: req.body, cookies: req.cookies });
+      if ('parseAsync' in schema && typeof schema.parseAsync === 'function') {
+        req.body = await schema.parseAsync(req.body);
+      } else {
+        const valSchema = schema as ValidationSchema;
+        if (valSchema.body) {
+          req.body = await valSchema.body.parseAsync(req.body);
+        }
+        if (valSchema.query) {
+          req.query = await valSchema.query.parseAsync(req.query);
+        }
+        if (valSchema.params) {
+          req.params = await valSchema.params.parseAsync(req.params);
+        }
+      }
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const errors = error.errors.map(e => ({
-          field: e.path.join('.'),
-          message: e.message,
+        const formattedErrors = error.errors.map((err) => ({
+          field: err.path.join('.'),
+          message: err.message,
         }));
-        return next({
-          name: 'ValidationError',
-          code: 'VALIDATION_ERROR',
-          statusCode: 400,
-          message: 'Validation failed',
-          details: errors,
-        });
+        next(ApiError.badRequest('Validation failed', 'VALIDATION_ERROR', formattedErrors));
+      } else {
+        next(error);
       }
-      next(error);
     }
   };
+}
+
+export function validateBody(schema: ZodTypeAny) {
+  return validate({ body: schema });
 }
 
 export function validateQuery(schema: ZodTypeAny) {
-  return (req: Request, _res: Response, next: NextFunction): void => {
-    try {
-      schema.parse({ query: req.query });
-      next();
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const errors = error.errors.map(e => ({
-          field: e.path.join('.'),
-          message: e.message,
-        }));
-        return next({
-          name: 'ValidationError',
-          code: 'VALIDATION_ERROR',
-          statusCode: 400,
-          message: 'Validation failed',
-          details: errors,
-        });
-      }
-      next(error);
-    }
-  };
+  return validate({ query: schema });
 }
 
 export function validateParams(schema: ZodTypeAny) {
-  return (req: Request, _res: Response, next: NextFunction): void => {
-    try {
-      schema.parse({ params: req.params });
-      next();
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const errors = error.errors.map(e => ({
-          field: e.path.join('.'),
-          message: e.message,
-        }));
-        return next({
-          name: 'ValidationError',
-          code: 'VALIDATION_ERROR',
-          statusCode: 400,
-          message: 'Validation failed',
-          details: errors,
-        });
-      }
-      next(error);
-    }
-  };
+  return validate({ params: schema });
 }

@@ -1,9 +1,11 @@
 export {
   authMiddleware,
   optionalAuthMiddleware,
+} from './auth.middleware.js';
+export {
   requireRole,
   requireVerifiedMentor,
-} from './auth.middleware.js';
+} from './role.middleware.js';
 export {
   authRateLimiter,
   generalRateLimiter,
@@ -11,4 +13,10 @@ export {
   createRateLimiter,
 } from './rateLimiter.middleware.js';
 export type { RateLimitInfo } from './rateLimiter.middleware.js';
-export { validateBody, validateQuery, validateParams } from './validate.middleware.js';
+export {
+  validate,
+  validateBody,
+  validateQuery,
+  validateParams,
+} from './validate.middleware.js';
+export { errorHandler } from './error.middleware.js';
