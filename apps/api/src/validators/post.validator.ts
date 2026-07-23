@@ -1,35 +1,13 @@
 import { z } from 'zod';
-import { PostCategory, EmotionType, UrgencyLevel } from '@shared-types/enums';
+import { EmotionType, UrgencyLevel, PostCategory } from '@shared-types/enums';
 
 export const createPostSchema = z.object({
   body: z.object({
-    title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-    body: z.string().min(1, 'Body is required').max(10000, 'Body too long'),
+    title: z.string().min(5).max(200),
+    body: z.string().min(10).max(10000),
+    emotion: z.nativeEnum(EmotionType).optional(),
+    urgencyLevel: z.nativeEnum(UrgencyLevel).optional(),
     category: z.nativeEnum(PostCategory),
-    emotion: z.nativeEnum(EmotionType).optional(),
-    urgencyLevel: z.nativeEnum(UrgencyLevel).optional(),
-  }),
-});
-
-export const updatePostSchema = z.object({
-  body: z.object({
-    title: z.string().min(1, 'Title is required').max(200, 'Title too long').optional(),
-    body: z.string().min(1, 'Body is required').max(10000, 'Body too long').optional(),
-    category: z.nativeEnum(PostCategory).optional(),
-    emotion: z.nativeEnum(EmotionType).optional(),
-    urgencyLevel: z.nativeEnum(UrgencyLevel).optional(),
-  }),
-  params: z.object({
-    id: z.string().cuid('Invalid post ID'),
-  }),
-});
-
-export const createReplySchema = z.object({
-  body: z.object({
-    body: z.string().min(1, 'Reply body is required').max(5000, 'Reply too long'),
-  }),
-  params: z.object({
-    id: z.string().cuid('Invalid post ID'),
   }),
 });
 
@@ -44,20 +22,25 @@ export const getPostsQuerySchema = z.object({
 
 export const getPostParamsSchema = z.object({
   params: z.object({
-    id: z.string().cuid('Invalid post ID'),
+    id: z.string().cuid(),
   }),
 });
 
-export const deleteReplySchema = z.object({
+export const createReplySchema = z.object({
+  body: z.object({
+    body: z.string().min(1).max(5000),
+  }),
+});
+
+export const replyParamsSchema = z.object({
   params: z.object({
-    id: z.string().cuid('Invalid post ID'),
-    replyId: z.string().cuid('Invalid reply ID'),
+    id: z.string().cuid(),
+    replyId: z.string().cuid(),
   }),
 });
 
 export type CreatePostInput = z.infer<typeof createPostSchema>['body'];
-export type UpdatePostInput = z.infer<typeof updatePostSchema>['body'];
-export type CreateReplyInput = z.infer<typeof createReplySchema>['body'];
 export type GetPostsQuery = z.infer<typeof getPostsQuerySchema>['query'];
 export type GetPostParams = z.infer<typeof getPostParamsSchema>['params'];
-export type DeleteReplyParams = z.infer<typeof deleteReplySchema>['params'];
+export type CreateReplyInput = z.infer<typeof createReplySchema>['body'];
+export type DeleteReplyParams = z.infer<typeof replyParamsSchema>['params'];
