@@ -80,13 +80,15 @@ export const EMOTION_MAPPINGS: Record<string, EmotionMapping> = {
 };
 
 export function getEmotionMapping(emotion: string): EmotionMapping {
-  return EMOTION_MAPPINGS[emotion] || {
-    label: emotion,
-    icon: '❓',
-    color: '#6b7280',
-    bgColor: '#f3f4f6',
-    borderColor: '#d1d5db',
-  };
+  return (
+    EMOTION_MAPPINGS[emotion] || {
+      label: emotion,
+      icon: '❓',
+      color: '#6b7280',
+      bgColor: '#f3f4f6',
+      borderColor: '#d1d5db',
+    }
+  );
 }
 
 export interface UrgencyMapping {
@@ -118,10 +120,12 @@ export const URGENCY_MAPPINGS: Record<string, UrgencyMapping> = {
 };
 
 export function getUrgencyMapping(urgency: string): UrgencyMapping {
-  return URGENCY_MAPPINGS[urgency] || {
-    label: urgency,
-    color: '#6b7280',
-    bgColor: '#f3f4f6',
-    borderColor: '#d1d5db',
-  };
+  return (
+    URGENCY_MAPPINGS[urgency] || {
+      label: urgency,
+      color: '#6b7280',
+      bgColor: '#f3f4f6',
+      borderColor: '#d1d5db',
+    }
+  );
 }

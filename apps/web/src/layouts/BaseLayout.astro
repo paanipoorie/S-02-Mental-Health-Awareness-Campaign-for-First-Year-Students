@@ -34,19 +34,25 @@ const {
       rel="stylesheet"
     />
   </head>
-  <body class="bg-slate-950 text-slate-100 font-['Plus_Jakarta_Sans',sans-serif] antialiased min-h-screen flex flex-col selection:bg-teal-500/30 selection:text-teal-200">
+  <body
+    class="flex min-h-screen flex-col bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif] text-slate-100 antialiased selection:bg-teal-500/30 selection:text-teal-200"
+  >
     <Navbar currentRole={currentRole} displayName={displayName} isVerified={isVerified} />
 
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
       <slot />
     </main>
 
-    <footer class="border-t border-slate-900 bg-slate-950/80 py-6 text-center text-xs text-slate-500">
-      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <footer
+      class="border-t border-slate-900 bg-slate-950/80 py-6 text-center text-xs text-slate-500"
+    >
+      <div
+        class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row"
+      >
         <span>© 2026 Campus Anonymous Peer Support. Strictly Confidential & Safe Space.</span>
         <div class="flex items-center gap-4 text-slate-400">
-          <a href="/resources" class="hover:text-slate-200 transition-colors">Helplines</a>
-          <a href="/privacy" class="hover:text-slate-200 transition-colors">Privacy Guarantee</a>
+          <a href="/resources" class="transition-colors hover:text-slate-200">Helplines</a>
+          <a href="/privacy" class="transition-colors hover:text-slate-200">Privacy Guarantee</a>
         </div>
       </div>
     </footer>

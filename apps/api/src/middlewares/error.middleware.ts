@@ -52,7 +52,12 @@ export function errorHandler(
 
   // Validation Error wrapper format
   if (err && typeof err === 'object' && 'name' in err && err.name === 'ValidationError') {
-    const valErr = err as { statusCode?: number; code?: string; message?: string; details?: unknown };
+    const valErr = err as {
+      statusCode?: number;
+      code?: string;
+      message?: string;
+      details?: unknown;
+    };
     res.status(valErr.statusCode || 400).json({
       success: false,
       error: {

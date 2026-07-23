@@ -19,7 +19,15 @@ function sanitizeData(data: unknown): unknown {
   }
 
   const sanitized: Record<string, unknown> = {};
-  const sensitiveKeys = ['password', 'token', 'authorization', 'secret', 'cookie', 'refreshtoken', 'accesstoken'];
+  const sensitiveKeys = [
+    'password',
+    'token',
+    'authorization',
+    'secret',
+    'cookie',
+    'refreshtoken',
+    'accesstoken',
+  ];
 
   for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
     if (sensitiveKeys.includes(key.toLowerCase())) {
@@ -39,7 +47,9 @@ function formatLog(level: LogLevel, message: string, meta?: Record<string, unkno
     timestamp: new Date().toISOString(),
     level,
     message,
-    ...(meta && Object.keys(meta).length > 0 ? { meta: sanitizeData(meta) as Record<string, unknown> } : {}),
+    ...(meta && Object.keys(meta).length > 0
+      ? { meta: sanitizeData(meta) as Record<string, unknown> }
+      : {}),
   };
 
   if (isDevelopment) {

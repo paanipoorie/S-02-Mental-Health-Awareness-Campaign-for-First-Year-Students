@@ -1,4 +1,5 @@
-import { URGENCY_LEVELS, UrgencyLevel } from '../lib/emotionConstants';
+import { URGENCY_LEVELS } from '../lib/emotionConstants';
+import type { UrgencyLevel } from '../lib/emotionConstants';
 
 interface UrgencyPickerProps {
   selectedUrgency?: UrgencyLevel;
@@ -17,11 +18,13 @@ export function UrgencyPicker({ selectedUrgency, onSelect, className = '' }: Urg
               key={level}
               type="button"
               className={`urgency-chip ${isSelected ? 'selected' : ''}`}
-              style={{
-                '--urgency-color': color,
-                '--urgency-bg': bg,
-                '--urgency-border': color,
-              } as React.CSSProperties}
+              style={
+                {
+                  '--urgency-color': color,
+                  '--urgency-bg': bg,
+                  '--urgency-border': color,
+                } as React.CSSProperties
+              }
               onClick={() => onSelect(level)}
               aria-label={label}
               aria-pressed={isSelected}
@@ -63,7 +66,9 @@ export function UrgencyPicker({ selectedUrgency, onSelect, className = '' }: Urg
         .urgency-chip.selected {
           border-color: var(--urgency-color);
           background: var(--urgency-bg);
-          box-shadow: 0 0 0 2px var(--urgency-bg), 0 2px 8px rgba(0, 0, 0, 0.08);
+          box-shadow:
+            0 0 0 2px var(--urgency-bg),
+            0 2px 8px rgba(0, 0, 0, 0.08);
         }
         .urgency-chip:focus-visible {
           outline: 2px solid var(--urgency-color);

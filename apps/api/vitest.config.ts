@@ -31,6 +31,7 @@ export default defineConfig({
       '@validators': path.resolve(__dirname, './src/validators'),
       '@sockets': path.resolve(__dirname, './src/sockets'),
       '@types': path.resolve(__dirname, './src/types'),
+      '@shared-types': path.resolve(__dirname, '../../packages/shared-types/src'),
     },
   },
 });

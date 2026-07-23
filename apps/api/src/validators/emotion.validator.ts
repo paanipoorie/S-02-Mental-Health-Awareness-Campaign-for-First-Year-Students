@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { EmotionType, UrgencyLevel, EmotionContext, Role } from '@shared-types/enums';
+import { EmotionType, UrgencyLevel, EmotionContext } from '@shared-types/enums';
 
 export const createEmotionSchema = z.object({
   body: z.object({

@@ -37,7 +37,9 @@ export async function requireVerifiedMentor(
     });
 
     if (!user || !user.isVerifiedMentor) {
-      return next(ApiError.forbidden('Mentor verification required', 'FORBIDDEN_UNVERIFIED_MENTOR'));
+      return next(
+        ApiError.forbidden('Mentor verification required', 'FORBIDDEN_UNVERIFIED_MENTOR')
+      );
     }
 
     next();

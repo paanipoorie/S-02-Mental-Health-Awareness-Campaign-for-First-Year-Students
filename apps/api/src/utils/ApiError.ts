@@ -3,7 +3,12 @@ export class ApiError extends Error {
   public readonly code: string;
   public readonly details?: unknown;
 
-  constructor(statusCode: number, message: string, code: string = 'BAD_REQUEST', details?: unknown) {
+  constructor(
+    statusCode: number,
+    message: string,
+    code: string = 'BAD_REQUEST',
+    details?: unknown
+  ) {
     super(message);
     this.name = 'ApiError';
     this.statusCode = statusCode;
@@ -36,11 +41,17 @@ export class ApiError extends Error {
     return new ApiError(409, message, code);
   }
 
-  static tooManyRequests(message: string = 'Too many requests', code: string = 'TOO_MANY_REQUESTS'): ApiError {
+  static tooManyRequests(
+    message: string = 'Too many requests',
+    code: string = 'TOO_MANY_REQUESTS'
+  ): ApiError {
     return new ApiError(429, message, code);
   }
 
-  static internal(message: string = 'Internal server error', code: string = 'INTERNAL_SERVER_ERROR'): ApiError {
+  static internal(
+    message: string = 'Internal server error',
+    code: string = 'INTERNAL_SERVER_ERROR'
+  ): ApiError {
     return new ApiError(500, message, code);
   }
 }

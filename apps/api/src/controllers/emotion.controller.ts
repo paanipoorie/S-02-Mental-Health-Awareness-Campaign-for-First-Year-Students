@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { emotionService } from '../services/emotion.service';
-import { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator';
+import type { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator';
 import { ApiError } from '../utils/ApiError';
 
 export const emotionController = {
@@ -17,10 +17,7 @@ export const emotionController = {
         throw new ApiError(404, 'Anonymous identity not found');
       }
 
-      const emotionLog = await emotionService.createEmotionLog(
-        user.anonymousIdentityId,
-        data
-      );
+      const emotionLog = await emotionService.createEmotionLog(user.anonymousIdentityId, data);
 
       res.status(201).json({
         success: true,
@@ -43,9 +40,7 @@ export const emotionController = {
         throw new ApiError(404, 'Anonymous identity not found');
       }
 
-      const emotionLog = await emotionService.getLatestEmotion(
-        user.anonymousIdentityId
-      );
+      const emotionLog = await emotionService.getLatestEmotion(user.anonymousIdentityId);
 
       if (!emotionLog) {
         return res.status(404).json({

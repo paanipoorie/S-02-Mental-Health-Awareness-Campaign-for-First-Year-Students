@@ -1,4 +1,5 @@
-import { EMOTIONS, EmotionType } from '../lib/emotionConstants';
+import { EMOTIONS } from '../lib/emotionConstants';
+import type { EmotionType } from '../lib/emotionConstants';
 
 interface EmotionPickerProps {
   selectedEmotion?: EmotionType;
@@ -17,11 +18,13 @@ export function EmotionPicker({ selectedEmotion, onSelect, className = '' }: Emo
               key={type}
               type="button"
               className={`emotion-chip ${isSelected ? 'selected' : ''}`}
-              style={{
-                '--emotion-color': color,
-                '--emotion-bg': bg,
-                '--emotion-border': border,
-              } as React.CSSProperties}
+              style={
+                {
+                  '--emotion-color': color,
+                  '--emotion-bg': bg,
+                  '--emotion-border': border,
+                } as React.CSSProperties
+              }
               onClick={() => onSelect(type)}
               aria-label={label}
               aria-pressed={isSelected}
@@ -61,7 +64,9 @@ export function EmotionPicker({ selectedEmotion, onSelect, className = '' }: Emo
         .emotion-chip.selected {
           border-color: var(--emotion-color);
           background: var(--emotion-bg);
-          box-shadow: 0 0 0 3px var(--emotion-bg), 0 4px 12px rgba(0, 0, 0, 0.1);
+          box-shadow:
+            0 0 0 3px var(--emotion-bg),
+            0 4px 12px rgba(0, 0, 0, 0.1);
         }
         .emotion-chip:focus-visible {
           outline: 2px solid var(--emotion-color);

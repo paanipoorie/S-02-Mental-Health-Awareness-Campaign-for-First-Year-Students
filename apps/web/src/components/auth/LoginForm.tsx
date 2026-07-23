@@ -65,20 +65,25 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl backdrop-blur-xl">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-teal-300 via-indigo-200 to-purple-300 bg-clip-text text-transparent">
+    <div className="mx-auto w-full max-w-md rounded-3xl border border-slate-800 bg-slate-900/90 p-8 shadow-2xl backdrop-blur-xl">
+      <div className="mb-8 text-center">
+        <h2 className="bg-gradient-to-r from-teal-300 via-indigo-200 to-purple-300 bg-clip-text text-2xl font-bold text-transparent">
           Welcome Back
         </h2>
-        <p className="text-xs text-slate-400 mt-1">
+        <p className="mt-1 text-xs text-slate-400">
           Sign in confidentially to access peer support & discussions
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-medium flex items-center gap-2">
-          <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <div className="mb-6 flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs font-medium text-rose-300">
+          <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <span>{error}</span>
         </div>
@@ -86,29 +91,29 @@ export const LoginForm: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300">
             University Email
           </label>
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             placeholder="student@university.edu"
-            className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
+            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 transition-all focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400"
             required
           />
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300">
             Password
           </label>
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
             placeholder="••••••••••••"
-            className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-all"
+            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 transition-all focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400"
             required
           />
         </div>
@@ -116,11 +121,11 @@ export const LoginForm: React.FC = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 px-4 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-teal-500 via-indigo-600 to-purple-600 hover:from-teal-400 hover:to-purple-500 shadow-lg shadow-teal-500/25 transition-all disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-500 via-indigo-600 to-purple-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-500/25 transition-all hover:from-teal-400 hover:to-purple-500 disabled:opacity-50"
         >
           {loading ? (
             <>
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
               <span>Signing In...</span>
             </>
           ) : (
@@ -129,10 +134,10 @@ export const LoginForm: React.FC = () => {
         </button>
       </form>
 
-      <div className="mt-8 text-center border-t border-slate-800/80 pt-6">
+      <div className="mt-8 border-t border-slate-800/80 pt-6 text-center">
         <p className="text-xs text-slate-400">
           Don't have an account?{' '}
-          <a href="/register" className="text-teal-400 font-semibold hover:underline ml-1">
+          <a href="/register" className="ml-1 font-semibold text-teal-400 hover:underline">
             Register now
           </a>
         </p>
