@@ -9,11 +9,11 @@ export const createEmotionLogSchema = z.object({
   }),
 });
 
-export const getEmotionTrendsQuerySchema = z.object({
+export const getEmotionTrendsSchema = z.object({
   query: z.object({
-    window: z.enum(['24h', '7d', '30d']).optional().default('24h'),
+    window: z.enum(['24h', '7d', '30d']).optional(),
   }),
 });
 
 export type CreateEmotionLogInput = z.infer<typeof createEmotionLogSchema>['body'];
-export type GetEmotionTrendsQuery = z.infer<typeof getEmotionTrendsQuerySchema>['query'];
+export type GetEmotionTrendsInput = z.infer<typeof getEmotionTrendsSchema>['query'];
