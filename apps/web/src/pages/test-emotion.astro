@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EmotionPicker from '../../components/emotion/EmotionPicker.tsx';
+import UrgencyPicker from '../../components/emotion/UrgencyPicker.tsx';
+import EmotionBadge from '../../components/emotion/EmotionBadge.astro';
+---
+
+<BaseLayout title="Emotion Components Test">
+  <div class="min-h-screen bg-gray-50 py-12 px-4">
+    <div class="max-w-4xl mx-auto space-y-12">
+      <section>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">EmotionPicker Component Test</h2>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <EmotionPicker client:visible />
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">UrgencyPicker Component Test</h2>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <UrgencyPicker client:visible />
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">EmotionBadge Component Tests</h2>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200 space-y-4">
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-3">All Emotions (md size, with urgency)</h3>
+            <div class="flex flex-wrap gap-3">
+              <EmotionBadge emotion="HAPPY" urgency="LOW" size="md" />
+              <EmotionBadge emotion="EXCITED" urgency="MEDIUM" size="md" />
+              <EmotionBadge emotion="CONFUSED" urgency="HIGH" size="md" />
+              <EmotionBadge emotion="HOMESICK" urgency="LOW" size="md" />
+              <EmotionBadge emotion="LONELY" urgency="MEDIUM" size="md" />
+              <EmotionBadge emotion="SCARED" urgency="HIGH" size="md" />
+              <EmotionBadge emotion="ANXIOUS" urgency="LOW" size="md" />
+              <EmotionBadge emotion="BURNT_OUT" urgency="MEDIUM" size="md" />
+              <EmotionBadge emotion="OVERWHELMED" urgency="HIGH" size="md" />
+              <EmotionBadge emotion="STRESSED" urgency="LOW" size="md" />
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-3">All Emotions (sm size, no urgency)</h3>
+            <div class="flex flex-wrap gap-2">
+              <EmotionBadge emotion="HAPPY" showUrgency={false} size="sm" />
+              <EmotionBadge emotion="EXCITED" showUrgency={false} size="sm" />
+              <EmotionBadge emotion="CONFUSED" showUrgency={false} size="sm" />
+              <EmotionBadge emotion="HOMESICK" showUrgency={false} size="sm" />
+              <EmotionBadge emotion="LONELY" showUrgency={false} size="sm" />
+              <EmotionBadge emotion="SCARED" showUrgency={false} size="sm" />
+              <EmotionBadge emotion="ANXIOUS" showUrgency={false} size="sm" />
+              <EmotionBadge emotion="BURNT_OUT" showUrgency={false} size="sm" />
+              <EmotionBadge emotion="OVERWHELMED" showUrgency={false} size="sm" />
+              <EmotionBadge emotion="STRESSED" showUrgency={false} size="sm" />
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-3">All Emotions (lg size, with urgency)</h3>
+            <div class="flex flex-wrap gap-4">
+              <EmotionBadge emotion="HAPPY" urgency="LOW" size="lg" />
+              <EmotionBadge emotion="EXCITED" urgency="MEDIUM" size="lg" />
+              <EmotionBadge emotion="CONFUSED" urgency="HIGH" size="lg" />
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-medium text-gray-700 mb-3">Urgency Levels Only</h3>
+            <div class="flex flex-wrap gap-3">
+              <EmotionBadge emotion="ANXIOUS" urgency="LOW" size="md" />
+              <EmotionBadge emotion="ANXIOUS" urgency="MEDIUM" size="md" />
+              <EmotionBadge emotion="ANXIOUS" urgency="HIGH" size="md" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Interactive Test (with state)</h2>
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <EmotionPicker client:visible />
+          <UrgencyPicker client:visible className="mt-6" />
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
