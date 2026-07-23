@@ -1,13 +1,11 @@
-import { PrismaClient, EmotionType, UrgencyLevel, EmotionContext } from '@prisma/client';
-import { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator';
+import { PrismaClient } from '@prisma/client';
+import type { EmotionType, UrgencyLevel } from '@prisma/client';
+import type { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator';
 
 const prisma = new PrismaClient();
 
 export const emotionService = {
-  async createEmotionLog(
-    anonymousIdentityId: string,
-    data: CreateEmotionInput
-  ) {
+  async createEmotionLog(anonymousIdentityId: string, data: CreateEmotionInput) {
     const { emotion, urgencyLevel, context } = data;
 
     const emotionLog = await prisma.emotionLog.create({
