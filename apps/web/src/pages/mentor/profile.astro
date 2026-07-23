@@ -1,0 +1,18 @@
+---
+import MentorLayout from '../../layouts/MentorLayout.astro';
+import { MentorProfileForm } from '../../components/mentor/MentorProfileForm.tsx';
+---
+
+<MentorLayout title="Mentor Profile">
+  <div class="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+    <MentorProfileForm
+      client:load
+      initialProfile={{
+        department: '',
+        bio: '',
+        specialties: [],
+        availabilityStatus: 'OFFLINE',
+      }}
+    />
+  </div>
+</MentorLayout>

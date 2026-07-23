@@ -1,0 +1,41 @@
+---
+interface Props {
+  status: 'AVAILABLE' | 'BUSY' | 'OFFLINE';
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+---
+const { status, size = 'md', className = '' } = Astro.props;
+
+const sizeClasses = {
+  sm: 'px-2 py-0.5 text-xs',
+  md: 'px-2.5 py-1 text-sm',
+  lg: 'px-3 py-1.5 text-base',
+};
+
+const statusConfig = {
+  AVAILABLE: {
+    label: 'Available',
+    classes: 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800',
+    dot: 'bg-green-500 dark:bg-green-400',
+  },
+  BUSY: {
+    label: 'Busy',
+    classes: 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800',
+    dot: 'bg-yellow-500 dark:bg-yellow-400',
+  },
+  OFFLINE: {
+    label: 'Offline',
+    classes: 'bg-gray-50 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700',
+    dot: 'bg-gray-400 dark:bg-gray-500',
+  },
+};
+
+const config = statusConfig[status];
+const classList = 'inline-flex items-center gap-1.5 font-medium rounded-full border ' + sizeClasses[size] + ' ' + config.classes + ' ' + className;
+---
+
+<span class={classList}>
+  <span class={`w-1.5 h-1.5 rounded-full ${config.dot}`} aria-hidden="true" />
+  <span>{config.label}</span>
+</span>

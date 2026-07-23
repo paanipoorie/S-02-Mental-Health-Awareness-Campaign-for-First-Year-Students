@@ -11,6 +11,7 @@ import authRoutes from './routes/auth.routes.js';
 import emotionRoutes from './routes/emotion.routes.js';
 import postRoutes from './routes/post.routes.js';
 import chatRoutes from './routes/chat.routes.js';
+import mentorRoutes from './routes/mentor.routes.js';
 import { requestLoggerMiddleware } from './utils/logger.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 
@@ -47,6 +48,7 @@ export function createApp(): Application {
   app.use(`${env.API_PREFIX}/emotions`, emotionRoutes);
   app.use(`${env.API_PREFIX}/posts`, postRoutes);
   app.use(`${env.API_PREFIX}/chats`, chatRoutes);
+  app.use(`${env.API_PREFIX}/mentors`, mentorRoutes);
 
   app.get(`${env.API_PREFIX}`, (_req: Request, res: Response) => {
     res.json({
