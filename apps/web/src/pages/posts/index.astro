@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Posts - Anonymous Feed">
+  <div class="posts-page">
+    <header class="page-header">
+      <h1>Anonymous Posts</h1>
+      <p class="page-subtitle">Share your thoughts, get support, connect anonymously</p>
+      <a href="/posts/new" class="new-post-btn">+ New Post</a>
+    </header>
+
+    <div class="filters">
+      <select id="emotion-filter" class="filter-select">
+        <option value="">All Emotions</option>
+        <option value="HAPPY">😊 Happy</option>
+        <option value="EXCITED">🤩 Excited</option>
+        <option value="CONFUSED">😕 Confused</option>
+        <option value="HOMESICK">🏠 Homesick</option>
+        <option value="LONELY">😔 Lonely</option>
+        <option value="SCARED">😨 Scared</option>
+        <option value="ANXIOUS">😰 Anxious</option>
+        <option value="BURNT_OUT">😩 Burnt Out</option>
+        <option value="OVERWHELMED">🤯 Overwhelmed</option>
+        <option value="STRESSED">😤 Stressed</option>
+      </select>
+
+      <select id="category-filter" class="filter-select">
+        <option value="">All Categories</option>
+        <option value="ACADEMICS">📚 Academics</option>
+        <option value="HOSTEL">🏠 Hostel Life</option>
+        <option value="HOMESICKNESS">🏡 Homesickness</option>
+        <option value="FRIENDS">👯 Friends</option>
+        <option value="RELATIONSHIPS">💕 Relationships</option>
+        <option value="TIME_MANAGEMENT">⏰ Time Management</option>
+        <option value="EXAMS">📝 Exams</option>
+        <option value="SLEEP">😴 Sleep</option>
+        <option value="CLUBS">🎭 Clubs</option>
+        <option value="FINANCIAL">💰 Financial</option>
+        <option value="GENERAL">💬 General</option>
+      </select>
+    </div>
+
+    <div id="posts-feed" class="posts-feed">
+      <div class="loading">Loading posts...</div>
+    </div>
+
+    <div class="pagination">
+      <button id="prev-page" class="page-btn" disabled>Previous</button>
+      <span id="page-info">Page 1</span>
+      <button id="next-page" class="page-btn">Next</button>
+    </div>
+  </div>
+
+  <script is:inline>
+    // Client-side script will handle fetching and rendering posts
+  </script>
+
+  <style>
+    .posts-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    .page-header {
+      margin-bottom: 24px;
+    }
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 8px 0;
+    }
+    .page-subtitle {
+      color: #6b7280;
+      margin: 0 0 16px 0;
+    }
+    .new-post-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #0d9488, #14b8a6);
+      color: white;
+      border-radius: 10px;
+      font-weight: 600;
+      text-decoration: none;
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+    .new-post-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+    }
+    .filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .filter-select {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      background: white;
+      cursor: pointer;
+    }
+    .filter-select:focus {
+      outline: none;
+      border-color: #0d9488;
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    }
+    .posts-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+    }
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .page-btn {
+      padding: 10px 20px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      color: #374151;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .page-btn:hover:not(:disabled) {
+      background: #f9fafb;
+      border-color: #9ca3af;
+    }
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    #page-info {
+      color: #6b7280;
+      font-size: 14px;
+    }
+    @media (max-width: 640px) {
+      .posts-page {
+        padding: 16px 12px;
+      }
+      .filters {
+        flex-direction: column;
+      }
+      .filter-select {
+        width: 100%;
+      }
+    }
+  </style>
+</BaseLayout>

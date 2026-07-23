@@ -1,0 +1,208 @@
+---
+interface Props {
+  post: {
+    id: string;
+    title: string;
+    body: string;
+    category: string;
+    emotion?: string;
+    urgencyLevel?: string;
+    createdAt: string;
+    authorName: string;
+    authorAvatarSeed: number;
+    replyCount: number;
+    isOwnPost: boolean;
+  };
+  onReply?: (postId: string) => void;
+  onDelete?: (postId: string) => void;
+}
+---
+
+{/* Import emotion badge */}
+<script is:inline>
+  import { EMOTIONS, URGENCY_LEVELS } from '../../lib/emotionConstants';
+  import EmotionBadge from '../../components/emotion/EmotionBadge.astro';
+
+  const { post, onReply, onDelete } = Astro.props;
+  const timeAgo = new Date(post.createdAt).toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+  const emotionConfig = post.emotion ? EMOTIONS.find(e => e.type === post.emotion) : null;
+  const urgencyConfig = post.urgencyLevel
+    ? URGENCY_LEVELS.find(u => u.level === post.urgencyLevel)
+    : null;
+</script>
+
+<article class="post-card">
+  <header class="post-header">
+    <div class="author-info">
+      <span class="author-avatar" style="--avatar-seed: {post.authorAvatarSeed};">
+        {post.authorName.charAt(0)}
+      </span>
+      <div class="author-details">
+        <span class="author-name">{post.authorName}</span>
+        <time class="post-time" datetime={post.createdAt}>{timeAgo}</time>
+      </div>
+    </div>
+    {
+      post.isOwnPost && onDelete && (
+        <button class="delete-btn" onclick={onDelete} aria-label="Delete post">
+          🗑️
+        </button>
+      )
+    }
+  </header>
+
+  <h2 class="post-title">{post.title}</h2>
+
+  <div class="post-body" set:html={post.body} />
+
+  <div class="post-meta">
+    <span class="category-tag">{post.category}</span>
+    {emotionConfig && <EmotionBadge emotion={post.emotion} urgency={post.urgencyLevel} size="sm" />}
+  </div>
+
+  <footer class="post-footer">
+    <button class="reply-btn" onclick={() => onReply && onReply(post.id)}
+      >💬 {post.replyCount} {post.replyCount === 1 ? 'Reply' : 'Replies'}</button
+    >
+  </footer>
+</article>
+
+<style>
+  .post-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
+    transition:
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .post-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border-color: #d1d5db;
+  }
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .author-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
+  }
+  .author-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .author-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #111827;
+  }
+  .post-time {
+    font-size: 12px;
+    color: #9ca3af;
+  }
+  .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 6px;
+    opacity: 0.6;
+    transition:
+      opacity 0.15s ease,
+      background 0.15s ease;
+  }
+  .delete-btn:hover {
+    opacity: 1;
+    background: #fef2f2;
+  }
+  .post-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 10px;
+    line-height: 1.4;
+  }
+  .post-body {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .category-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: #f0fdfa;
+    color: #0d9488;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .post-footer {
+    border-top: 1px solid #f3f4f6;
+    padding-top: 14px;
+  }
+  .reply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .reply-btn:hover {
+    background: #f0fdfa;
+    border-color: #0d9488;
+    color: #0d9488;
+  }
+  @media (max-width: 480px) {
+    .post-card {
+      padding: 16px;
+    }
+    .post-title {
+      font-size: 16px;
+    }
+  }
+</style>
