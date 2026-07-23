@@ -1,7 +1,7 @@
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, { type Application, type Request, type Response, type NextFunction } from 'express';
+import express, { type Application, type Request, type Response } from 'express';
 import helmet from 'helmet';
 
 import { env, isDevelopment } from './config/env.js';

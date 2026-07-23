@@ -27,7 +27,7 @@ export async function fetchCurrentUser(): Promise<UserProfile | null> {
     const profile = await api.get<UserProfile>('/auth/me');
     setAuthUser(profile);
     return profile;
-  } catch (error) {
+  } catch {
     clearAuthUser();
     return null;
   } finally {

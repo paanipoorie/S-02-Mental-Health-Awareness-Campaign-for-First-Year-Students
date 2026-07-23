@@ -1,4 +1,4 @@
-import { Role } from '@campus-peer-support/shared-types';
+import type { Role } from '@campus-peer-support/shared-types';
 
 export interface UserProfile {
   id?: string;

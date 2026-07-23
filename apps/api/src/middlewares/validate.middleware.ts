@@ -8,22 +8,29 @@ export interface ValidationSchema {
   params?: ZodTypeAny;
 }
 
+function isValidationSchema(schema: ZodTypeAny | ValidationSchema): schema is ValidationSchema {
+  return (
+    typeof schema === 'object' &&
+    schema !== null &&
+    ('body' in schema || 'query' in schema || 'params' in schema)
+  );
+}
+
 export function validate(schema: ZodTypeAny | ValidationSchema) {
   return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
     try {
-      if ('parseAsync' in schema && typeof schema.parseAsync === 'function') {
-        req.body = await schema.parseAsync(req.body);
+      if (isValidationSchema(schema)) {
+        if (schema.body) {
+          req.body = await schema.body.parseAsync(req.body);
+        }
+        if (schema.query) {
+          req.query = await schema.query.parseAsync(req.query);
+        }
+        if (schema.params) {
+          req.params = await schema.params.parseAsync(req.params);
+        }
       } else {
-        const valSchema = schema as ValidationSchema;
-        if (valSchema.body) {
-          req.body = await valSchema.body.parseAsync(req.body);
-        }
-        if (valSchema.query) {
-          req.query = await valSchema.query.parseAsync(req.query);
-        }
-        if (valSchema.params) {
-          req.params = await valSchema.params.parseAsync(req.params);
-        }
+        req.body = await schema.parseAsync(req.body);
       }
       next();
     } catch (error) {

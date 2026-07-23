@@ -1,31 +1,25 @@
 import { Router } from 'express';
 import { authMiddleware, authRateLimiter } from '../middlewares/index.js';
 import {
-  registerSchema,
-  loginSchema,
-  refreshTokenSchema,
-  logoutSchema,
-} from '../validators/index.js';
+  registerBodySchemaExport as registerBodySchema,
+  loginBodySchemaExport as loginBodySchema,
+  refreshTokenBodySchemaExport as refreshTokenBodySchema,
+  logoutBodySchemaExport as logoutBodySchema,
+} from '../validators/auth.validator.js';
 import { validateBody } from '../middlewares/validate.middleware.js';
 import { authController } from '../controllers/auth.controller.js';
-import type { ZodTypeAny } from 'zod';
 
 const router: Router = Router();
 
 router.post(
   '/register',
   authRateLimiter,
-  validateBody(registerSchema as ZodTypeAny),
+  validateBody(registerBodySchema),
   authController.register
 );
-router.post(
-  '/login',
-  authRateLimiter,
-  validateBody(loginSchema as ZodTypeAny),
-  authController.login
-);
-router.post('/refresh', validateBody(refreshTokenSchema as ZodTypeAny), authController.refresh);
-router.post('/logout', validateBody(logoutSchema as ZodTypeAny), authController.logout);
+router.post('/login', authRateLimiter, validateBody(loginBodySchema), authController.login);
+router.post('/refresh', validateBody(refreshTokenBodySchema), authController.refresh);
+router.post('/logout', validateBody(logoutBodySchema), authController.logout);
 router.get('/me', authMiddleware, authController.me);
 
 export default router;

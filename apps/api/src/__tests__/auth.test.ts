@@ -349,11 +349,11 @@ describe('Authentication Integration Tests', () => {
       expect(response.body.error.code).toBe('INVALID_REFRESH_TOKEN');
     });
 
-    it('should return 400 when refresh token is missing', async () => {
-      const response = await request(app).post('/api/auth/refresh').send({}).expect(400);
+    it('should return 401 when refresh token is missing', async () => {
+      const response = await request(app).post('/api/auth/refresh').send({}).expect(401);
 
       expect(response.body.success).toBe(false);
-      expect(response.body.error.code).toBe('VALIDATION_ERROR');
+      expect(response.body.error.code).toBe('REFRESH_TOKEN_REQUIRED');
     });
   });
 

@@ -6,7 +6,7 @@ import { prisma } from '../prisma/client.js';
 export function requireRole(...allowedRoles: Role[]) {
   return (req: Request, _res: Response, next: NextFunction): void => {
     if (!req.user) {
-      return next(ApiError.unauthorized('Authentication required', 'UNAUTHORIZED'));
+      return next(ApiError.unauthorized('Authentication required', 'MISSING_AUTH'));
     }
 
     if (!allowedRoles.includes(req.user.role)) {
@@ -23,7 +23,7 @@ export async function requireVerifiedMentor(
   next: NextFunction
 ): Promise<void> {
   if (!req.user) {
-    return next(ApiError.unauthorized('Authentication required', 'UNAUTHORIZED'));
+    return next(ApiError.unauthorized('Authentication required', 'MISSING_AUTH'));
   }
 
   if (req.user.role !== Role.MENTOR) {
@@ -37,9 +37,7 @@ export async function requireVerifiedMentor(
     });
 
     if (!user || !user.isVerifiedMentor) {
-      return next(
-        ApiError.forbidden('Mentor verification required', 'FORBIDDEN_UNVERIFIED_MENTOR')
-      );
+      return next(ApiError.forbidden('Mentor not verified', 'FORBIDDEN'));
     }
 
     next();
