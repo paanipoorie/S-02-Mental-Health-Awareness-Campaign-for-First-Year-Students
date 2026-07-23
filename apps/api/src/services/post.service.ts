@@ -1,64 +1,27 @@
-import { PrismaClient, PostCategory, EmotionType, UrgencyLevel } from '@prisma/client';
-import type { CreatePostInput, UpdatePostInput, CreateReplyInput, GetPostsQuery, GetPostParams, DeleteReplyParams } from '../validators/post.validator';
+import { PrismaClient } from '@prisma/client';
+import type { CreatePostInput, GetPostsQuery, CreateReplyInput } from '../validators/post.validator';
 
 const prisma = new PrismaClient();
 
-const POST_SELECT = {
-  id: true,
-  title: true,
-  body: true,
-  category: true,
-  emotion: true,
-  urgencyLevel: true,
-  createdAt: true,
-  updatedAt: true,
-  isDeleted: true,
-  anonymousIdentity: {
-    select: {
-      id: true,
-      displayName: true,
-      avatarSeed: true,
-    },
-  },
-  _count: {
-    select: { replies: { where: { isDeleted: false } } },
-  },
-} as const;
-
-const REPLY_SELECT = {
-  id: true,
-  body: true,
-  createdAt: true,
-  isDeleted: true,
-  anonymousIdentity: {
-    select: {
-      id: true,
-      displayName: true,
-      avatarSeed: true,
-    },
-  },
-  post: {
-    select: {
-      id: true,
-      anonymousIdentityId: true,
-    },
-  },
-} as const;
-
 export const postService = {
   async createPost(anonymousIdentityId: string, data: CreatePostInput) {
-    const { title, body, category, emotion, urgencyLevel } = data;
-
     const post = await prisma.post.create({
       data: {
         anonymousIdentityId,
-        title,
-        body,
-        category,
-        emotion,
-        urgencyLevel,
+        title: data.title,
+        body: data.body,
+        category: data.category,
+        emotion: data.emotion,
+        urgencyLevel: data.urgencyLevel,
       },
-      select: POST_SELECT,
+      include: {
+        anonymousIdentity: {
+          select: {
+            displayName: true,
+            avatarSeed: true,
+          },
+        },
+      },
     });
 
     return post;
@@ -75,6 +38,7 @@ export const postService = {
     if (emotion) {
       where.emotion = emotion;
     }
+
     if (category) {
       where.category = category;
     }
@@ -82,10 +46,20 @@ export const postService = {
     const [posts, total] = await Promise.all([
       prisma.post.findMany({
         where,
-        select: POST_SELECT,
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
+        include: {
+          anonymousIdentity: {
+            select: {
+              displayName: true,
+              avatarSeed: true,
+            },
+          },
+          _count: {
+            select: { replies: { where: { isDeleted: false } } },
+          },
+        },
       }),
       prisma.post.count({ where }),
     ]);
@@ -103,28 +77,44 @@ export const postService = {
   },
 
   async getPostById(id: string) {
-    const post = await prisma.post.findFirst({
-      where: { id, isDeleted: false },
-      select: {
-        ...POST_SELECT,
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: {
+        anonymousIdentity: {
+          select: {
+            displayName: true,
+            avatarSeed: true,
+          },
+        },
         replies: {
           where: { isDeleted: false },
-          select: REPLY_SELECT,
           orderBy: { createdAt: 'asc' },
+          include: {
+            anonymousIdentity: {
+              select: {
+                displayName: true,
+                avatarSeed: true,
+              },
+            },
+          },
         },
       },
     });
 
+    if (post && post.isDeleted) {
+      return null;
+    }
+
     return post;
   },
 
-  async updatePost(id: string, anonymousIdentityId: string, data: UpdatePostInput) {
-    const post = await prisma.post.findFirst({
-      where: { id, isDeleted: false },
-      select: { anonymousIdentityId: true },
+  async updatePost(id: string, anonymousIdentityId: string, data: Partial<CreatePostInput>) {
+    const post = await prisma.post.findUnique({
+      where: { id },
+      select: { anonymousIdentityId: true, isDeleted: true },
     });
 
-    if (!post) {
+    if (!post || post.isDeleted) {
       return null;
     }
 
@@ -134,20 +124,33 @@ export const postService = {
 
     const updatedPost = await prisma.post.update({
       where: { id },
-      data,
-      select: POST_SELECT,
+      data: {
+        title: data.title,
+        body: data.body,
+        emotion: data.emotion,
+        urgencyLevel: data.urgencyLevel,
+        category: data.category,
+      },
+      include: {
+        anonymousIdentity: {
+          select: {
+            displayName: true,
+            avatarSeed: true,
+          },
+        },
+      },
     });
 
     return updatedPost;
   },
 
   async deletePost(id: string, anonymousIdentityId: string) {
-    const post = await prisma.post.findFirst({
-      where: { id, isDeleted: false },
-      select: { anonymousIdentityId: true },
+    const post = await prisma.post.findUnique({
+      where: { id },
+      select: { anonymousIdentityId: true, isDeleted: true },
     });
 
-    if (!post) {
+    if (!post || post.isDeleted) {
       return false;
     }
 
@@ -164,12 +167,12 @@ export const postService = {
   },
 
   async createReply(postId: string, anonymousIdentityId: string, data: CreateReplyInput) {
-    const post = await prisma.post.findFirst({
-      where: { id: postId, isDeleted: false },
-      select: { id: true },
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      select: { id: true, isDeleted: true },
     });
 
-    if (!post) {
+    if (!post || post.isDeleted) {
       throw new Error('POST_NOT_FOUND');
     }
 
@@ -179,19 +182,26 @@ export const postService = {
         anonymousIdentityId,
         body: data.body,
       },
-      select: REPLY_SELECT,
+      include: {
+        anonymousIdentity: {
+          select: {
+            displayName: true,
+            avatarSeed: true,
+          },
+        },
+      },
     });
 
     return reply;
   },
 
   async deleteReply(postId: string, replyId: string, anonymousIdentityId: string) {
-    const reply = await prisma.postReply.findFirst({
-      where: { id: replyId, postId, isDeleted: false },
-      select: { anonymousIdentityId: true, post: { select: { anonymousIdentityId: true } } },
+    const reply = await prisma.postReply.findUnique({
+      where: { id: replyId },
+      select: { postId: true, anonymousIdentityId: true, isDeleted: true },
     });
 
-    if (!reply) {
+    if (!reply || reply.isDeleted || reply.postId !== postId) {
       return false;
     }
 
