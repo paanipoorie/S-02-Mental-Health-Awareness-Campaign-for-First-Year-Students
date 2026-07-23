@@ -9,6 +9,7 @@ import { prisma } from './prisma/client.js';
 import healthRoutes from './routes/health.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import emotionRoutes from './routes/emotion.routes.js';
+import postRoutes from './routes/post.routes.js';
 import { requestLoggerMiddleware } from './utils/logger.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 
@@ -43,6 +44,7 @@ export function createApp(): Application {
   app.use(`${env.API_PREFIX}/health`, healthRoutes);
   app.use(`${env.API_PREFIX}/auth`, authRoutes);
   app.use(`${env.API_PREFIX}/emotions`, emotionRoutes);
+  app.use(`${env.API_PREFIX}/posts`, postRoutes);
 
   app.get(`${env.API_PREFIX}`, (_req: Request, res: Response) => {
     res.json({

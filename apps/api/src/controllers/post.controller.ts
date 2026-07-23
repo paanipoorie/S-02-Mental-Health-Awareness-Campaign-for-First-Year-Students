@@ -1,6 +1,13 @@
 import type { Request, Response, NextFunction } from 'express';
 import { postService } from '../services/post.service';
-import type { CreatePostInput, UpdatePostInput, CreateReplyInput, GetPostsQuery, GetPostParams, DeleteReplyParams } from '../validators/post.validator';
+import type {
+  CreatePostInput,
+  UpdatePostInput,
+  CreateReplyInput,
+  GetPostsQuery,
+  GetPostParams,
+  DeleteReplyParams,
+} from '../validators/post.validator';
 import { ApiError } from '../utils/ApiError';
 
 export const postController = {

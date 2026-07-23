@@ -1,5 +1,9 @@
 import { PrismaClient } from '@prisma/client';
-import type { CreatePostInput, GetPostsQuery, CreateReplyInput } from '../validators/post.validator';
+import type {
+  CreatePostInput,
+  GetPostsQuery,
+  CreateReplyInput,
+} from '../validators/post.validator';
 
 const prisma = new PrismaClient();
 
