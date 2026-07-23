@@ -1,1 +1,4 @@
 export * from './auth.validator.js';
+export * from './emotion.validator.js';
+export * from './post.validator.js';
+export * from './chat.validator.js';

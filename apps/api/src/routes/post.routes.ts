@@ -1,16 +1,16 @@
 import { Router } from 'express';
-import { postController } from '../controllers/post.controller';
-import { validate } from '../middlewares/validate.middleware';
-import { authMiddleware } from '../middlewares';
+import { postController } from '../controllers/post.controller.js';
+import { validate } from '../middlewares/validate.middleware.js';
+import { authMiddleware } from '../middlewares/index.js';
 import {
   createPostSchema,
   getPostsQuerySchema,
   getPostParamsSchema,
   createReplySchema,
   replyParamsSchema,
-} from '../validators/post.validator';
+} from '../validators/post.validator.js';
 
-const router = Router();
+const router: Router = Router();
 
 router.use(authMiddleware);
 

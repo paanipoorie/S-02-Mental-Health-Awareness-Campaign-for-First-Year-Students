@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import type { EmotionType, UrgencyLevel } from '@prisma/client';
-import type { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator';
+import type { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator.js';
 
 const prisma = new PrismaClient();
 
@@ -12,7 +12,7 @@ export const emotionService = {
       data: {
         anonymousIdentityId,
         emotion,
-        urgencyLevel,
+        urgencyLevel: urgencyLevel ?? null,
         context,
       },
       include: {

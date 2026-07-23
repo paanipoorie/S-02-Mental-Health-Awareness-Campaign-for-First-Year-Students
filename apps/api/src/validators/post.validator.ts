@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { EmotionType, UrgencyLevel, PostCategory } from '@shared-types/enums';
+import { EmotionType, UrgencyLevel, PostCategory } from '@campus-peer-support/shared-types/enums';
 
 export const createPostSchema = z.object({
   body: z.object({
@@ -39,7 +39,18 @@ export const replyParamsSchema = z.object({
   }),
 });
 
+export const updatePostSchema = z.object({
+  body: z.object({
+    title: z.string().min(5).max(200).optional(),
+    body: z.string().min(10).max(10000).optional(),
+    emotion: z.nativeEnum(EmotionType).nullable().optional(),
+    urgencyLevel: z.nativeEnum(UrgencyLevel).nullable().optional(),
+    category: z.nativeEnum(PostCategory).optional(),
+  }),
+});
+
 export type CreatePostInput = z.infer<typeof createPostSchema>['body'];
+export type UpdatePostInput = z.infer<typeof updatePostSchema>['body'];
 export type GetPostsQuery = z.infer<typeof getPostsQuerySchema>['query'];
 export type GetPostParams = z.infer<typeof getPostParamsSchema>['params'];
 export type CreateReplyInput = z.infer<typeof createReplySchema>['body'];

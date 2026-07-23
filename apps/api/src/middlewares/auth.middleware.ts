@@ -5,7 +5,7 @@ import { AuthError } from '../services/auth.service.js';
 import { prisma } from '../prisma/client.js';
 
 export interface AuthenticatedRequest extends Request {
-  user: TokenPayload & { role: Role };
+  user: TokenPayload & { role: Role; anonymousIdentityId?: string | null };
 }
 
 function extractTokenFromHeader(req: Request): string | null {
@@ -29,10 +29,12 @@ export function authMiddleware(req: Request, _res: Response, next: NextFunction)
 
   try {
     const payload = verifyAccessToken(token);
+    const anonymousIdentityId = payload.anonymousIdentityId ?? null;
     req.user = {
       userId: payload.userId,
       role: payload.role as Role,
       email: payload.email,
+      anonymousIdentityId,
     };
     next();
   } catch (error) {
@@ -59,6 +61,7 @@ export function optionalAuthMiddleware(req: Request, _res: Response, next: NextF
       userId: payload.userId,
       role: payload.role as Role,
       email: payload.email,
+      anonymousIdentityId: payload.anonymousIdentityId ?? null,
     };
   } catch {
     // Silently ignore invalid tokens for optional auth

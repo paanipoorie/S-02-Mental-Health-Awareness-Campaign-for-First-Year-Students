@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { postService } from '../services/post.service';
+import { postService } from '../services/post.service.js';
 import type {
   CreatePostInput,
   UpdatePostInput,
@@ -7,8 +7,8 @@ import type {
   GetPostsQuery,
   GetPostParams,
   DeleteReplyParams,
-} from '../validators/post.validator';
-import { ApiError } from '../utils/ApiError';
+} from '../validators/post.validator.js';
+import { ApiError } from '../utils/ApiError.js';
 
 export const postController = {
   async createPost(req: Request, res: Response, next: NextFunction) {

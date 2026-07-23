@@ -110,7 +110,15 @@ export class AuthService {
   }
 
   private async createUserTokens(userId: string, role: Role, email: string): Promise<AuthTokens> {
-    const payload: TokenPayload = { userId, role, email };
+    let anonymousIdentityId: string | null = null;
+    if (role === Role.STUDENT) {
+      const identity = await prisma.anonymousIdentity.findUnique({
+        where: { userId },
+        select: { id: true },
+      });
+      anonymousIdentityId = identity?.id ?? null;
+    }
+    const payload: TokenPayload = { userId, role, email, anonymousIdentityId };
     const accessToken = signAccessToken(payload);
     const refreshToken = signRefreshToken(payload);
     return { accessToken, refreshToken };
@@ -230,6 +238,7 @@ export class AuthService {
       userId: user.id,
       role: toSharedRole(user.role),
       email: user.universityEmail,
+      anonymousIdentityId: payload.anonymousIdentityId,
     });
 
     return { accessToken: newAccessToken };

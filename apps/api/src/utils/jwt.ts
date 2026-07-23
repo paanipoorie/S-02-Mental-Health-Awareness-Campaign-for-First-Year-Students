@@ -5,6 +5,7 @@ export interface TokenPayload {
   userId: string;
   role: string;
   email: string;
+  anonymousIdentityId?: string | null | undefined;
 }
 
 const signOptions: SignOptions = {

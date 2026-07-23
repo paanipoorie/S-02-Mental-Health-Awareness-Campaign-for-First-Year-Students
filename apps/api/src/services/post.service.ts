@@ -1,9 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import type {
   CreatePostInput,
+  UpdatePostInput,
   GetPostsQuery,
   CreateReplyInput,
-} from '../validators/post.validator';
+} from '../validators/post.validator.js';
 
 const prisma = new PrismaClient();
 
@@ -15,8 +16,8 @@ export const postService = {
         title: data.title,
         body: data.body,
         category: data.category,
-        emotion: data.emotion,
-        urgencyLevel: data.urgencyLevel,
+        emotion: data.emotion ?? null,
+        urgencyLevel: data.urgencyLevel ?? null,
       },
       include: {
         anonymousIdentity: {
@@ -93,14 +94,6 @@ export const postService = {
         replies: {
           where: { isDeleted: false },
           orderBy: { createdAt: 'asc' },
-          include: {
-            anonymousIdentity: {
-              select: {
-                displayName: true,
-                avatarSeed: true,
-              },
-            },
-          },
         },
       },
     });
@@ -112,7 +105,7 @@ export const postService = {
     return post;
   },
 
-  async updatePost(id: string, anonymousIdentityId: string, data: Partial<CreatePostInput>) {
+  async updatePost(id: string, anonymousIdentityId: string, data: UpdatePostInput) {
     const post = await prisma.post.findUnique({
       where: { id },
       select: { anonymousIdentityId: true, isDeleted: true },
@@ -126,15 +119,17 @@ export const postService = {
       throw new Error('FORBIDDEN');
     }
 
+    const updateData: Record<string, unknown> = {};
+
+    if (data.title !== undefined) updateData.title = data.title;
+    if (data.body !== undefined) updateData.body = data.body;
+    if (data.emotion !== undefined) updateData.emotion = data.emotion ?? null;
+    if (data.urgencyLevel !== undefined) updateData.urgencyLevel = data.urgencyLevel ?? null;
+    if (data.category !== undefined) updateData.category = data.category;
+
     const updatedPost = await prisma.post.update({
       where: { id },
-      data: {
-        title: data.title,
-        body: data.body,
-        emotion: data.emotion,
-        urgencyLevel: data.urgencyLevel,
-        category: data.category,
-      },
+      data: updateData,
       include: {
         anonymousIdentity: {
           select: {
@@ -185,14 +180,6 @@ export const postService = {
         postId,
         anonymousIdentityId,
         body: data.body,
-      },
-      include: {
-        anonymousIdentity: {
-          select: {
-            displayName: true,
-            avatarSeed: true,
-          },
-        },
       },
     });
 

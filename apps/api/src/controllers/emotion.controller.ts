@@ -1,10 +1,10 @@
 import type { Request, Response, NextFunction } from 'express';
-import { emotionService } from '../services/emotion.service';
-import type { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator';
-import { ApiError } from '../utils/ApiError';
+import { emotionService } from '../services/emotion.service.js';
+import type { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator.js';
+import { ApiError } from '../utils/ApiError.js';
 
 export const emotionController = {
-  async createEmotion(req: Request, res: Response, next: NextFunction) {
+  async createEmotion(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const user = req.user!;
       const data = req.body as CreateEmotionInput;
@@ -28,7 +28,7 @@ export const emotionController = {
     }
   },
 
-  async getMyEmotion(req: Request, res: Response, next: NextFunction) {
+  async getMyEmotion(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const user = req.user!;
 
@@ -43,10 +43,11 @@ export const emotionController = {
       const emotionLog = await emotionService.getLatestEmotion(user.anonymousIdentityId);
 
       if (!emotionLog) {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           error: { code: 'NOT_FOUND', message: 'No emotion logged yet' },
         });
+        return;
       }
 
       res.json({
@@ -58,7 +59,7 @@ export const emotionController = {
     }
   },
 
-  async getTrends(req: Request, res: Response, next: NextFunction) {
+  async getTrends(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const user = req.user!;
 
@@ -73,6 +74,7 @@ export const emotionController = {
         success: true,
         data: trends,
       });
+      return;
     } catch (error) {
       next(error);
     }
