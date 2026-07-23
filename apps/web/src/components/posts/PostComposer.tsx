@@ -213,3 +213,5 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
     </form>
   );
 }
+
+export default PostComposer;

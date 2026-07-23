@@ -1,5 +1,5 @@
-import { EMOTIONS } from '../lib/emotionConstants';
-import type { EmotionType } from '../lib/emotionConstants';
+import { EMOTIONS } from '@lib/emotionConstants';
+import type { EmotionType } from '@lib/emotionConstants';
 
 interface EmotionPickerProps {
   selectedEmotion?: EmotionType;

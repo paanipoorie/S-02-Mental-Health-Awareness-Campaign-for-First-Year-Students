@@ -1,5 +1,5 @@
-import { URGENCY_LEVELS } from '../lib/emotionConstants';
-import type { UrgencyLevel } from '../lib/emotionConstants';
+import { URGENCY_LEVELS } from '@lib/emotionConstants';
+import type { UrgencyLevel } from '@lib/emotionConstants';
 
 interface UrgencyPickerProps {
   selectedUrgency?: UrgencyLevel;

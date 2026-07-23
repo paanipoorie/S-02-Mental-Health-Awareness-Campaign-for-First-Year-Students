@@ -1,0 +1,84 @@
+---
+import StudentLayout from '../../layouts/StudentLayout.astro';
+import PostComposer from '../../components/posts/PostComposer.tsx';
+import { AuthGuard } from '../../components/auth/AuthGuard.tsx';
+---
+
+<StudentLayout title="Create Post - Anonymous Feed">
+  <div class="create-post-page">
+    <header class="page-header">
+      <a href="/posts" class="back-link">← Back to Posts</a>
+      <h1>Create Anonymous Post</h1>
+      <p class="page-subtitle">Share your thoughts anonymously with the community</p>
+    </header>
+
+    <main class="create-post-main">
+      <AuthGuard client:visible />
+      <PostComposer
+        client:visible
+        onSubmit={async data => {
+          const response = await fetch('/api/posts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(data),
+          });
+          const result = await response.json();
+          if (result.success) {
+            window.location.href = `/posts/${result.data.id}`;
+          } else {
+            alert(result.error?.message || 'Failed to create post');
+          }
+        }}
+      />
+    </main>
+  </div>
+
+  <style>
+    .create-post-page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    .page-header {
+      margin-bottom: 24px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 12px;
+      transition: color 0.15s ease;
+    }
+    .back-link:hover {
+      color: #0d9488;
+    }
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 8px 0;
+    }
+    .page-subtitle {
+      color: #6b7280;
+      margin: 0;
+    }
+    .create-post-main {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 24px;
+    }
+    @media (max-width: 640px) {
+      .create-post-page {
+        padding: 16px 12px;
+      }
+      .create-post-main {
+        padding: 16px;
+      }
+    }
+  </style>
+</StudentLayout>
