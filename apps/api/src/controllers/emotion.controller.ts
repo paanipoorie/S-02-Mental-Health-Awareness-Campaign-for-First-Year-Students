@@ -1,19 +1,25 @@
-import { type Request, type Response, type NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { emotionService } from '../services/emotion.service';
+import { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator';
 import { ApiError } from '../utils/ApiError';
 
 export const emotionController = {
-  async createEmotionLog(req: Request, res: Response, next: NextFunction) {
+  async createEmotion(req: Request, res: Response, next: NextFunction) {
     try {
-      const anonymousIdentityId = req.user!.anonymousIdentityId;
+      const user = req.user!;
+      const data = req.body as CreateEmotionInput;
 
-      if (!anonymousIdentityId) {
-        throw new ApiError(400, 'No anonymous identity found for this user');
+      if (user.role !== 'STUDENT') {
+        throw new ApiError(403, 'Only students can log emotions');
+      }
+
+      if (!user.anonymousIdentityId) {
+        throw new ApiError(404, 'Anonymous identity not found');
       }
 
       const emotionLog = await emotionService.createEmotionLog(
-        anonymousIdentityId,
-        req.body
+        user.anonymousIdentityId,
+        data
       );
 
       res.status(201).json({
@@ -25,15 +31,28 @@ export const emotionController = {
     }
   },
 
-  async getMyLatestEmotion(req: Request, res: Response, next: NextFunction) {
+  async getMyEmotion(req: Request, res: Response, next: NextFunction) {
     try {
-      const anonymousIdentityId = req.user!.anonymousIdentityId;
+      const user = req.user!;
 
-      if (!anonymousIdentityId) {
-        throw new ApiError(400, 'No anonymous identity found for this user');
+      if (user.role !== 'STUDENT') {
+        throw new ApiError(403, 'Only students can view their emotion');
       }
 
-      const emotionLog = await emotionService.getLatestEmotion(anonymousIdentityId);
+      if (!user.anonymousIdentityId) {
+        throw new ApiError(404, 'Anonymous identity not found');
+      }
+
+      const emotionLog = await emotionService.getLatestEmotion(
+        user.anonymousIdentityId
+      );
+
+      if (!emotionLog) {
+        return res.status(404).json({
+          success: false,
+          error: { code: 'NOT_FOUND', message: 'No emotion logged yet' },
+        });
+      }
 
       res.json({
         success: true,
@@ -44,9 +63,16 @@ export const emotionController = {
     }
   },
 
-  async getEmotionTrends(req: Request, res: Response, next: NextFunction) {
+  async getTrends(req: Request, res: Response, next: NextFunction) {
     try {
-      const trends = await emotionService.getEmotionTrends(req.query as any);
+      const user = req.user!;
+
+      if (user.role !== 'MENTOR' && user.role !== 'ADMIN') {
+        throw new ApiError(403, 'Only mentors and admins can view emotion trends');
+      }
+
+      const query = req.query as unknown as GetTrendsInput;
+      const trends = await emotionService.getEmotionTrends(query);
 
       res.json({
         success: true,

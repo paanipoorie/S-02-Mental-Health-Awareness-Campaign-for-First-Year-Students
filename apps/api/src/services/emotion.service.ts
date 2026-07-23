@@ -1,12 +1,12 @@
 import { PrismaClient, EmotionType, UrgencyLevel, EmotionContext } from '@prisma/client';
-import { CreateEmotionLogInput, GetEmotionTrendsQuery } from '../validators/emotion.validator';
+import { CreateEmotionInput, GetTrendsInput } from '../validators/emotion.validator';
 
 const prisma = new PrismaClient();
 
 export const emotionService = {
   async createEmotionLog(
     anonymousIdentityId: string,
-    data: CreateEmotionLogInput
+    data: CreateEmotionInput
   ) {
     const { emotion, urgencyLevel, context } = data;
 
@@ -47,32 +47,16 @@ export const emotionService = {
     return emotionLog;
   },
 
-  async getEmotionTrends(query: GetEmotionTrendsQuery) {
-    const { window } = query;
+  async getEmotionTrends(query: GetTrendsInput) {
+    const { hours } = query;
 
     const now = new Date();
-    let startDate: Date;
-
-    switch (window) {
-      case '7d':
-        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
-      case '30d':
-        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      case '24h':
-      default:
-        startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-        break;
-    }
+    const startDate = new Date(now.getTime() - hours * 60 * 60 * 1000);
 
     const logs = await prisma.emotionLog.findMany({
       where: {
         createdAt: {
           gte: startDate,
-        },
-        context: {
-          in: [EmotionContext.STANDALONE, EmotionContext.POST, EmotionContext.CHAT],
         },
       },
       select: {
@@ -129,7 +113,7 @@ export const emotionService = {
     }
 
     return {
-      window,
+      windowHours: hours,
       startDate: startDate.toISOString(),
       endDate: now.toISOString(),
       totalLogs: logs.length,

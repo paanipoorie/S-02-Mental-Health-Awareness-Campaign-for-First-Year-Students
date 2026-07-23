@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { EmotionType, UrgencyLevel, EmotionContext } from '@shared-types/enums';
+import { EmotionType, UrgencyLevel, EmotionContext, Role } from '@shared-types/enums';
 
-export const createEmotionLogSchema = z.object({
+export const createEmotionSchema = z.object({
   body: z.object({
     emotion: z.nativeEnum(EmotionType),
     urgencyLevel: z.nativeEnum(UrgencyLevel).optional(),
@@ -9,11 +9,11 @@ export const createEmotionLogSchema = z.object({
   }),
 });
 
-export const getEmotionTrendsSchema = z.object({
+export const getTrendsSchema = z.object({
   query: z.object({
-    window: z.enum(['24h', '7d', '30d']).optional(),
+    hours: z.coerce.number().int().positive().max(168).default(24),
   }),
 });
 
-export type CreateEmotionLogInput = z.infer<typeof createEmotionLogSchema>['body'];
-export type GetEmotionTrendsInput = z.infer<typeof getEmotionTrendsSchema>['query'];
+export type CreateEmotionInput = z.infer<typeof createEmotionSchema>['body'];
+export type GetTrendsInput = z.infer<typeof getTrendsSchema>['query'];
