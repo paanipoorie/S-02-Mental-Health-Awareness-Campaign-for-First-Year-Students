@@ -1,0 +1,12 @@
+---
+import AdminLayout from '@layouts/AdminLayout.astro';
+import AdminDashboardClient from '@components/dashboard/AdminDashboardClient';
+---
+
+<AdminLayout
+  title="Admin Dashboard | Campus Anonymous Peer Support"
+  description="Administrative dashboard for managing the peer support platform"
+  adminName="Admin"
+>
+  <AdminDashboardClient client:load />
+</AdminLayout>

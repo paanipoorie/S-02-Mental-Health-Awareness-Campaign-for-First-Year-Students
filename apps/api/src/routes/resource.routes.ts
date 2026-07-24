@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import { resourceController } from '../controllers/resource.controller.js';
 import { validate } from '../middlewares/validate.middleware.js';
-import { getResourcesQuerySchema, getResourceParamsSchema } from '../validators/resource.validator.js';
+import {
+  getResourcesQuerySchema,
+  getResourceParamsSchema,
+} from '../validators/resource.validator.js';
 
 const router: Router = Router();
 

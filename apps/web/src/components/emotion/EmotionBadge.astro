@@ -5,25 +5,22 @@ interface Props {
   size?: 'sm' | 'md' | 'lg';
   showUrgency?: boolean;
 }
+
+const { emotion, urgency, size = 'md', showUrgency = true } = Astro.props;
+
+import { EMOTIONS, URGENCY_LEVELS } from '@lib/emotionConstants';
+
+const emotionConfig = EMOTIONS.find(e => e.type === emotion) || EMOTIONS[0];
+const urgencyConfig = urgency
+  ? URGENCY_LEVELS.find(u => u.level === urgency) || URGENCY_LEVELS[0]
+  : null;
+
+const sizeClasses = {
+  sm: 'px-2 py-1 text-xs',
+  md: 'px-3 py-1.5 text-sm',
+  lg: 'px-4 py-2 text-base',
+};
 ---
-
-{/* Import emotion constants */}
-<script is:inline>
-  import { EMOTIONS, URGENCY_LEVELS } from '@lib/emotionConstants';
-
-  const { emotion, urgency, size = 'md', showUrgency = true } = Astro.props;
-
-  const emotionConfig = EMOTIONS.find(e => e.type === emotion) || EMOTIONS[0];
-  const urgencyConfig = urgency
-    ? URGENCY_LEVELS.find(u => u.level === urgency) || URGENCY_LEVELS[0]
-    : null;
-
-  const sizeClasses = {
-    sm: 'px-2 py-1 text-xs',
-    md: 'px-3 py-1.5 text-sm',
-    lg: 'px-4 py-2 text-base',
-  };
-</script>
 
 <div
   class="emotion-badge"

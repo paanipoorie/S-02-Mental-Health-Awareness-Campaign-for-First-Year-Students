@@ -1,0 +1,31 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  adminName?: string;
+}
+
+const {
+  title = 'Admin Dashboard | Campus Anonymous Peer Support',
+  description = 'Administrative dashboard for managing the peer support platform.',
+  adminName = 'Admin',
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} currentRole="ADMIN" displayName={adminName}>
+  <div class="space-y-6">
+    <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+      <div>
+        <h1
+          class="bg-gradient-to-r from-amber-300 to-orange-300 bg-clip-text text-2xl font-bold text-transparent"
+        >
+          Admin Portal
+        </h1>
+        <p class="text-xs text-slate-400">Platform administration & monitoring</p>
+      </div>
+    </div>
+    <slot />
+  </div>
+</BaseLayout>

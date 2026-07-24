@@ -1,4 +1,11 @@
-import { PrismaClient, Prisma, MeetingType, MeetingHostType, MeetingCategory, WorkshopCategory, WorkshopRegistrationStatus } from '@prisma/client';
+import type {
+  Prisma,
+  MeetingType,
+  MeetingHostType,
+  MeetingCategory,
+  WorkshopCategory,
+} from '@prisma/client';
+import { PrismaClient, WorkshopRegistrationStatus } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -82,7 +89,10 @@ export interface PaginatedWorkshops {
 }
 
 async function getAnonId(userId: string): Promise<string | null> {
-  const identity = await prisma.anonymousIdentity.findUnique({ where: { userId }, select: { id: true } });
+  const identity = await prisma.anonymousIdentity.findUnique({
+    where: { userId },
+    select: { id: true },
+  });
   return identity?.id ?? null;
 }
 
@@ -93,7 +103,10 @@ export const meetingService = {
     let hostUserId: string | null = null;
 
     if (isStudent) {
-      const anonIdentity = await prisma.anonymousIdentity.findUnique({ where: { userId }, select: { id: true } });
+      const anonIdentity = await prisma.anonymousIdentity.findUnique({
+        where: { userId },
+        select: { id: true },
+      });
       hostIdentityId = anonIdentity?.id ?? null;
     } else {
       hostUserId = userId;
@@ -107,7 +120,12 @@ export const meetingService = {
     return meeting;
   },
 
-  async getMeetings(page: number, limit: number, filters: { upcoming?: boolean; category?: MeetingCategory; hostType?: MeetingHostType }, userId?: string) {
+  async getMeetings(
+    page: number,
+    limit: number,
+    filters: { upcoming?: boolean; category?: MeetingCategory; hostType?: MeetingHostType },
+    userId?: string
+  ) {
     const skip = (page - 1) * limit;
     const where: Prisma.MeetingWhereInput = {};
 
@@ -155,7 +173,8 @@ export const meetingService = {
         location: m.location,
         category: m.category,
         createdAt: m.createdAt,
-        hostDisplayName: m.hostIdentity?.displayName ?? m.hostUser?.anonymousIdentity?.displayName ?? null,
+        hostDisplayName:
+          m.hostIdentity?.displayName ?? m.hostUser?.anonymousIdentity?.displayName ?? null,
         attendeeCount: m._count.attendees,
         isAttending: anonId ? m.attendees.length > 0 : false,
       })),
@@ -188,7 +207,10 @@ export const meetingService = {
 
     return {
       ...meeting,
-      hostDisplayName: meeting.hostIdentity?.displayName ?? meeting.hostUser?.anonymousIdentity?.displayName ?? null,
+      hostDisplayName:
+        meeting.hostIdentity?.displayName ??
+        meeting.hostUser?.anonymousIdentity?.displayName ??
+        null,
       isAttending,
     };
   },
@@ -227,6 +249,175 @@ export const meetingService = {
     await prisma.meeting.delete({ where: { id: meetingId } });
     return { deleted: true };
   },
+
+  async getUpcomingMeetingsForStudent(anonymousIdentityId: string) {
+    const now = new Date();
+    const meetings = await prisma.meeting.findMany({
+      where: {
+        date: { gte: now },
+        attendees: { some: { anonymousIdentityId } },
+      },
+      include: {
+        hostIdentity: { select: { displayName: true } },
+        hostUser: { select: { anonymousIdentity: { select: { displayName: true } } } },
+        _count: { select: { attendees: true } },
+      },
+      orderBy: { date: 'asc' },
+      take: 10,
+    });
+
+    return {
+      meetings: meetings.map(m => ({
+        id: m.id,
+        title: m.title,
+        description: m.description,
+        hostType: m.hostType,
+        date: m.date,
+        time: m.time,
+        durationMinutes: m.durationMinutes,
+        meetingType: m.meetingType,
+        meetingLink: m.meetingLink,
+        location: m.location,
+        category: m.category,
+        hostDisplayName:
+          m.hostIdentity?.displayName ?? m.hostUser?.anonymousIdentity?.displayName ?? null,
+        attendeeCount: m._count.attendees,
+        isAttending: true,
+      })),
+      total: meetings.length,
+      page: 1,
+      limit: 10,
+      totalPages: 1,
+    };
+  },
+
+  async getUpcomingWorkshopsForStudent(anonymousIdentityId: string) {
+    const now = new Date();
+    const registrations = await prisma.workshopRegistration.findMany({
+      where: {
+        anonymousIdentityId,
+        status: 'REGISTERED',
+        workshop: { date: { gte: now } },
+      },
+      include: {
+        workshop: {
+          include: {
+            mentor: { select: { anonymousIdentity: { select: { displayName: true } } } },
+            _count: { select: { registrations: true } },
+          },
+        },
+      },
+      orderBy: { workshop: { date: 'asc' } },
+      take: 10,
+    });
+
+    return {
+      workshops: registrations.map(r => ({
+        id: r.workshop.id,
+        title: r.workshop.title,
+        description: r.workshop.description,
+        date: r.workshop.date,
+        time: r.workshop.time,
+        durationMinutes: r.workshop.durationMinutes,
+        meetingType: r.workshop.meetingType,
+        meetingLink: r.workshop.meetingLink,
+        location: r.workshop.location,
+        category: r.workshop.category,
+        maxAttendees: r.workshop.maxAttendees,
+        resources: r.workshop.resources,
+        createdAt: r.workshop.createdAt,
+        mentorDisplayName: r.workshop.mentor.anonymousIdentity?.displayName ?? 'Unknown Mentor',
+        registrationCount: r.workshop._count.registrations,
+        userRegistrationStatus: r.status,
+      })),
+      total: registrations.length,
+      page: 1,
+      limit: 10,
+      totalPages: 1,
+    };
+  },
+
+  async getTodaysMeetingsForMentor(mentorId: string) {
+    const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000);
+
+    const meetings = await prisma.meeting.findMany({
+      where: {
+        date: { gte: todayStart, lt: todayEnd },
+        OR: [
+          { hostUserId: mentorId },
+          { attendees: { some: { anonymousIdentity: { userId: mentorId } } } },
+        ],
+      },
+      include: {
+        hostIdentity: { select: { displayName: true } },
+        hostUser: { select: { anonymousIdentity: { select: { displayName: true } } } },
+        _count: { select: { attendees: true } },
+      },
+      orderBy: { time: 'asc' },
+    });
+
+    return {
+      meetings: meetings.map(m => ({
+        id: m.id,
+        title: m.title,
+        description: m.description,
+        hostType: m.hostType,
+        date: m.date,
+        time: m.time,
+        durationMinutes: m.durationMinutes,
+        meetingType: m.meetingType,
+        meetingLink: m.meetingLink,
+        location: m.location,
+        category: m.category,
+        attendeeCount: m._count.attendees,
+        isHost: m.hostUserId === mentorId,
+      })),
+      total: meetings.length,
+      page: 1,
+      limit: 20,
+      totalPages: 1,
+    };
+  },
+
+  async getTodaysWorkshopsForMentor(mentorId: string) {
+    const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000);
+
+    const workshops = await prisma.workshop.findMany({
+      where: {
+        mentorId,
+        date: { gte: todayStart, lt: todayEnd },
+      },
+      include: {
+        _count: { select: { registrations: true } },
+      },
+      orderBy: { time: 'asc' },
+    });
+
+    return {
+      workshops: workshops.map(w => ({
+        id: w.id,
+        title: w.title,
+        description: w.description,
+        date: w.date,
+        time: w.time,
+        durationMinutes: w.durationMinutes,
+        meetingType: w.meetingType,
+        meetingLink: w.meetingLink,
+        location: w.location,
+        category: w.category,
+        maxAttendees: w.maxAttendees,
+        registrationCount: w._count.registrations,
+      })),
+      total: workshops.length,
+      page: 1,
+      limit: 20,
+      totalPages: 1,
+    };
+  },
 };
 
 export const workshopService = {
@@ -235,7 +426,12 @@ export const workshopService = {
     return workshop;
   },
 
-  async getWorkshops(page: number, limit: number, filters: { upcoming?: boolean; category?: WorkshopCategory }, userId?: string) {
+  async getWorkshops(
+    page: number,
+    limit: number,
+    filters: { upcoming?: boolean; category?: WorkshopCategory },
+    userId?: string
+  ) {
     const skip = (page - 1) * limit;
     const where: Prisma.WorkshopWhereInput = {};
 
@@ -320,7 +516,10 @@ export const workshopService = {
     const anonId = await getAnonId(userId);
     if (!anonId) throw new Error('Anonymous identity not found');
 
-    const workshop = await prisma.workshop.findUnique({ where: { id: workshopId }, include: { _count: { select: { registrations: true } } } });
+    const workshop = await prisma.workshop.findUnique({
+      where: { id: workshopId },
+      include: { _count: { select: { registrations: true } } },
+    });
     if (!workshop) throw new Error('Workshop not found');
 
     if (workshop.maxAttendees && workshop._count.registrations >= workshop.maxAttendees) {
@@ -333,12 +532,21 @@ export const workshopService = {
 
     if (existing) {
       if (existing.status === WorkshopRegistrationStatus.CANCELLED) {
-        await prisma.workshopRegistration.update({ where: { id: existing.id }, data: { status: WorkshopRegistrationStatus.REGISTERED } });
+        await prisma.workshopRegistration.update({
+          where: { id: existing.id },
+          data: { status: WorkshopRegistrationStatus.REGISTERED },
+        });
       }
       return existing;
     }
 
-    return prisma.workshopRegistration.create({ data: { workshopId, anonymousIdentityId: anonId, status: WorkshopRegistrationStatus.REGISTERED } });
+    return prisma.workshopRegistration.create({
+      data: {
+        workshopId,
+        anonymousIdentityId: anonId,
+        status: WorkshopRegistrationStatus.REGISTERED,
+      },
+    });
   },
 
   async cancelRegistration(workshopId: string, userId: string) {
@@ -351,11 +559,18 @@ export const workshopService = {
 
     if (!registration) throw new Error('Registration not found');
 
-    await prisma.workshopRegistration.update({ where: { id: registration.id }, data: { status: WorkshopRegistrationStatus.CANCELLED } });
+    await prisma.workshopRegistration.update({
+      where: { id: registration.id },
+      data: { status: WorkshopRegistrationStatus.CANCELLED },
+    });
     return { cancelled: true };
   },
 
-  async markAttendance(workshopId: string, anonymousIdentityId: string, status: WorkshopRegistrationStatus) {
+  async markAttendance(
+    workshopId: string,
+    anonymousIdentityId: string,
+    status: WorkshopRegistrationStatus
+  ) {
     const registration = await prisma.workshopRegistration.findFirst({
       where: { workshopId, anonymousIdentityId },
     });
@@ -364,7 +579,10 @@ export const workshopService = {
 
     return prisma.workshopRegistration.update({
       where: { id: registration.id },
-      data: { status, attendedAt: status === WorkshopRegistrationStatus.ATTENDED ? new Date() : null },
+      data: {
+        status,
+        attendedAt: status === WorkshopRegistrationStatus.ATTENDED ? new Date() : null,
+      },
     });
   },
 

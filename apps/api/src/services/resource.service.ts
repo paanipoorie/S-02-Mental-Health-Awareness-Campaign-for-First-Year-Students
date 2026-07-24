@@ -1,4 +1,5 @@
-import { PrismaClient, Prisma, ResourceCategory } from '@prisma/client';
+import type { Prisma, ResourceCategory } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -28,7 +29,11 @@ export interface ResourceCategories {
 }
 
 export const resourceService = {
-  async getResources(page: number, limit: number, filters: { category?: ResourceCategory; search?: string }): Promise<PaginatedResources> {
+  async getResources(
+    page: number,
+    limit: number,
+    filters: { category?: ResourceCategory; search?: string }
+  ): Promise<PaginatedResources> {
     const skip = (page - 1) * limit;
 
     const where: Prisma.ResourceWhereInput = {

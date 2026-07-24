@@ -1,0 +1,8 @@
+---
+import StudentLayout from '@layouts/StudentLayout.astro';
+import StudentDashboardClient from '@components/dashboard/StudentDashboardClient';
+---
+
+<StudentLayout title="Dashboard | Student Portal" anonymousDisplayName="Anonymous Student">
+  <StudentDashboardClient client:load />
+</StudentLayout>
