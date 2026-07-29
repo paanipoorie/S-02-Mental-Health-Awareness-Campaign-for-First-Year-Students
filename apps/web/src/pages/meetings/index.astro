@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { MeetingListClient } from '../../components/meetings/MeetingListClient';
+---
+
+<BaseLayout title="Peer Meetings | Campus Sanctuary">
+  <MeetingListClient client:load />
+</BaseLayout>
