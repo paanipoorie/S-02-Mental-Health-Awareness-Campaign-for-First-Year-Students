@@ -22,12 +22,12 @@ async function createTestUser(role: Role, isVerifiedMentor = false) {
   const anon = await prisma.anonymousIdentity.create({
     data: {
       userId: user.id,
-      displayName: `Anonymous ${role}`,
+      displayName: `Anonymous ${role} ${Math.random().toString(36).substring(2, 9)}`,
       avatarSeed: 123,
     },
   });
 
-  const token = signAccessToken({ userId: user.id, role });
+  const token = signAccessToken({ userId: user.id, role, anonymousIdentityId: anon.id });
   return { user, token, anon };
 }
 
@@ -73,7 +73,6 @@ describe('Posts (Forum) Integration Tests', () => {
         title: 'Need a study partner',
         body: 'Looking for someone to study CS with.',
         category: 'ACADEMICS',
-        userId: student.user.id,
         anonymousIdentityId: student.anon.id,
       },
     });
@@ -108,7 +107,6 @@ describe('Posts (Forum) Integration Tests', () => {
         title: 'Struggling with sleep',
         body: 'Cannot sleep well before exams.',
         category: 'SLEEP',
-        userId: student.user.id,
         anonymousIdentityId: student.anon.id,
       },
     });
@@ -133,7 +131,6 @@ describe('Posts (Forum) Integration Tests', () => {
         title: 'Please delete me later',
         body: 'Test post deletion permissions.',
         category: 'GENERAL',
-        userId: author.user.id,
         anonymousIdentityId: author.anon.id,
       },
     });
@@ -158,7 +155,6 @@ describe('Posts (Forum) Integration Tests', () => {
         title: 'Delete by admin',
         body: 'Admin will delete this.',
         category: 'GENERAL',
-        userId: author.user.id,
         anonymousIdentityId: author.anon.id,
       },
     });
