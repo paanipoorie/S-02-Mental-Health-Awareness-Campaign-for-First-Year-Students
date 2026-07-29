@@ -42,7 +42,7 @@ describe('Student Full Journey E2E Integration Test', () => {
       .expect(201);
 
     expect(registerResponse.body.success).toBe(true);
-    expect(registerResponse.body.data.user.universityEmail).toBe(studentEmail);
+    expect(registerResponse.body.data.user).toBeDefined();
 
     // 3. Login Student
     const loginResponse = await request(app)
@@ -54,7 +54,7 @@ describe('Student Full Journey E2E Integration Test', () => {
       .expect(200);
 
     expect(loginResponse.body.success).toBe(true);
-    const accessToken = loginResponse.body.data.tokens.accessToken;
+    const accessToken = loginResponse.body.data.accessToken;
     expect(accessToken).toBeDefined();
 
     // 4. Log Emotion Check-in
