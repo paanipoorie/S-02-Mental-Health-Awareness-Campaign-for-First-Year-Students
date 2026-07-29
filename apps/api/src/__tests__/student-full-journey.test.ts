@@ -159,7 +159,7 @@ describe('Student Full Journey E2E Integration Test', () => {
         durationMinutes: 90,
         meetingType: 'ONLINE',
         meetingLink: 'https://zoom.us/j/12345678',
-        category: 'STUDENT_WELFARE',
+        category: 'STRESS_MANAGEMENT',
         maxAttendees: 50,
       })
       .expect(201);
