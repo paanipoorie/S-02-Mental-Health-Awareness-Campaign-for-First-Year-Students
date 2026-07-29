@@ -33,6 +33,7 @@ model User {
   meetings          Meeting[]
   workshops         Workshop[]
   adminLogs         AdminActionLog[]
+  notifications     Notification[]
 }
 
 model AnonymousIdentity {
@@ -290,4 +291,26 @@ model AdminActionLog {
   targetId    String
   notes       String?
   createdAt   DateTime @default(now()) @db.Timestamptz(6)
+}
+
+enum NotificationType {
+  NEW_REPLY
+  NEW_CHAT_MESSAGE
+  MEETING_REMINDER
+  WORKSHOP_REMINDER
+  MENTOR_ASSIGNED
+  POST_REPLY_MENTOR
+  EMOTION_CHECKED
+}
+
+model Notification {
+  id              String           @id @default(cuid())
+  recipientUserId String
+  recipientUser   User             @relation(fields: [recipientUserId], references: [id], onDelete: Cascade)
+  type            NotificationType
+  title           String
+  body            String
+  payload         Json?
+  isRead          Boolean          @default(false)
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
 }

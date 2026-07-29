@@ -5,6 +5,8 @@ import { verifyAccessToken, type TokenPayload } from '../utils/jwt.js';
 import { prisma } from '../prisma/client.js';
 import { handleChatSocket } from './chat.socket.js';
 import { handlePresenceSocket } from './presence.socket.js';
+import { handleNotificationSocket } from './notification.socket.js';
+import { setSocketIO } from '../services/notificationHelper.js';
 
 export function createSocketServer(httpServer: HttpServer): Server {
   const io = new Server(httpServer, {
@@ -35,6 +37,8 @@ export function createSocketServer(httpServer: HttpServer): Server {
     }
   });
 
+  setSocketIO(io);
+
   io.on('connection', (socket: Socket) => {
     console.log(
       `[Socket] Client connected: ${socket.id}, User: ${socket.data.user?.userId}, Role: ${socket.data.user?.role}`
@@ -45,6 +49,9 @@ export function createSocketServer(httpServer: HttpServer): Server {
 
     // Handle presence events
     handlePresenceSocket(io, socket);
+
+    // Handle notification events
+    handleNotificationSocket(io, socket);
 
     socket.on('disconnect', reason => {
       console.log(`[Socket] Client disconnected: ${socket.id}, Reason: ${reason}`);

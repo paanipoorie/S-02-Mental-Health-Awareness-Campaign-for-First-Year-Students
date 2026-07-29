@@ -1,5 +1,7 @@
 ---
 import RoleBadge from './RoleBadge.astro';
+import NotificationBell from '@components/notifications/NotificationBell';
+import NotificationToast from '@components/notifications/NotificationToast';
 
 interface Props {
   currentRole?: 'STUDENT' | 'MENTOR' | 'ADMIN' | null;
@@ -151,6 +153,20 @@ const { currentRole = null, displayName = '', isVerified = false } = Astro.props
           )
         }
       </nav>
+
+      <!-- Notification Bell (authenticated users only) -->
+      {
+        currentRole && (
+          <NotificationBell client:load />
+        )
+      }
+
+      <!-- Notification Toast -->
+      {
+        currentRole && (
+          <NotificationToast client:load />
+        )
+      }
 
       <!-- User Action / Auth CTA -->
       <div class="flex items-center gap-3">

@@ -116,6 +116,21 @@ export const api = {
   },
 };
 
+export const notificationApi = {
+  getNotifications(page: number = 1, limit: number = 20) {
+    return api.get<{ data: any[]; unreadCount: number; pagination: any }>(`/notifications?page=${page}&limit=${limit}`);
+  },
+  getUnreadCount() {
+    return api.get<{ unreadCount: number }>('/notifications/unread-count');
+  },
+  markAsRead(id: string) {
+    return api.patch(`/notifications/${id}/read`);
+  },
+  markAllAsRead() {
+    return api.patch('/notifications/read-all');
+  },
+};
+
 export const dashboardApi = {
   getStudentDashboard(): Promise<StudentDashboardData> {
     return api.get('/dashboard/student');

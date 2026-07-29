@@ -5,6 +5,7 @@ import type {
   GetPostsQuery,
   CreateReplyInput,
 } from '../validators/post.validator.js';
+import { emitNotification } from './notificationHelper.js';
 
 const prisma = new PrismaClient();
 
@@ -168,7 +169,15 @@ export const postService = {
   async createReply(postId: string, anonymousIdentityId: string, data: CreateReplyInput) {
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      select: { id: true, isDeleted: true },
+      select: {
+        id: true,
+        isDeleted: true,
+        title: true,
+        anonymousIdentityId: true,
+        anonymousIdentity: {
+          select: { userId: true, displayName: true },
+        },
+      },
     });
 
     if (!post || post.isDeleted) {
@@ -182,6 +191,22 @@ export const postService = {
         body: data.body,
       },
     });
+
+    // Send notification to post author (if replier is not the author)
+    if (post.anonymousIdentityId !== anonymousIdentityId && post.anonymousIdentity.userId) {
+      const replier = await prisma.anonymousIdentity.findUnique({
+        where: { id: anonymousIdentityId },
+        select: { displayName: true },
+      });
+      const replySnippet = data.body.length > 100 ? data.body.slice(0, 100) + '...' : data.body;
+      await emitNotification(
+        post.anonymousIdentity.userId,
+        'NEW_REPLY',
+        'New Reply on Your Post',
+        `${replier?.displayName || 'Someone'} replied to "${post.title}": "${replySnippet}"`,
+        { postId, replyId: reply.id }
+      );
+    }
 
     return reply;
   },

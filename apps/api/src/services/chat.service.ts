@@ -8,6 +8,7 @@ import type {
   ReadMessagesParams,
 } from '../validators/chat.validator.js';
 import type { Role } from '@campus-peer-support/shared-types';
+import { emitNotification } from './notificationHelper.js';
 
 async function findAvailableMentor() {
   const mentors = await prisma.user.findMany({
@@ -90,6 +91,21 @@ export const chatService = {
           },
         },
       });
+
+      // Notify the mentor if one was assigned
+      if (availableMentor) {
+        const studentIdentity = await prisma.anonymousIdentity.findUnique({
+          where: { id: studentIdentityId },
+          select: { displayName: true },
+        });
+        await emitNotification(
+          availableMentor.id,
+          'MENTOR_ASSIGNED',
+          'New Student Assigned',
+          `${studentIdentity?.displayName || 'A student'} has been assigned to you for support.`,
+          { chatId: chat.id, studentIdentityId }
+        );
+      }
 
       return chat;
     } else if (role === 'MENTOR') {
@@ -355,6 +371,36 @@ export const chatService = {
         body: data.body,
       },
     });
+
+    // Send notification to the other participant
+    const messageSnippet = data.body.length > 100 ? data.body.slice(0, 100) + '...' : data.body;
+    if (role === 'STUDENT' && chat.mentorId) {
+      const studentIdentity = await prisma.anonymousIdentity.findUnique({
+        where: { id: chat.studentIdentityId },
+        select: { displayName: true },
+      });
+      await emitNotification(
+        chat.mentorId,
+        'NEW_CHAT_MESSAGE',
+        'New Message from Student',
+        `${studentIdentity?.displayName || 'A student'} sent: "${messageSnippet}"`,
+        { chatId, messageId: message.id, senderType: 'ANONYMOUS' }
+      );
+    } else if (role === 'MENTOR') {
+      const studentUser = await prisma.anonymousIdentity.findUnique({
+        where: { id: chat.studentIdentityId },
+        select: { userId: true },
+      });
+      if (studentUser?.userId) {
+        await emitNotification(
+          studentUser.userId,
+          'NEW_CHAT_MESSAGE',
+          'New Message from Mentor',
+          `Your mentor sent: "${messageSnippet}"`,
+          { chatId, messageId: message.id, senderType: 'MENTOR' }
+        );
+      }
+    }
 
     return message;
   },

@@ -15,6 +15,7 @@ import mentorRoutes from './routes/mentor.routes.js';
 import resourceRoutes from './routes/resource.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import notificationRoutes from './routes/notification.routes.js';
 import { requestLoggerMiddleware } from './utils/logger.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 
@@ -55,6 +56,7 @@ export function createApp(): Application {
   app.use(`${env.API_PREFIX}/resources`, resourceRoutes);
   app.use(`${env.API_PREFIX}/dashboard`, dashboardRoutes);
   app.use(`${env.API_PREFIX}/admin`, adminRoutes);
+  app.use(`${env.API_PREFIX}/notifications`, notificationRoutes);
 
   app.get(`${env.API_PREFIX}`, (_req: Request, res: Response) => {
     res.json({
