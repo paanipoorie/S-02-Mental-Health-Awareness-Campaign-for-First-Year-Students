@@ -19,18 +19,37 @@ import notificationRoutes from './routes/notification.routes.js';
 import meetingRoutes from './routes/meeting.routes.js';
 import { requestLoggerMiddleware } from './utils/logger.js';
 import { errorHandler } from './middlewares/error.middleware.js';
+import { generalRateLimiter, createCustomRateLimiter } from './middlewares/rateLimiter.middleware.js';
 
 export function createApp(): Application {
   const app = express();
 
   const helmetOptions: Record<string, unknown> = {
     crossOriginResourcePolicy: { policy: 'cross-origin' },
+    contentSecurityPolicy: isDevelopment ? false : {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        fontSrc: ["'self'"],
+        connectSrc: ["'self'"],
+        frameAncestors: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+      },
+    },
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true,
+    },
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+    noSniff: true,
+    xssFilter: true,
+    frameguard: { action: 'deny' },
+    hidePoweredBy: true,
   };
-  if (!isDevelopment) {
-    helmetOptions.contentSecurityPolicy = undefined;
-  } else {
-    helmetOptions.contentSecurityPolicy = false;
-  }
   app.use(helmet(helmetOptions));
 
   app.use(
@@ -39,6 +58,7 @@ export function createApp(): Application {
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
+      maxAge: 86400,
     })
   );
 
@@ -48,17 +68,26 @@ export function createApp(): Application {
   app.use(cookieParser());
   app.use(requestLoggerMiddleware);
 
+  // Apply general rate limiter to all API routes
+  app.use(`${env.API_PREFIX}`, generalRateLimiter);
+
+  // Specific rate limiters for sensitive endpoints
+  const authRateLimiter = createCustomRateLimiter(900000, 5, 'Too many authentication attempts', 'AUTH_RATE_LIMIT');
+  const postRateLimiter = createCustomRateLimiter(60000, 10, 'Too many posts created', 'POST_RATE_LIMIT');
+  const chatRateLimiter = createCustomRateLimiter(60000, 30, 'Too many chat messages', 'CHAT_RATE_LIMIT');
+  const meetingRateLimiter = createCustomRateLimiter(60000, 5, 'Too many meetings created', 'MEETING_RATE_LIMIT');
+
   app.use(`${env.API_PREFIX}/health`, healthRoutes);
-  app.use(`${env.API_PREFIX}/auth`, authRoutes);
+  app.use(`${env.API_PREFIX}/auth`, authRateLimiter, authRoutes);
   app.use(`${env.API_PREFIX}/emotions`, emotionRoutes);
-  app.use(`${env.API_PREFIX}/posts`, postRoutes);
-  app.use(`${env.API_PREFIX}/chats`, chatRoutes);
+  app.use(`${env.API_PREFIX}/posts`, postRateLimiter, postRoutes);
+  app.use(`${env.API_PREFIX}/chats`, chatRateLimiter, chatRoutes);
   app.use(`${env.API_PREFIX}/mentors`, mentorRoutes);
   app.use(`${env.API_PREFIX}/resources`, resourceRoutes);
   app.use(`${env.API_PREFIX}/dashboard`, dashboardRoutes);
   app.use(`${env.API_PREFIX}/admin`, adminRoutes);
   app.use(`${env.API_PREFIX}/notifications`, notificationRoutes);
-  app.use(`${env.API_PREFIX}`, meetingRoutes);
+  app.use(`${env.API_PREFIX}`, meetingRateLimiter, meetingRoutes);
 
   app.get(`${env.API_PREFIX}`, (_req: Request, res: Response) => {
     res.json({
