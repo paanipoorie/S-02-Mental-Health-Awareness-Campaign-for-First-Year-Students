@@ -1,8 +1,14 @@
 ---
 import AdminLayout from '@layouts/AdminLayout.astro';
+import AdminStudentsClient from '@components/admin/AdminStudentsClient';
 import { adminApi } from '@lib/api';
 
-const studentsData = await adminApi.getUsers({ page: 1, limit: 20, role: 'STUDENT' });
+let studentsData = undefined;
+try {
+  studentsData = await adminApi.getUsers({ page: 1, limit: 20, role: 'STUDENT' });
+} catch (e) {
+  // Let client load it dynamically in browser
+}
 ---
 
 <AdminLayout

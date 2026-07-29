@@ -1,8 +1,14 @@
 ---
+import AdminLayout from '@layouts/AdminLayout.astro';
 import AdminMentorsClient from '@components/admin/AdminMentorsClient';
 import { adminApi } from '@lib/api';
 
-const mentorsData = await adminApi.getMentors({ page: 1, limit: 20 });
+let mentorsData = undefined;
+try {
+  mentorsData = await adminApi.getMentors({ page: 1, limit: 20 });
+} catch (e) {
+  // Let client load it dynamically in browser
+}
 ---
 
 <AdminLayout

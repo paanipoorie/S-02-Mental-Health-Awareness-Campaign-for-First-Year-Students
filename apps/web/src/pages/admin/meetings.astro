@@ -3,7 +3,12 @@ import AdminLayout from '@layouts/AdminLayout.astro';
 import AdminMeetingsClient from '@components/admin/AdminMeetingsClient';
 import { adminApi } from '@lib/api';
 
-const meetingsData = await adminApi.getMeetings({ page: 1, limit: 20 });
+let meetingsData = undefined;
+try {
+  meetingsData = await adminApi.getMeetings({ page: 1, limit: 20 });
+} catch (e) {
+  // Let client load it dynamically in browser
+}
 ---
 
 <AdminLayout

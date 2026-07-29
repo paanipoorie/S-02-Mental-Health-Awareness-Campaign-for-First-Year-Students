@@ -3,7 +3,12 @@ import AdminLayout from '@layouts/AdminLayout.astro';
 import AdminResourcesClient from '@components/admin/AdminResourcesClient';
 import { adminApi } from '@lib/api';
 
-const resourcesData = await adminApi.getResources({ page: 1, limit: 20 });
+let resourcesData = undefined;
+try {
+  resourcesData = await adminApi.getResources({ page: 1, limit: 20 });
+} catch (e) {
+  // Let client load it dynamically in browser
+}
 ---
 
 <AdminLayout

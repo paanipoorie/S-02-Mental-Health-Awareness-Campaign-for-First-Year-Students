@@ -3,7 +3,12 @@ import AdminLayout from '@layouts/AdminLayout.astro';
 import AdminWorkshopsClient from '@components/admin/AdminWorkshopsClient';
 import { adminApi } from '@lib/api';
 
-const workshopsData = await adminApi.getWorkshops({ page: 1, limit: 20 });
+let workshopsData = undefined;
+try {
+  workshopsData = await adminApi.getWorkshops({ page: 1, limit: 20 });
+} catch (e) {
+  // Let client load it dynamically in browser
+}
 ---
 
 <AdminLayout

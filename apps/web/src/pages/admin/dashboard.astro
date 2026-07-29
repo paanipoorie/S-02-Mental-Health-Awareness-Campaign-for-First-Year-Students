@@ -3,7 +3,12 @@ import AdminLayout from '@layouts/AdminLayout.astro';
 import AdminDashboardClient from '@components/dashboard/AdminDashboardClient';
 import { dashboardApi } from '@lib/api';
 
-const data = await dashboardApi.getAdminDashboard();
+let data = undefined;
+try {
+  data = await dashboardApi.getAdminDashboard();
+} catch (e) {
+  // Let client load it dynamically in browser
+}
 ---
 
 <AdminLayout
