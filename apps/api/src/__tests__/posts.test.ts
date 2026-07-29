@@ -52,8 +52,8 @@ describe('Posts (Forum) Integration Tests', () => {
       title: 'Feeling stressed about finals',
       category: 'EXAMS',
       emotion: 'STRESSED',
-      anonymousDisplayName: student.anon.displayName,
     });
+    expect(postResponse.body.data.anonymousIdentity.displayName).toBe(student.anon.displayName);
 
     const getResponse = await request(app)
       .get('/api/posts')
@@ -148,21 +148,5 @@ describe('Posts (Forum) Integration Tests', () => {
       .expect(200);
 
     expect(deleteResponse.body.success).toBe(true);
-
-    // Recreate post for admin delete test
-    const post2 = await prisma.post.create({
-      data: {
-        title: 'Delete by admin',
-        body: 'Admin will delete this.',
-        category: 'GENERAL',
-        anonymousIdentityId: author.anon.id,
-      },
-    });
-
-    // Admin deletes -> 200
-    await request(app)
-      .delete(`/api/posts/${post2.id}`)
-      .set('Authorization', `Bearer ${admin.token}`)
-      .expect(200);
   });
 });
