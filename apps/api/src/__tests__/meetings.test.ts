@@ -22,12 +22,12 @@ async function createTestUser(role: Role, isVerifiedMentor = false) {
   const anon = await prisma.anonymousIdentity.create({
     data: {
       userId: user.id,
-      displayName: `Anonymous ${role}`,
+      displayName: `Anonymous ${role} ${Math.random().toString(36).substring(2, 9)}`,
       avatarSeed: 123,
     },
   });
 
-  const token = signAccessToken({ userId: user.id, role });
+  const token = signAccessToken({ userId: user.id, role, anonymousIdentityId: anon.id });
   return { user, token, anon };
 }
 
@@ -104,7 +104,7 @@ describe('Meetings and Workshops Integration Tests', () => {
     const registerResponse = await request(app)
       .post(`/api/workshops/${workshopId}/register`)
       .set('Authorization', `Bearer ${student.token}`)
-      .expect(200);
+      .expect(201);
 
     expect(registerResponse.body.success).toBe(true);
   });
