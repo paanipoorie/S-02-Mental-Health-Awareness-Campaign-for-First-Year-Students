@@ -60,19 +60,20 @@ describe('Chat Service Unit Tests', () => {
     });
     expect(msg).toBeDefined();
     expect(msg.body).toBe('Unit test chat message');
-    expect(msg.isRead).toBe(false);
+    expect(msg.readAt).toBeNull();
 
     // Fetch messages as mentor
     const messagesResult = await chatService.getMessages(thread.id, mentor.id, Role.MENTOR, {
       page: 1,
       limit: 10,
     });
-    expect(messagesResult.messages.length).toBe(1);
-    expect(messagesResult.messages[0].body).toBe('Unit test chat message');
+    expect(messagesResult).not.toBeNull();
+    expect(messagesResult!.messages.length).toBe(1);
+    expect(messagesResult!.messages[0].body).toBe('Unit test chat message');
 
     // Mark as read
     await chatService.markAsRead(thread.id, mentor.id, Role.MENTOR);
     const dbMsg = await prisma.chatMessage.findUnique({ where: { id: msg.id } });
-    expect(dbMsg?.isRead).toBe(true);
+    expect(dbMsg?.readAt).not.toBeNull();
   });
 });
