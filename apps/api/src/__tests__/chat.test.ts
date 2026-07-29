@@ -22,12 +22,24 @@ async function createTestUser(role: Role, isVerifiedMentor = false) {
   const anon = await prisma.anonymousIdentity.create({
     data: {
       userId: user.id,
-      displayName: `Anonymous ${role}`,
+      displayName: `Anonymous ${role} ${Math.random().toString(36).substring(2, 9)}`,
       avatarSeed: 123,
     },
   });
 
-  const token = signAccessToken({ userId: user.id, role });
+  if (role === Role.MENTOR) {
+    await prisma.mentorProfile.create({
+      data: {
+        userId: user.id,
+        department: 'Support Dept',
+        bio: 'Helper',
+        specialties: ['Anxiety'],
+        availabilityStatus: 'AVAILABLE',
+      },
+    });
+  }
+
+  const token = signAccessToken({ userId: user.id, role, anonymousIdentityId: anon.id });
   return { user, token, anon };
 }
 
@@ -54,11 +66,11 @@ describe('Chat Support Integration Tests', () => {
     const student = await createTestUser(Role.STUDENT);
     const unverifiedMentor = await createTestUser(Role.MENTOR, false);
 
-    // Student starting chat with unverified mentor -> 403 because mentor.isVerifiedMentor = false
+    // Unverified mentor attempting to start a chat thread -> 403 because mentor is unverified
     const chatResponse = await request(app)
       .post('/api/chats')
-      .set('Authorization', `Bearer ${student.token}`)
-      .send({ mentorId: unverifiedMentor.user.id })
+      .set('Authorization', `Bearer ${unverifiedMentor.token}`)
+      .send({ studentIdentityId: student.anon.id })
       .expect(403);
 
     expect(chatResponse.body.success).toBe(false);
@@ -117,8 +129,9 @@ describe('Chat Support Integration Tests', () => {
       data: {
         chatThreadId: thread.id,
         senderId: student.user.id,
+        senderType: 'STUDENT',
         body: 'Unread message',
-        isRead: false,
+        readAt: null,
       },
     });
 
@@ -133,6 +146,6 @@ describe('Chat Support Integration Tests', () => {
     const message = await prisma.chatMessage.findFirst({
       where: { chatThreadId: thread.id },
     });
-    expect(message?.isRead).toBe(true);
+    expect(message?.readAt).not.toBeNull();
   });
 });
