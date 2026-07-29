@@ -170,7 +170,7 @@ describe('Student Full Journey E2E Integration Test', () => {
     const registerWorkshopResponse = await request(app)
       .post(`/api/workshops/${workshopId}/register`)
       .set('Authorization', `Bearer ${accessToken}`)
-      .expect(200);
+      .expect(201);
 
     expect(registerWorkshopResponse.body.success).toBe(true);
 
