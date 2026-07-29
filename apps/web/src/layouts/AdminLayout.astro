@@ -5,27 +5,157 @@ interface Props {
   title?: string;
   description?: string;
   adminName?: string;
+  currentPage?: string;
 }
 
 const {
   title = 'Admin Dashboard | Campus Anonymous Peer Support',
   description = 'Administrative dashboard for managing the peer support platform.',
   adminName = 'Admin',
+  currentPage = 'dashboard',
 } = Astro.props;
+
+const navItems = [
+  { href: '/admin', label: 'Dashboard', icon: '📊' },
+  { href: '/admin/mentors', label: 'Mentors', icon: '👨‍🏫' },
+  { href: '/admin/students', label: 'Students', icon: '🎓' },
+  { href: '/admin/meetings', label: 'Meetings', icon: '📅' },
+  { href: '/admin/workshops', label: 'Workshops', icon: '🛠️' },
+  { href: '/admin/resources', label: 'Resources', icon: '📚' },
+];
 ---
 
 <BaseLayout title={title} description={description} currentRole="ADMIN" displayName={adminName}>
-  <div class="space-y-6">
-    <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
-      <div>
-        <h1
-          class="bg-gradient-to-r from-amber-300 to-orange-300 bg-clip-text text-2xl font-bold text-transparent"
-        >
-          Admin Portal
-        </h1>
-        <p class="text-xs text-slate-400">Platform administration & monitoring</p>
+  <div class="flex min-h-screen bg-slate-50">
+    <!-- Sidebar -->
+    <aside class="hidden lg:flex lg:flex-col fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200">
+      <div class="flex flex-col h-full">
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between h-16 px-4 border-b border-slate-200">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🛡️</span>
+            <span class="text-heading-16 font-semibold text-slate-900">Admin Portal</span>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto p-4 space-y-1" aria-label="Admin navigation">
+          {navItems.map(item => (
+            <a
+              href={item.href}
+              class={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                currentPage === item.href.split('/').pop() || (currentPage === 'dashboard' && item.href === '/admin')
+                  ? 'bg-amber-50 text-amber-700'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              }`}
+              aria-current={currentPage === item.href.split('/').pop() || (currentPage === 'dashboard' && item.href === '/admin') ? 'page' : undefined}
+            >
+              <span class="text-lg">{item.icon}</span>
+              <span>{item.label}</span>
+            </a>
+          ))}
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-slate-200">
+          <p class="text-xs text-slate-500 text-center">
+            Campus Anonymous Peer Support
+          </p>
+        </div>
       </div>
-    </div>
-    <slot />
+    </aside>
+
+    <!-- Mobile sidebar backdrop -->
+    <div class="lg:hidden fixed inset-0 z-40 bg-black/50 hidden" id="sidebar-backdrop" aria-hidden="true"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 lg:ml-64 min-h-screen">
+      <!-- Mobile header -->
+      <header class="lg:hidden sticky top-0 z-30 flex items-center justify-between h-16 px-4 bg-white border-b border-slate-200">
+        <button
+          class="p-2 rounded-lg text-slate-600 hover:bg-slate-100"
+          onclick="document.getElementById('mobile-sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebar-backdrop').classList.remove('hidden')"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="mobile-sidebar"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <h1 class="text-heading-16 font-semibold text-slate-900">Admin Portal</h1>
+        <div class="w-10" />
+      </header>
+
+      <!-- Mobile sidebar -->
+      <aside
+        id="mobile-sidebar"
+        class="lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform -translate-x-full transition-transform duration-300 ease-in-out"
+        aria-label="Mobile navigation"
+      >
+        <div class="flex flex-col h-full">
+          <div class="flex items-center justify-between h-16 px-4 border-b border-slate-200">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">🛡️</span>
+              <span class="text-heading-16 font-semibold text-slate-900">Admin Portal</span>
+            </div>
+            <button
+              class="p-2 rounded-lg text-slate-600 hover:bg-slate-100"
+              onclick="document.getElementById('mobile-sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-backdrop').classList.add('hidden')"
+              aria-label="Close navigation menu"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <nav class="flex-1 overflow-y-auto p-4 space-y-1" aria-label="Admin navigation">
+            {navItems.map(item => (
+              <a
+                href={item.href}
+                class={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  currentPage === item.href.split('/').pop() || (currentPage === 'dashboard' && item.href === '/admin')
+                    ? 'bg-amber-50 text-amber-700'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                }`}
+                aria-current={currentPage === item.href.split('/').pop() || (currentPage === 'dashboard' && item.href === '/admin') ? 'page' : undefined}
+                onclick="document.getElementById('mobile-sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-backdrop').classList.add('hidden')"
+              >
+                <span class="text-lg">{item.icon}</span>
+                <span>{item.label}</span>
+              </a>
+            ))}
+          </nav>
+
+          <div class="p-4 border-t border-slate-200">
+            <p class="text-xs text-slate-500 text-center">
+              Campus Anonymous Peer Support
+            </p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Page Content -->
+      <div class="p-4 lg:p-8">
+        <slot />
+      </div>
+    </main>
   </div>
+
+  <script>
+    // Close mobile sidebar when clicking backdrop
+    document.getElementById('sidebar-backdrop')?.addEventListener('click', () => {
+      document.getElementById('mobile-sidebar')?.classList.add('-translate-x-full');
+      document.getElementById('sidebar-backdrop')?.classList.add('hidden');
+    });
+
+    // Close mobile sidebar on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.getElementById('mobile-sidebar')?.classList.add('-translate-x-full');
+        document.getElementById('sidebar-backdrop')?.classList.add('hidden');
+      }
+    });
+  </script>
 </BaseLayout>

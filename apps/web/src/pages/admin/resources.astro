@@ -1,0 +1,16 @@
+---
+import AdminLayout from '@layouts/AdminLayout.astro';
+import AdminResourcesClient from '@components/admin/AdminResourcesClient';
+import { adminApi } from '@lib/api';
+
+const resourcesData = await adminApi.getResources({ page: 1, limit: 20 });
+---
+
+<AdminLayout
+  title="Resource Management | Campus Anonymous Peer Support"
+  description="Manage mental health resources for students"
+  adminName="Admin"
+  currentPage="resources"
+>
+  <AdminResourcesClient initialData={resourcesData} client:load />
+</AdminLayout>

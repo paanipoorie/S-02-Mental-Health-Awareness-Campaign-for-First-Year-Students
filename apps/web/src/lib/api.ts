@@ -131,6 +131,75 @@ export const dashboardApi = {
   },
 };
 
+export const adminApi = {
+  getStats(): Promise<AdminDashboardData['platformStats']> {
+    return api.get('/admin/stats');
+  },
+  getUsers(query: { page: number; limit: number; role?: string; isActive?: boolean; search?: string }) {
+    const params = new URLSearchParams();
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined) params.append(key, String(value));
+    });
+    return api.get(`/admin/users?${params.toString()}`);
+  },
+  getMentors(query: { page: number; limit: number; isVerified?: boolean; availabilityStatus?: string; search?: string }) {
+    const params = new URLSearchParams();
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined) params.append(key, String(value));
+    });
+    return api.get(`/admin/mentors?${params.toString()}`);
+  },
+  updateUserStatus(userId: string, isActive: boolean) {
+    return api.patch(`/admin/users/${userId}/status`, { isActive });
+  },
+  verifyMentor(mentorId: string, isVerified: boolean) {
+    return api.patch(`/admin/mentors/${mentorId}/verify`, { isVerified });
+  },
+  getMeetings(query: { page: number; limit: number; hostType?: string; meetingType?: string; category?: string; upcoming?: boolean; search?: string }) {
+    const params = new URLSearchParams();
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined) params.append(key, String(value));
+    });
+    return api.get(`/admin/meetings?${params.toString()}`);
+  },
+  deleteMeeting(meetingId: string) {
+    return api.delete(`/admin/meetings/${meetingId}`);
+  },
+  getWorkshops(query: { page: number; limit: number; meetingType?: string; category?: string; upcoming?: boolean; search?: string }) {
+    const params = new URLSearchParams();
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined) params.append(key, String(value));
+    });
+    return api.get(`/admin/workshops?${params.toString()}`);
+  },
+  deleteWorkshop(workshopId: string) {
+    return api.delete(`/admin/workshops/${workshopId}`);
+  },
+  getResources(query: { page: number; limit: number; category?: string; isActive?: boolean; search?: string }) {
+    const params = new URLSearchParams();
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined) params.append(key, String(value));
+    });
+    return api.get(`/admin/resources?${params.toString()}`);
+  },
+  createResource(data: { title: string; description: string; category: string; content: string; link?: string | null; isActive: boolean }) {
+    return api.post('/admin/resources', data);
+  },
+  updateResource(resourceId: string, data: { title?: string; description?: string; category?: string; content?: string; link?: string | null; isActive?: boolean }) {
+    return api.patch(`/admin/resources/${resourceId}`, data);
+  },
+  deleteResource(resourceId: string) {
+    return api.delete(`/admin/resources/${resourceId}`);
+  },
+  getActionLogs(query: { page: number; limit: number; adminUserId?: string; actionType?: string; targetType?: string }) {
+    const params = new URLSearchParams();
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined) params.append(key, String(value));
+    });
+    return api.get(`/admin/action-logs?${params.toString()}`);
+  },
+};
+
 export interface StudentDashboardData {
   currentEmotion: {
     emotion: string | null;
@@ -360,4 +429,108 @@ export interface AdminDashboardData {
     status: string;
     createdAt: string;
   }>;
+}
+
+// Admin API Types
+export interface AdminUser {
+  id: string;
+  universityEmail: string;
+  role: string;
+  isActive: boolean;
+  isVerifiedMentor: boolean;
+  createdAt: string;
+  anonymousDisplayName: string | null;
+  avatarSeed: number | null;
+  department: string | null;
+  bio: string | null;
+  specialties: string[];
+  availabilityStatus: string | null;
+  lastSeenAt: string | null;
+  _count: {
+    posts: number;
+    chatThreads: number;
+    meetings: number;
+    workshops: number;
+  };
+}
+
+export interface AdminMeeting {
+  id: string;
+  title: string;
+  description: string;
+  hostType: string;
+  hostDisplayName: string | null;
+  date: string;
+  time: string;
+  durationMinutes: number;
+  meetingType: string;
+  meetingLink: string | null;
+  location: string | null;
+  category: string;
+  attendeeCount: number;
+  createdAt: string;
+}
+
+export interface AdminWorkshop {
+  id: string;
+  title: string;
+  description: string;
+  mentorId: string;
+  mentorDisplayName: string;
+  date: string;
+  time: string;
+  durationMinutes: number;
+  meetingType: string;
+  meetingLink: string | null;
+  location: string | null;
+  category: string;
+  maxAttendees: number | null;
+  registrationCount: number;
+  resources: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminResource {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  content: string;
+  link: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+export interface AdminActionLog {
+  id: string;
+  adminUserId: string;
+  adminUserEmail: string;
+  adminUserDisplayName: string | null;
+  actionType: string;
+  targetType: string;
+  targetId: string;
+  notes: string | null;
+  createdAt: string;
+}
+
+export interface AdminActionLogsResponse {
+  logs: AdminActionLog[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }

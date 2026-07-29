@@ -1,0 +1,15 @@
+---
+import AdminLayout from '@layouts/AdminLayout.astro';
+import { adminApi } from '@lib/api';
+
+const studentsData = await adminApi.getUsers({ page: 1, limit: 20, role: 'STUDENT' });
+---
+
+<AdminLayout
+  title="Manage Students | Campus Anonymous Peer Support"
+  description="View and manage student accounts"
+  adminName="Admin"
+  currentPage="students"
+>
+  <AdminStudentsClient initialData={studentsData} client:load />
+</AdminLayout>

@@ -1,0 +1,15 @@
+---
+import AdminMentorsClient from '@components/admin/AdminMentorsClient';
+import { adminApi } from '@lib/api';
+
+const mentorsData = await adminApi.getMentors({ page: 1, limit: 20 });
+---
+
+<AdminLayout
+  title="Mentor Management | Campus Anonymous Peer Support"
+  description="Manage mentor verification and view mentor details"
+  adminName="Admin"
+  currentPage="mentors"
+>
+  <AdminMentorsClient initialData={mentorsData} client:load />
+</AdminLayout>

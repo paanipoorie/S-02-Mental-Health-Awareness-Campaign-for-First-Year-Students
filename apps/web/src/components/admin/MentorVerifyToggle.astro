@@ -1,0 +1,40 @@
+---
+interface Props {
+  isVerified: boolean;
+  onToggle: (isVerified: boolean) => void;
+  isLoading?: boolean;
+}
+---
+
+<script>
+  function MentorVerifyToggle({ isVerified, onToggle, isLoading }) {
+    const handleClick = () => {
+      if (!isLoading) {
+        onToggle(!isVerified);
+      }
+    };
+
+    return (
+      <button
+        type="button"
+        onClick={handleClick}
+        disabled={isLoading}
+        class={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+          isVerified
+            ? 'bg-emerald-500'
+            : 'bg-slate-300'
+        } ${isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+        role="switch"
+        aria-checked={isVerified}
+        aria-label={isVerified ? 'Mentor is verified. Click to unverify.' : 'Mentor is not verified. Click to verify.'}
+      >
+        <span
+          class={`inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition-transform ${
+            isVerified ? 'translate-x-6' : 'translate-x-1'
+          }`}
+          aria-hidden="true"
+        />
+      </button>
+    );
+  }
+</script>

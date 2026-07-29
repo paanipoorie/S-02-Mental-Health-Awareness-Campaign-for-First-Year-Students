@@ -74,14 +74,19 @@ interface AdminDashboardData {
   }>;
 }
 
-export function AdminDashboardClient() {
+interface AdminDashboardClientProps {
+  initialData?: AdminDashboardData;
+}
+
+export function AdminDashboardClient({ initialData }: AdminDashboardClientProps) {
   const user = useStore($user);
   const isLoading = useStore($isLoading);
-  const [dashboardData, setDashboardData] = useState<AdminDashboardData | null>(null);
+  const [dashboardData, setDashboardData] = useState<AdminDashboardData | null>(initialData || null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialData);
 
   useEffect(() => {
+    if (initialData) return;
     async function loadDashboard() {
       try {
         if (!user) {
@@ -96,7 +101,7 @@ export function AdminDashboardClient() {
       }
     }
     loadDashboard();
-  }, [user]);
+  }, [user, initialData]);
 
   if (isLoading || loading) {
     return (

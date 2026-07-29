@@ -1,0 +1,136 @@
+---
+interface Props {
+  stats: {
+    totalUsers: number;
+    totalStudents: number;
+    totalMentors: number;
+    totalAdmins: number;
+    verifiedMentors: number;
+    totalPosts: number;
+    totalChats: number;
+    activeChats: number;
+    totalMeetings: number;
+    upcomingMeetings: number;
+    totalWorkshops: number;
+    upcomingWorkshops: number;
+    totalResources: number;
+    activeResources: number;
+  };
+}
+---
+
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+  <StatCard
+    label="Total Users"
+    value={stats.totalUsers}
+    icon="👥"
+    color="blue"
+  />
+  <StatCard
+    label="Students"
+    value={stats.totalStudents}
+    icon="🎓"
+    color="green"
+  />
+  <StatCard
+    label="Mentors"
+    value={stats.totalMentors}
+    icon="👨‍🏫"
+    color="purple"
+  />
+  <StatCard
+    label="Admins"
+    value={stats.totalAdmins}
+    icon="🛡️"
+    color="amber"
+  />
+  <StatCard
+    label="Verified Mentors"
+    value={stats.verifiedMentors}
+    icon="✅"
+    color="emerald"
+  />
+  <StatCard
+    label="Total Posts"
+    value={stats.totalPosts}
+    icon="📝"
+    color="blue"
+  />
+  <StatCard
+    label="Total Chats"
+    value={stats.totalChats}
+    icon="💬"
+    color="indigo"
+  />
+  <StatCard
+    label="Active Chats"
+    value={stats.activeChats}
+    icon="🟢"
+    color="green"
+  />
+  <StatCard
+    label="Total Meetings"
+    value={stats.totalMeetings}
+    icon="📅"
+    color="violet"
+  />
+  <StatCard
+    label="Upcoming Meetings"
+    value={stats.upcomingMeetings}
+    icon="⏰"
+    color="amber"
+  />
+  <StatCard
+    label="Total Workshops"
+    value={stats.totalWorkshops}
+    icon="🛠️"
+    color="rose"
+  />
+  <StatCard
+    label="Upcoming Workshops"
+    value={stats.upcomingWorkshops}
+    icon="📚"
+    color="pink"
+  />
+  <StatCard
+    label="Total Resources"
+    value={stats.totalResources}
+    icon="📖"
+    color="teal"
+  />
+  <StatCard
+    label="Active Resources"
+    value={stats.activeResources}
+    icon="✨"
+    color="cyan"
+  />
+</div>
+
+<script>
+  function StatCard({ label, value, icon, color }) {
+    const colorMap = {
+      blue: 'bg-blue-50 text-blue-700 border-blue-200',
+      green: 'bg-green-50 text-green-700 border-green-200',
+      purple: 'bg-purple-50 text-purple-700 border-purple-200',
+      amber: 'bg-amber-50 text-amber-700 border-amber-200',
+      emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      indigo: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+      violet: 'bg-violet-50 text-violet-700 border-violet-200',
+      rose: 'bg-rose-50 text-rose-700 border-rose-200',
+      pink: 'bg-pink-50 text-pink-700 border-pink-200',
+      teal: 'bg-teal-50 text-teal-700 border-teal-200',
+      cyan: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+    };
+    return (
+      <div class={`dashboard-card p-5 border ${colorMap[color] || colorMap.blue}`}>
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-label-14 text-slate-500">{label}</p>
+            <p class="mt-1 text-heading-32 font-bold text-slate-900">{value}</p>
+          </div>
+          <span class="text-3xl" role="img" aria-hidden="true">{icon}</span>
+        </div>
+      </div>
+    );
+  }
+</script>

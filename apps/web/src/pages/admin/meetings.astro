@@ -1,0 +1,16 @@
+---
+import AdminLayout from '@layouts/AdminLayout.astro';
+import AdminMeetingsClient from '@components/admin/AdminMeetingsClient';
+import { adminApi } from '@lib/api';
+
+const meetingsData = await adminApi.getMeetings({ page: 1, limit: 20 });
+---
+
+<AdminLayout
+  title="Meeting Management | Campus Anonymous Peer Support"
+  description="View and manage all platform meetings"
+  adminName="Admin"
+  currentPage="meetings"
+>
+  <AdminMeetingsClient initialData={meetingsData} client:load />
+</AdminLayout>
