@@ -70,8 +70,13 @@ export const postService = {
       prisma.post.count({ where }),
     ]);
 
+    const mappedPosts = posts.map(p => ({
+      ...p,
+      anonymousDisplayName: p.anonymousIdentity?.displayName,
+    }));
+
     return {
-      posts,
+      posts: mappedPosts,
       pagination: {
         page,
         limit,
@@ -103,7 +108,14 @@ export const postService = {
       return null;
     }
 
-    return post;
+    if (!post) {
+      return null;
+    }
+
+    return {
+      ...post,
+      anonymousDisplayName: post.anonymousIdentity?.displayName,
+    };
   },
 
   async updatePost(id: string, anonymousIdentityId: string, data: UpdatePostInput) {

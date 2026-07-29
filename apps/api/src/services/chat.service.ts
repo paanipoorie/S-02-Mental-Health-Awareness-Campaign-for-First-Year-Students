@@ -209,8 +209,14 @@ export const chatService = {
         prisma.chatThread.count({ where: { studentIdentityId } }),
       ]);
 
+      const mappedChats = chats.map(c => ({
+        ...c,
+        studentDisplayName: c.studentIdentity?.displayName,
+        mentorDisplayName: c.mentor ? 'Mentor' : null,
+      }));
+
       return {
-        chats,
+        chats: mappedChats,
         pagination: {
           page,
           limit,
@@ -253,8 +259,14 @@ export const chatService = {
         prisma.chatThread.count({ where: { mentorId: userId } }),
       ]);
 
+      const mappedChats = chats.map(c => ({
+        ...c,
+        studentDisplayName: c.studentIdentity?.displayName,
+        mentorDisplayName: c.mentor ? 'Mentor' : null,
+      }));
+
       return {
-        chats,
+        chats: mappedChats,
         pagination: {
           page,
           limit,
@@ -303,7 +315,12 @@ export const chatService = {
     const { page, limit } = query;
     const skip = (page - 1) * limit;
 
-    const chat = await prisma.chatThread.findUnique({ where: { id: chatId } });
+    const chat = await prisma.chatThread.findUnique({
+      where: { id: chatId },
+      include: {
+        studentIdentity: { select: { displayName: true } },
+      },
+    });
     if (!chat) {
       return null;
     }
@@ -326,8 +343,18 @@ export const chatService = {
       prisma.chatMessage.count({ where: { chatThreadId: chatId } }),
     ]);
 
+    const mappedMessages = messages.map(m => {
+      const senderName = m.senderType === 'ANONYMOUS'
+        ? chat.studentIdentity.displayName
+        : 'Mentor';
+      return {
+        ...m,
+        senderName,
+      };
+    });
+
     return {
-      messages: messages.reverse(),
+      messages: mappedMessages.reverse(),
       pagination: {
         page,
         limit,

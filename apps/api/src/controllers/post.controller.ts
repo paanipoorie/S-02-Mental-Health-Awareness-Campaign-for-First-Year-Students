@@ -129,11 +129,13 @@ export const postController = {
       const { id } = req.params as GetPostParams;
       const data = req.body as CreateReplyInput;
 
-      if (!user.anonymousIdentityId) {
+      const identityId = user.role === 'MENTOR' || user.role === 'ADMIN' ? user.userId : user.anonymousIdentityId;
+
+      if (!identityId) {
         throw new ApiError(404, 'Anonymous identity not found');
       }
 
-      const reply = await postService.createReply(id, user.anonymousIdentityId, data);
+      const reply = await postService.createReply(id, identityId, data);
 
       res.status(201).json({
         success: true,
@@ -152,11 +154,13 @@ export const postController = {
       const user = req.user!;
       const { id, replyId } = req.params as DeleteReplyParams;
 
-      if (!user.anonymousIdentityId) {
+      const identityId = user.role === 'MENTOR' || user.role === 'ADMIN' ? user.userId : user.anonymousIdentityId;
+
+      if (!identityId) {
         throw new ApiError(404, 'Anonymous identity not found');
       }
 
-      const deleted = await postService.deleteReply(id, replyId, user.anonymousIdentityId);
+      const deleted = await postService.deleteReply(id, replyId, identityId);
 
       if (!deleted) {
         throw new ApiError(404, 'Reply not found');
