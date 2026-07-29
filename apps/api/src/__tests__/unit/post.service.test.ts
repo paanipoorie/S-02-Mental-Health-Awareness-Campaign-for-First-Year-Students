@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { prisma } from '../../prisma/client.js';
 import { postService } from '../../services/post.service.js';
+import { PostCategory, EmotionType, UrgencyLevel } from '@campus-peer-support/shared-types';
 
 async function createIdentity(email: string) {
   const user = await prisma.user.create({
@@ -29,9 +30,9 @@ describe('Post Service Unit Tests', () => {
     const post = await postService.createPost(studentAnon.id, {
       title: 'Unit Test Post',
       body: 'Testing the post service layers directly.',
-      category: 'GENERAL',
-      emotion: 'HAPPY',
-      urgencyLevel: 'LOW',
+      category: PostCategory.GENERAL,
+      emotion: EmotionType.HAPPY,
+      urgencyLevel: UrgencyLevel.LOW,
     });
 
     expect(post).toBeDefined();
