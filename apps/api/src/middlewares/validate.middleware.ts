@@ -9,25 +9,39 @@ export interface ValidationSchema {
 }
 
 function isValidationSchema(schema: ZodTypeAny | ValidationSchema): schema is ValidationSchema {
-  return (
-    typeof schema === 'object' &&
-    schema !== null &&
-    ('body' in schema || 'query' in schema || 'params' in schema)
-  );
+  if (typeof schema !== 'object' || schema === null) return false;
+  if ('body' in schema || 'query' in schema || 'params' in schema) return true;
+  if ('shape' in schema && typeof schema.shape === 'object' && schema.shape !== null) {
+    return 'body' in schema.shape || 'query' in schema.shape || 'params' in schema.shape;
+  }
+  return false;
+}
+
+function extractSchema(schema: ValidationSchema, key: 'body' | 'query' | 'params'): ZodTypeAny | undefined {
+  if (schema[key]) return schema[key] as ZodTypeAny;
+  if ('shape' in schema && typeof (schema as Record<string, unknown>).shape === 'object') {
+    const shape = (schema as Record<string, unknown>).shape as Record<string, unknown>;
+    return shape[key] as ZodTypeAny | undefined;
+  }
+  return undefined;
 }
 
 export function validate(schema: ZodTypeAny | ValidationSchema) {
   return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
     try {
       if (isValidationSchema(schema)) {
-        if (schema.body) {
-          req.body = await schema.body.parseAsync(req.body);
+        const bodySchema = extractSchema(schema, 'body');
+        const querySchema = extractSchema(schema, 'query');
+        const paramsSchema = extractSchema(schema, 'params');
+
+        if (bodySchema) {
+          req.body = await bodySchema.parseAsync(req.body);
         }
-        if (schema.query) {
-          req.query = await schema.query.parseAsync(req.query);
+        if (querySchema) {
+          req.query = await querySchema.parseAsync(req.query);
         }
-        if (schema.params) {
-          req.params = await schema.params.parseAsync(req.params);
+        if (paramsSchema) {
+          req.params = await paramsSchema.parseAsync(req.params);
         }
       } else {
         req.body = await schema.parseAsync(req.body);

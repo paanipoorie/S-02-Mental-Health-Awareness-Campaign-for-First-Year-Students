@@ -11,6 +11,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['src/__tests__/setup.ts'],
     globalSetup: ['src/__tests__/globalSetup.ts'],
+    fileParallelism: false,
     env: {
       NODE_ENV: 'test',
       JWT_SECRET: 'test-jwt-secret-key-for-testing-only-32chars',
