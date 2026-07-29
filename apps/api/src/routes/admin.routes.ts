@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { adminController } from '../controllers/admin.controller.js';
 import { validate } from '../middlewares/validate.middleware.js';
 import { requireRole } from '../middlewares/role.middleware.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { Role } from '@campus-peer-support/shared-types';
 import {
   getAdminUsersQuerySchema,
@@ -22,7 +23,8 @@ import {
 
 const router: Router = Router();
 
-// All admin routes require ADMIN role
+// All admin routes require authentication and ADMIN role
+router.use(authMiddleware);
 router.use(requireRole(Role.ADMIN));
 
 // Stats

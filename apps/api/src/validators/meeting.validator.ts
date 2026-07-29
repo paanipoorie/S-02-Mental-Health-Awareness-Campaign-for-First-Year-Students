@@ -7,6 +7,8 @@ import {
   WorkshopRegistrationStatus,
 } from '@campus-peer-support/shared-types/enums';
 
+export { MeetingType, MeetingHostType, MeetingCategory, WorkshopCategory, WorkshopRegistrationStatus };
+
 export const createMeetingSchema = z.object({
   body: z.object({
     title: z.string().min(1, 'Title is required').max(200, 'Title must be at most 200 characters'),
