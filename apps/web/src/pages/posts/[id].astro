@@ -1,0 +1,14 @@
+---
+import StudentLayout from '../../layouts/StudentLayout.astro';
+import PostDetailClient from '../../components/posts/PostDetailClient.tsx';
+
+export async function getStaticPaths() {
+  return [];
+}
+
+const { id } = Astro.params;
+---
+
+<StudentLayout title="Post Details | Campus Sanctuary">
+  {id && <PostDetailClient postId={id} client:load />}
+</StudentLayout>
