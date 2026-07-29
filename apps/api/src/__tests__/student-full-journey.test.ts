@@ -103,7 +103,7 @@ describe('Student Full Journey E2E Integration Test', () => {
       .expect(200);
 
     expect(feedResponse.body.success).toBe(true);
-    const foundPost = feedResponse.body.data.posts.find((p: any) => p.id === postId);
+    const foundPost = feedResponse.body.data.find((p: any) => p.id === postId);
     expect(foundPost).toBeDefined();
 
     // 8. Start Support Chat with Mentor (should auto-assign the pre-created mentor)
