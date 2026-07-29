@@ -1009,7 +1009,7 @@ feat(dashboard): add modern professional student, mentor, and admin dashboards w
 
 ---
 
-## Phase 11 — Admin Panel
+## Phase 11 — Admin Panel ✅ COMPLETED
 
 ### Goal
 Give administrators the ability to manage mentors, students, meetings, workshops, and resources — including the mentor verification toggle that Phase 7 depends on conceptually.
@@ -1094,7 +1094,7 @@ feat(admin): add admin panel for mentor verification, user management, meeting/w
 
 ---
 
-## Phase 12 — Realtime Notifications & Presence Polish
+## Phase 12 — Realtime Notifications & Presence Polish ✅ COMPLETED
 
 ### Goal
 Round out the realtime layer beyond chat: live notification badges for new replies/messages/meeting reminders, and finalize the "mentors online" presence system referenced since Phase 6/9.

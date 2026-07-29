@@ -16,8 +16,8 @@ export interface MeetingData {
   time: string;
   durationMinutes: number;
   meetingType: MeetingType;
-  meetingLink: string | null;
-  location: string | null;
+  meetingLink: string | null | undefined;
+  location: string | null | undefined;
   category: MeetingCategory;
   hostType: MeetingHostType;
 }
@@ -55,11 +55,11 @@ export interface WorkshopData {
   time: string;
   durationMinutes: number;
   meetingType: MeetingType;
-  meetingLink: string | null;
-  location: string | null;
+  meetingLink: string | null | undefined;
+  location: string | null | undefined;
   category: WorkshopCategory;
-  maxAttendees: number | null;
-  resources: string | null;
+  maxAttendees: number | null | undefined;
+  resources: string | null | undefined;
 }
 
 export interface PaginatedWorkshops {
@@ -422,7 +422,16 @@ export const meetingService = {
 
 export const workshopService = {
   async createWorkshop(mentorId: string, data: WorkshopData) {
-    const workshop = await prisma.workshop.create({ data: { ...data, mentorId } });
+    const workshop = await prisma.workshop.create({
+      data: {
+        ...data,
+        mentorId,
+        meetingLink: data.meetingLink ?? null,
+        location: data.location ?? null,
+        maxAttendees: data.maxAttendees ?? null,
+        resources: data.resources ?? null,
+      },
+    });
     return workshop;
   },
 

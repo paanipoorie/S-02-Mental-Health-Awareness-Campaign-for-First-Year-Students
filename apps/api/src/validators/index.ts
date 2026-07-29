@@ -6,3 +6,4 @@ export * from './mentor.validator.js';
 export * from './resource.validator.js';
 export * from './dashboard.validator.js';
 export * from './notification.validator.js';
+export * from './meeting.validator.js';
