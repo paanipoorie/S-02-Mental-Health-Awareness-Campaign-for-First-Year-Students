@@ -28,5 +28,5 @@ RUN pnpm --filter api build
 # Expose port
 EXPOSE 3001
 
-# Start API
-CMD ["pnpm", "--filter", "api", "start"]
+# Start API with migration deploy
+CMD ["sh", "-c", "npx prisma migrate deploy && pnpm --filter api start"]
