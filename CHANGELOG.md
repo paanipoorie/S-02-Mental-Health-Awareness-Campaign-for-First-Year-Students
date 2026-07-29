@@ -29,6 +29,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Test parallelism**: Configured test executions sequentially to avoid database transaction collisions.
 - **Test schemas**: Corrected mock inputs in `anonymity.audit.test.ts` to satisfy Zod validation constraints.
 
+### Frontend Additions
+- **Post Detail page**: `/posts/[id]` with threaded replies, reply composer, emotion/urgency display, and soft delete.
+- **Chat Inbox**: `/chat` with thread list, unread badges, emotion previews for mentors, and "New Chat" action.
+- **Chat Conversation**: `/chat/[threadId]` with live Socket.io messaging, typing indicators, read receipts, and scroll-to-bottom.
+- **Chat Components**: Reusable `ChatList`, `ChatWindow`, `MessageBubble`, and `TypingIndicator` React components.
+
 ---
 
 ## [0.1.0-alpha] - 2026-07-15

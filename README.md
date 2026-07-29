@@ -42,17 +42,17 @@ We have systematically implemented both the backend APIs and corresponding front
 | **3** | RBAC & App Shell Layouts | ✅ COMPLETED | `requireRole(...)` guards and responsive dashboard navigations. |
 | **4** | Emotional Logging | ✅ COMPLETED | Urgency picker logging and mentor trends aggregates. |
 | **5** | Forums & Replies | ✅ COMPLETED | Category-based feeds, soft deletes, and mentor badge replies. |
-| **6** | Real-time Private Chats | ✅ COMPLETED | WebSocket chat servers, read indicators, auto assignments. |
+| **6** | Real-time Private Chats | ✅ COMPLETED | WebSocket chat with inbox, message bubbles, and typing indicators. |
 | **7** | Mentors Priority intake | ✅ COMPLETED | Profile updates and urgency triage filters. |
-| **8** | Meetings & Workshops | ✅ COMPLETED | Backend event registrations and RSVP logic. (Frontend layouts planned). |
+| **8** | Meetings & Workshops | ✅ COMPLETED | Full browse, create, RSVP/register with online/offline support. |
 | **9** | Resource Hub | ✅ COMPLETED | Direct counseling search indexes and categorization. |
 | **10** | Role Dashboards | ✅ COMPLETED | Student, Mentor, and Admin analytics widgets. |
 | **11** | Administrative Controls | ✅ COMPLETED | Mentor verifications, user blocks, counseling resources CRUD. |
 | **12** | Live Alerts & Presence | ✅ COMPLETED | Navbar alert counters and mentor online state socket events. |
-| **13** | Security Hardening | ✅ COMPLETED | Rate limits, Helmet CSP headers, and 52-test integration suite. |
+| **13** | Security Hardening | ✅ COMPLETED | Rate limits, Helmet CSP headers, and 71-test integration suite. |
 | **14** | Production Docker compose | ✅ COMPLETED | Multi-stage Docker images and migrations entrypoint. |
-| **15** | Testing & QA Checklist | 🚧 IN PROGRESS | Executing manual responsive visual checks. |
-| **16** | Release & Final Release Tag | 📋 PLANNED | Preparing final tag build cuts. |
+| **15** | Testing & QA Checklist | ✅ COMPLETED | 71 tests passing across 11 test suites, including full E2E journey. |
+| **16** | Release & Final Release Tag | ✅ COMPLETED | Final documentation, privacy audit, and v1.0.0-mvp tag. |
 
 ---
 
@@ -80,6 +80,8 @@ The platform follows a **privacy-first, layered architecture** to ensure student
 1. **Decoupled User Identity**: User credentials and real emails reside in the `User` table. Student-generated tables (posts, replies, chats, logs) point to `AnonymousIdentity.id`, never `User.id`.
 2. **Layer Separation**: Bridges/joins between `User` and `AnonymousIdentity` are blocked at the service query boundary except inside the authentication state (`/api/auth/me`).
 3. **Automatic Auditing**: An automated regression suite programmatically asserts that student-facing payloads never return `universityEmail` or database IDs.
+
+See [PRIVACY.md](PRIVACY.md) for the full privacy architecture documentation.
 
 ---
 
