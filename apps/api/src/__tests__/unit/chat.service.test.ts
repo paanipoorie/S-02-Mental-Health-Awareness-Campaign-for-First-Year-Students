@@ -69,7 +69,7 @@ describe('Chat Service Unit Tests', () => {
     });
     expect(messagesResult).not.toBeNull();
     expect(messagesResult!.messages.length).toBe(1);
-    expect(messagesResult!.messages[0].body).toBe('Unit test chat message');
+    expect(messagesResult!.messages[0]!.body).toBe('Unit test chat message');
 
     // Mark as read
     await chatService.markAsRead(thread.id, mentor.id, Role.MENTOR);
