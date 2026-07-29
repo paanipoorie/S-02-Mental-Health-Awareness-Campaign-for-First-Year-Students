@@ -101,13 +101,13 @@ export function WorkshopListClient() {
 
   const getCategoryEmoji = (cat: string) => {
     switch (cat) {
-      case 'ACADEMICS': return '📚';
+      case 'MENTAL_HEALTH': return '🧠';
       case 'STRESS_MANAGEMENT': return '😌';
-      case 'SLEEP_HYGIENE': return '😴';
-      case 'STUDENT_WELFARE': return '🤝';
-      case 'CAMPUS_CLUBS': return '🎪';
-      case 'SELF_HELP_PDFS': return '📄';
-      case 'EXTERNAL_HELPLINES': return '☎️';
+      case 'STUDY_SKILLS': return '📚';
+      case 'TIME_MANAGEMENT': return '⏰';
+      case 'MINDFULNESS': return '🧘';
+      case 'CAREER_GUIDANCE': return '💼';
+      case 'GENERAL': return '📋';
       default: return '📋';
     }
   };
@@ -160,13 +160,13 @@ export function WorkshopListClient() {
             className="w-full px-4 py-3 bg-slate-950 border border-slate-800 text-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
           >
             <option value="">All Categories</option>
-            <option value="ACADEMICS">📚 Academics</option>
+            <option value="MENTAL_HEALTH">🧠 Mental Health</option>
             <option value="STRESS_MANAGEMENT">😌 Stress Management</option>
-            <option value="SLEEP_HYGIENE">😴 Sleep Hygiene</option>
-            <option value="STUDENT_WELFARE">🤝 Student Welfare</option>
-            <option value="CAMPUS_CLUBS">🎪 Campus Clubs</option>
-            <option value="SELF_HELP_PDFS">📄 Self-Help PDFs</option>
-            <option value="EXTERNAL_HELPLINES">☎️ External Helplines</option>
+            <option value="STUDY_SKILLS">📚 Study Skills</option>
+            <option value="TIME_MANAGEMENT">⏰ Time Management</option>
+            <option value="MINDFULNESS">🧘 Mindfulness</option>
+            <option value="CAREER_GUIDANCE">💼 Career Guidance</option>
+            <option value="GENERAL">📋 General</option>
           </select>
         </div>
 
