@@ -31,12 +31,18 @@ interface WorkshopData {
   };
 }
 
-export function AdminWorkshopsClient({ initialData }: { initialData: WorkshopData }) {
-  const [workshops, setWorkshops] = useState(initialData.data);
-  const [pagination, setPagination] = useState(initialData.pagination);
+export function AdminWorkshopsClient({ initialData }: { initialData?: WorkshopData }) {
+  const [workshops, setWorkshops] = useState(initialData?.data || []);
+  const [pagination, setPagination] = useState(initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 });
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!initialData);
+
+  useEffect(() => {
+    if (!initialData) {
+      fetchWorkshops(1, '', {});
+    }
+  }, [initialData]);
 
   const fetchWorkshops = async (page: number, searchQuery: string, filterOptions: Record<string, string>) => {
     setLoading(true);

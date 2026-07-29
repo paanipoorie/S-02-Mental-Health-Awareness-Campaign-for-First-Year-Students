@@ -33,12 +33,18 @@ interface UserData {
   };
 }
 
-export function AdminStudentsClient({ initialData }: { initialData: UserData }) {
-  const [users, setUsers] = useState(initialData.data);
-  const [pagination, setPagination] = useState(initialData.pagination);
+export function AdminStudentsClient({ initialData }: { initialData?: UserData }) {
+  const [users, setUsers] = useState(initialData?.data || []);
+  const [pagination, setPagination] = useState(initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 });
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!initialData);
+
+  useEffect(() => {
+    if (!initialData) {
+      fetchUsers(1, '', {});
+    }
+  }, [initialData]);
 
   const fetchUsers = async (page: number, searchQuery: string, filterOptions: Record<string, string>) => {
     setLoading(true);

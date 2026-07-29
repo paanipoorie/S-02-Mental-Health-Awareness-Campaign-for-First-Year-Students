@@ -33,12 +33,18 @@ interface MentorData {
   };
 }
 
-export function AdminMentorsClient({ initialData }: { initialData: MentorData }) {
-  const [mentors, setMentors] = useState(initialData.data);
-  const [pagination, setPagination] = useState(initialData.pagination);
+export function AdminMentorsClient({ initialData }: { initialData?: MentorData }) {
+  const [mentors, setMentors] = useState(initialData?.data || []);
+  const [pagination, setPagination] = useState(initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 });
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!initialData);
+
+  useEffect(() => {
+    if (!initialData) {
+      fetchMentors(1, '', {});
+    }
+  }, [initialData]);
 
   const fetchMentors = async (page: number, searchQuery: string, filterOptions: Record<string, string>) => {
     setLoading(true);
