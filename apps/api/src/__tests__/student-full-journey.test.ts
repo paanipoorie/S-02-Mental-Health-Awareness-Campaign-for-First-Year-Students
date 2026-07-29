@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { prisma } from '../prisma/client.js';
 import { createApp } from '../app.js';
+import { signAccessToken } from '../utils/jwt.js';
 import { Role } from '@campus-peer-support/shared-types';
 import { getTestEmail, testPassword } from './setup.js';
 
@@ -146,7 +147,7 @@ describe('Student Full Journey E2E Integration Test', () => {
     expect(meetingResponse.body.success).toBe(true);
 
     // 11. Schedule a Workshop (as mentor) and register Student for it
-    const mentorToken = signAccessToken({ userId: mentor.id, role: Role.MENTOR });
+    const mentorToken = signAccessToken({ userId: mentor.id, role: Role.MENTOR, email: mentor.universityEmail });
     const workshopResponse = await request(app)
       .post('/api/workshops')
       .set('Authorization', `Bearer ${mentorToken}`)
