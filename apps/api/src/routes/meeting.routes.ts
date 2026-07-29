@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { meetingController } from '../controllers/meeting.controller.js';
 import { validate } from '../middlewares/validate.middleware.js';
-import { requireRole, requireVerifiedMentor } from '../middlewares/role.middleware.js';
+import { authMiddleware, requireRole, requireVerifiedMentor } from '../middlewares/index.js';
 import { Role } from '@campus-peer-support/shared-types';
 import {
   createMeetingSchema,
@@ -17,6 +17,8 @@ import {
 
 const router: Router = Router();
 
+// All meeting and workshop routes require authentication
+router.use(authMiddleware);
 router.use(requireRole(Role.STUDENT, Role.MENTOR, Role.ADMIN));
 
 // Meeting routes

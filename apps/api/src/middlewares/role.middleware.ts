@@ -45,3 +45,32 @@ export async function requireVerifiedMentor(
     next(error);
   }
 }
+
+export async function gateUnverifiedMentor(
+  req: Request,
+  _res: Response,
+  next: NextFunction
+): Promise<void> {
+  if (!req.user) {
+    return next();
+  }
+
+  if (req.user.role !== Role.MENTOR) {
+    return next();
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: { isVerifiedMentor: true },
+    });
+
+    if (!user || !user.isVerifiedMentor) {
+      return next(ApiError.forbidden('Mentor account is pending verification', 'FORBIDDEN'));
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+}

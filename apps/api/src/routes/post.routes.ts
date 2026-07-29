@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { postController } from '../controllers/post.controller.js';
 import { validate } from '../middlewares/validate.middleware.js';
-import { authMiddleware } from '../middlewares/index.js';
+import { authMiddleware, gateUnverifiedMentor } from '../middlewares/index.js';
 import {
   createPostSchema,
   getPostsQuerySchema,
@@ -31,6 +31,7 @@ router.delete('/:id', validate(getPostParamsSchema), postController.deletePost);
 
 router.post(
   '/:id/replies',
+  gateUnverifiedMentor,
   validate(getPostParamsSchema),
   validate(createReplySchema),
   postController.createReply

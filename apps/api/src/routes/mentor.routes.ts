@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { mentorController } from '../controllers/mentor.controller.js';
-import { requireRole, requireVerifiedMentor } from '../middlewares/role.middleware.js';
+import { authMiddleware, requireRole, requireVerifiedMentor } from '../middlewares/index.js';
 import { validate } from '../middlewares/validate.middleware.js';
 import { Role } from '@campus-peer-support/shared-types';
 import {
@@ -9,6 +9,9 @@ import {
 } from '../validators/mentor.validator.js';
 
 const router: Router = Router();
+
+// All mentor routes require authentication
+router.use(authMiddleware);
 
 // Mentor-only routes (require MENTOR role and verified status)
 router.get(

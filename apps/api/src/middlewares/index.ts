@@ -1,5 +1,5 @@
 export { authMiddleware, optionalAuthMiddleware } from './auth.middleware.js';
-export { requireRole, requireVerifiedMentor } from './role.middleware.js';
+export { requireRole, requireVerifiedMentor, gateUnverifiedMentor } from './role.middleware.js';
 export {
   authRateLimiter,
   generalRateLimiter,

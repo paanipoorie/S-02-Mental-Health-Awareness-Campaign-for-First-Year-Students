@@ -1,6 +1,6 @@
 import type { Router as ExpressRouter } from 'express';
 import { Router } from 'express';
-import { authMiddleware } from '../middlewares/index.js';
+import { authMiddleware, gateUnverifiedMentor } from '../middlewares/index.js';
 import { chatController } from '../controllers/chat.controller.js';
 import { validate } from '../middlewares/validate.middleware.js';
 import {
@@ -15,6 +15,7 @@ import {
 const router: ExpressRouter = Router();
 
 router.use(authMiddleware);
+router.use(gateUnverifiedMentor);
 
 router.post('/', validate(createChatSchema), chatController.createChat);
 
