@@ -54,7 +54,7 @@ describe('Meeting and Workshop Service Unit Tests', () => {
     const meeting = await meetingService.createMeeting(student.id, Role.STUDENT, {
       title: 'Group Study Unit',
       description: 'Preparing for final calculus quiz.',
-      date: new Date(Date.now() + 86400000).toISOString(),
+      date: new Date(Date.now() + 86400000),
       time: '15:00',
       durationMinutes: 60,
       meetingType: 'ONLINE',
@@ -82,7 +82,7 @@ describe('Meeting and Workshop Service Unit Tests', () => {
     const workshop = await workshopService.createWorkshop(mentor.id, {
       title: 'Mindfulness Unit',
       description: 'Stress management practices.',
-      date: new Date(Date.now() + 86400000).toISOString(),
+      date: new Date(Date.now() + 86400000),
       time: '10:00',
       durationMinutes: 90,
       meetingType: 'OFFLINE',
