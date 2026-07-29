@@ -59,6 +59,7 @@ describe('Meeting and Workshop Service Unit Tests', () => {
       durationMinutes: 60,
       meetingType: 'ONLINE',
       meetingLink: 'https://meet.google.com/xyz',
+      location: null,
       category: 'STUDY_GROUP',
       hostType: 'STUDENT',
     });
@@ -87,8 +88,10 @@ describe('Meeting and Workshop Service Unit Tests', () => {
       durationMinutes: 90,
       meetingType: 'OFFLINE',
       location: 'Room 502',
+      meetingLink: null,
       category: 'STRESS_MANAGEMENT',
       maxAttendees: 5,
+      resources: null,
     });
 
     expect(workshop).toBeDefined();
