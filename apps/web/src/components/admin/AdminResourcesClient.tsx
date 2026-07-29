@@ -23,12 +23,18 @@ interface ResourceData {
   };
 }
 
-export function AdminResourcesClient({ initialData }: { initialData: ResourceData }) {
-  const [resources, setResources] = useState(initialData.data);
-  const [pagination, setPagination] = useState(initialData.pagination);
+export function AdminResourcesClient({ initialData }: { initialData?: ResourceData }) {
+  const [resources, setResources] = useState(initialData?.data || []);
+  const [pagination, setPagination] = useState(initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 });
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!initialData);
+
+  useEffect(() => {
+    if (!initialData) {
+      fetchResources(1, '', {});
+    }
+  }, [initialData]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingResource, setEditingResource] = useState<any>(null);
 
