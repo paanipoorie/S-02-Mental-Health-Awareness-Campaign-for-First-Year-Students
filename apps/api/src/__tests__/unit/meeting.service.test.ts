@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { prisma } from '../../prisma/client.js';
-import { meetingService } from '../../services/meeting.service.js';
+import { meetingService, workshopService } from '../../services/meeting.service.js';
 import { Role } from '@campus-peer-support/shared-types';
 
 async function createStudentAndMentor(studentEmail: string, mentorEmail: string) {
@@ -19,6 +19,21 @@ async function createStudentAndMentor(studentEmail: string, mentorEmail: string)
     },
   });
 
+  const student2 = await prisma.user.create({
+    data: {
+      universityEmail: studentEmail.replace('@', '2@'),
+      passwordHash: 'pass',
+      role: Role.STUDENT,
+    },
+  });
+  const student2Anon = await prisma.anonymousIdentity.create({
+    data: {
+      userId: student2.id,
+      displayName: `Anon2 ${studentEmail.split('@')[0]}`,
+      avatarSeed: 124,
+    },
+  });
+
   const mentor = await prisma.user.create({
     data: {
       universityEmail: mentorEmail,
@@ -28,12 +43,12 @@ async function createStudentAndMentor(studentEmail: string, mentorEmail: string)
     },
   });
 
-  return { student, studentAnon, mentor };
+  return { student, studentAnon, student2, student2Anon, mentor };
 }
 
 describe('Meeting and Workshop Service Unit Tests', () => {
   it('should verify meeting scheduling, RSVP toggles, and cancellation', async () => {
-    const { student, mentor } = await createStudentAndMentor('meetunit1@test.edu', 'meetunit2@test.edu');
+    const { student, student2 } = await createStudentAndMentor('meetunit1@test.edu', 'meetunit2@test.edu');
 
     // Create meeting
     const meeting = await meetingService.createMeeting(student.id, Role.STUDENT, {
@@ -51,8 +66,8 @@ describe('Meeting and Workshop Service Unit Tests', () => {
     expect(meeting).toBeDefined();
     expect(meeting.title).toBe('Group Study Unit');
 
-    // RSVP
-    const rsvpResult = await meetingService.rsvpMeeting(meeting.id, mentor.id);
+    // RSVP using student2 (has anonymous identity)
+    const rsvpResult = await meetingService.rsvpMeeting(meeting.id, student2.id);
     expect(rsvpResult.rsvped).toBe(true);
 
     // Cancel Meeting
@@ -64,7 +79,7 @@ describe('Meeting and Workshop Service Unit Tests', () => {
     const { student, studentAnon, mentor } = await createStudentAndMentor('meetunit3@test.edu', 'meetunit4@test.edu');
 
     // Create workshop
-    const workshop = await meetingService.createWorkshop(mentor.id, {
+    const workshop = await workshopService.createWorkshop(mentor.id, {
       title: 'Mindfulness Unit',
       description: 'Stress management practices.',
       date: new Date(Date.now() + 86400000).toISOString(),
@@ -80,17 +95,17 @@ describe('Meeting and Workshop Service Unit Tests', () => {
     expect(workshop.title).toBe('Mindfulness Unit');
 
     // Register
-    const reg = await meetingService.registerWorkshop(workshop.id, student.id);
+    const reg = await workshopService.registerWorkshop(workshop.id, student.id);
     expect(reg).toBeDefined();
     expect(reg.status).toBe('REGISTERED');
 
     // Mark Attendance
-    const attendance = await meetingService.markAttendance(workshop.id, studentAnon.id, 'ATTENDED' as any);
+    const attendance = await workshopService.markAttendance(workshop.id, studentAnon.id, 'ATTENDED' as any);
     expect(attendance.status).toBe('ATTENDED');
     expect(attendance.attendedAt).not.toBeNull();
 
     // Cancel Workshop
-    const cancelResult = await meetingService.cancelWorkshop(workshop.id, mentor.id);
+    const cancelResult = await workshopService.cancelWorkshop(workshop.id, mentor.id);
     expect(cancelResult.deleted).toBe(true);
   });
 });
