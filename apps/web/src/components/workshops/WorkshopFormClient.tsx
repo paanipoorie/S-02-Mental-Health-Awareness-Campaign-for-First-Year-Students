@@ -155,13 +155,13 @@ export function WorkshopFormClient() {
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
               >
-                <option value="ACADEMICS">Academics</option>
+                <option value="MENTAL_HEALTH">Mental Health</option>
                 <option value="STRESS_MANAGEMENT">Stress Management</option>
-                <option value="SLEEP_HYGIENE">Sleep Hygiene</option>
-                <option value="STUDENT_WELFARE">Student Welfare</option>
-                <option value="CAMPUS_CLUBS">Campus Clubs</option>
-                <option value="SELF_HELP_PDFS">Self-Help PDFs</option>
-                <option value="EXTERNAL_HELPLINES">External Helplines</option>
+                <option value="STUDY_SKILLS">Study Skills</option>
+                <option value="TIME_MANAGEMENT">Time Management</option>
+                <option value="MINDFULNESS">Mindfulness</option>
+                <option value="CAREER_GUIDANCE">Career Guidance</option>
+                <option value="GENERAL">General</option>
               </select>
             </div>
             <div>
