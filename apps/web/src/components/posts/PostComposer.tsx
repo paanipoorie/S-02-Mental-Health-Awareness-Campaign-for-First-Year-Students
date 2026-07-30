@@ -68,9 +68,9 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="post-composer">
-      <div className="composer-field">
-        <label htmlFor="title" className="field-label">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="title" className="text-label-13 font-semibold text-gray-700">
           Title
         </label>
         <input
@@ -79,21 +79,23 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
           value={title}
           onChange={e => setTitle(e.target.value)}
           placeholder="What's on your mind? (min 5 characters)"
-          className={`field-input ${errors.title ? 'error' : ''}`}
+          className={`rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-copy-14 text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors ${
+            errors.title ? 'border-red-300' : ''
+          }`}
           disabled={isLoading}
           maxLength={200}
           aria-invalid={!!errors.title}
           aria-describedby={errors.title ? 'title-error' : undefined}
         />
         {errors.title && (
-          <span id="title-error" className="field-error">
+          <span id="title-error" className="text-label-12 text-red-600 font-semibold">
             {errors.title}
           </span>
         )}
       </div>
 
-      <div className="composer-field">
-        <label htmlFor="body" className="field-label">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="body" className="text-label-13 font-semibold text-gray-700">
           Share your thoughts
         </label>
         <textarea
@@ -101,7 +103,9 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
           value={body}
           onChange={e => setBody(e.target.value)}
           placeholder="Write your post here... (min 10 characters)"
-          className={`field-textarea ${errors.body ? 'error' : ''}`}
+          className={`rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-copy-14 text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors resize-vertical min-h-[140px] ${
+            errors.body ? 'border-red-300' : ''
+          }`}
           disabled={isLoading}
           rows={6}
           maxLength={10000}
@@ -109,107 +113,40 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
           aria-describedby={errors.body ? 'body-error' : undefined}
         />
         {errors.body && (
-          <span id="body-error" className="field-error">
+          <span id="body-error" className="text-label-12 text-red-600 font-semibold">
             {errors.body}
           </span>
         )}
       </div>
 
-      <CategoryPicker selectedCategory={category} onSelect={setCategory} />
+      <div className="flex flex-col gap-1.5">
+        <label className="text-label-13 font-semibold text-gray-700">Category</label>
+        <CategoryPicker selectedCategory={category} onSelect={setCategory} />
+      </div>
 
-      <div className="composer-field">
-        <label className="field-label">How are you feeling? (optional)</label>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-label-13 font-semibold text-gray-700">How are you feeling? (optional)</label>
         <EmotionPicker selectedEmotion={emotion as any} onSelect={setEmotion} />
       </div>
 
-      <div className="composer-field">
-        <label className="field-label">Urgency level (optional)</label>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-label-13 font-semibold text-gray-700">Urgency level (optional)</label>
         <UrgencyPicker selectedUrgency={urgency as any} onSelect={setUrgency} />
       </div>
 
-      {submitError && <div className="submit-error">{submitError}</div>}
+      {submitError && (
+        <div className="rounded-sm border border-red-300 bg-red-50 p-3 text-sm text-red-800 font-semibold">
+          {submitError}
+        </div>
+      )}
 
-      <button type="submit" className="submit-btn" disabled={isLoading}>
+      <button
+        type="submit"
+        className="self-start rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled={isLoading}
+      >
         {isLoading ? 'Posting...' : 'Post Anonymously'}
       </button>
-
-      <style jsx>{`
-        .post-composer {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-        .composer-field {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        .field-label {
-          font-size: 13px;
-          font-weight: 500;
-          color: #374151;
-        }
-        .field-input,
-        .field-textarea {
-          padding: 10px 12px;
-          border: 1px solid #d1d5db;
-          border-radius: 8px;
-          font-size: 14px;
-          color: #111827;
-          background: white;
-          font-family: inherit;
-          transition:
-            border-color 0.15s ease,
-            box-shadow 0.15s ease;
-        }
-        .field-input:focus,
-        .field-textarea:focus {
-          outline: none;
-          border-color: #0d9488;
-          box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
-        }
-        .field-input.error,
-        .field-textarea.error {
-          border-color: #ef4444;
-        }
-        .field-textarea {
-          resize: vertical;
-          min-height: 120px;
-        }
-        .field-error {
-          font-size: 12px;
-          color: #ef4444;
-        }
-        .submit-error {
-          padding: 10px 12px;
-          background: #fef2f2;
-          color: #dc2626;
-          border-radius: 8px;
-          font-size: 13px;
-        }
-        .submit-btn {
-          align-self: flex-start;
-          padding: 12px 24px;
-          background: linear-gradient(135deg, #0d9488, #14b8a6);
-          color: white;
-          border: none;
-          border-radius: 10px;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition:
-            transform 0.1s ease,
-            box-shadow 0.15s ease;
-        }
-        .submit-btn:hover:not(:disabled) {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
-        }
-        .submit-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-      `}</style>
     </form>
   );
 }

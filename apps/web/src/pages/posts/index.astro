@@ -2,16 +2,23 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Posts - Anonymous Feed">
-  <div class="posts-page">
-    <header class="page-header">
-      <h1>Anonymous Posts</h1>
-      <p class="page-subtitle">Share your thoughts, get support, connect anonymously</p>
-      <a href="/posts/new" class="new-post-btn">+ New Post</a>
+<BaseLayout title="Anonymous Discussions | Campus Peer Support">
+  <div class="posts-page py-10 max-w-3xl mx-auto px-4">
+    <header class="page-header mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-heading-32 font-bold text-gray-1000">Discussions Feed</h1>
+        <p class="text-copy-14 text-gray-500 mt-1">Share your thoughts and get anonymous peer support</p>
+      </div>
+      <a
+        href="/posts/new"
+        class="inline-block rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors focus-visible:outline-none"
+      >
+        + New Post
+      </a>
     </header>
 
-    <div class="filters">
-      <select id="emotion-filter" class="filter-select">
+    <div class="filters mb-6 flex flex-wrap gap-3">
+      <select id="emotion-filter" class="filter-select flex-1 min-w-[180px] rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-label-14 font-semibold text-gray-700 outline-none focus:border-gray-900 transition-colors cursor-pointer">
         <option value="">All Emotions</option>
         <option value="HAPPY">😊 Happy</option>
         <option value="EXCITED">🤩 Excited</option>
@@ -25,7 +32,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <option value="STRESSED">😤 Stressed</option>
       </select>
 
-      <select id="category-filter" class="filter-select">
+      <select id="category-filter" class="filter-select flex-1 min-w-[180px] rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-label-14 font-semibold text-gray-700 outline-none focus:border-gray-900 transition-colors cursor-pointer">
         <option value="">All Categories</option>
         <option value="ACADEMICS">📚 Academics</option>
         <option value="HOSTEL">🏠 Hostel Life</option>
@@ -41,130 +48,206 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </select>
     </div>
 
-    <div id="posts-feed" class="posts-feed">
-      <div class="loading">Loading posts...</div>
+    <div id="posts-feed" class="space-y-4">
+      <div class="py-12 text-center text-gray-500 font-medium">Loading posts...</div>
     </div>
 
-    <div class="pagination">
-      <button id="prev-page" class="page-btn" disabled>Previous</button>
-      <span id="page-info">Page 1</span>
-      <button id="next-page" class="page-btn">Next</button>
+    <div class="pagination flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
+      <button
+        id="prev-page"
+        class="rounded-sm border border-gray-200 bg-background-100 px-4 py-2 text-button-14 font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:hover:bg-background-100 disabled:cursor-not-allowed"
+        disabled
+      >
+        Previous
+      </button>
+      <span id="page-info" class="text-label-14 font-mono text-gray-500">Page 1</span>
+      <button
+        id="next-page"
+        class="rounded-sm border border-gray-200 bg-background-100 px-4 py-2 text-button-14 font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:hover:bg-background-100 disabled:cursor-not-allowed"
+      >
+        Next
+      </button>
     </div>
   </div>
 
   <script is:inline>
-    // Client-side script will handle fetching and rendering posts
-  </script>
+    (function () {
+      const token = localStorage.getItem('caps_access_token');
+      if (!token) {
+        window.location.href = '/login';
+        return;
+      }
 
-  <style>
-    .posts-page {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 24px 16px;
-    }
-    .page-header {
-      margin-bottom: 24px;
-    }
-    .page-header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      color: #111827;
-      margin: 0 0 8px 0;
-    }
-    .page-subtitle {
-      color: #6b7280;
-      margin: 0 0 16px 0;
-    }
-    .new-post-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #0d9488, #14b8a6);
-      color: white;
-      border-radius: 10px;
-      font-weight: 600;
-      text-decoration: none;
-      transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease;
-    }
-    .new-post-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
-    }
-    .filters {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-    .filter-select {
-      flex: 1;
-      min-width: 200px;
-      padding: 10px 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 14px;
-      background: white;
-      cursor: pointer;
-    }
-    .filter-select:focus {
-      outline: none;
-      border-color: #0d9488;
-      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
-    }
-    .posts-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: #6b7280;
-    }
-    .pagination {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 1px solid #e5e7eb;
-    }
-    .page-btn {
-      padding: 10px 20px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      background: white;
-      color: #374151;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .page-btn:hover:not(:disabled) {
-      background: #f9fafb;
-      border-color: #9ca3af;
-    }
-    .page-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    #page-info {
-      color: #6b7280;
-      font-size: 14px;
-    }
-    @media (max-width: 640px) {
-      .posts-page {
-        padding: 16px 12px;
+      let currentPage = 1;
+      const limit = 10;
+      let selectedEmotion = '';
+      let selectedCategory = '';
+
+      const feedContainer = document.getElementById('posts-feed');
+      const prevBtn = document.getElementById('prev-page');
+      const nextBtn = document.getElementById('next-page');
+      const pageInfo = document.getElementById('page-info');
+      const emotionFilter = document.getElementById('emotion-filter');
+      const categoryFilter = document.getElementById('category-filter');
+
+      const EMOTION_EMOJIS = {
+        HAPPY: '😊',
+        EXCITED: '🤩',
+        CONFUSED: '😕',
+        HOMESICK: '🏠',
+        LONELY: '😔',
+        SCARED: '😨',
+        ANXIOUS: '😰',
+        BURNT_OUT: '😩',
+        OVERWHELMED: '🤯',
+        STRESSED: '😤',
+      };
+
+      const URGENCY_STYLES = {
+        HIGH: 'bg-red-50 text-red-800 border-red-300',
+        MEDIUM: 'bg-amber-50 text-amber-800 border-amber-300',
+        LOW: 'bg-green-50 text-green-800 border-green-300',
+      };
+
+      function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
       }
-      .filters {
-        flex-direction: column;
+
+      async function fetchPosts() {
+        feedContainer.innerHTML = '<div class="py-12 text-center text-gray-500 font-medium">Loading posts...</div>';
+        
+        const params = new URLSearchParams({
+          page: currentPage,
+          limit: limit
+        });
+        if (selectedEmotion) params.append('emotion', selectedEmotion);
+        if (selectedCategory) params.append('category', selectedCategory);
+
+        try {
+          const res = await fetch(`http://localhost:3001/api/posts?${params.toString()}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          if (res.status === 401) {
+            localStorage.clear();
+            window.location.href = '/login';
+            return;
+          }
+
+          const result = await res.json();
+          if (result.success) {
+            renderPosts(result.data);
+            updatePagination(result.pagination);
+          } else {
+            feedContainer.innerHTML = `<div class="py-12 text-center text-red-600 font-semibold border border-red-200 bg-red-50 rounded-sm">Error: ${result.error?.message || 'Failed to load posts'}</div>`;
+          }
+        } catch (err) {
+          feedContainer.innerHTML = '<div class="py-12 text-center text-red-600 font-semibold border border-red-200 bg-red-50 rounded-sm">Failed to connect to the server</div>';
+        }
       }
-      .filter-select {
-        width: 100%;
+
+      function renderPosts(posts) {
+        if (!posts || posts.length === 0) {
+          feedContainer.innerHTML = `
+            <div class="py-16 text-center border border-gray-200 rounded-sm bg-background-100">
+              <p class="text-copy-16 text-gray-600 font-semibold">No discussions found</p>
+              <p class="text-label-12 text-gray-500 mt-1">Be the first to post anonymous thoughts in this category!</p>
+            </div>
+          `;
+          return;
+        }
+
+        feedContainer.innerHTML = posts.map(post => {
+          const emoji = EMOTION_EMOJIS[post.emotion] || '';
+          const categoryClean = post.category ? post.category.replace(/_/g, ' ') : '';
+          const replyCount = post._count?.replies || 0;
+
+          let badgeHtml = '';
+          if (post.emotion) {
+            badgeHtml += `
+              <span class="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700">
+                ${emoji} ${post.emotion}
+              </span>
+            `;
+          }
+          if (post.urgencyLevel && post.urgencyLevel !== 'NONE') {
+            const style = URGENCY_STYLES[post.urgencyLevel] || 'bg-gray-50 text-gray-600 border-gray-200';
+            badgeHtml += `
+              <span class="inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 text-xs font-semibold ${style}">
+                ${post.urgencyLevel}
+              </span>
+            `;
+          }
+
+          return `
+            <a href="/posts/${post.id}" class="block rounded-sm border border-gray-200 bg-background-100 p-5 hover:bg-gray-50 transition-colors focus-visible:outline-none">
+              <header class="flex items-center justify-between gap-4 mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-label-12 font-semibold text-gray-900">${post.anonymousDisplayName || 'Anonymous'}</span>
+                  <span class="text-gray-300 font-mono text-label-12">·</span>
+                  <time class="text-label-12 text-gray-400 font-mono" datetime="${post.createdAt}">${formatDate(post.createdAt)}</time>
+                </div>
+                <span class="text-label-12 font-semibold text-tertiary bg-blue-50/50 border border-blue-200 rounded-sm px-2 py-0.5">${categoryClean}</span>
+              </header>
+
+              <h2 class="text-heading-18 font-bold text-gray-900 mb-2 leading-tight">${post.title}</h2>
+              <p class="text-copy-14 text-gray-600 line-clamp-3 mb-4 leading-normal">${post.body}</p>
+
+              <footer class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                  ${badgeHtml}
+                </div>
+                <span class="text-label-13 font-semibold text-gray-500 flex items-center gap-1.5">
+                  <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                  </svg>
+                  ${replyCount} ${replyCount === 1 ? 'reply' : 'replies'}
+                </span>
+              </footer>
+            </a>
+          `;
+        }).join('');
       }
-    }
-  </style>
+
+      function updatePagination(pagination) {
+        currentPage = pagination.page;
+        pageInfo.textContent = `Page ${currentPage} of ${pagination.totalPages || 1}`;
+        prevBtn.disabled = currentPage <= 1;
+        nextBtn.disabled = currentPage >= pagination.totalPages;
+      }
+
+      // Event listeners
+      emotionFilter.addEventListener('change', (e) => {
+        selectedEmotion = e.target.value;
+        currentPage = 1;
+        fetchPosts();
+      });
+
+      categoryFilter.addEventListener('change', (e) => {
+        selectedCategory = e.target.value;
+        currentPage = 1;
+        fetchPosts();
+      });
+
+      prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          fetchPosts();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentPage++;
+        fetchPosts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Init
+      fetchPosts();
+    })();
+  </script>
 </BaseLayout>

@@ -30,8 +30,8 @@ interface PostDetail {
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString([], {
-    weekday: 'long',
-    month: 'long',
+    weekday: 'short',
+    month: 'short',
     day: 'numeric',
     year: 'numeric',
     hour: 'numeric',
@@ -67,12 +67,12 @@ function getCategoryEmoji(cat: string): string {
   return map[cat] || '💬';
 }
 
-function getUrgencyColor(level: string | null): string {
+function getUrgencyBadgeClass(level: string | null): string {
   switch (level) {
-    case 'HIGH': return 'text-rose-400 border-rose-800 bg-rose-950/60';
-    case 'MEDIUM': return 'text-amber-400 border-amber-800 bg-amber-950/60';
-    case 'LOW': return 'text-emerald-400 border-emerald-800 bg-emerald-950/60';
-    default: return 'text-slate-500 border-slate-800 bg-slate-950';
+    case 'HIGH': return 'bg-red-50 text-red-800 border-red-300';
+    case 'MEDIUM': return 'bg-amber-50 text-amber-800 border-amber-300';
+    case 'LOW': return 'bg-green-50 text-green-800 border-green-300';
+    default: return 'bg-gray-50 text-gray-600 border-gray-200';
   }
 }
 
@@ -140,11 +140,10 @@ export function PostDetailClient({ postId }: { postId: string }) {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto py-12 px-4 animate-pulse">
-        <div className="h-4 bg-slate-800 rounded w-1/4 mb-4" />
-        <div className="h-10 bg-slate-800 rounded w-3/4 mb-6" />
-        <div className="h-32 bg-slate-800 rounded mb-6" />
-        <div className="h-10 bg-slate-800 rounded w-full" />
+      <div className="max-w-3xl mx-auto py-12 px-4 animate-pulse space-y-6">
+        <div className="h-4 bg-gray-200 rounded-sm w-1/4" />
+        <div className="h-48 bg-gray-200 rounded-sm w-full" />
+        <div className="h-32 bg-gray-200 rounded-sm w-full" />
       </div>
     );
   }
@@ -152,10 +151,10 @@ export function PostDetailClient({ postId }: { postId: string }) {
   if (!post) {
     return (
       <div className="text-center py-16 max-w-md mx-auto">
-        <h2 className="text-2xl font-bold text-slate-200 font-sans">Post not found</h2>
-        <p className="text-sm text-slate-500 mt-2">This post may have been deleted.</p>
-        <a href="/posts" className="mt-6 inline-block rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-semibold px-5 py-2.5 text-sm transition-all">
-          Back to Posts
+        <h2 className="text-heading-24 font-bold text-gray-900">Post not found</h2>
+        <p className="text-copy-14 text-gray-500 mt-2">This post may have been deleted.</p>
+        <a href="/posts" className="mt-6 inline-block rounded-sm bg-primary hover:bg-gray-800 text-background-100 font-semibold px-5 py-2.5 text-sm transition-colors">
+          Back to Discussions
         </a>
       </div>
     );
@@ -164,103 +163,104 @@ export function PostDetailClient({ postId }: { postId: string }) {
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
       <div>
-        <a href="/posts" className="text-sm text-teal-400 hover:text-teal-300 flex items-center gap-1.5 transition-colors">
-          ← Back to Posts
+        <a href="/posts" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
+          ← Back to Discussions
         </a>
       </div>
 
-      <div className="bg-gradient-to-b from-slate-900/60 to-slate-950/60 border border-slate-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-2xl">
-        <div className="flex items-center justify-between mb-4">
+      <div className="rounded-sm border border-gray-200 bg-background-100 p-6 sm:p-8 shadow-sm">
+        <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-indigo-500 flex items-center justify-center text-sm font-bold text-white">
+            <div className="w-10 h-10 rounded-sm bg-gray-100 border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-700">
               {post.anonymousDisplayName.charAt(0)}
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-200">{post.anonymousDisplayName}</p>
-              <p className="text-xs text-slate-500">{timeAgo(post.createdAt)}</p>
+              <p className="text-copy-14 font-bold text-gray-900">{post.anonymousDisplayName}</p>
+              <p className="text-label-12 text-gray-400 font-mono">{timeAgo(post.createdAt)}</p>
             </div>
           </div>
           {post.isOwn && (
-            <button onClick={handleDeletePost} className="text-xs text-rose-400 hover:text-rose-300 px-3 py-1.5 rounded-lg border border-rose-900/40 hover:bg-rose-950/40 transition-all">
+            <button onClick={handleDeletePost} className="text-label-12 font-semibold text-red-600 border border-red-200 hover:bg-red-50 px-3 py-1.5 rounded-sm transition-colors">
               Delete
             </button>
           )}
         </div>
 
         <div className="flex flex-wrap items-center gap-2 mb-4">
-          <span className="inline-flex items-center gap-1 rounded-full border border-slate-800 bg-slate-950 px-3 py-1 text-xs font-semibold text-slate-400">
+          <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
             {getCategoryEmoji(post.category)} {post.category.replace('_', ' ')}
           </span>
           {post.emotion && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-slate-800 bg-slate-950 px-3 py-1 text-xs text-slate-400">
+            <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
               {getEmoji(post.emotion)} {post.emotion}
             </span>
           )}
-          {post.urgencyLevel && (
-            <span className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold ${getUrgencyColor(post.urgencyLevel)}`}>
+          {post.urgencyLevel && post.urgencyLevel !== 'NONE' && (
+            <span className={`inline-flex items-center gap-1 rounded-sm border px-2.5 py-0.5 text-xs font-semibold ${getUrgencyBadgeClass(post.urgencyLevel)}`}>
               {post.urgencyLevel}
             </span>
           )}
         </div>
 
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-100 font-sans tracking-tight mb-4">
+        <h1 className="text-heading-28 sm:text-heading-32 font-bold text-gray-1000 leading-tight mb-4">
           {post.title}
         </h1>
 
-        <div className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+        <div className="text-copy-15 text-gray-700 leading-relaxed whitespace-pre-wrap font-sans">
           {post.body}
         </div>
 
-        <div className="mt-6 text-xs text-slate-600">
+        <div className="mt-6 text-label-12 text-gray-400 font-mono">
           Posted {formatDate(post.createdAt)}
         </div>
       </div>
 
-      <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-md">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-slate-100 font-sans">
+      <div className="rounded-sm border border-gray-200 bg-background-100 p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+          <h2 className="text-heading-18 font-bold text-gray-900">
             Replies ({post.replies.length})
           </h2>
           <button
             onClick={() => setReplying(v => !v)}
-            className="text-sm font-semibold text-teal-400 hover:text-teal-300 transition-colors"
+            className="text-label-14 font-semibold text-tertiary hover:underline"
           >
             {replying ? 'Cancel' : '+ Reply'}
           </button>
         </div>
 
         {replying && (
-          <div className="mb-6 p-4 bg-slate-950/50 border border-slate-800 rounded-xl">
+          <div className="mb-6">
             <ReplyComposer onSubmit={handleReply} />
           </div>
         )}
 
         {post.replies.length === 0 ? (
-          <p className="text-sm text-slate-500 italic text-center py-6">No replies yet. Be the first to respond!</p>
+          <p className="text-copy-14 text-gray-400 italic text-center py-6">No replies yet. Be the first to respond!</p>
         ) : (
           <div className="space-y-4">
             {post.replies.map((reply) => (
-              <div key={reply.id} className="bg-slate-950/40 border border-slate-800/60 rounded-xl p-4">
+              <div key={reply.id} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-xs font-bold text-white">
+                    <div className="w-7 h-7 rounded-sm bg-gray-100 border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">
                       {reply.authorName.charAt(0)}
                     </div>
-                    <span className="text-sm font-medium text-slate-300">{reply.authorName}</span>
+                    <span className="text-label-12 font-bold text-gray-900">{reply.authorName}</span>
                     {reply.isMentor && (
-                      <span className="text-[10px] font-semibold text-teal-300 bg-teal-950/60 border border-teal-800/50 rounded-full px-2 py-0.5">
+                      <span className="text-[10px] font-semibold text-blue-800 bg-blue-50 border border-blue-200 rounded-sm px-1.5 py-0.5">
                         Verified Mentor
                       </span>
                     )}
-                    <span className="text-xs text-slate-600">{timeAgo(reply.createdAt)}</span>
+                    <span className="text-gray-300 font-mono text-label-12">·</span>
+                    <span className="text-label-12 font-mono text-gray-400">{timeAgo(reply.createdAt)}</span>
                   </div>
                   {reply.isOwn && (
-                    <button onClick={() => handleDeleteReply(reply.id)} className="text-xs text-rose-400/60 hover:text-rose-300 transition-colors">
+                    <button onClick={() => handleDeleteReply(reply.id)} className="text-label-12 font-semibold text-red-600 hover:underline">
                       Delete
                     </button>
                   )}
                 </div>
-                <div className="text-sm text-slate-400 leading-relaxed whitespace-pre-wrap">
+                <div className="text-copy-14 text-gray-700 leading-relaxed whitespace-pre-wrap pl-9">
                   {reply.body}
                 </div>
               </div>

@@ -5,22 +5,27 @@ import { AuthGuard } from '../../components/auth/AuthGuard.tsx';
 ---
 
 <StudentLayout title="Create Post - Anonymous Feed">
-  <div class="create-post-page">
-    <header class="page-header">
-      <a href="/posts" class="back-link">← Back to Posts</a>
-      <h1>Create Anonymous Post</h1>
-      <p class="page-subtitle">Share your thoughts anonymously with the community</p>
+  <div class="create-post-page max-w-2xl mx-auto py-10 px-4">
+    <header class="page-header mb-6">
+      <a href="/posts" class="back-link text-label-14 font-semibold text-tertiary hover:underline inline-flex items-center gap-1 mb-4">
+        ← Back to Posts
+      </a>
+      <h1 class="text-heading-32 font-bold text-gray-1000">Create Anonymous Post</h1>
+      <p class="text-copy-14 text-gray-500 mt-1">Share your thoughts anonymously with the university community</p>
     </header>
 
-    <main class="create-post-main">
+    <main class="create-post-main rounded-sm border border-gray-200 bg-background-100 p-6">
       <AuthGuard client:visible />
       <PostComposer
         client:visible
         onSubmit={async data => {
-          const response = await fetch('/api/posts', {
+          const token = localStorage.getItem('caps_access_token');
+          const response = await fetch('http://localhost:3001/api/posts', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify(data),
           });
           const result = await response.json();
@@ -33,52 +38,4 @@ import { AuthGuard } from '../../components/auth/AuthGuard.tsx';
       />
     </main>
   </div>
-
-  <style>
-    .create-post-page {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 24px 16px;
-    }
-    .page-header {
-      margin-bottom: 24px;
-    }
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #6b7280;
-      text-decoration: none;
-      font-size: 14px;
-      margin-bottom: 12px;
-      transition: color 0.15s ease;
-    }
-    .back-link:hover {
-      color: #0d9488;
-    }
-    .page-header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      color: #111827;
-      margin: 0 0 8px 0;
-    }
-    .page-subtitle {
-      color: #6b7280;
-      margin: 0;
-    }
-    .create-post-main {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 24px;
-    }
-    @media (max-width: 640px) {
-      .create-post-page {
-        padding: 16px 12px;
-      }
-      .create-post-main {
-        padding: 16px;
-      }
-    }
-  </style>
 </StudentLayout>
