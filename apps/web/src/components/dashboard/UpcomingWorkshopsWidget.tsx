@@ -31,13 +31,13 @@ function formatTime(timeStr: string): string {
   return `${hour12}:${minutes} ${ampm}`;
 }
 
-function getStatusBadge(status: string) {
-  const configs: Record<string, { bg: string; color: string; label: string }> = {
-    REGISTERED: { bg: '#dcfce7', color: '#166534', label: 'Registered' },
-    ATTENDED: { bg: '#dbeafe', color: '#1e40af', label: 'Attended' },
-    CANCELLED: { bg: '#fee2e2', color: '#991b1b', label: 'Cancelled' },
+function getStatusBadgeClass(status: string) {
+  const configs: Record<string, string> = {
+    REGISTERED: 'bg-green-100/50 text-green-800 border border-green-300',
+    ATTENDED: 'bg-blue-100/50 text-blue-800 border border-blue-300',
+    CANCELLED: 'bg-red-100/50 text-red-800 border border-red-300',
   };
-  return configs[status] || { bg: '#f1f5f9', color: '#475569', label: status };
+  return configs[status] || 'bg-gray-100 text-gray-800 border border-gray-300';
 }
 
 export function UpcomingWorkshopsWidget({
@@ -47,10 +47,10 @@ export function UpcomingWorkshopsWidget({
   if (!upcomingWorkshops || upcomingWorkshops.length === 0) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
-        <h3 className="text-heading-20 mb-4 text-slate-100">Upcoming Workshops</h3>
+        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Upcoming Workshops</h3>
         <div className="py-8 text-center">
           <svg
-            className="mx-auto h-12 w-12 text-slate-600"
+            className="mx-auto h-12 w-12 text-gray-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -62,13 +62,13 @@ export function UpcomingWorkshopsWidget({
               d="M9 20l-5.447-5.447L12 14l5.446-5.447L21 20H9z"
             />
           </svg>
-          <p className="text-copy-14 mt-3 text-slate-400">No registered workshops</p>
-          <p className="text-label-14 mt-1 text-slate-500">
-            Register for workshops to see them here
+          <p className="text-copy-14 mt-3 text-gray-600 font-medium">No registered workshops</p>
+          <p className="text-label-12 mt-1 text-gray-500">
+            Register for workshops to participate and learn.
           </p>
           <a
             href="/workshops"
-            className="button-primary text-button-14 mt-4 inline-block rounded-lg px-4 py-2 transition-opacity hover:opacity-90"
+            className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
           >
             Browse Workshops
           </a>
@@ -80,27 +80,27 @@ export function UpcomingWorkshopsWidget({
   return (
     <div className={`dashboard-card p-6 ${className}`}>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-heading-20 text-slate-100">Upcoming Workshops</h3>
+        <h3 className="text-heading-20 text-gray-1000 font-semibold">Upcoming Workshops</h3>
         <a
           href="/workshops"
-          className="text-label-14 text-teal-400 transition-colors hover:text-teal-300"
+          className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
         >
           View all
         </a>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {upcomingWorkshops.slice(0, 4).map(workshop => {
-          const statusConfig = getStatusBadge(workshop.registrationStatus);
+          const statusBadge = getStatusBadgeClass(workshop.registrationStatus);
           return (
             <a
               key={workshop.id}
               href={`/workshops/${workshop.id}`}
-              className="flex items-start gap-4 rounded-lg border border-slate-800/50 bg-slate-900/50 p-4 transition-all hover:border-slate-700/50 hover:bg-slate-800/50"
+              className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
             >
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-600">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
                 <svg
-                  className="h-6 w-6 text-white"
+                  className="h-5 w-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -116,68 +116,27 @@ export function UpcomingWorkshopsWidget({
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
-                  <h4 className="text-copy-14 truncate pr-2 font-medium text-slate-100">
+                  <h4 className="text-copy-14 truncate pr-2 font-semibold text-gray-900">
                     {workshop.title}
                   </h4>
                   <span
-                    className="inline-flex flex-shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
-                    style={{ background: statusConfig.bg, color: statusConfig.color }}
+                    className={`inline-flex flex-shrink-0 items-center gap-1 rounded-sm px-2 py-0.5 text-xs font-semibold ${statusBadge}`}
                   >
-                    {statusConfig.label}
+                    {workshop.registrationStatus}
                   </span>
                 </div>
-                <p className="text-label-13 mt-1 truncate text-slate-400">
-                  {workshop.description.substring(0, 80) +
-                    (workshop.description.length > 80 ? '...' : '')}
+                <p className="text-label-12 mt-1 truncate text-gray-500">
+                  {workshop.description}
                 </p>
-                <div className="text-label-12 mt-2 flex flex-wrap items-center gap-3 text-slate-500">
+                <div className="text-label-12 mt-2 flex flex-wrap items-center gap-3 text-gray-400 font-mono">
                   <span className="flex items-center gap-1">
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
                     {formatDate(workshop.date)}
                   </span>
                   <span className="flex items-center gap-1">
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
                     {formatTime(workshop.time)} · {workshop.durationMinutes} min
                   </span>
-                  <span className="flex items-center gap-1">
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
-                    {workshop.mentorDisplayName}
+                  <span className="flex items-center gap-1 text-gray-500 font-sans font-medium">
+                    By {workshop.mentorDisplayName}
                   </span>
                 </div>
               </div>
@@ -190,7 +149,7 @@ export function UpcomingWorkshopsWidget({
         <div className="mt-4 text-center">
           <a
             href="/workshops"
-            className="text-label-14 text-teal-400 transition-colors hover:text-teal-300"
+            className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
           >
             View all {upcomingWorkshops.length} workshops
           </a>
