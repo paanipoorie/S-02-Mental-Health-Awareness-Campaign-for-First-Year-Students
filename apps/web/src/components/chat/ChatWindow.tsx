@@ -176,14 +176,14 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
 
   if (loading) {
     return (
-      <div className="h-full flex flex-col">
-        <div className="border-b border-slate-800 px-6 py-4">
-          <div className="h-5 bg-slate-800 rounded w-1/3 animate-pulse" />
+      <div className="h-full flex flex-col bg-background-100">
+        <div className="border-b border-gray-200 px-6 py-4">
+          <div className="h-5 bg-gray-200 rounded-sm w-1/3 animate-pulse" />
         </div>
         <div className="flex-1 p-6 space-y-4">
           {[1, 2, 3].map(i => (
             <div key={i} className={`flex ${i % 2 === 0 ? 'justify-end' : 'justify-start'}`}>
-              <div className={`h-12 bg-slate-800 rounded-2xl w-3/5 animate-pulse ${i % 2 === 1 ? 'rounded-bl-md' : 'rounded-br-md'}`} />
+              <div className={`h-12 bg-gray-200 rounded-sm w-3/5 animate-pulse`} />
             </div>
           ))}
         </div>
@@ -192,22 +192,20 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center gap-3 px-6 py-3 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md">
-        <a href="/chat" className="text-slate-500 hover:text-slate-300 transition-colors md:hidden">
+    <div className="h-full flex flex-col bg-background-100">
+      <div className="flex items-center gap-3 px-6 py-3 border-b border-gray-200 bg-background-100">
+        <a href="/chat" className="text-gray-500 hover:text-gray-700 transition-colors md:hidden text-lg">
           ←
         </a>
-        <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${
-          isStudent ? 'from-indigo-400 to-purple-500' : 'from-teal-400 to-indigo-500'
-        } flex items-center justify-center text-sm font-bold text-white flex-shrink-0`}>
+        <div className="w-9 h-9 rounded-sm bg-gray-100 border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-700 flex-shrink-0">
           {otherName.charAt(0)}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-slate-100 truncate">{otherName}</p>
+          <p className="text-sm font-bold text-gray-900 truncate">{otherName}</p>
           {chatInfo?.latestEmotion && (
-            <p className="text-[10px] text-slate-500">
-              Feeling: {chatInfo.latestEmotion.emotion}
-              {chatInfo.latestEmotion.urgencyLevel && ` · ${chatInfo.latestEmotion.urgencyLevel} urgency`}
+            <p className="text-[10px] text-gray-400 font-mono mt-0.5">
+              Mood: {chatInfo.latestEmotion.emotion}
+              {chatInfo.latestEmotion.urgencyLevel && ` · ${chatInfo.latestEmotion.urgencyLevel} Urgency`}
             </p>
           )}
         </div>
@@ -216,7 +214,7 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-1">
         {hasMore && (
           <div className="text-center py-2">
-            <button onClick={loadMore} className="text-xs text-teal-400 hover:text-teal-300 transition-colors">
+            <button onClick={loadMore} className="text-xs font-semibold text-tertiary hover:underline transition-colors">
               Load older messages
             </button>
           </div>
@@ -224,7 +222,7 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
 
         {messages.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-sm text-slate-500">No messages yet. Say hello!</p>
+            <p className="text-sm text-gray-400 italic">No messages yet. Say hello!</p>
           </div>
         ) : (
           messages.map(msg => (
@@ -237,7 +235,7 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="border-t border-slate-800 px-6 py-4 bg-slate-900/80 backdrop-blur-md">
+      <div className="border-t border-gray-200 px-6 py-4 bg-background-100">
         <div className="flex items-end gap-3">
           <textarea
             ref={inputRef}
@@ -246,13 +244,13 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
             rows={1}
-            className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-500 resize-none outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all min-h-[44px] max-h-32"
+            className="flex-1 rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2.5 text-copy-14 text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors resize-none min-h-[42px] max-h-32"
             disabled={sending}
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || sending}
-            className="rounded-xl bg-teal-500 hover:bg-teal-400 disabled:bg-slate-800 disabled:text-slate-600 text-slate-950 font-semibold px-5 py-3 text-sm transition-all disabled:cursor-not-allowed flex-shrink-0"
+            className="rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
           >
             {sending ? '...' : 'Send'}
           </button>

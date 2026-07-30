@@ -59,13 +59,13 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
 
   if (loading) {
     return (
-      <div className="space-y-3">
+      <div className="space-y-2 p-4">
         {[1, 2, 3].map(i => (
-          <div key={i} className="flex items-center gap-3 p-4 animate-pulse">
-            <div className="w-10 h-10 rounded-full bg-slate-800" />
+          <div key={i} className="flex items-center gap-3 p-4 border border-gray-200 rounded-sm bg-background-100 animate-pulse">
+            <div className="w-10 h-10 rounded-sm bg-gray-200" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 bg-slate-800 rounded w-1/3" />
-              <div className="h-3 bg-slate-800 rounded w-2/3" />
+              <div className="h-4 bg-gray-200 rounded-sm w-1/3" />
+              <div className="h-3 bg-gray-200 rounded-sm w-2/3" />
             </div>
           </div>
         ))}
@@ -77,14 +77,14 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
   const isMentor = user?.role === 'MENTOR';
 
   return (
-    <div className={`${compact ? '' : 'h-full flex flex-col'}`}>
+    <div className={`${compact ? '' : 'h-full flex flex-col bg-background-100'}`}>
       {!compact && (
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-          <h1 className="text-xl font-bold text-slate-100 font-sans">Messages</h1>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-background-100">
+          <h1 className="text-heading-20 font-bold text-gray-1000">Messages</h1>
           {isStudent && (
             <button
               onClick={handleStartChat}
-              className="rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-semibold px-4 py-2 text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
             >
               + New Chat
             </button>
@@ -93,24 +93,24 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
       )}
 
       {chats.length === 0 ? (
-        <div className="text-center py-16 px-4">
-          <svg className="mx-auto h-14 w-14 text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center py-16 px-4 bg-background-100">
+          <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
-          <h3 className="text-lg font-semibold text-slate-300 font-sans">No conversations yet</h3>
+          <h3 className="text-heading-18 font-bold text-gray-900">No conversations yet</h3>
           {isStudent ? (
-            <p className="text-sm text-slate-500 mt-2 mb-6 max-w-sm mx-auto">
+            <p className="text-copy-14 text-gray-500 mt-2 mb-6 max-w-sm mx-auto">
               Start a chat with a mentor to get support. A mentor will be assigned to you automatically.
             </p>
           ) : (
-            <p className="text-sm text-slate-500 mt-2 mb-6 max-w-sm mx-auto">
+            <p className="text-copy-14 text-gray-500 mt-2 mb-6 max-w-sm mx-auto">
               When a student reaches out, their conversation will appear here.
             </p>
           )}
           {isStudent && (
             <button
               onClick={handleStartChat}
-              className="rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-semibold px-5 py-2.5 text-sm transition-all"
+              className="rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
             >
               Start a Chat
             </button>
@@ -127,52 +127,52 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
               ? emotionIcons[chat.latestEmotion.emotion] || ''
               : '';
 
+            const isUnread = chat.unreadCount > 0;
+
             return (
               <a
                 key={chat.id}
                 href={`/chat/${chat.id}`}
                 onClick={onSelect ? (e) => { e.preventDefault(); onSelect(chat.id); } : undefined}
-                className={`flex items-center gap-4 px-6 py-4 border-b border-slate-800/60 hover:bg-slate-800/40 transition-colors ${
-                  chat.unreadCount > 0 ? 'bg-slate-800/20' : ''
+                className={`flex items-center gap-4 px-6 py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors bg-background-100 ${
+                  isUnread ? 'bg-blue-50/20' : ''
                 }`}
               >
                 <div className="relative flex-shrink-0">
-                  <div className={`w-11 h-11 rounded-full bg-gradient-to-br ${
-                    isStudent ? 'from-indigo-400 to-purple-500' : 'from-teal-400 to-indigo-500'
-                  } flex items-center justify-center text-sm font-bold text-white`}>
+                  <div className="w-10 h-10 rounded-sm bg-gray-100 border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-700">
                     {otherInitial}
                   </div>
                   {emotionIcon && (
-                    <span className="absolute -bottom-1 -right-1 text-sm">{emotionIcon}</span>
+                    <span className="absolute -bottom-1.5 -right-1.5 text-sm">{emotionIcon}</span>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className={`text-sm font-semibold truncate ${
-                      chat.unreadCount > 0 ? 'text-slate-100' : 'text-slate-300'
+                    <span className={`text-copy-14 truncate ${
+                      isUnread ? 'font-bold text-gray-900' : 'font-semibold text-gray-800'
                     }`}>
                       {displayName}
                     </span>
                     <div className="flex items-center gap-2">
-                      {chat.unreadCount > 0 && (
-                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-teal-500 px-1.5 text-[10px] font-bold text-white">
+                      {isUnread && (
+                        <span className="flex h-5 min-w-5 items-center justify-center rounded-sm bg-blue-700 px-1.5 text-[10px] font-bold text-background-100">
                           {chat.unreadCount > 9 ? '9+' : chat.unreadCount}
                         </span>
                       )}
                       {chat.lastMessage && (
-                        <time className="text-[10px] text-slate-600 flex-shrink-0">
+                        <time className="text-label-10 text-gray-400 font-mono flex-shrink-0">
                           {formatDistanceToNow(new Date(chat.lastMessage.createdAt), { addSuffix: true })}
                         </time>
                       )}
                     </div>
                   </div>
-                  <p className={`text-xs truncate ${
-                    chat.unreadCount > 0 ? 'text-slate-400 font-medium' : 'text-slate-600'
+                  <p className={`text-label-12 truncate ${
+                    isUnread ? 'text-gray-700 font-semibold' : 'text-gray-500'
                   }`}>
                     {chat.lastMessage?.body || 'No messages yet'}
                   </p>
                   {isMentor && chat.latestEmotion && (
-                    <p className="text-[10px] text-slate-600 mt-0.5">
+                    <p className="text-[10px] text-gray-400 mt-1 font-mono">
                       Emotion: {chat.latestEmotion.emotion}
                       {chat.latestEmotion.urgencyLevel && ` · ${chat.latestEmotion.urgencyLevel}`}
                     </p>

@@ -13,35 +13,33 @@ interface MessageBubbleProps {
 }
 
 function formatTime(dateStr: string): string {
-  return new Date(dateStr).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  return new Date(dateStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 export function MessageBubble({ message }: MessageBubbleProps) {
-  const isMentor = message.senderType === 'MENTOR';
-
   return (
     <div className={`flex ${message.isOwn ? 'justify-end' : 'justify-start'} mb-3`}>
-      <div className={`max-w-[75%] ${message.isOwn ? 'order-1' : 'order-1'}`}>
+      <div className="max-w-[75%]">
         <div className="flex items-end gap-2 mb-1">
           {!message.isOwn && (
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
+            <div className="w-7 h-7 rounded-sm bg-gray-150 border border-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-600 flex-shrink-0">
               {message.senderName.charAt(0)}
             </div>
           )}
           <div
-            className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+            className={`rounded-sm px-4 py-2 text-copy-14 leading-normal ${
               message.isOwn
-                ? 'bg-teal-600 text-white rounded-br-md'
-                : 'bg-slate-800 text-slate-200 rounded-bl-md'
+                ? 'bg-primary text-background-100'
+                : 'bg-gray-100 border border-gray-200 text-gray-900'
             }`}
           >
             <p className="whitespace-pre-wrap break-words">{message.body}</p>
           </div>
         </div>
         <div className={`flex items-center gap-2 px-1 ${message.isOwn ? 'justify-end' : 'justify-start'}`}>
-          <span className="text-[10px] text-slate-600">{formatTime(message.createdAt)}</span>
+          <span className="text-[10px] text-gray-400 font-mono">{formatTime(message.createdAt)}</span>
           {message.isOwn && message.readAt && (
-            <span className="text-[10px] text-teal-400">Read</span>
+            <span className="text-[10px] text-tertiary font-mono">Read</span>
           )}
         </div>
       </div>
