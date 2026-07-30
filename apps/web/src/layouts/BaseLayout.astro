@@ -20,7 +20,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,12 +30,12 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap"
       rel="stylesheet"
     />
   </head>
   <body
-    class="flex min-h-screen flex-col bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif] text-slate-100 antialiased selection:bg-teal-500/30 selection:text-teal-200"
+    class="flex min-h-screen flex-col bg-background-100 font-sans text-primary antialiased selection:bg-blue-100 selection:text-blue-900"
   >
     <Navbar currentRole={currentRole} displayName={displayName} isVerified={isVerified} />
 
@@ -44,15 +44,15 @@ const {
     </main>
 
     <footer
-      class="border-t border-slate-900 bg-slate-950/80 py-6 text-center text-xs text-slate-500"
+      class="border-t border-gray-200 bg-background-200 py-6 text-center text-xs text-gray-500"
     >
       <div
         class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row"
       >
-        <span>© 2026 Campus Anonymous Peer Support. Strictly Confidential & Safe Space.</span>
-        <div class="flex items-center gap-4 text-slate-400">
-          <a href="/resources" class="transition-colors hover:text-slate-200">Helplines</a>
-          <a href="/privacy" class="transition-colors hover:text-slate-200">Privacy Guarantee</a>
+        <span>© 2026 Campus Peer Support. Strictly Confidential & Safe Space.</span>
+        <div class="flex items-center gap-4 text-gray-500">
+          <a href="/resources" class="transition-colors hover:text-gray-900">Helplines</a>
+          <a href="/privacy" class="transition-colors hover:text-gray-900">Privacy Guarantee</a>
         </div>
       </div>
     </footer>
