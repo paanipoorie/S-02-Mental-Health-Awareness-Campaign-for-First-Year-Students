@@ -58,7 +58,7 @@ export function ResourceDetail() {
     return (
       <div className="flex items-center justify-center py-12">
         <div
-          className="border-primary-600 h-8 w-8 animate-spin rounded-full border-b-2"
+          className="border-primary h-8 w-8 animate-spin rounded-full border-b-2"
           aria-label="Loading resource..."
         />
       </div>
@@ -67,7 +67,7 @@ export function ResourceDetail() {
 
   if (error || !resource) {
     return (
-      <div className="py-12 text-center">
+      <div className="py-12 text-center border border-gray-200 bg-background-100 rounded-sm p-6">
         <svg
           className="mx-auto h-12 w-12 text-gray-400"
           fill="none"
@@ -82,15 +82,15 @@ export function ResourceDetail() {
             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
           />
         </svg>
-        <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+        <h3 className="mt-2 text-sm font-bold text-gray-900">
           Resource not found
         </h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-xs text-gray-500">
           {error ?? 'The resource you are looking for does not exist.'}
         </p>
         <button
           onClick={goBack}
-          className="bg-primary-600 hover:bg-primary-700 mt-4 rounded-lg px-4 py-2 text-sm font-medium text-white"
+          className="bg-primary hover:bg-gray-800 mt-4 rounded-sm px-4 py-2 text-xs font-semibold text-background-100 transition-colors"
         >
           Back to Resources
         </button>
@@ -99,31 +99,31 @@ export function ResourceDetail() {
   }
 
   return (
-    <article className="space-y-6">
-      <header>
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+    <article className="space-y-6 border border-gray-200 bg-background-100 rounded-sm p-6">
+      <header className="border-b border-gray-200 pb-4">
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <h1 className="text-heading-24 font-bold text-gray-1000 leading-tight">
             {resource.title}
           </h1>
           <ResourceCategoryBadge category={resource.category} size="md" />
         </div>
-        <p className="text-gray-600 dark:text-gray-300">{resource.description}</p>
+        <p className="text-copy-14 text-gray-900 font-medium leading-relaxed">{resource.description}</p>
       </header>
 
-      <div className="prose prose-gray dark:prose-invert max-w-none">
+      <div className="prose prose-gray max-w-none text-copy-14 text-gray-900 leading-relaxed">
         <div dangerouslySetInnerHTML={{ __html: resource.content }} />
       </div>
 
       {resource.link && (
-        <div className="border-t border-gray-200 pt-4 dark:border-gray-700">
+        <div className="border-t border-gray-200 pt-4">
           <a
             href={resource.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-primary-600 hover:bg-primary-700 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white"
+            className="bg-primary hover:bg-gray-800 inline-flex items-center gap-2 rounded-sm px-4 py-2 text-xs font-semibold text-background-100 transition-colors"
           >
             <svg
-              className="h-4 w-4"
+              className="h-3.5 w-3.5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -141,14 +141,14 @@ export function ResourceDetail() {
         </div>
       )}
 
-      <footer className="border-t border-gray-200 pt-4 text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400">
+      <footer className="border-t border-gray-200 pt-4 text-xs font-mono text-gray-400">
         <p>Last updated: {formatDate(resource.updatedAt)}</p>
       </footer>
 
-      <div className="pt-4">
+      <div className="pt-4 border-t border-gray-200">
         <button
           onClick={goBack}
-          className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 text-sm font-medium"
+          className="text-tertiary hover:underline text-xs font-semibold"
         >
           ← Back to Resources
         </button>

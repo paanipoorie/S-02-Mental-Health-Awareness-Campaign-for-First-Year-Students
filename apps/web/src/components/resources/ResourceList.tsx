@@ -84,7 +84,7 @@ export function ResourceList() {
     return (
       <div className="flex items-center justify-center py-12">
         <div
-          className="border-primary-600 h-8 w-8 animate-spin rounded-full border-b-2"
+          className="border-primary h-8 w-8 animate-spin rounded-full border-b-2"
           aria-label="Loading resources..."
         />
       </div>
@@ -106,7 +106,7 @@ export function ResourceList() {
 
       {error && (
         <div
-          className="rounded-lg bg-red-50 p-4 text-red-700 dark:bg-red-900/20 dark:text-red-400"
+          className="rounded-sm bg-red-50 p-4 text-red-700 border border-red-200 text-sm"
           role="alert"
         >
           {error}
@@ -114,7 +114,7 @@ export function ResourceList() {
       )}
 
       {resources.length === 0 && !loading && (
-        <div className="py-12 text-center">
+        <div className="py-12 text-center border border-gray-200 bg-background-100 rounded-sm">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
             fill="none"
@@ -129,10 +129,10 @@ export function ResourceList() {
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+          <h3 className="mt-2 text-sm font-bold text-gray-900">
             No resources found
           </h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-xs text-gray-500">
             {selectedCategory || searchQuery
               ? 'Try adjusting your filters or search terms'
               : 'No resources have been added yet'}
@@ -141,7 +141,7 @@ export function ResourceList() {
       )}
 
       <div
-        className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         role="list"
         aria-label="Resources"
       >
@@ -155,22 +155,22 @@ export function ResourceList() {
       </div>
 
       {totalPages > 1 && (
-        <nav className="flex items-center justify-center gap-2" aria-label="Pagination">
+        <nav className="flex items-center justify-center gap-3 pt-4 border-t border-gray-200" aria-label="Pagination">
           <button
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="rounded-sm border border-gray-200 bg-background-100 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
             aria-label="Previous page"
           >
             Previous
           </button>
-          <span className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
-            Page {page} of {totalPages} ({total} total)
+          <span className="text-xs font-mono text-gray-500">
+            Page {page} of {totalPages}
           </span>
           <button
             onClick={() => setPage(p => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="rounded-sm border border-gray-200 bg-background-100 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
             aria-label="Next page"
           >
             Next

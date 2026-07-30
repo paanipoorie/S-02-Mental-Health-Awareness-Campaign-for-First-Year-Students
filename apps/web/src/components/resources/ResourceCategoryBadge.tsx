@@ -9,66 +9,56 @@ export function ResourceCategoryBadge({ category, size = 'md' }: ResourceCategor
   const categoryConfig: Record<ResourceCategory, { label: string; color: string }> = {
     COUNSELING_CENTER: {
       label: 'Counseling Center',
-      color:
-        'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800',
+      color: 'bg-blue-50 text-blue-700 border-blue-200',
     },
     EMERGENCY_CONTACTS: {
       label: 'Emergency Contacts',
-      color:
-        'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800',
+      color: 'bg-red-50 text-red-700 border-red-200',
     },
     FACULTY_ADVISORS: {
       label: 'Faculty Advisors',
-      color:
-        'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-800',
+      color: 'bg-purple-50 text-purple-700 border-purple-200',
     },
     STUDENT_WELFARE: {
       label: 'Student Welfare',
-      color:
-        'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800',
+      color: 'bg-green-50 text-green-700 border-green-200',
     },
     CAMPUS_CLUBS: {
       label: 'Campus Clubs',
-      color:
-        'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-800',
+      color: 'bg-orange-50 text-orange-700 border-orange-200',
     },
     SELF_HELP_PDFS: {
       label: 'Self-Help PDFs',
-      color:
-        'bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-800',
+      color: 'bg-indigo-50 text-indigo-700 border-indigo-200',
     },
     STRESS_MANAGEMENT: {
       label: 'Stress Management',
-      color:
-        'bg-teal-100 text-teal-700 border-teal-200 dark:bg-teal-900/30 dark:text-teal-400 dark:border-teal-800',
+      color: 'bg-teal-50 text-teal-700 border-teal-200',
     },
     SLEEP_HYGIENE: {
       label: 'Sleep Hygiene',
-      color:
-        'bg-pink-100 text-pink-700 border-pink-200 dark:bg-pink-900/30 dark:text-pink-400 dark:border-pink-800',
+      color: 'bg-pink-50 text-pink-700 border-pink-200',
     },
     EXTERNAL_HELPLINES: {
       label: 'External Helplines',
-      color:
-        'bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700',
+      color: 'bg-gray-50 text-gray-700 border-gray-200',
     },
   };
 
   const config = categoryConfig[category] || {
     label: category.replace(/_/g, ' '),
-    color:
-      'bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700',
+    color: 'bg-gray-50 text-gray-700 border-gray-200',
   };
 
   const sizeClasses = {
-    sm: 'px-2 py-0.5 text-xs',
-    md: 'px-2.5 py-1 text-sm',
-    lg: 'px-3 py-1.5 text-base',
+    sm: 'px-1.5 py-0.5 text-xs',
+    md: 'px-2 py-1 text-sm',
+    lg: 'px-2.5 py-1.5 text-base',
   };
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border font-medium ${sizeClasses[size]} ${config.color}`}
+      className={`inline-flex items-center rounded-sm border font-semibold ${sizeClasses[size]} ${config.color}`}
     >
       {config.label}
     </span>

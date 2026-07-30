@@ -26,7 +26,7 @@ export function ResourceCard({ resource, onClick }: ResourceCardProps) {
 
   return (
     <article
-      className="hover:border-primary-300 dark:hover:border-primary-700 cursor-pointer rounded-xl border border-gray-200 bg-white p-5 transition-colors dark:border-gray-700 dark:bg-gray-800"
+      className="flex flex-col justify-between bg-background-100 border border-gray-200 rounded-sm p-5 hover:bg-gray-50 transition-colors cursor-pointer focus-visible:outline-none"
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -37,21 +37,24 @@ export function ResourceCard({ resource, onClick }: ResourceCardProps) {
         }
       }}
     >
-      <div className="mb-3 flex items-start justify-between gap-3">
-        <h3 className="line-clamp-2 flex-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
-          {resource.title}
-        </h3>
-        <ResourceCategoryBadge category={resource.category} size="sm" />
+      <div>
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <h3 className="line-clamp-2 flex-1 text-heading-18 font-bold text-gray-900 leading-tight">
+            {resource.title}
+          </h3>
+          <ResourceCategoryBadge category={resource.category} size="sm" />
+        </div>
+        <p className="mb-4 line-clamp-3 text-copy-14 text-gray-600 leading-normal">
+          {resource.description}
+        </p>
       </div>
-      <p className="mb-4 line-clamp-3 text-sm text-gray-600 dark:text-gray-300">
-        {resource.description}
-      </p>
-      <div className="flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-700">
-        <time className="text-xs text-gray-500 dark:text-gray-400" dateTime={resource.updatedAt}>
+
+      <div className="flex items-center justify-between border-t border-gray-200 pt-3">
+        <time className="text-xs font-mono text-gray-400" dateTime={resource.updatedAt}>
           Updated {formatDate(resource.updatedAt)}
         </time>
         {resource.link && (
-          <span className="text-primary-600 dark:text-primary-400 flex items-center gap-1 text-xs">
+          <span className="text-tertiary flex items-center gap-1 text-xs font-semibold hover:underline">
             <svg
               className="h-3.5 w-3.5"
               fill="none"
