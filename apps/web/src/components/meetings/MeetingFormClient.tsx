@@ -74,29 +74,29 @@ export function MeetingFormClient() {
     <div className="max-w-xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
       {/* Back button */}
       <div>
-        <a href="/meetings" className="text-sm text-teal-400 hover:text-teal-300 flex items-center gap-1.5 transition-colors">
+        <a href="/meetings" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
           ← Back to Meetings
         </a>
       </div>
 
-      <div className="bg-gradient-to-b from-slate-900/60 to-slate-950/60 border border-slate-800/80 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-2xl">
-        <h1 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-indigo-200 to-purple-400 font-sans tracking-tight mb-2">
+      <div className="rounded-sm border border-gray-200 bg-background-100 p-6 sm:p-8 shadow-sm">
+        <h1 className="text-heading-24 font-bold text-gray-1000 mb-1">
           Host a Meeting
         </h1>
-        <p className="text-xs text-slate-450 mb-6">
+        <p className="text-copy-14 text-gray-500 mb-6">
           Schedule a group session, peer discussion, or check-in with other students.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Meeting Title *</label>
+            <label htmlFor="title" className="block text-label-12 font-bold text-gray-700 mb-1.5">Meeting Title *</label>
             <input
               type="text"
               id="title"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+              className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400"
               placeholder="e.g. Midterm prep study group"
               required
             />
@@ -104,13 +104,13 @@ export function MeetingFormClient() {
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Description *</label>
+            <label htmlFor="description" className="block text-label-12 font-bold text-gray-700 mb-1.5">Description *</label>
             <textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={3}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all resize-none"
+              className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400 resize-y"
               placeholder="What will we discuss? Any pre-requisites?"
               required
             />
@@ -119,12 +119,12 @@ export function MeetingFormClient() {
           {/* Category & Duration */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="category" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Category *</label>
+              <label htmlFor="category" className="block text-label-12 font-bold text-gray-700 mb-1.5">Category *</label>
               <select
                 id="category"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-750 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
               >
                 <option value="STUDY_GROUP">Study Group</option>
                 <option value="PEER_DISCUSSION">Peer Discussion</option>
@@ -133,12 +133,12 @@ export function MeetingFormClient() {
               </select>
             </div>
             <div>
-              <label htmlFor="duration" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Duration (mins) *</label>
+              <label htmlFor="duration" className="block text-label-12 font-bold text-gray-700 mb-1.5">Duration (mins) *</label>
               <select
                 id="duration"
                 value={formData.durationMinutes}
                 onChange={(e) => setFormData({ ...formData, durationMinutes: Number(e.target.value) })}
-                className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-750 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
               >
                 <option value={30}>30 Minutes</option>
                 <option value={60}>1 Hour</option>
@@ -151,24 +151,24 @@ export function MeetingFormClient() {
           {/* Date & Time */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="date" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Date *</label>
+              <label htmlFor="date" className="block text-label-12 font-bold text-gray-700 mb-1.5">Date *</label>
               <input
                 type="date"
                 id="date"
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-750 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors"
                 required
               />
             </div>
             <div>
-              <label htmlFor="time" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Time (HH:mm) *</label>
+              <label htmlFor="time" className="block text-label-12 font-bold text-gray-700 mb-1.5">Time (HH:mm) *</label>
               <input
                 type="time"
                 id="time"
                 value={formData.time}
                 onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-750 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors"
                 required
               />
             </div>
@@ -176,27 +176,27 @@ export function MeetingFormClient() {
 
           {/* Location Mode */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Location Mode *</label>
+            <label className="block text-label-12 font-bold text-gray-700 mb-2">Location Mode *</label>
             <div className="flex gap-4">
-              <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-300">
+              <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
                 <input
                   type="radio"
                   name="meetingType"
                   value="ONLINE"
                   checked={formData.meetingType === 'ONLINE'}
                   onChange={() => setFormData({ ...formData, meetingType: 'ONLINE' })}
-                  className="w-4 h-4 text-teal-600 bg-slate-950 border-slate-800 focus:ring-teal-500"
+                  className="w-4 h-4 text-primary bg-background-100 border-gray-300 focus:ring-gray-900"
                 />
                 Online Link
               </label>
-              <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-300">
+              <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
                 <input
                   type="radio"
                   name="meetingType"
                   value="OFFLINE"
                   checked={formData.meetingType === 'OFFLINE'}
                   onChange={() => setFormData({ ...formData, meetingType: 'OFFLINE' })}
-                  className="w-4 h-4 text-teal-600 bg-slate-950 border-slate-800 focus:ring-teal-500"
+                  className="w-4 h-4 text-primary bg-background-100 border-gray-300 focus:ring-gray-900"
                 />
                 Physical Location
               </label>
@@ -206,36 +206,36 @@ export function MeetingFormClient() {
           {/* Dynamic Link or Location inputs */}
           {formData.meetingType === 'ONLINE' ? (
             <div>
-              <label htmlFor="meetingLink" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Meeting Link (optional)</label>
+              <label htmlFor="meetingLink" className="block text-label-12 font-bold text-gray-700 mb-1.5">Meeting Link (optional)</label>
               <input
                 type="url"
                 id="meetingLink"
                 value={formData.meetingLink}
                 onChange={(e) => setFormData({ ...formData, meetingLink: e.target.value })}
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400"
                 placeholder="https://meet.google.com/abc-defg-hij"
               />
             </div>
           ) : (
             <div>
-              <label htmlFor="location" className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Campus Location (optional)</label>
+              <label htmlFor="location" className="block text-label-12 font-bold text-gray-700 mb-1.5">Campus Location (optional)</label>
               <input
                 type="text"
                 id="location"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400"
                 placeholder="e.g. Student Center Room 204"
               />
             </div>
           )}
 
           {/* Submit */}
-          <div className="pt-4 border-t border-slate-900/60">
+          <div className="pt-4 border-t border-gray-250">
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-slate-950 font-bold rounded-xl text-sm transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-2.5 bg-primary hover:bg-gray-800 text-background-100 font-semibold rounded-sm text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Creating meeting...' : 'Create Meeting'}
             </button>
