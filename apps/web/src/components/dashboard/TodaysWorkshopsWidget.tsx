@@ -40,10 +40,10 @@ export function TodaysWorkshopsWidget({
   if (!todaysWorkshops || todaysWorkshops.length === 0) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
-        <h3 className="text-heading-20 mb-4 text-slate-100">Today's Workshops</h3>
+        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Today's Workshops</h3>
         <div className="py-8 text-center">
           <svg
-            className="mx-auto h-12 w-12 text-slate-600"
+            className="mx-auto h-12 w-12 text-gray-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -55,10 +55,8 @@ export function TodaysWorkshopsWidget({
               d="M9 20l-5.447-5.447L12 14l5.446-5.447L21 20H9z"
             />
           </svg>
-          <p className="text-copy-14 mt-3 text-slate-400">No workshops today</p>
-          <p className="text-label-14 mt-1 text-slate-500">
-            Your hosted workshops will appear here
-          </p>
+          <p className="text-copy-14 mt-3 text-gray-600 font-medium">No workshops today</p>
+          <p className="text-label-12 mt-1 text-gray-500">Your hosted workshops for today will appear here.</p>
         </div>
       </div>
     );
@@ -69,16 +67,16 @@ export function TodaysWorkshopsWidget({
   return (
     <div className={`dashboard-card p-6 ${className}`}>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-heading-20 text-slate-100">Today's Workshops</h3>
+        <h3 className="text-heading-20 text-gray-1000 font-semibold">Today's Workshops</h3>
         <a
           href="/mentor/workshops"
-          className="text-label-14 text-teal-400 transition-colors hover:text-teal-300"
+          className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
         >
           View all
         </a>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {sortedWorkshops.slice(0, 5).map(workshop => {
           const capacityText = workshop.maxAttendees
             ? `${workshop.registrationCount}/${workshop.maxAttendees}`
@@ -90,11 +88,11 @@ export function TodaysWorkshopsWidget({
             <a
               key={workshop.id}
               href={`/workshops/${workshop.id}`}
-              className="flex items-start gap-4 rounded-lg border border-slate-800/50 bg-slate-900/50 p-4 transition-all hover:border-slate-700/50 hover:bg-slate-800/50"
+              className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
             >
-              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-600">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
                 <svg
-                  className="h-6 w-6 text-white"
+                  className="h-5 w-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -110,72 +108,30 @@ export function TodaysWorkshopsWidget({
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
-                  <h4 className="text-copy-14 truncate pr-2 font-medium text-slate-100">
+                  <h4 className="text-copy-14 truncate pr-2 font-semibold text-gray-900">
                     {workshop.title}
                   </h4>
                   <span
-                    className="inline-flex flex-shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
-                    style={{
-                      background: isFull ? '#fee2e2' : '#dcfce7',
-                      color: isFull ? '#dc2626' : '#16a34a',
-                    }}
+                    className={`inline-flex flex-shrink-0 items-center gap-1 rounded-sm px-2 py-0.5 text-xs font-semibold border ${
+                      isFull ? 'bg-red-50 text-red-800 border-red-300' : 'bg-green-50 text-green-800 border-green-300'
+                    }`}
                   >
                     {isFull ? 'Full' : 'Open'}
                   </span>
                 </div>
 
-                <p className="text-label-13 mt-1 truncate text-slate-400">
-                  {workshop.description.substring(0, 80) +
-                    (workshop.description.length > 80 ? '...' : '')}
+                <p className="text-label-12 mt-1 truncate text-gray-500">
+                  {workshop.description}
                 </p>
 
-                <div className="text-label-12 mt-2 flex flex-wrap items-center gap-3 text-slate-500">
+                <div className="text-label-12 mt-2 flex flex-wrap items-center gap-3 text-gray-400 font-mono">
                   <span className="flex items-center gap-1">
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
                     {formatTime(workshop.time)} · {workshop.durationMinutes} min
                   </span>
-                  <span className="flex items-center gap-1">
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
+                  <span className="flex items-center gap-1 text-gray-500 font-sans font-medium">
                     {capacityText}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <svg
-                      className="h-3.5 w-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                      />
-                    </svg>
+                  <span className="flex items-center gap-1 text-gray-500 font-sans font-medium">
                     {getCategoryLabel(workshop.category)}
                   </span>
                 </div>
@@ -189,7 +145,7 @@ export function TodaysWorkshopsWidget({
         <div className="mt-4 text-center">
           <a
             href="/mentor/workshops"
-            className="text-label-14 text-teal-400 transition-colors hover:text-teal-300"
+            className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
           >
             View all {todaysWorkshops.length} workshops today
           </a>

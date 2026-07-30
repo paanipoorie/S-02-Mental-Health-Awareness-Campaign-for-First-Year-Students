@@ -207,11 +207,11 @@ export function MentorDashboardClient() {
 function DashboardSkeleton({ className = '' }: { className?: string }) {
   return (
     <div className={`dashboard-card animate-pulse p-6 ${className}`}>
-      <div className="mb-4 h-6 w-1/4 rounded bg-slate-800" />
+      <div className="mb-4 h-6 w-1/4 rounded-sm bg-gray-200" />
       <div className="space-y-3">
-        <div className="h-4 w-3/4 rounded bg-slate-800" />
-        <div className="h-4 w-1/2 rounded bg-slate-800" />
-        <div className="h-4 w-1/3 rounded bg-slate-800" />
+        <div className="h-4 w-3/4 rounded-sm bg-gray-200" />
+        <div className="h-4 w-1/2 rounded-sm bg-gray-200" />
+        <div className="h-4 w-1/3 rounded-sm bg-gray-200" />
       </div>
     </div>
   );

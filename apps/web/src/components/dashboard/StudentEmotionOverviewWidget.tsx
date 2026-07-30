@@ -42,21 +42,16 @@ const EMOTION_LABELS: Record<string, string> = {
   STRESSED: 'Stressed',
 };
 
-const PRIORITY_ORDER = [
-  'OVERWHELMED',
-  'ANXIOUS',
-  'SCARED',
-  'STRESSED',
-  'BURNT_OUT',
-  'HOMESICK',
-  'LONELY',
-  'CONFUSED',
-];
+const URGENCY_STYLES: Record<string, string> = {
+  HIGH: 'bg-red-50 text-red-800 border-red-300',
+  MEDIUM: 'bg-amber-50 text-amber-800 border-amber-300',
+  LOW: 'bg-green-50 text-green-800 border-green-300',
+};
 
-const URGENCY_COLORS: Record<string, { bg: string; color: string; icon: string }> = {
-  HIGH: { bg: '#fee2e2', color: '#dc2626', icon: '🔴' },
-  MEDIUM: { bg: '#fef3c7', color: '#d97706', icon: '🟡' },
-  LOW: { bg: '#dcfce7', color: '#16a34a', icon: '🟢' },
+const URGENCY_ICONS: Record<string, string> = {
+  HIGH: '🔴',
+  MEDIUM: '🟡',
+  LOW: '🟢',
 };
 
 function formatNumber(num: number): string {
@@ -80,40 +75,43 @@ export function StudentEmotionOverviewWidget({
 
   return (
     <div className={`dashboard-card p-6 ${className}`}>
-      <h3 className="text-heading-20 mb-6 text-slate-100">Student Emotion Overview (24h)</h3>
+      <h3 className="text-heading-20 mb-6 text-gray-1000 font-semibold">Student Emotion Overview (24h)</h3>
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Total Logs"
           value={formatNumber(totalLogs)}
           icon="📊"
-          bg="from-teal-500 to-indigo-600"
+          borderColor="border-gray-200"
+          valueColor="text-gray-1000"
         />
         <StatCard
           label="High Urgency"
           value={formatNumber(totalHighUrgency)}
           icon="🔴"
-          bg="from-red-500 to-red-600"
-          highlight
+          borderColor="border-red-300 bg-red-50/20"
+          valueColor="text-red-700"
         />
         <StatCard
           label="Medium Urgency"
           value={formatNumber(totalMediumUrgency)}
           icon="🟡"
-          bg="from-amber-500 to-orange-500"
+          borderColor="border-amber-300 bg-amber-50/10"
+          valueColor="text-amber-700"
         />
         <StatCard
           label="Low Urgency"
           value={formatNumber(totalLowUrgency)}
           icon="🟢"
-          bg="from-green-500 to-emerald-500"
+          borderColor="border-green-300 bg-green-50/10"
+          valueColor="text-green-700"
         />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div>
-          <h4 className="text-label-14 mb-3 font-medium text-slate-300">Top Emotions</h4>
-          <div className="space-y-2">
+          <h4 className="text-label-13 mb-3 font-semibold text-gray-700">Top Emotions</h4>
+          <div className="space-y-3.5">
             {topEmotions.length > 0 ? (
               topEmotions.map(([emotion, count]) => (
                 <EmotionBar
@@ -125,41 +123,36 @@ export function StudentEmotionOverviewWidget({
                 />
               ))
             ) : (
-              <p className="text-label-14 py-4 text-center text-slate-500">No emotion data</p>
+              <p className="text-label-12 py-4 text-center text-gray-400">No emotional status logged today.</p>
             )}
           </div>
         </div>
 
         <div>
-          <h4 className="text-label-14 mb-3 font-medium text-slate-300">
-            Priority Students ({priorityStudents.length})
+          <h4 className="text-label-13 mb-3 font-semibold text-gray-700">
+            Priority Support Required ({priorityStudents.length})
           </h4>
           <div className="max-h-64 space-y-2 overflow-y-auto">
             {priorityStudents.length > 0 ? (
               priorityStudents.slice(0, 8).map((student, index) => (
                 <div
                   key={student.studentIdentityId}
-                  className="flex items-center gap-3 rounded-lg border border-slate-800/50 bg-slate-900/50 p-3"
+                  className="flex items-center gap-3 rounded-sm border border-gray-200 bg-background-100 p-3"
                 >
-                  <span className="text-label-12 w-5 text-right text-slate-500">{index + 1}.</span>
+                  <span className="text-label-12 w-5 text-right text-gray-400 font-mono">{index + 1}.</span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-copy-14 truncate font-medium text-slate-100">
+                    <p className="text-copy-14 truncate font-semibold text-gray-900">
                       {student.studentDisplayName}
                     </p>
-                    <div className="mt-0.5 flex items-center gap-1">
-                      <span className="text-label-12">
-                        {EMOTION_EMOJIS[student.latestEmotion] || '❓'}
-                        {EMOTION_LABELS[student.latestEmotion] || student.latestEmotion}
+                    <div className="mt-0.5 flex items-center gap-2">
+                      <span className="text-label-12 text-gray-600">
+                        {EMOTION_EMOJIS[student.latestEmotion] || '❓'} {EMOTION_LABELS[student.latestEmotion] || student.latestEmotion}
                       </span>
                       {student.latestUrgency && (
                         <span
-                          className="inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium"
-                          style={{
-                            background: URGENCY_COLORS[student.latestUrgency]?.bg || '#f1f5f9',
-                            color: URGENCY_COLORS[student.latestUrgency]?.color || '#475569',
-                          }}
+                          className={`inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 text-[10px] font-semibold border ${URGENCY_STYLES[student.latestUrgency] || 'bg-gray-100 text-gray-800 border-gray-300'}`}
                         >
-                          {URGENCY_COLORS[student.latestUrgency]?.icon || ''}
+                          {URGENCY_ICONS[student.latestUrgency] || ''}
                           {student.latestUrgency}
                         </span>
                       )}
@@ -168,7 +161,7 @@ export function StudentEmotionOverviewWidget({
                 </div>
               ))
             ) : (
-              <p className="text-label-14 py-4 text-center text-slate-500">No priority students</p>
+              <p className="text-label-12 py-4 text-center text-gray-400">No students are currently flagged as priority.</p>
             )}
           </div>
         </div>
@@ -181,27 +174,25 @@ function StatCard({
   label,
   value,
   icon,
-  bg,
-  highlight = false,
+  borderColor,
+  valueColor,
 }: {
   label: string;
   value: string;
   icon: string;
-  bg: string;
-  highlight?: boolean;
+  borderColor: string;
+  valueColor: string;
 }) {
   return (
     <div
-      className={`rounded-xl bg-gradient-to-br p-4 ${bg} text-white ${
-        highlight ? 'ring-2 ring-red-500/50' : ''
-      }`}
+      className={`rounded-sm border p-4 bg-background-100 ${borderColor}`}
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-label-14 opacity-90">{label}</p>
-          <p className="text-heading-24 mt-1 font-bold">{value}</p>
+          <p className="text-label-12 font-medium text-gray-600">{label}</p>
+          <p className={`text-heading-32 font-bold mt-1 ${valueColor}`}>{value}</p>
         </div>
-        <span className="text-3xl opacity-80">{icon}</span>
+        <span className="text-2xl" role="img" aria-label={label}>{icon}</span>
       </div>
     </div>
   );
@@ -221,17 +212,17 @@ function EmotionBar({
   const percentage = total > 0 ? (count / total) * 100 : 0;
 
   return (
-    <div className="group">
+    <div>
       <div className="mb-1 flex items-center justify-between">
-        <span className="text-label-13 flex items-center gap-1 text-slate-300">
+        <span className="text-label-13 flex items-center gap-1.5 text-gray-700">
           <span>{emoji}</span>
-          {label}
+          <span className="font-medium">{label}</span>
         </span>
-        <span className="text-label-13 font-medium text-slate-400">{count}</span>
+        <span className="text-label-12 font-mono text-gray-400">{count}</span>
       </div>
-      <div className="h-2 overflow-hidden rounded-full bg-slate-800">
+      <div className="h-1.5 overflow-hidden rounded-sm bg-gray-100">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-teal-400 to-indigo-500 transition-all duration-300"
+          className="h-full rounded-sm bg-gray-1000"
           style={{ width: `${percentage}%` }}
         />
       </div>

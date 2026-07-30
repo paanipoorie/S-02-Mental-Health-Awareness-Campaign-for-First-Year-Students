@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { dashboardApi } from '@lib/api';
 
 interface MentorAvailabilityToggleProps {
@@ -8,9 +8,9 @@ interface MentorAvailabilityToggleProps {
 }
 
 const STATUS_OPTIONS = [
-  { value: 'AVAILABLE', label: 'Available', icon: '🟢', color: 'bg-green-500' },
-  { value: 'BUSY', label: 'Busy', icon: '🟡', color: 'bg-amber-500' },
-  { value: 'OFFLINE', label: 'Offline', icon: '⚫', color: 'bg-slate-500' },
+  { value: 'AVAILABLE', label: 'Available', icon: '🟢', style: 'bg-green-50 border-green-300 text-green-800' },
+  { value: 'BUSY', label: 'Busy', icon: '🟡', style: 'bg-amber-50 border-amber-300 text-amber-800' },
+  { value: 'OFFLINE', label: 'Offline', icon: '⚫', style: 'bg-gray-100 border-gray-300 text-gray-800' },
 ] as const;
 
 export function MentorAvailabilityToggle({
@@ -40,51 +40,52 @@ export function MentorAvailabilityToggle({
 
   return (
     <div className={`dashboard-card p-6 ${className}`}>
-      <h3 className="text-heading-20 mb-4 text-slate-100">Availability Status</h3>
+      <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Availability Status</h3>
 
-      <div className="mb-4 flex items-center gap-4 rounded-lg border border-slate-800/50 bg-slate-900/50 p-4">
+      <div className="mb-4 flex items-center gap-4 rounded-sm border border-gray-200 bg-background-100 p-4">
         <div
-          className={`flex h-12 w-12 items-center justify-center rounded-xl ${currentStatus.color}`}
+          className="flex h-10 w-10 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700"
         >
           <span className="text-xl">{currentStatus.icon}</span>
         </div>
         <div className="flex-1">
-          <p className="text-label-14 text-slate-400">Current Status</p>
-          <p className="text-copy-14 font-semibold text-slate-100">{currentStatus.label}</p>
+          <p className="text-label-12 text-gray-500 font-medium">Current Status</p>
+          <p className="text-copy-14 font-semibold text-gray-900">{currentStatus.label}</p>
         </div>
         {loading && (
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-teal-500/30 border-t-teal-400" />
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-200 border-t-gray-800" />
         )}
       </div>
 
       <div className="grid gap-2 sm:grid-cols-3">
-        {STATUS_OPTIONS.map(option => (
-          <button
-            key={option.value}
-            onClick={() => handleChange(option.value)}
-            disabled={loading || availability === option.value}
-            className={`flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${
-              availability === option.value
-                ? `${option.color} text-white shadow-lg`
-                : 'border border-slate-700/50 bg-slate-900/50 text-slate-300 hover:border-slate-600/50 hover:bg-slate-800/50'
-            } disabled:cursor-not-allowed disabled:opacity-50`}
-          >
-            <span>{option.icon}</span>
-            <span>{option.label}</span>
-          </button>
-        ))}
+        {STATUS_OPTIONS.map(option => {
+          const isSelected = availability === option.value;
+          return (
+            <button
+              key={option.value}
+              onClick={() => handleChange(option.value)}
+              disabled={loading || isSelected}
+              className={`flex items-center justify-center gap-2 rounded-sm px-4 py-2.5 text-sm font-semibold transition-all ${
+                isSelected
+                  ? `border ${option.style} shadow-sm`
+                  : 'border border-gray-200 bg-background-100 text-gray-700 hover:bg-gray-50'
+              } disabled:cursor-not-allowed disabled:opacity-80`}
+            >
+              <span>{option.icon}</span>
+              <span>{option.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {error && (
-        <div className="mt-3 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
+        <div className="mt-3 rounded-sm border border-red-300 bg-red-50 p-3 text-sm text-red-800">
           {error}
         </div>
       )}
 
-      <p className="text-label-12 mt-4 text-slate-500">
-        Students can see your availability status when requesting support.
-        <br />
-        Set to <strong>Available</strong> to receive new chat requests.
+      <p className="text-label-12 mt-4 text-gray-500 leading-normal">
+        Students can see your availability status when requesting support. Set to <strong>Available</strong> to receive new chat requests.
       </p>
     </div>
   );
