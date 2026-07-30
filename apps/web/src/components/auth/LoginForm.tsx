@@ -49,7 +49,7 @@ export const LoginForm: React.FC = () => {
       } else if (res.role === Role.MENTOR) {
         window.location.href = '/mentor/dashboard';
       } else if (res.role === Role.ADMIN) {
-        window.location.href = '/admin';
+        window.location.href = '/admin/dashboard';
       } else {
         window.location.href = '/';
       }

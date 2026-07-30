@@ -114,8 +114,8 @@ export function AdminResourcesClient({ initialData }: { initialData?: ResourceDa
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-heading-24 font-bold text-slate-900">Resource Management</h1>
-          <p className="text-copy-14 text-slate-500 mt-1">Manage mental health resources for students</p>
+          <h1 className="text-heading-24 font-bold text-gray-1000">Resource Management</h1>
+          <p className="text-copy-14 text-gray-600 mt-1">Manage mental health resources for students</p>
         </div>
       </div>
 

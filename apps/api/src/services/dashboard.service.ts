@@ -659,8 +659,10 @@ export const dashboardService = {
       where: { role: PrismaRole.STUDENT, isActive: true },
       include: {
         anonymousIdentity: {
-          select: { displayName: true, avatarSeed: true },
-          include: {
+          select: {
+            id: true,
+            displayName: true,
+            avatarSeed: true,
             _count: {
               select: { posts: { where: { isDeleted: false } } },
             },

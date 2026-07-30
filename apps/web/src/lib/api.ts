@@ -83,6 +83,13 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
     );
   }
 
+  if ('pagination' in data) {
+    return {
+      data: (data as any).data,
+      pagination: (data as any).pagination,
+    } as unknown as T;
+  }
+
   return (data as ApiSuccessResponse<T>).data;
 }
 
