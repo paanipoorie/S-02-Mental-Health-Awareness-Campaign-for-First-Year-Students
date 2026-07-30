@@ -75,23 +75,23 @@ export const RegisterForm: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-3xl border border-slate-800 bg-slate-900/90 p-8 shadow-2xl backdrop-blur-xl">
-      <div className="mb-8 text-center">
-        <h2 className="bg-gradient-to-r from-teal-300 via-indigo-200 to-purple-300 bg-clip-text text-2xl font-bold text-transparent">
-          Join Campus Sanctuary
+    <div className="mx-auto w-full max-w-md rounded-sm border border-gray-200 bg-background-100 p-8 shadow-sm">
+      <div className="mb-8">
+        <h2 className="text-heading-24 font-bold text-gray-1000">
+          Create Account
         </h2>
-        <p className="mt-1 text-xs text-slate-400">
-          Create an account with your official university email
+        <p className="mt-1.5 text-label-13 text-gray-600">
+          Sign up with your official university email address.
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs font-medium text-rose-300">
+        <div className="mb-6 flex items-center gap-2 rounded-sm border border-red-300 bg-red-100/50 p-4 text-label-13 text-red-800">
           <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2.5"
               d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
@@ -101,17 +101,17 @@ export const RegisterForm: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300">
+          <label className="mb-2 block text-label-13 font-semibold text-gray-700">
             I am registering as:
           </label>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => setRole(Role.STUDENT)}
-              className={`rounded-xl border px-3 py-2.5 text-xs font-semibold transition-all ${
+              className={`rounded-sm border px-3 py-2.5 text-button-12 font-semibold transition-all cursor-pointer focus-visible:outline-none ${
                 role === Role.STUDENT
-                  ? 'border-teal-400 bg-teal-500/15 text-teal-300 shadow-sm shadow-teal-500/20'
-                  : 'border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200'
+                  ? 'border-gray-1000 bg-gray-100 text-gray-1000'
+                  : 'border-gray-300 bg-background-100 text-gray-600 hover:bg-gray-50'
               }`}
             >
               Student (Anonymous)
@@ -119,10 +119,10 @@ export const RegisterForm: React.FC = () => {
             <button
               type="button"
               onClick={() => setRole(Role.MENTOR)}
-              className={`rounded-xl border px-3 py-2.5 text-xs font-semibold transition-all ${
+              className={`rounded-sm border px-3 py-2.5 text-button-12 font-semibold transition-all cursor-pointer focus-visible:outline-none ${
                 role === Role.MENTOR
-                  ? 'border-purple-400 bg-purple-500/15 text-purple-300 shadow-sm shadow-purple-500/20'
-                  : 'border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200'
+                  ? 'border-gray-1000 bg-gray-100 text-gray-1000'
+                  : 'border-gray-300 bg-background-100 text-gray-600 hover:bg-gray-50'
               }`}
             >
               Peer Mentor
@@ -131,7 +131,7 @@ export const RegisterForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300">
+          <label className="mb-2 block text-label-13 font-semibold text-gray-700">
             University Email
           </label>
           <input
@@ -139,16 +139,16 @@ export const RegisterForm: React.FC = () => {
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="student@university.edu"
-            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 transition-all focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400"
+            className="w-full h-10 px-3 py-2 text-label-14 bg-background-100 text-primary border border-gray-300 rounded-sm focus-visible:outline-none focus-visible:border-blue-700 placeholder-gray-400"
             required
           />
-          <p className="mt-1 text-[10px] text-slate-500">
-            Your email is only used for authentication and is never shown publicly.
+          <p className="mt-1.5 text-label-12 text-gray-500">
+            Only used for verification. Real identity is never exposed.
           </p>
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300">
+          <label className="mb-2 block text-label-13 font-semibold text-gray-700">
             Password
           </label>
           <input
@@ -156,13 +156,13 @@ export const RegisterForm: React.FC = () => {
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder="Minimum 8 characters"
-            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 transition-all focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400"
+            className="w-full h-10 px-3 py-2 text-label-14 bg-background-100 text-primary border border-gray-300 rounded-sm focus-visible:outline-none focus-visible:border-blue-700 placeholder-gray-400"
             required
           />
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-300">
+          <label className="mb-2 block text-label-13 font-semibold text-gray-700">
             Confirm Password
           </label>
           <input
@@ -170,7 +170,7 @@ export const RegisterForm: React.FC = () => {
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
             placeholder="Re-enter password"
-            className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 transition-all focus:border-teal-400 focus:outline-none focus:ring-1 focus:ring-teal-400"
+            className="w-full h-10 px-3 py-2 text-label-14 bg-background-100 text-primary border border-gray-300 rounded-sm focus-visible:outline-none focus-visible:border-blue-700 placeholder-gray-400"
             required
           />
         </div>
@@ -178,11 +178,11 @@ export const RegisterForm: React.FC = () => {
         <button
           type="submit"
           disabled={loading}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-500 via-indigo-600 to-purple-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-teal-500/25 transition-all hover:from-teal-400 hover:to-purple-500 disabled:opacity-50"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-sm bg-primary px-4 py-2.5 text-button-14 font-semibold text-background-100 transition-colors hover:bg-gray-800 disabled:opacity-50 cursor-pointer"
         >
           {loading ? (
             <>
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-background-100/30 border-t-background-100"></div>
               <span>Creating Account...</span>
             </>
           ) : (
@@ -191,10 +191,10 @@ export const RegisterForm: React.FC = () => {
         </button>
       </form>
 
-      <div className="mt-8 border-t border-slate-800/80 pt-6 text-center">
-        <p className="text-xs text-slate-400">
+      <div className="mt-8 border-t border-gray-200 pt-6 text-center">
+        <p className="text-label-13 text-gray-600">
           Already have an account?{' '}
-          <a href="/login" className="ml-1 font-semibold text-teal-400 hover:underline">
+          <a href="/login" className="ml-1 font-semibold text-tertiary hover:underline">
             Sign In
           </a>
         </p>
