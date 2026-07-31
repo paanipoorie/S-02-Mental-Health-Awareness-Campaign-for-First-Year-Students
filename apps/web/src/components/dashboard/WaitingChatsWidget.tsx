@@ -59,7 +59,7 @@ export function WaitingChatsWidget({ waitingChats, className = '' }: WaitingChat
         {waitingChats.slice(0, 5).map(chat => (
           <a
             key={chat.id}
-            href={`/mentor/chat/${chat.id}`}
+            href={`/chat?threadId=${chat.id}`}
             className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
           >
             <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
@@ -101,7 +101,7 @@ export function WaitingChatsWidget({ waitingChats, className = '' }: WaitingChat
       {waitingChats.length > 5 && (
         <div className="mt-4 text-center">
           <a
-            href="/mentor/chats"
+            href="/chat"
             className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
           >
             View all {waitingChats.length} waiting chats

@@ -38,8 +38,8 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
   const fetchChats = async () => {
     try {
       if (!user) await fetchCurrentUser();
-      const data = await api.get<{ chats: ChatThread[] }>('/chats');
-      setChats(data.chats);
+      const res = await api.get<{ data: ChatThread[] }>('/chats');
+      setChats(res.data);
     } catch (err: any) {
       toast.error(err.message || 'Failed to load chats');
     } finally {
@@ -52,7 +52,7 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
   const handleStartChat = async () => {
     try {
       const data = await api.post<{ id: string }>('/chats');
-      window.location.href = `/chat/${data.id}`;
+      window.location.href = `/chat?threadId=${data.id}`;
     } catch (err: any) {
       toast.error(err.message || 'Failed to start chat');
     }
@@ -133,7 +133,7 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
             return (
               <a
                 key={chat.id}
-                href={`/chat/${chat.id}`}
+                href={`/chat?threadId=${chat.id}`}
                 onClick={onSelect ? (e) => { e.preventDefault(); onSelect(chat.id); } : undefined}
                 className={`flex items-center gap-4 px-6 py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors bg-background-100 ${
                   isUnread ? 'bg-blue-50/20' : ''

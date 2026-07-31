@@ -151,7 +151,7 @@ export function StudentDashboardClient() {
           </div>
           {mentor && (
             <a
-              href={mentor.chatThreadId ? `/chat/${mentor.chatThreadId}` : '/chat'}
+              href={mentor.chatThreadId ? `/chat?threadId=${mentor.chatThreadId}` : '/chat'}
               className="flex items-center gap-2 rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors flex-shrink-0"
             >
               <MessageCircle className="h-4 w-4" />

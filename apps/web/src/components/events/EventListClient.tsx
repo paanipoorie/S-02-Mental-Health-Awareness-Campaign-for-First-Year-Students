@@ -3,6 +3,8 @@ import { api } from '@lib/api';
 import { useStore } from '@nanostores/react';
 import { $user, fetchCurrentUser } from '@stores/authStore';
 import { toast } from 'sonner';
+import { WorkshopDetailClient } from '../workshops/WorkshopDetailClient';
+import { MeetingDetailClient } from '../meetings/MeetingDetailClient';
 import {
   Brain,
   Activity,
@@ -76,6 +78,28 @@ export function EventListClient() {
 
   const [page, setPage] = useState(1);
 
+  const [activeEventId, setActiveEventId] = useState<string | null>(null);
+  const [activeEventType, setActiveEventType] = useState<'WORKSHOP' | 'MEETING' | null>(null);
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const type = params.get('type');
+      if (id && (type === 'workshop' || type === 'meeting')) {
+        setActiveEventId(id);
+        setActiveEventType(type.toUpperCase() as any);
+      } else {
+        setActiveEventId(null);
+        setActiveEventType(null);
+      }
+    };
+
+    handleLocationChange();
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
+
   const fetchEvents = async () => {
     setLoading(true);
     try {
@@ -85,13 +109,13 @@ export function EventListClient() {
 
       // Fetch both meetings and workshops
       const [workshopsRes, meetingsRes] = await Promise.all([
-        api.get<{ workshops: any[] }>('/workshops?limit=100'),
-        api.get<{ meetings: any[] }>('/meetings?limit=100'),
+        api.get<{ data: any[] }>('/workshops?limit=50'),
+        api.get<{ data: any[] }>('/meetings?limit=50'),
       ]);
 
       const combined: EventItem[] = [
-        ...workshopsRes.workshops.map(w => ({ ...w, eventType: 'WORKSHOP' as const })),
-        ...meetingsRes.meetings.map(m => ({ ...m, eventType: 'MEETING' as const })),
+        ...workshopsRes.data.map(w => ({ ...w, eventType: 'WORKSHOP' as const })),
+        ...meetingsRes.data.map(m => ({ ...m, eventType: 'MEETING' as const })),
       ];
 
       setRawEvents(combined);
@@ -221,6 +245,26 @@ export function EventListClient() {
   const itemsPerPage = 9;
   const totalPages = Math.ceil(filteredEvents.length / itemsPerPage) || 1;
   const paginatedEvents = filteredEvents.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+  if (activeEventId && activeEventType) {
+    return (
+      <div className="space-y-6 max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 bg-background-100">
+        <div className="mb-4">
+          <a
+            href="/events"
+            className="inline-flex items-center gap-1.5 text-copy-14 font-semibold text-gray-700 hover:text-gray-900 transition-colors"
+          >
+            ← Back to Events
+          </a>
+        </div>
+        {activeEventType === 'MEETING' ? (
+          <MeetingDetailClient meetingId={activeEventId} />
+        ) : (
+          <WorkshopDetailClient workshopId={activeEventId} />
+        )}
+      </div>
+    );
+  }
 
   const showHostButton = user?.role === 'MENTOR' || user?.role === 'ADMIN';
 
@@ -413,7 +457,7 @@ export function EventListClient() {
                   </span>
                   <div className="flex gap-2">
                     <a
-                      href={isWorkshop ? `/events/${event.id}?type=workshop` : `/events/${event.id}?type=meeting`}
+                      href={isWorkshop ? `/events?id=${event.id}&type=workshop` : `/events?id=${event.id}&type=meeting`}
                       className="px-3.5 py-1.5 text-xs font-semibold text-gray-700 bg-background-100 hover:bg-gray-50 border border-gray-200 rounded-sm transition-colors flex items-center gap-1"
                     >
                       Details <ChevronRight className="h-3 w-3" />

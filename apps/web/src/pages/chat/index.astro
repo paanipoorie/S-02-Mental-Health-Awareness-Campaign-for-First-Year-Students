@@ -1,17 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { ChatList } from '../../components/chat/ChatList';
+import { ChatPortal } from '../../components/chat/ChatPortal';
 ---
 
 <BaseLayout title="Messages | Peerly">
   <div class="chat-page">
-    <ChatList client:load />
+    <ChatPortal client:load />
   </div>
 
   <style>
     .chat-page {
       height: calc(100vh - 64px);
-      max-width: 900px;
+      max-width: 1200px;
       margin: 0 auto;
       background: var(--color-background-100);
       border-left: 1px solid var(--color-gray-200);

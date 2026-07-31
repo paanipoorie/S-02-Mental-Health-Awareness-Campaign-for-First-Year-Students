@@ -62,7 +62,7 @@ export function AssignedStudentsWidget({
         {assignedStudents.slice(0, 5).map(student => (
           <a
             key={student.id}
-            href={`/mentor/chat/${student.id}`}
+            href={`/chat?threadId=${student.id}`}
             className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700 flex-shrink-0">
@@ -119,7 +119,7 @@ export function AssignedStudentsWidget({
       {assignedStudents.length > 5 && (
         <div className="mt-4 text-center">
           <a
-            href="/mentor/chats"
+            href="/chat"
             className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
           >
             View all {assignedStudents.length} assigned students

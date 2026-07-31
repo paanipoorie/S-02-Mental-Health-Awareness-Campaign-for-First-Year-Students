@@ -53,13 +53,13 @@ function getNotificationLink(notification: Notification): string | null {
     case 'NEW_REPLY':
       return payload.postId ? `/posts/${payload.postId}` : null;
     case 'NEW_CHAT_MESSAGE':
-      return payload.chatId ? `/chat/${payload.chatId}` : null;
+      return payload.chatId ? `/chat?threadId=${payload.chatId}` : null;
     case 'MENTOR_ASSIGNED':
-      return payload.chatId ? `/chat/${payload.chatId}` : null;
+      return payload.chatId ? `/chat?threadId=${payload.chatId}` : null;
     case 'MEETING_REMINDER':
-      return payload.meetingId ? `/meetings/${payload.meetingId}` : null;
+      return payload.meetingId ? `/events/${payload.meetingId}?type=meeting` : null;
     case 'WORKSHOP_REMINDER':
-      return payload.workshopId ? `/workshops/${payload.workshopId}` : null;
+      return payload.workshopId ? `/events/${payload.workshopId}?type=workshop` : null;
     default:
       return null;
   }

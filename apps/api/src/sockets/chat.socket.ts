@@ -36,7 +36,14 @@ export function handleChatSocket(io: Server, socket: AuthenticatedSocket) {
       }
 
       // Check authorization
-      const isStudent = role === 'STUDENT' && thread.studentIdentityId === userId;
+      let isStudent = false;
+      if (role === 'STUDENT') {
+        const studentIdentity = await prisma.anonymousIdentity.findUnique({
+          where: { userId },
+          select: { id: true },
+        });
+        isStudent = studentIdentity?.id === thread.studentIdentityId;
+      }
       const isMentor = role === 'MENTOR' && thread.mentorId === userId;
 
       if (!isStudent && !isMentor) {
@@ -76,7 +83,14 @@ export function handleChatSocket(io: Server, socket: AuthenticatedSocket) {
         return;
       }
 
-      const isStudent = role === 'STUDENT' && thread.studentIdentityId === userId;
+      let isStudent = false;
+      if (role === 'STUDENT') {
+        const studentIdentity = await prisma.anonymousIdentity.findUnique({
+          where: { userId },
+          select: { id: true },
+        });
+        isStudent = studentIdentity?.id === thread.studentIdentityId;
+      }
       const isMentor = role === 'MENTOR' && thread.mentorId === userId;
 
       if (!isStudent && !isMentor) {
@@ -167,7 +181,14 @@ export function handleChatSocket(io: Server, socket: AuthenticatedSocket) {
         return;
       }
 
-      const isStudent = role === 'STUDENT' && thread.studentIdentityId === userId;
+      let isStudent = false;
+      if (role === 'STUDENT') {
+        const studentIdentity = await prisma.anonymousIdentity.findUnique({
+          where: { userId },
+          select: { id: true },
+        });
+        isStudent = studentIdentity?.id === thread.studentIdentityId;
+      }
       const isMentor = role === 'MENTOR' && thread.mentorId === userId;
 
       if (!isStudent && !isMentor) {

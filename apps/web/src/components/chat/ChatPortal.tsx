@@ -1,12 +1,35 @@
+import { useEffect, useState } from 'react';
 import { ChatList } from './ChatList';
 import { ChatWindow } from './ChatWindow';
 import { MessageSquare } from 'lucide-react';
 
-interface ChatPortalProps {
-  activeThreadId?: string;
-}
+export function ChatPortal() {
+  const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
 
-export function ChatPortal({ activeThreadId }: ChatPortalProps) {
+  useEffect(() => {
+    const getThreadIdFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('threadId');
+    };
+
+    setActiveThreadId(getThreadIdFromUrl());
+
+    // Listen for history popstate events (e.g. browser back/forward buttons)
+    const handlePopState = () => {
+      setActiveThreadId(getThreadIdFromUrl());
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleSelectThread = (id: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('threadId', id);
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+    setActiveThreadId(id);
+  };
+
   return (
     <div className="flex h-full w-full bg-background-100 overflow-hidden">
       {/* Left panel: Conversation List */}
@@ -17,9 +40,7 @@ export function ChatPortal({ activeThreadId }: ChatPortalProps) {
       >
         <ChatList
           compact={true}
-          onSelect={(id) => {
-            window.location.href = `/chat/${id}`;
-          }}
+          onSelect={handleSelectThread}
         />
       </div>
 
@@ -30,7 +51,7 @@ export function ChatPortal({ activeThreadId }: ChatPortalProps) {
         }`}
       >
         {activeThreadId ? (
-          <ChatWindow threadId={activeThreadId} />
+          <ChatWindow key={activeThreadId} threadId={activeThreadId} />
         ) : (
           <div className="max-w-sm">
             <MessageSquare className="mx-auto h-12 w-12 text-gray-400 mb-4" />

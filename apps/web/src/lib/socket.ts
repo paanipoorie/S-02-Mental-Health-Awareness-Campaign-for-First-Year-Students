@@ -8,8 +8,8 @@ const SOCKET_URL = import.meta.env.PUBLIC_API_URL
 let socket: Socket | null = null;
 
 export function getSocket(): Socket {
+  const token = getAccessToken();
   if (!socket) {
-    const token = getAccessToken();
     socket = io(SOCKET_URL, {
       auth: { token },
       transports: ['websocket', 'polling'],
@@ -18,6 +18,13 @@ export function getSocket(): Socket {
       reconnectionAttempts: 10,
       reconnectionDelay: 1000,
     });
+  } else {
+    if (socket.auth && (socket.auth as any).token !== token) {
+      (socket.auth as any).token = token;
+      if (socket.connected) {
+        socket.disconnect().connect();
+      }
+    }
   }
   return socket;
 }

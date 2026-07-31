@@ -41,11 +41,14 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   }, []);
 
   const fetchChatInfo = async () => {
@@ -59,15 +62,15 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
 
   const fetchMessages = async (pageNum: number = 1, append: boolean = false) => {
     try {
-      const data = await api.get<{ messages: Message[]; hasMore: boolean }>(
+      const res = await api.get<{ data: Message[]; pagination: { page: number; totalPages: number } }>(
         `/chats/${threadId}/messages?page=${pageNum}&limit=50`
       );
       if (append) {
-        setMessages(prev => [...data.messages, ...prev]);
+        setMessages(prev => [...res.data, ...prev]);
       } else {
-        setMessages(data.messages);
+        setMessages(res.data);
       }
-      setHasMore(data.hasMore);
+      setHasMore(res.pagination.page < res.pagination.totalPages);
       if (!append) {
         setTimeout(scrollToBottom, 100);
       }
@@ -211,7 +214,7 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-1">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-6 py-4 space-y-1">
         {hasMore && (
           <div className="text-center py-2">
             <button onClick={loadMore} className="text-xs font-semibold text-tertiary hover:underline transition-colors">
@@ -226,7 +229,15 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
           </div>
         ) : (
           messages.map(msg => (
-            <MessageBubble key={msg.id} message={msg} />
+            <MessageBubble
+              key={msg.id}
+              message={{
+                ...msg,
+                isOwn: isStudent
+                  ? (msg.senderType === 'ANONYMOUS' as any || msg.senderType === 'ANONYMOUS_IDENTITY')
+                  : msg.senderType === 'MENTOR'
+              }}
+            />
           ))
         )}
 

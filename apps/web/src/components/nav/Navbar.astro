@@ -33,106 +33,171 @@ const { currentRole = null } = Astro.props;
       </div>
 
       <nav class="hidden items-center gap-1 md:flex" aria-label="Main Navigation">
-        {
-          currentRole === 'STUDENT' && (
-            <>
-              <a
-                href="/dashboard"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Dashboard
-              </a>
-              <a
-                href="/posts"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Discussions
-              </a>
-              <a
-                href="/chat"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Peer Chat
-              </a>
-              <a
-                href="/events"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Events
-              </a>
-            </>
-          )
-        }
+        <!-- Student Links -->
+        <div
+          id="nav-links-student"
+          class={`items-center gap-1 ${currentRole === 'STUDENT' ? 'flex' : 'hidden'}`}
+        >
+          <a
+            href="/dashboard"
+            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+          >
+            Dashboard
+          </a>
+          <a
+            href="/posts"
+            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+          >
+            Discussions
+          </a>
+          <a
+            href="/chat"
+            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+          >
+            Peer Chat
+          </a>
+          <a
+            href="/events"
+            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+          >
+            Events
+          </a>
+        </div>
 
-        {
-          currentRole === 'MENTOR' && (
-            <>
-              <a
-                href="/mentor/dashboard"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Dashboard
-              </a>
-              <a
-                href="/events"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Events
-              </a>
-            </>
-          )
-        }
+        <!-- Mentor Links -->
+        <div
+          id="nav-links-mentor"
+          class={`items-center gap-1 ${currentRole === 'MENTOR' ? 'flex' : 'hidden'}`}
+        >
+          <a
+            href="/mentor/dashboard"
+            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+          >
+            Dashboard
+          </a>
+          <a
+            href="/events"
+            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+          >
+            Events
+          </a>
+        </div>
 
-        {
-          currentRole === 'ADMIN' && (
-            <>
-              <a
-                href="/admin/dashboard"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Dashboard
-              </a>
-              <a
-                href="/admin/mentors"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Verify Mentors
-              </a>
-            </>
-          )
-        }
+        <!-- Admin Links -->
+        <div
+          id="nav-links-admin"
+          class={`items-center gap-1 ${currentRole === 'ADMIN' ? 'flex' : 'hidden'}`}
+        >
+          <a
+            href="/admin/dashboard"
+            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+          >
+            Dashboard
+          </a>
+          <a
+            href="/admin/mentors"
+            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+          >
+            Verify Mentors
+          </a>
+        </div>
       </nav>
 
       <div class="flex items-center gap-3">
-        {
-          currentRole ? (
-            <div class="flex items-center gap-3">
-              <NotificationBell client:load />
-              <button
-                id="logout-btn"
-                class="font-medium text-gray-700 hover:text-gray-1000 text-sm cursor-pointer border-none bg-transparent p-0 transition-colors focus-visible:outline-none"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <div class="flex items-center gap-2">
-              <a
-                href="/login"
-                class="rounded-sm border border-gray-200 bg-background-100 px-3 py-1.5 text-button-12 font-medium text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none"
-              >
-                Sign In
-              </a>
-              <a
-                href="/register"
-                class="rounded-sm bg-primary px-3 py-1.5 text-button-12 font-semibold text-background-100 transition-colors hover:bg-gray-800 focus-visible:outline-none"
-              >
-                Get Started
-              </a>
-            </div>
-          )
-        }
+        <!-- Logged-in Controls -->
+        <div
+          id="nav-user-controls"
+          class={`items-center gap-3 ${currentRole ? 'flex' : 'hidden'}`}
+        >
+          <NotificationBell client:load />
+          <button
+            id="logout-btn"
+            class="font-medium text-gray-700 hover:text-gray-1000 text-sm cursor-pointer border-none bg-transparent p-0 transition-colors focus-visible:outline-none"
+          >
+            Logout
+          </button>
+        </div>
+
+        <!-- Logged-out Controls -->
+        <div
+          id="nav-guest-controls"
+          class={`items-center gap-2 ${!currentRole ? 'flex' : 'hidden'}`}
+        >
+          <a
+            href="/login"
+            class="rounded-sm border border-gray-200 bg-background-100 px-3 py-1.5 text-button-12 font-medium text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none"
+          >
+            Sign In
+          </a>
+          <a
+            href="/register"
+            class="rounded-sm bg-primary px-3 py-1.5 text-button-12 font-semibold text-background-100 transition-colors hover:bg-gray-800 focus-visible:outline-none"
+          >
+            Get Started
+          </a>
+        </div>
       </div>
+
+      <script is:inline>
+        (function() {
+          const rawUser = localStorage.getItem('caps_user_profile');
+          let role = null;
+          if (rawUser) {
+            try {
+              role = JSON.parse(rawUser).role;
+            } catch (e) {}
+          }
+          
+          if (role) {
+            document.getElementById('nav-links-student')?.classList.add('hidden');
+            document.getElementById('nav-links-student')?.classList.remove('flex');
+            document.getElementById('nav-links-mentor')?.classList.add('hidden');
+            document.getElementById('nav-links-mentor')?.classList.remove('flex');
+            document.getElementById('nav-links-admin')?.classList.add('hidden');
+            document.getElementById('nav-links-admin')?.classList.remove('flex');
+            document.getElementById('nav-guest-controls')?.classList.add('hidden');
+            document.getElementById('nav-guest-controls')?.classList.remove('flex');
+            
+            if (role === 'STUDENT') {
+              const studentNav = document.getElementById('nav-links-student');
+              if (studentNav) {
+                studentNav.classList.remove('hidden');
+                studentNav.classList.add('flex');
+              }
+            } else if (role === 'MENTOR') {
+              const mentorNav = document.getElementById('nav-links-mentor');
+              if (mentorNav) {
+                mentorNav.classList.remove('hidden');
+                mentorNav.classList.add('flex');
+              }
+            } else if (role === 'ADMIN') {
+              const adminNav = document.getElementById('nav-links-admin');
+              if (adminNav) {
+                adminNav.classList.remove('hidden');
+                adminNav.classList.add('flex');
+              }
+            }
+            
+            const userControls = document.getElementById('nav-user-controls');
+            if (userControls) {
+              userControls.classList.remove('hidden');
+              userControls.classList.add('flex');
+            }
+          } else {
+            const userControls = document.getElementById('nav-user-controls');
+            if (userControls) {
+              userControls.classList.add('hidden');
+              userControls.classList.remove('flex');
+            }
+            
+            const guestControls = document.getElementById('nav-guest-controls');
+            if (guestControls) {
+              guestControls.classList.remove('hidden');
+              guestControls.classList.add('flex');
+            }
+          }
+        })();
+      </script>
     </div>
   </div>
 </header>

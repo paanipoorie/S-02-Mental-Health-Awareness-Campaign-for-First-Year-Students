@@ -63,7 +63,7 @@ export function ActiveChatsWidget({ activeChats, className = '' }: ActiveChatsWi
         {activeChats.slice(0, 5).map(chat => (
           <a
             key={chat.id}
-            href={`/chat/${chat.id}`}
+            href={`/chat?threadId=${chat.id}`}
             className="flex items-center gap-4 rounded-sm border border-gray-200 bg-background-100 p-3 transition-colors hover:bg-gray-50 focus-visible:outline-none"
           >
             <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
