@@ -1,3 +1,6 @@
+import { MessageSquare, Mail, Calendar, Wrench, Briefcase, CheckCircle, Heart, Bell } from 'lucide-react';
+import type { ReactNode } from 'react';
+
 interface Notification {
   id: string;
   type: string;
@@ -29,17 +32,17 @@ function formatTimeAgo(dateStr: string): string {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-function getNotificationIcon(type: string): string {
-  const icons: Record<string, string> = {
-    NEW_REPLY: '💬',
-    NEW_CHAT_MESSAGE: '✉️',
-    MEETING_REMINDER: '📅',
-    WORKSHOP_REMINDER: '🛠️',
-    MENTOR_ASSIGNED: '👨‍🏫',
-    POST_REPLY_MENTOR: '✅',
-    EMOTION_CHECKED: '💚',
+function getNotificationIcon(type: string): ReactNode {
+  const icons: Record<string, ReactNode> = {
+    NEW_REPLY: <MessageSquare className="h-5 w-5 text-slate-500" />,
+    NEW_CHAT_MESSAGE: <Mail className="h-5 w-5 text-slate-500" />,
+    MEETING_REMINDER: <Calendar className="h-5 w-5 text-slate-500" />,
+    WORKSHOP_REMINDER: <Wrench className="h-5 w-5 text-slate-500" />,
+    MENTOR_ASSIGNED: <Briefcase className="h-5 w-5 text-slate-500" />,
+    POST_REPLY_MENTOR: <CheckCircle className="h-5 w-5 text-slate-500" />,
+    EMOTION_CHECKED: <Heart className="h-5 w-5 text-slate-500" />,
   };
-  return icons[type] || '🔔';
+  return icons[type] || <Bell className="h-5 w-5 text-slate-500" />;
 }
 
 function getNotificationLink(notification: Notification): string | null {
@@ -95,7 +98,7 @@ export function NotificationList({ notifications, onMarkAsRead, onClose }: Notif
             }`}
           >
             <div className="flex items-start gap-3">
-              <span className="mt-0.5 text-lg flex-shrink-0" role="img" aria-hidden="true">
+              <span className="mt-0.5 flex-shrink-0" aria-hidden="true">
                 {getNotificationIcon(notification.type)}
               </span>
               <div className="flex-1 min-w-0">

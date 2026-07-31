@@ -1,17 +1,17 @@
 import type { PostCategory } from '@shared-types/enums';
 
 const CATEGORIES = [
-  { value: 'ACADEMICS', label: 'Academics', icon: '📚' },
-  { value: 'HOSTEL', label: 'Hostel', icon: '🏠' },
-  { value: 'HOMESICKNESS', label: 'Homesickness', icon: '🏡' },
-  { value: 'FRIENDS', label: 'Friends', icon: '👯' },
-  { value: 'RELATIONSHIPS', label: 'Relationships', icon: '💕' },
-  { value: 'TIME_MANAGEMENT', label: 'Time Management', icon: '⏰' },
-  { value: 'EXAMS', label: 'Exams', icon: '📝' },
-  { value: 'SLEEP', label: 'Sleep', icon: '😴' },
-  { value: 'CLUBS', label: 'Clubs', icon: '🎭' },
-  { value: 'FINANCIAL', label: 'Financial', icon: '💸' },
-  { value: 'GENERAL', label: 'General', icon: '📌' },
+  { value: 'ACADEMICS', label: 'Academics' },
+  { value: 'HOSTEL', label: 'Hostel' },
+  { value: 'HOMESICKNESS', label: 'Homesickness' },
+  { value: 'FRIENDS', label: 'Friends' },
+  { value: 'RELATIONSHIPS', label: 'Relationships' },
+  { value: 'TIME_MANAGEMENT', label: 'Time Management' },
+  { value: 'EXAMS', label: 'Exams' },
+  { value: 'SLEEP', label: 'Sleep' },
+  { value: 'CLUBS', label: 'Clubs' },
+  { value: 'FINANCIAL', label: 'Financial' },
+  { value: 'GENERAL', label: 'General' },
 ] as const;
 
 interface CategoryPickerProps {
@@ -34,9 +34,9 @@ export function CategoryPicker({
         aria-label="Post category"
       >
         <option value="">Select a category</option>
-        {CATEGORIES.map(({ value, label, icon }) => (
+        {CATEGORIES.map(({ value, label }) => (
           <option key={value} value={value}>
-            {icon} {label}
+            {label}
           </option>
         ))}
       </select>

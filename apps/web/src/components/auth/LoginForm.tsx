@@ -5,7 +5,11 @@ import { Role } from '@campus-peer-support/shared-types';
 
 interface LoginResponse {
   accessToken: string;
-  role: Role;
+  user: {
+    id: string;
+    role: Role;
+    isVerifiedMentor: boolean;
+  };
 }
 
 export const LoginForm: React.FC = () => {
@@ -44,11 +48,11 @@ export const LoginForm: React.FC = () => {
       setAuthUser(profile, res.accessToken);
 
       // Redirect based on role
-      if (res.role === Role.STUDENT) {
+      if (profile.role === Role.STUDENT) {
         window.location.href = '/dashboard';
-      } else if (res.role === Role.MENTOR) {
+      } else if (profile.role === Role.MENTOR) {
         window.location.href = '/mentor/dashboard';
-      } else if (res.role === Role.ADMIN) {
+      } else if (profile.role === Role.ADMIN) {
         window.location.href = '/admin/dashboard';
       } else {
         window.location.href = '/';

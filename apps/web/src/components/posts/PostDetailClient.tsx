@@ -50,21 +50,21 @@ function timeAgo(dateStr: string): string {
   return `${days}d ago`;
 }
 
-function getCategoryEmoji(cat: string): string {
+function getCategoryLabel(cat: string): string {
   const map: Record<string, string> = {
-    ACADEMICS: '📚',
-    HOSTEL: '🏠',
-    HOMESICKNESS: '🏡',
-    FRIENDS: '👯',
-    RELATIONSHIPS: '💕',
-    TIME_MANAGEMENT: '⏰',
-    EXAMS: '📝',
-    SLEEP: '😴',
-    CLUBS: '🎭',
-    FINANCIAL: '💰',
-    GENERAL: '💬',
+    ACADEMICS: 'Academics',
+    HOSTEL: 'Hostel',
+    HOMESICKNESS: 'Homesickness',
+    FRIENDS: 'Friends',
+    RELATIONSHIPS: 'Relationships',
+    TIME_MANAGEMENT: 'Time Management',
+    EXAMS: 'Exams',
+    SLEEP: 'Sleep',
+    CLUBS: 'Clubs',
+    FINANCIAL: 'Financial',
+    GENERAL: 'General',
   };
-  return map[cat] || '💬';
+  return map[cat] || 'General';
 }
 
 function getUrgencyBadgeClass(level: string | null): string {
@@ -76,11 +76,11 @@ function getUrgencyBadgeClass(level: string | null): string {
   }
 }
 
-function getEmoji(emotion: string | null): string {
+function getEmotionLabel(emotion: string | null): string {
   const map: Record<string, string> = {
-    HAPPY: '😊', EXCITED: '🤩', CONFUSED: '😕', HOMESICK: '🏠',
-    LONELY: '😔', SCARED: '😨', ANXIOUS: '😰', BURNT_OUT: '😩',
-    OVERWHELMED: '🤯', STRESSED: '😤',
+    HAPPY: 'Happy', EXCITED: 'Excited', CONFUSED: 'Confused', HOMESICK: 'Homesick',
+    LONELY: 'Lonely', SCARED: 'Scared', ANXIOUS: 'Anxious', BURNT_OUT: 'Burnt Out',
+    OVERWHELMED: 'Overwhelmed', STRESSED: 'Stressed',
   };
   return map[emotion || ''] || '';
 }
@@ -188,11 +188,11 @@ export function PostDetailClient({ postId }: { postId: string }) {
 
         <div className="flex flex-wrap items-center gap-2 mb-4">
           <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
-            {getCategoryEmoji(post.category)} {post.category.replace('_', ' ')}
+            {getCategoryLabel(post.category)}
           </span>
           {post.emotion && (
             <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
-              {getEmoji(post.emotion)} {post.emotion}
+              {getEmotionLabel(post.emotion)}
             </span>
           )}
           {post.urgencyLevel && post.urgencyLevel !== 'NONE' && (

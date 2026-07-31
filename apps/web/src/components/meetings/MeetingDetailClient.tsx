@@ -3,6 +3,7 @@ import { api } from '@lib/api';
 import { useStore } from '@nanostores/react';
 import { $user, fetchCurrentUser } from '@stores/authStore';
 import { toast } from 'sonner';
+import { Globe, MapPin, Calendar, Clock, User, Link, Users } from 'lucide-react';
 
 interface Attendee {
   id: string;
@@ -123,7 +124,7 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
       {/* Back button */}
       <div>
         <a href="/meetings" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
-          ← Back to Meetings
+          &larr; Back to Meetings
         </a>
       </div>
 
@@ -134,7 +135,8 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
             {meeting.category.replace('_', ' ')}
           </span>
           <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-700">
-            {meeting.meetingType === 'ONLINE' ? '🌐 Online' : '📍 Offline'}
+            {meeting.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-600" /> : <MapPin className="h-3 w-3 text-gray-600" />}
+            {' '}{meeting.meetingType === 'ONLINE' ? 'Online' : 'Offline'}
           </span>
         </div>
 
@@ -150,22 +152,26 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
         <div className="mt-8 bg-gray-50 border border-gray-200 rounded-sm p-5 grid gap-4 sm:grid-cols-2 text-sm text-gray-500 font-mono">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span>📅 Date:</span>
+              <Calendar className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <span>Date:</span>
               <strong className="text-gray-900">{formatDate(meeting.date)}</strong>
             </div>
             <div className="flex items-center gap-2">
-              <span>⏰ Time:</span>
+              <Clock className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <span>Time:</span>
               <strong className="text-gray-900">{formatTime(meeting.time)} ({meeting.durationMinutes} mins)</strong>
             </div>
           </div>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span>👤 Host:</span>
+              <User className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <span>Host:</span>
               <strong className="text-gray-900">{meeting.hostDisplayName || 'Anonymous'}</strong>
             </div>
             {meeting.meetingType === 'ONLINE' ? (
               <div className="flex items-center gap-2 truncate">
-                <span>🔗 Link:</span>
+                <Link className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                <span>Link:</span>
                 {meeting.meetingLink ? (
                   <a href={meeting.meetingLink} target="_blank" rel="noreferrer" className="text-tertiary hover:underline truncate">
                     {meeting.meetingLink}
@@ -176,7 +182,8 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <span>📍 Location:</span>
+                <MapPin className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                <span>Location:</span>
                 <strong className="text-gray-900">{meeting.location || 'Campus'}</strong>
               </div>
             )}
@@ -186,7 +193,7 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
         {/* Action Panel */}
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-6">
           <div className="flex items-center gap-1.5 text-gray-500 text-sm">
-            <span>👥</span>
+            <Users className="h-5 w-5 text-gray-500" />
             <strong className="text-gray-900 text-lg font-bold">{meeting.attendees.length}</strong> attending
           </div>
           <div className="flex gap-3">
@@ -208,7 +215,7 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
                   : 'bg-primary hover:bg-gray-800 text-background-100 border-transparent'
               }`}
             >
-              {meeting.isAttending ? '✓ Going' : 'RSVP to Join'}
+              {meeting.isAttending ? '\u2713 Going' : 'RSVP to Join'}
             </button>
           </div>
         </div>
@@ -225,7 +232,7 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
           <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {meeting.attendees.map((attendee) => (
               <div key={attendee.id} className="flex items-center gap-2 p-3 bg-gray-50 border border-gray-200 rounded-sm text-sm text-gray-700 font-semibold">
-                <span>👤</span>
+                <User className="h-4 w-4 text-gray-500 flex-shrink-0" />
                 <span className="truncate">{attendee.anonymousIdentity?.displayName || 'Anonymous Student'}</span>
               </div>
             ))}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { GraduationCap, Briefcase, Globe, MapPin, BookOpen, MessageCircle, PartyPopper, Wrench, FileText, Calendar, Clock } from 'lucide-react';
 
 interface AdminMeetingTableProps {
   meetings: Array<{
@@ -62,7 +63,7 @@ function getHostTypeBadge(hostType: string) {
         ? 'bg-blue-50 text-blue-700 border-blue-200'
         : 'bg-purple-50 text-purple-700 border-purple-200'
     }`}>
-      {hostType === 'STUDENT' ? '🎓 Student' : '👨‍🏫 Mentor'}
+      {hostType === 'STUDENT' ? <><GraduationCap className="h-3 w-3 inline mr-1" /> Student</> : <><Briefcase className="h-3 w-3 inline mr-1" /> Mentor</>}
     </span>
   );
 }
@@ -74,23 +75,24 @@ function getMeetingTypeBadge(meetingType: string) {
         ? 'bg-green-50 text-green-700 border-green-200'
         : 'bg-amber-50 text-amber-700 border-amber-200'
     }`}>
-      {meetingType === 'ONLINE' ? '🌐 Online' : '📍 Offline'}
+      {meetingType === 'ONLINE' ? <><Globe className="h-3 w-3 inline mr-1" /> Online</> : <><MapPin className="h-3 w-3 inline mr-1" /> Offline</>}
     </span>
   );
 }
 
 function getCategoryBadge(category: string) {
-  const categoryLabels: Record<string, string> = {
-    STUDY_GROUP: '📚 Study Group',
-    PEER_DISCUSSION: '💬 Peer Discussion',
-    MENTOR_OFFICE_HOURS: '👨‍🏫 Office Hours',
-    SOCIAL: '🎉 Social',
-    WORKSHOP: '🛠️ Workshop',
-    GENERAL: '📋 General',
+  const categoryLabels: Record<string, { label: string; icon: React.ReactNode }> = {
+    STUDY_GROUP: { label: 'Study Group', icon: <BookOpen className="h-3 w-3 inline mr-1" /> },
+    PEER_DISCUSSION: { label: 'Peer Discussion', icon: <MessageCircle className="h-3 w-3 inline mr-1" /> },
+    MENTOR_OFFICE_HOURS: { label: 'Office Hours', icon: <Briefcase className="h-3 w-3 inline mr-1" /> },
+    SOCIAL: { label: 'Social', icon: <PartyPopper className="h-3 w-3 inline mr-1" /> },
+    WORKSHOP: { label: 'Workshop', icon: <Wrench className="h-3 w-3 inline mr-1" /> },
+    GENERAL: { label: 'General', icon: <FileText className="h-3 w-3 inline mr-1" /> },
   };
+  const c = categoryLabels[category] || { label: category, icon: null };
   return (
     <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold border border-gray-200 bg-gray-50 text-gray-700">
-      {categoryLabels[category] || category}
+      {c.icon}{c.label}
     </span>
   );
 }
@@ -267,15 +269,17 @@ export function AdminMeetingTable({
                 <td className="px-4 py-4">{getCategoryBadge(meeting.category)}</td>
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-2 text-xs font-medium text-gray-600">
-                    <span>📅 {formatDate(meeting.date)}</span>
-                    <span>🕐 {formatTime(meeting.time)}</span>
+                    <Calendar className="h-3.5 w-3.5 text-gray-500" />
+                    {' '}{formatDate(meeting.date)}
+                    <Clock className="h-3.5 w-3.5 text-gray-500" />
+                    {' '}{formatTime(meeting.time)}
                     <span>({meeting.durationMinutes} min)</span>
                   </div>
                   {meeting.meetingLink && (
                     <a href={meeting.meetingLink} target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-tertiary hover:underline block mt-1">Join Link</a>
                   )}
                   {meeting.location && !meeting.meetingLink && (
-                    <span className="text-[11px] font-medium text-gray-500 block mt-1">📍 {meeting.location}</span>
+                    <span className="text-[11px] font-medium text-gray-500 block mt-1"><MapPin className="h-3 w-3 inline mr-0.5" /> {meeting.location}</span>
                   )}
                 </td>
                 <td className="px-4 py-4 text-xs font-semibold text-gray-700">{meeting.attendeeCount}</td>

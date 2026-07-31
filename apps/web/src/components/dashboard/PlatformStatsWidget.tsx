@@ -1,3 +1,6 @@
+import { Users, GraduationCap, Briefcase, ShieldCheck, MessageSquare, MessageCircle, CalendarCheck, Target, BookOpen } from 'lucide-react';
+import type { ReactNode } from 'react';
+
 interface PlatformStatsWidgetProps {
   platformStats: {
     totalUsers: number;
@@ -25,59 +28,59 @@ function formatNumber(num: number): string {
 }
 
 export function PlatformStatsWidget({ platformStats, className = '' }: PlatformStatsWidgetProps) {
-  const stats = [
+  const stats: Array<{ label: string; value: string; icon: ReactNode; key: string }> = [
     {
       label: 'Total Users',
       value: formatNumber(platformStats.totalUsers),
-      icon: '👥',
+      icon: <Users className="h-6 w-6 text-gray-500" />,
       key: 'totalUsers',
     },
     {
       label: 'Students',
       value: formatNumber(platformStats.totalStudents),
-      icon: '🎓',
+      icon: <GraduationCap className="h-6 w-6 text-gray-500" />,
       key: 'totalStudents',
     },
     {
       label: 'Mentors',
       value: formatNumber(platformStats.totalMentors),
-      icon: '👨‍🏫',
+      icon: <Briefcase className="h-6 w-6 text-gray-500" />,
       key: 'totalMentors',
     },
     {
       label: 'Verified Mentors',
       value: formatNumber(platformStats.verifiedMentors),
-      icon: '✅',
+      icon: <ShieldCheck className="h-6 w-6 text-gray-500" />,
       key: 'verifiedMentors',
     },
     {
       label: 'Total Posts',
       value: formatNumber(platformStats.totalPosts),
-      icon: '💬',
+      icon: <MessageSquare className="h-6 w-6 text-gray-500" />,
       key: 'totalPosts',
     },
     {
       label: 'Active Chats',
       value: formatNumber(platformStats.activeChats),
-      icon: '💭',
+      icon: <MessageCircle className="h-6 w-6 text-gray-500" />,
       key: 'activeChats',
     },
     {
       label: 'Upcoming Meetings',
       value: formatNumber(platformStats.upcomingMeetings),
-      icon: '📅',
+      icon: <CalendarCheck className="h-6 w-6 text-gray-500" />,
       key: 'upcomingMeetings',
     },
     {
       label: 'Upcoming Workshops',
       value: formatNumber(platformStats.upcomingWorkshops),
-      icon: '🎯',
+      icon: <Target className="h-6 w-6 text-gray-500" />,
       key: 'upcomingWorkshops',
     },
     {
       label: 'Active Resources',
       value: formatNumber(platformStats.activeResources),
-      icon: '📚',
+      icon: <BookOpen className="h-6 w-6 text-gray-500" />,
       key: 'activeResources',
     },
   ];
@@ -95,7 +98,7 @@ export function PlatformStatsWidget({ platformStats, className = '' }: PlatformS
               <p className="text-label-12 font-medium text-gray-700 leading-none">{stat.label}</p>
               <p className="text-heading-20 font-bold text-gray-1000 mt-2 leading-none">{stat.value}</p>
             </div>
-            <span className="text-2xl text-gray-500" aria-hidden="true">{stat.icon}</span>
+            <span aria-hidden="true">{stat.icon}</span>
           </div>
         ))}
       </div>

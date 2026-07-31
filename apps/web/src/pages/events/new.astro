@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { WorkshopFormClient } from '../../components/workshops/WorkshopFormClient';
+import { MeetingFormClient } from '../../components/meetings/MeetingFormClient';
+
+const url = new URL(Astro.request.url);
+const type = url.searchParams.get('type') || 'workshop';
+---
+
+<BaseLayout title={type === 'meeting' ? "Host a Meeting | Peerly" : "Host a Workshop | Peerly"}>
+  {type === 'meeting' ? (
+    <MeetingFormClient client:load />
+  ) : (
+    <WorkshopFormClient client:load />
+  )}
+</BaseLayout>

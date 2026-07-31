@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from 'date-fns';
+import { Globe, MapPin, Users } from 'lucide-react';
 
 interface EventsOverviewWidgetProps {
   meetingsOverview: Array<{
@@ -73,7 +74,7 @@ export function EventsOverviewWidget({
             {(meetingsOverview || []).slice(0, 10).map(meeting => (
               <a
                 key={meeting.id}
-                href={`/meetings/${meeting.id}`}
+                href={`/events/${meeting.id}?type=meeting`}
                 className="flex items-start gap-3 rounded-sm border border-gray-200 bg-background-100 p-3 transition-all hover:bg-gray-50 hover:border-gray-300"
               >
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
@@ -101,12 +102,13 @@ export function EventsOverviewWidget({
                       {formatDate(meeting.date)}
                     </span>
                     <span className="flex items-center gap-1 font-semibold">
-                      {meeting.meetingType === 'ONLINE' ? '🌐 Online' : '📍 In-person'}
+                      {meeting.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-500" /> : <MapPin className="h-3 w-3 text-gray-500" />}
+                      {' '}{meeting.meetingType === 'ONLINE' ? 'Online' : 'In-person'}
                     </span>
                     <CategoryBadge category={meeting.category} />
                   </div>
                   <div className="text-label-12 mt-2 flex items-center gap-3 text-gray-500">
-                    <span>👤 {meeting.attendeeCount} attendees</span>
+                    <span className="flex items-center gap-1"><Users className="h-3 w-3 text-gray-500" /> {meeting.attendeeCount} attendees</span>
                     <span className="font-semibold text-gray-600">Host: {meeting.hostDisplayName || meeting.hostType}</span>
                   </div>
                 </div>
@@ -147,7 +149,7 @@ export function EventsOverviewWidget({
             {(workshopsOverview || []).slice(0, 10).map(workshop => (
               <a
                 key={workshop.id}
-                href={`/workshops/${workshop.id}`}
+                href={`/events/${workshop.id}?type=workshop`}
                 className="flex items-start gap-3 rounded-sm border border-gray-200 bg-background-100 p-3 transition-all hover:bg-gray-50 hover:border-gray-300"
               >
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
@@ -175,11 +177,12 @@ export function EventsOverviewWidget({
                       {formatDate(workshop.date)}
                     </span>
                     <span className="flex items-center gap-1 font-semibold">
-                      {workshop.meetingType === 'ONLINE' ? '🌐 Online' : '📍 In-person'}
+                      {workshop.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-500" /> : <MapPin className="h-3 w-3 text-gray-500" />}
+                      {' '}{workshop.meetingType === 'ONLINE' ? 'Online' : 'In-person'}
                     </span>
                     <CategoryBadge category={workshop.category} />
                     <span className="flex items-center gap-1 font-semibold">
-                      👤 {workshop.registrationCount} / {workshop.maxAttendees || '∞'}
+                      <Users className="h-3 w-3 text-gray-500" /> {workshop.registrationCount} / {workshop.maxAttendees || '\u221E'}
                     </span>
                   </div>
                   <div className="text-label-12 mt-2 flex items-center gap-3 text-gray-500">

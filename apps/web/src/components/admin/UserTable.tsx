@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { Users, GraduationCap, Briefcase, Shield, CheckCircle, Clock, Circle, User, Bird } from 'lucide-react';
 
 interface User {
   id: string;
@@ -70,25 +70,26 @@ export function UserTable({
 
   const getVerificationBadge = (isVerified: boolean) => (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold border ${isVerified ? 'bg-green-50 text-green-700 border-green-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
-      {isVerified ? '✓ Verified' : '⏳ Pending'}
+      {isVerified ? <><CheckCircle className="h-3 w-3 inline mr-0.5" /> Verified</> : <><Clock className="h-3 w-3 inline mr-0.5 animate-pulse" /> Pending</>}
     </span>
   );
 
   const getAvailabilityBadge = (status: string | null) => {
-    if (!status) return <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold bg-gray-50 text-gray-500 border border-gray-200">—</span>;
-    const statusMap: Record<string, { bg: string; text: string; border: string; label: string }> = {
-      AVAILABLE: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', label: '🟢 Available' },
-      BUSY: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', label: '🟡 Busy' },
-      OFFLINE: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', label: '⚫ Offline' },
+    if (!status) return <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold bg-gray-50 text-gray-500 border border-gray-200">&mdash;</span>;
+    const statusMap: Record<string, { bg: string; text: string; border: string; label: React.ReactNode }> = {
+      AVAILABLE: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', label: <><Circle className="h-3 w-3 inline mr-0.5 fill-green-500 text-green-500" /> Available</> },
+      BUSY: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', label: <><Circle className="h-3 w-3 inline mr-0.5 fill-amber-500 text-amber-500" /> Busy</> },
+      OFFLINE: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', label: <><Circle className="h-3 w-3 inline mr-0.5 fill-gray-400 text-gray-400" /> Offline</> },
     };
     const s = statusMap[status] || { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', label: status };
     return <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold border ${s.bg} ${s.text} ${s.border}`}>{s.label}</span>;
   };
 
   const getAvatarSeed = (seed: number | null) => {
-    if (!seed) return '👤';
-    const avatars = ['🐦', '🦅', '🦉', '🦜', '🐧', '🦢', '🦩', '🐤'];
-    return avatars[seed % avatars.length];
+    if (!seed) return <User className="h-5 w-5 text-gray-500" />;
+    const avatars = [User, Bird];
+    const IconComponent = avatars[seed % avatars.length];
+    return <IconComponent className="h-5 w-5 text-gray-600" />;
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -265,7 +266,7 @@ export function UserTable({
               <tr key={user.id} className="hover:bg-gray-50 border-b border-gray-200 transition-colors">
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-3">
-                    <span className="w-10 h-10 rounded-sm bg-gray-100 flex items-center justify-center text-2xl border border-gray-200" aria-hidden="true">
+                    <span className="w-10 h-10 rounded-sm bg-gray-100 flex items-center justify-center border border-gray-200" aria-hidden="true">
                       {getAvatarSeed(user.avatarSeed)}
                     </span>
                     <div>
@@ -276,12 +277,12 @@ export function UserTable({
                 </td>
                 <td className="px-4 py-4">
                   <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold border border-gray-200 bg-gray-50 text-gray-700">
-                    {user.role === 'MENTOR' ? '👨‍🏫 Mentor' : user.role === 'STUDENT' ? '🎓 Student' : '🛡️ Admin'}
+                    {user.role === 'MENTOR' ? <><Briefcase className="h-3 w-3 inline mr-1" /> Mentor</> : user.role === 'STUDENT' ? <><GraduationCap className="h-3 w-3 inline mr-1" /> Student</> : <><Shield className="h-3 w-3 inline mr-1" /> Admin</>}
                   </span>
                 </td>
                 {type === 'mentors' && (
                   <>
-                    <td className="px-4 py-4 text-xs font-medium text-gray-700">{user.department || '—'}</td>
+                    <td className="px-4 py-4 text-xs font-medium text-gray-700">{user.department || '\u2014'}</td>
                     <td className="px-4 py-4">{getVerificationBadge(user.isVerifiedMentor)}</td>
                     <td className="px-4 py-4">{getAvailabilityBadge(user.availabilityStatus)}</td>
                   </>

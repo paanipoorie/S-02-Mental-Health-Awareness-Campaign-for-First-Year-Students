@@ -9,7 +9,7 @@ export async function getStaticPaths() {
 const { threadId } = Astro.params;
 ---
 
-<BaseLayout title="Chat | Campus Sanctuary">
+<BaseLayout title="Chat | Peerly">
   <div class="chat-conversation">
     {threadId && <ChatWindow threadId={threadId} client:load />}
   </div>

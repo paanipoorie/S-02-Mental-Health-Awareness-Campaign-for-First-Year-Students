@@ -3,6 +3,7 @@ import { api } from '@lib/api';
 import { useStore } from '@nanostores/react';
 import { $user, fetchCurrentUser } from '@stores/authStore';
 import { toast } from 'sonner';
+import { BookOpen, MessageCircle, Briefcase, PartyPopper, Wrench, FileText, Globe, MapPin, Calendar, Clock, User, Link, Users } from 'lucide-react';
 
 interface Meeting {
   id: string;
@@ -98,14 +99,14 @@ export function MeetingListClient() {
     }
   };
 
-  const getCategoryEmoji = (cat: string) => {
+  const getCategoryIcon = (cat: string) => {
     switch (cat) {
-      case 'STUDY_GROUP': return '📚';
-      case 'PEER_DISCUSSION': return '💬';
-      case 'MENTOR_OFFICE_HOURS': return '👨‍🏫';
-      case 'SOCIAL': return '🎉';
-      case 'WORKSHOP': return '🛠️';
-      default: return '📋';
+      case 'STUDY_GROUP': return <BookOpen className="h-3 w-3 text-gray-600" />;
+      case 'PEER_DISCUSSION': return <MessageCircle className="h-3 w-3 text-gray-600" />;
+      case 'MENTOR_OFFICE_HOURS': return <Briefcase className="h-3 w-3 text-gray-600" />;
+      case 'SOCIAL': return <PartyPopper className="h-3 w-3 text-gray-600" />;
+      case 'WORKSHOP': return <Wrench className="h-3 w-3 text-gray-600" />;
+      default: return <FileText className="h-3 w-3 text-gray-600" />;
     }
   };
 
@@ -115,7 +116,7 @@ export function MeetingListClient() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-heading-32 font-bold text-gray-1000">Peer Meetings</h1>
-            <p class="text-copy-14 text-gray-500 mt-1">
+            <p className="text-copy-14 text-gray-500 mt-1">
               Join peer-led study groups, check-ins, office hours, and social events.
             </p>
           </div>
@@ -151,11 +152,11 @@ export function MeetingListClient() {
                 className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-700 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
             >
               <option value="">All Categories</option>
-              <option value="STUDY_GROUP">📚 Study Group</option>
-              <option value="PEER_DISCUSSION">💬 Peer Discussion</option>
-              <option value="MENTOR_OFFICE_HOURS">👨‍🏫 Office Hours</option>
-              <option value="SOCIAL">🎉 Social</option>
-              <option value="GENERAL">📋 General</option>
+              <option value="STUDY_GROUP"><BookOpen className="h-3.5 w-3.5 inline mr-1" /> Study Group</option>
+              <option value="PEER_DISCUSSION"><MessageCircle className="h-3.5 w-3.5 inline mr-1" /> Peer Discussion</option>
+              <option value="MENTOR_OFFICE_HOURS"><Briefcase className="h-3.5 w-3.5 inline mr-1" /> Office Hours</option>
+              <option value="SOCIAL"><PartyPopper className="h-3.5 w-3.5 inline mr-1" /> Social</option>
+              <option value="GENERAL"><FileText className="h-3.5 w-3.5 inline mr-1" /> General</option>
             </select>
           </div>
 
@@ -166,8 +167,8 @@ export function MeetingListClient() {
                 className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-700 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
             >
               <option value="">All Locations</option>
-              <option value="ONLINE">🌐 Online</option>
-              <option value="OFFLINE">📍 Campus</option>
+              <option value="ONLINE"><Globe className="h-3.5 w-3.5 inline mr-1" /> Online</option>
+              <option value="OFFLINE"><MapPin className="h-3.5 w-3.5 inline mr-1" /> Campus</option>
             </select>
           </div>
         </form>
@@ -207,10 +208,11 @@ export function MeetingListClient() {
                       {/* Meta details */}
                       <div className="flex items-center justify-between gap-2 mb-3">
                       <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
-                        {getCategoryEmoji(meeting.category)} {meeting.category.replace('_', ' ')}
+                        {getCategoryIcon(meeting.category)} {meeting.category.replace('_', ' ')}
                       </span>
                         <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700">
-                        {meeting.meetingType === 'ONLINE' ? '🌐' : '📍'} {meeting.meetingType}
+                        {meeting.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-600" /> : <MapPin className="h-3 w-3 text-gray-600" />}
+                        {' '}{meeting.meetingType}
                       </span>
                       </div>
 
@@ -227,20 +229,20 @@ export function MeetingListClient() {
                       {/* Logistics */}
                       <div className="space-y-2 mt-4 border-t border-gray-200 pt-4 text-label-12 text-gray-500 font-mono">
                         <div className="flex items-center gap-2">
-                          <span>📅</span>
+                          <Calendar className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                           <span className="font-medium text-gray-700">{formatDate(meeting.date)}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span>⏰</span>
+                          <Clock className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                           <span className="font-medium text-gray-700">{formatTime(meeting.time)} ({meeting.durationMinutes} min)</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span>👤</span>
+                          <User className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                           <span className="font-sans font-medium text-gray-700">Hosted by <strong className="font-semibold">{meeting.hostDisplayName || 'Anonymous'}</strong></span>
                         </div>
                         {meeting.meetingType === 'ONLINE' ? (
                             <div className="flex items-center gap-2 truncate">
-                              <span>🔗</span>
+                              <Link className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                               {meeting.meetingLink ? (
                                   <a href={meeting.meetingLink} target="_blank" rel="noreferrer" className="text-tertiary hover:underline truncate">
                                     {meeting.meetingLink}
@@ -251,7 +253,7 @@ export function MeetingListClient() {
                             </div>
                         ) : (
                             <div className="flex items-center gap-2 truncate">
-                              <span>📍</span>
+                              <MapPin className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                               <span className="font-sans font-medium text-gray-700 truncate">{meeting.location || 'Campus'}</span>
                             </div>
                         )}
@@ -261,7 +263,7 @@ export function MeetingListClient() {
                     {/* Actions */}
                     <div className="mt-6 flex items-center justify-between gap-3 border-t border-gray-200 pt-4">
                     <span className="text-xs text-gray-500">
-                      👥 <strong className="text-gray-700">{meeting.attendeeCount}</strong> going
+                      <Users className="h-3 w-3 inline mr-1" /><strong className="text-gray-700">{meeting.attendeeCount}</strong> going
                     </span>
                       <div className="flex gap-2">
                         <a
@@ -279,7 +281,7 @@ export function MeetingListClient() {
                                     : 'bg-primary hover:bg-gray-800 text-background-100 border-transparent'
                             }`}
                         >
-                          {meeting.isAttending ? '✓ Going' : 'RSVP'}
+                          {meeting.isAttending ? '\u2713 Going' : 'RSVP'}
                         </button>
                       </div>
                     </div>

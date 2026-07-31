@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from 'date-fns';
+import { Globe, MapPin } from 'lucide-react';
 
 interface UpcomingMeetingsWidgetProps {
   upcomingMeetings: Array<{
@@ -57,10 +58,10 @@ export function UpcomingMeetingsWidget({
           <p className="text-copy-14 mt-3 text-gray-600 font-medium">No upcoming meetings</p>
           <p className="text-label-12 mt-1 text-gray-500">You are not attending any meetings. Browse peer-support meetings to join.</p>
           <a
-            href="/meetings"
+            href="/events"
             className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
           >
-            Browse Meetings
+            Browse Events
           </a>
         </div>
       </div>
@@ -72,7 +73,7 @@ export function UpcomingMeetingsWidget({
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-heading-20 text-gray-1000 font-semibold">Upcoming Meetings</h3>
         <a
-          href="/meetings"
+          href="/events"
           className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
         >
           View all
@@ -83,7 +84,7 @@ export function UpcomingMeetingsWidget({
         {upcomingMeetings.slice(0, 4).map(meeting => (
           <a
             key={meeting.id}
-            href={`/meetings/${meeting.id}`}
+            href={`/events/${meeting.id}?type=meeting`}
             className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
           >
             <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
@@ -108,7 +109,12 @@ export function UpcomingMeetingsWidget({
                   {meeting.title}
                 </h4>
                 <span className="inline-flex flex-shrink-0 items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700">
-                  {meeting.meetingType === 'ONLINE' ? '🌐' : '📍'} {meeting.meetingType}
+                  {meeting.meetingType === 'ONLINE' ? (
+                    <Globe className="h-3 w-3" />
+                  ) : (
+                    <MapPin className="h-3 w-3" />
+                  )}
+                  {meeting.meetingType === 'ONLINE' ? 'Online' : 'In-person'}
                 </span>
               </div>
               <p className="text-label-12 mt-1 truncate text-gray-500">
@@ -130,7 +136,7 @@ export function UpcomingMeetingsWidget({
       {upcomingMeetings.length > 4 && (
         <div className="mt-4 text-center">
           <a
-            href="/meetings"
+            href="/events"
             className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
           >
             View all {upcomingMeetings.length} meetings

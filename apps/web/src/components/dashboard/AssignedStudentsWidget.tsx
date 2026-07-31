@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from 'date-fns';
+import { AlertCircle, MinusCircle, ArrowDownCircle } from 'lucide-react';
 
 interface AssignedStudentsWidgetProps {
   assignedStudents: Array<{
@@ -98,9 +99,9 @@ export function AssignedStudentsWidget({
                   <span className="text-label-12 text-gray-400 font-medium">Mood:</span>
                   <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700">
                     {student.latestEmotion.emotion}
-                    {student.latestEmotion.urgencyLevel === 'HIGH' && '🔴'}
-                    {student.latestEmotion.urgencyLevel === 'MEDIUM' && '🟡'}
-                    {student.latestEmotion.urgencyLevel === 'LOW' && '🟢'}
+                    {student.latestEmotion.urgencyLevel === 'HIGH' && <AlertCircle className="h-3 w-3 text-red-500" />}
+                    {student.latestEmotion.urgencyLevel === 'MEDIUM' && <MinusCircle className="h-3 w-3 text-amber-500" />}
+                    {student.latestEmotion.urgencyLevel === 'LOW' && <ArrowDownCircle className="h-3 w-3 text-green-500" />}
                   </span>
                 </div>
               )}

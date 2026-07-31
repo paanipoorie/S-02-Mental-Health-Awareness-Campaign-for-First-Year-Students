@@ -9,6 +9,6 @@ export async function getStaticPaths() {
 const { id } = Astro.params;
 ---
 
-<StudentLayout title="Post Details | Campus Sanctuary">
+<StudentLayout title="Post Details | Peerly">
   {id && <PostDetailClient postId={id} client:load />}
 </StudentLayout>

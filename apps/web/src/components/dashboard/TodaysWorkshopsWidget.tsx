@@ -69,7 +69,7 @@ export function TodaysWorkshopsWidget({
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-heading-20 text-gray-1000 font-semibold">Today's Workshops</h3>
         <a
-          href="/mentor/workshops"
+          href="/events"
           className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
         >
           View all
@@ -87,7 +87,7 @@ export function TodaysWorkshopsWidget({
           return (
             <a
               key={workshop.id}
-              href={`/workshops/${workshop.id}`}
+              href={`/events/${workshop.id}?type=workshop`}
               className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
             >
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
@@ -144,7 +144,7 @@ export function TodaysWorkshopsWidget({
       {todaysWorkshops.length > 5 && (
         <div className="mt-4 text-center">
           <a
-            href="/mentor/workshops"
+            href="/events"
             className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
           >
             View all {todaysWorkshops.length} workshops today

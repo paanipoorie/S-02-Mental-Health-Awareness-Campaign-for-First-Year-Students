@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { dashboardApi } from '@lib/api';
+import { Circle, Dot, Moon } from 'lucide-react';
 
 interface MentorAvailabilityToggleProps {
   initialAvailability: string;
@@ -8,9 +9,9 @@ interface MentorAvailabilityToggleProps {
 }
 
 const STATUS_OPTIONS = [
-  { value: 'AVAILABLE', label: 'Available', icon: '🟢', style: 'bg-green-50 border-green-300 text-green-800' },
-  { value: 'BUSY', label: 'Busy', icon: '🟡', style: 'bg-amber-50 border-amber-300 text-amber-800' },
-  { value: 'OFFLINE', label: 'Offline', icon: '⚫', style: 'bg-gray-100 border-gray-300 text-gray-800' },
+  { value: 'AVAILABLE', label: 'Available', icon: <Circle className="h-5 w-5 fill-green-500 text-green-500" />, style: 'bg-green-50 border-green-300 text-green-800' },
+  { value: 'BUSY', label: 'Busy', icon: <Dot className="h-5 w-5 text-amber-500" />, style: 'bg-amber-50 border-amber-300 text-amber-800' },
+  { value: 'OFFLINE', label: 'Offline', icon: <Moon className="h-5 w-5 text-gray-500" />, style: 'bg-gray-100 border-gray-300 text-gray-800' },
 ] as const;
 
 export function MentorAvailabilityToggle({
@@ -46,7 +47,7 @@ export function MentorAvailabilityToggle({
         <div
           className="flex h-10 w-10 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700"
         >
-          <span className="text-xl">{currentStatus.icon}</span>
+          {currentStatus.icon}
         </div>
         <div className="flex-1">
           <p className="text-label-12 text-gray-500 font-medium">Current Status</p>
@@ -71,7 +72,7 @@ export function MentorAvailabilityToggle({
                   : 'border border-gray-200 bg-background-100 text-gray-700 hover:bg-gray-50'
               } disabled:cursor-not-allowed disabled:opacity-80`}
             >
-              <span>{option.icon}</span>
+              <span className="flex-shrink-0">{option.icon}</span>
               <span>{option.label}</span>
             </button>
           );

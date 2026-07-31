@@ -1,5 +1,5 @@
 import { atom } from 'nanostores';
-import { getStoredUser, setStoredUser, clearAuthSession, type UserProfile } from '../lib/auth';
+import { getStoredUser, setStoredUser, clearAuthSession, setAccessToken, type UserProfile } from '../lib/auth';
 import { api } from '../lib/api';
 
 export const $user = atom<UserProfile | null>(getStoredUser());
@@ -8,7 +8,7 @@ export const $isLoading = atom<boolean>(false);
 
 export function setAuthUser(user: UserProfile, token?: string): void {
   if (token) {
-    import('../lib/auth').then(({ setAccessToken }) => setAccessToken(token));
+    setAccessToken(token);
   }
   setStoredUser(user);
   $user.set(user);

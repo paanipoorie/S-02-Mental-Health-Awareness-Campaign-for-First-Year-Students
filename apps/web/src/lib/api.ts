@@ -292,6 +292,13 @@ export interface StudentDashboardData {
     body: string;
     createdAt: string;
   }>;
+  assignedMentor: {
+    id: string;
+    displayName: string;
+    availabilityStatus: string;
+    isVerifiedMentor: boolean;
+    chatThreadId: string | null;
+  } | null;
 }
 
 export interface MentorDashboardData {

@@ -1,8 +1,3 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { MeetingFormClient } from '../../components/meetings/MeetingFormClient';
+return Astro.redirect('/events/new?type=meeting');
 ---
-
-<BaseLayout title="Host a Meeting | Campus Sanctuary">
-  <MeetingFormClient client:load />
-</BaseLayout>

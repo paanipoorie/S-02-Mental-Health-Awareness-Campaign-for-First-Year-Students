@@ -4,6 +4,7 @@ import { useStore } from '@nanostores/react';
 import { $user, fetchCurrentUser } from '@stores/authStore';
 import { toast } from 'sonner';
 import { formatDistanceToNow } from 'date-fns';
+import { Smile, Sparkles, HelpCircle, Home, Frown, AlertTriangle, AlertCircle, BatteryLow, Brain, Zap } from 'lucide-react';
 
 interface ChatThread {
   id: string;
@@ -23,10 +24,10 @@ interface ChatListProps {
   compact?: boolean;
 }
 
-const emotionIcons: Record<string, string> = {
-  HAPPY: '😊', EXCITED: '🤩', CONFUSED: '😕', HOMESICK: '🏠',
-  LONELY: '😔', SCARED: '😨', ANXIOUS: '😰', BURNT_OUT: '😩',
-  OVERWHELMED: '🤯', STRESSED: '😤',
+const emotionIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  HAPPY: Smile, EXCITED: Sparkles, CONFUSED: HelpCircle, HOMESICK: Home,
+  LONELY: Frown, SCARED: AlertTriangle, ANXIOUS: AlertCircle, BURNT_OUT: BatteryLow,
+  OVERWHELMED: Brain, STRESSED: Zap,
 };
 
 export function ChatList({ onSelect, compact }: ChatListProps) {
@@ -123,9 +124,9 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
               ? (chat.mentorDisplayName || 'Mentor')
               : chat.studentDisplayName;
             const otherInitial = displayName.charAt(0);
-            const emotionIcon = isMentor && chat.latestEmotion
-              ? emotionIcons[chat.latestEmotion.emotion] || ''
-              : '';
+            const EmotionIconComponent = isMentor && chat.latestEmotion
+              ? emotionIcons[chat.latestEmotion.emotion]
+              : undefined;
 
             const isUnread = chat.unreadCount > 0;
 
@@ -142,8 +143,8 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
                   <div className="w-10 h-10 rounded-sm bg-gray-100 border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-700">
                     {otherInitial}
                   </div>
-                  {emotionIcon && (
-                    <span className="absolute -bottom-1.5 -right-1.5 text-sm">{emotionIcon}</span>
+                  {EmotionIconComponent && (
+                    <EmotionIconComponent className="absolute -bottom-1.5 -right-1.5 h-3.5 w-3.5 text-gray-600" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">

@@ -1,3 +1,6 @@
+import { Flag, AlertTriangle, User, Mail, Ban, Phone, FileText, MessageSquare, MessageCircle, Calendar, Target } from 'lucide-react';
+import type { ReactNode } from 'react';
+
 interface ReportsWidgetProps {
   reports: Array<{
     id: string;
@@ -11,13 +14,13 @@ interface ReportsWidgetProps {
   className?: string;
 }
 
-const TYPE_CONFIG: Record<string, { icon: string; color: string; bg: string }> = {
-  CONTENT_FLAG: { icon: '🚩', color: '#ef4444', bg: '#fee2e2' },
-  CHAT_CONCERN: { icon: '⚠️', color: '#f59e0b', bg: '#fef3c7' },
-  USER_REPORT: { icon: '👤', color: '#8b5cf6', bg: '#f3e8ff' },
-  SPAM: { icon: '📧', color: '#ec4899', bg: '#fce7f3' },
-  HARASSMENT: { icon: '🛑', color: '#dc2626', bg: '#fee2e2' },
-  SELF_HARM: { icon: '🆘', color: '#ef4444', bg: '#fee2e2' },
+const TYPE_CONFIG: Record<string, { icon: ReactNode; color: string; bg: string }> = {
+  CONTENT_FLAG: { icon: <Flag className="h-5 w-5" style={{ color: '#ef4444' }} />, color: '#ef4444', bg: '#fee2e2' },
+  CHAT_CONCERN: { icon: <AlertTriangle className="h-5 w-5" style={{ color: '#f59e0b' }} />, color: '#f59e0b', bg: '#fef3c7' },
+  USER_REPORT: { icon: <User className="h-5 w-5" style={{ color: '#8b5cf6' }} />, color: '#8b5cf6', bg: '#f3e8ff' },
+  SPAM: { icon: <Mail className="h-5 w-5" style={{ color: '#ec4899' }} />, color: '#ec4899', bg: '#fce7f3' },
+  HARASSMENT: { icon: <Ban className="h-5 w-5" style={{ color: '#dc2626' }} />, color: '#dc2626', bg: '#fee2e2' },
+  SELF_HARM: { icon: <Phone className="h-5 w-5" style={{ color: '#ef4444' }} />, color: '#ef4444', bg: '#fee2e2' },
 };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
@@ -28,13 +31,13 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
   ESCALATED: { label: 'Escalated', color: '#ef4444', bg: '#fee2e2' },
 };
 
-const TARGET_TYPE_ICONS: Record<string, string> = {
-  POST: '📝',
-  REPLY: '💬',
-  CHAT: '💭',
-  USER: '👤',
-  MEETING: '📅',
-  WORKSHOP: '🎯',
+const TARGET_TYPE_ICONS: Record<string, ReactNode> = {
+  POST: <FileText className="h-3.5 w-3.5 text-gray-500" />,
+  REPLY: <MessageSquare className="h-3.5 w-3.5 text-gray-500" />,
+  CHAT: <MessageCircle className="h-3.5 w-3.5 text-gray-500" />,
+  USER: <User className="h-3.5 w-3.5 text-gray-500" />,
+  MEETING: <Calendar className="h-3.5 w-3.5 text-gray-500" />,
+  WORKSHOP: <Target className="h-3.5 w-3.5 text-gray-500" />,
 };
 
 export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
@@ -76,7 +79,7 @@ export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
       <div className="max-h-96 space-y-3 overflow-y-auto pr-1">
         {reports.map(report => {
           const typeConfig = TYPE_CONFIG[report.type] || {
-            icon: '📋',
+            icon: <FileText className="h-5 w-5" style={{ color: '#6b7280' }} />,
             color: '#6b7280',
             bg: '#f3f4f6',
           };
@@ -85,7 +88,7 @@ export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
             color: '#6b7280',
             bg: '#f3f4f6',
           };
-          const targetIcon = TARGET_TYPE_ICONS[report.targetType] || '📄';
+          const targetIcon = TARGET_TYPE_ICONS[report.targetType] || <FileText className="h-3.5 w-3.5 text-gray-500" />;
 
           return (
             <div
@@ -98,7 +101,7 @@ export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
                     className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm"
                     style={{ background: typeConfig.bg }}
                   >
-                    <span className="text-lg">{typeConfig.icon}</span>
+                    {typeConfig.icon}
                   </div>
 
                   <div className="min-w-0 flex-1">

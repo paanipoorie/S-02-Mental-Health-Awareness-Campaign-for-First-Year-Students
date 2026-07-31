@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getSocket } from '@lib/socket';
+import { MessageSquare, Mail, Briefcase, Bell } from 'lucide-react';
 
 interface Notification {
   id: string;
@@ -36,14 +37,23 @@ export function NotificationToast() {
 
   if (!toast || !toast.visible) return null;
 
+  const getIcon = () => {
+    switch (toast.type) {
+      case 'NEW_REPLY': return <MessageSquare className="h-5 w-5 text-slate-500" />;
+      case 'NEW_CHAT_MESSAGE': return <Mail className="h-5 w-5 text-slate-500" />;
+      case 'MENTOR_ASSIGNED': return <Briefcase className="h-5 w-5 text-slate-500" />;
+      default: return <Bell className="h-5 w-5 text-slate-500" />;
+    }
+  };
+
   return (
     <div
       className="fixed bottom-4 right-4 z-[100] max-w-sm bg-white rounded-xl shadow-2xl border border-slate-200 p-4 animate-slide-up transition-all duration-300"
       role="alert"
     >
       <div className="flex items-start gap-3">
-        <span className="text-lg flex-shrink-0" role="img" aria-hidden="true">
-          {toast.type === 'NEW_REPLY' ? '💬' : toast.type === 'NEW_CHAT_MESSAGE' ? '✉️' : toast.type === 'MENTOR_ASSIGNED' ? '👨‍🏫' : '🔔'}
+        <span className="flex-shrink-0" aria-hidden="true">
+          {getIcon()}
         </span>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-slate-900">{toast.title}</p>

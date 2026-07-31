@@ -1,6 +1,7 @@
 import { getEmotionConfig } from '@lib/emotionConstants';
 import { getUrgencyConfig } from '@lib/emotionConstants';
 import { EmotionBadge } from '@components/emotion/EmotionBadge';
+import { Smile, Sparkles, HelpCircle, Home, Frown, AlertTriangle, AlertCircle, BatteryLow, Brain, Zap, ChevronDown, Minus, ChevronUp } from 'lucide-react';
 
 interface EmotionSummaryCardProps {
   currentEmotion: {
@@ -10,6 +11,25 @@ interface EmotionSummaryCardProps {
   } | null;
   className?: string;
 }
+
+const emotionIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  HAPPY: Smile,
+  EXCITED: Sparkles,
+  CONFUSED: HelpCircle,
+  HOMESICK: Home,
+  LONELY: Frown,
+  SCARED: AlertTriangle,
+  ANXIOUS: AlertCircle,
+  BURNT_OUT: BatteryLow,
+  OVERWHELMED: Brain,
+  STRESSED: Zap,
+};
+
+const urgencyIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  LOW: ChevronDown,
+  MEDIUM: Minus,
+  HIGH: ChevronUp,
+};
 
 function formatTimeAgo(date: Date): string {
   const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
@@ -58,6 +78,9 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
     ? getUrgencyConfig(currentEmotion.urgencyLevel as any)
     : null;
 
+  const EmotionIcon = emotionIconMap[currentEmotion.emotion] || HelpCircle;
+  const UrgencyIcon = urgencyConfig ? urgencyIconMap[urgencyConfig.level] : null;
+
   return (
     <div className={`dashboard-card p-6 ${className}`}>
       <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Current Emotion</h3>
@@ -68,7 +91,7 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
             className="flex h-16 w-16 items-center justify-center rounded-sm border border-gray-200"
             style={{ backgroundColor: `${emotionConfig.bg}22` }}
           >
-            <span className="text-3xl">{emotionConfig.emoji}</span>
+            <EmotionIcon className="h-8 w-8 text-gray-700" />
           </div>
           <div>
             <p className="text-label-12 font-medium text-gray-500">Currently feeling</p>
@@ -88,11 +111,11 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
         </div>
       </div>
 
-      {urgencyConfig && (
+      {urgencyConfig && UrgencyIcon && (
         <div className="mt-4 rounded-sm border p-3 border-gray-200 bg-background-200">
           <div className="flex items-center gap-2">
             <span className="text-heading-16 text-gray-800">
-              {urgencyConfig.icon}
+              <UrgencyIcon className="h-5 w-5 text-gray-700" />
             </span>
             <p className="text-copy-14 text-gray-700">
               <strong className="text-gray-900">Urgency: {urgencyConfig.label}</strong>{' '}

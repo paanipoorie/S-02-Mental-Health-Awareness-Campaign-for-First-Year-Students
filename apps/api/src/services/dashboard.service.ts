@@ -94,6 +94,13 @@ export interface StudentDashboardData {
     body: string;
     createdAt: Date;
   }>;
+  assignedMentor: {
+    id: string;
+    displayName: string;
+    availabilityStatus: string;
+    isVerifiedMentor: boolean;
+    chatThreadId: string | null;
+  } | null;
 }
 
 export interface MentorDashboardData {
@@ -343,6 +350,32 @@ export const dashboardService = {
       replyCount: p._count.replies,
     }));
 
+    const activeChat = await prisma.chatThread.findFirst({
+      where: {
+        studentIdentityId: anonymousIdentityId,
+        mentorId: { not: null },
+        status: ChatStatus.ACTIVE,
+      },
+      include: {
+        mentor: {
+          include: {
+            mentorProfile: true,
+            anonymousIdentity: true,
+          },
+        },
+      },
+    });
+
+    const assignedMentor = activeChat?.mentor
+      ? {
+          id: activeChat.mentor.id,
+          displayName: activeChat.mentor.anonymousIdentity?.displayName || 'Assigned Mentor',
+          availabilityStatus: activeChat.mentor.mentorProfile?.availabilityStatus || 'OFFLINE',
+          isVerifiedMentor: activeChat.mentor.isVerifiedMentor,
+          chatThreadId: activeChat.id,
+        }
+      : null;
+
     return {
       currentEmotion: currentEmotion
         ? {
@@ -357,6 +390,7 @@ export const dashboardService = {
       activeChats: formattedChats,
       recentDiscussions: formattedDiscussions,
       announcements,
+      assignedMentor,
     };
   },
 

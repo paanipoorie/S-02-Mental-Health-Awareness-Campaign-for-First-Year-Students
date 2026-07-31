@@ -4,13 +4,11 @@ import BaseLayout from './BaseLayout.astro';
 interface Props {
   title?: string;
   description?: string;
-  anonymousDisplayName?: string;
 }
 
 const {
   title = 'Student Dashboard | Peerly',
   description = 'Confidential peer support dashboard for first-year students.',
-  anonymousDisplayName = 'Anonymous Student',
 } = Astro.props;
 ---
 
@@ -18,21 +16,8 @@ const {
   title={title}
   description={description}
   currentRole="STUDENT"
-  displayName={anonymousDisplayName}
 >
   <div class="space-y-6">
-    <div class="flex items-center justify-between border-b border-gray-200 pb-4">
-      <div>
-        <h1 class="text-heading-24 font-bold text-gray-1000">
-          Student Portal
-        </h1>
-        <p class="text-label-12 mt-1 text-gray-600">
-          Connected anonymously as <span class="rounded bg-gray-100 px-2 py-0.5 font-mono text-gray-800 border border-gray-200"
-            >{anonymousDisplayName}</span
-          >
-        </p>
-      </div>
-    </div>
     <slot />
   </div>
 </BaseLayout>

@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from 'date-fns';
+import { Megaphone } from 'lucide-react';
 
 interface AnnouncementsWidgetProps {
   announcements: Array<{
@@ -10,70 +10,59 @@ interface AnnouncementsWidgetProps {
   className?: string;
 }
 
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString([], {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
 export function AnnouncementsWidget({ announcements, className = '' }: AnnouncementsWidgetProps) {
   if (!announcements || announcements.length === 0) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
         <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Announcements</h3>
         <div className="py-8 text-center">
-          <svg
-            className="mx-auto h-12 w-12 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-            />
-          </svg>
+          <Megaphone className="mx-auto h-10 w-10 text-gray-400" strokeWidth={1.5} />
           <p className="text-copy-14 mt-3 text-gray-600 font-medium">No announcements</p>
-          <p className="text-label-12 mt-1 text-gray-500">Check back later for university or campaign updates.</p>
+          <p className="text-label-12 mt-1 text-gray-500">Check back later for university updates.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`dashboard-card p-6 ${className}`}>
-      <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Announcements</h3>
-
-      <div className="space-y-2">
-        {announcements.slice(0, 3).map(announcement => (
+    <div className={`dashboard-card ${className}`}>
+      <div className="border-b border-gray-200 px-6 py-4">
+        <h3 className="text-heading-20 text-gray-1000 font-semibold">Announcements</h3>
+      </div>
+      <div className="divide-y divide-gray-100">
+        {announcements.map(announcement => (
           <div
             key={announcement.id}
-            className="rounded-sm border border-gray-200 bg-background-100 p-4"
+            className="px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 flex-1">
-                <h4 className="text-copy-14 font-semibold text-gray-900">{announcement.title}</h4>
-                <p className="text-label-12 mt-1 text-gray-500 line-clamp-3">
+                <h4 className="text-copy-14 font-semibold text-gray-900">
+                  {announcement.title}
+                </h4>
+                <p className="text-label-12 mt-1 text-gray-500 line-clamp-2 leading-relaxed">
                   {announcement.body}
                 </p>
               </div>
               <time
-                className="text-label-12 flex-shrink-0 whitespace-nowrap text-gray-400 font-mono"
+                className="text-label-12 flex-shrink-0 whitespace-nowrap text-gray-400"
                 dateTime={announcement.createdAt}
               >
-                {formatDistanceToNow(new Date(announcement.createdAt), { addSuffix: true })}
+                {formatDate(announcement.createdAt)}
               </time>
             </div>
           </div>
         ))}
       </div>
-
-      {announcements.length > 3 && (
-        <div className="mt-4 text-center">
-          <a
-            href="/announcements"
-            className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
-          >
-            View all {announcements.length} announcements
-          </a>
-        </div>
-      )}
     </div>
   );
 }

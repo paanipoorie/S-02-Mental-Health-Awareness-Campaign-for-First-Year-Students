@@ -1,14 +1,8 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { MeetingDetailClient } from '../../components/meetings/MeetingDetailClient';
-
 export async function getStaticPaths() {
   return [];
 }
 
 const { id } = Astro.params;
+return Astro.redirect(`/events/${id}?type=meeting`);
 ---
-
-<BaseLayout title="Meeting Details | Campus Sanctuary">
-  {id && <MeetingDetailClient meetingId={id} client:load />}
-</BaseLayout>

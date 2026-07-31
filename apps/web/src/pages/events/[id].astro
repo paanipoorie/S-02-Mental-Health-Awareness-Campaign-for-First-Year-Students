@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { WorkshopDetailClient } from '../../components/workshops/WorkshopDetailClient';
+import { MeetingDetailClient } from '../../components/meetings/MeetingDetailClient';
+
+export async function getStaticPaths() {
+  return [];
+}
+
+const { id } = Astro.params;
+const url = new URL(Astro.request.url);
+const type = url.searchParams.get('type') || 'workshop';
+---
+
+<BaseLayout title={type === 'meeting' ? "Meeting Details | Peerly" : "Workshop Details | Peerly"}>
+  {id && (
+    type === 'meeting' ? (
+      <MeetingDetailClient meetingId={id} client:load />
+    ) : (
+      <WorkshopDetailClient workshopId={id} client:load />
+    )
+  )}
+</BaseLayout>

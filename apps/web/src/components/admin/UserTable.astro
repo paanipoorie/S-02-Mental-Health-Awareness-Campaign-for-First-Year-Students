@@ -58,24 +58,24 @@ interface Props {
 
   function getVerificationBadge(isVerified: boolean) {
     return isVerified
-      ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">✅ Verified</span>'
-      : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">⏳ Pending</span>';
+      ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800"><svg class="w-3 h-3 inline mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Verified</span>'
+      : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800"><svg class="w-3 h-3 inline mr-0.5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Pending</span>';
   }
 
   function getAvailabilityBadge(status: string | null) {
-    if (!status) return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">—</span>';
+    if (!status) return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">\u2014</span>';
     const statusMap: Record<string, { bg: string; text: string; label: string }> = {
-      AVAILABLE: { bg: 'bg-green-100', text: 'text-green-800', label: '🟢 Available' },
-      BUSY: { bg: 'bg-amber-100', text: 'text-amber-800', label: '🟡 Busy' },
-      OFFLINE: { bg: 'bg-slate-100', text: 'text-slate-600', label: '⚫ Offline' },
+      AVAILABLE: { bg: 'bg-green-100', text: 'text-green-800', label: '<svg class="w-3 h-3 inline mr-0.5 fill-green-500" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> Available' },
+      BUSY: { bg: 'bg-amber-100', text: 'text-amber-800', label: '<svg class="w-3 h-3 inline mr-0.5 fill-amber-500" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> Busy' },
+      OFFLINE: { bg: 'bg-slate-100', text: 'text-slate-600', label: '<svg class="w-3 h-3 inline mr-0.5 fill-slate-400" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> Offline' },
     };
     const s = statusMap[status] || { bg: 'bg-slate-100', text: 'text-slate-600', label: status };
     return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${s.bg} ${s.text}">${s.label}</span>`;
   }
 
   function getAvatarSeed(seed: number | null) {
-    if (!seed) return '👤';
-    const avatars = ['🐦', '🦅', '🦉', '🦜', '🐧', '🦢', '🦩', '🐤'];
+    if (!seed) return '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    const avatars = ['&#x1F426;', '&#x1F985;', '&#x1F989;', '&#x1F99C;', '&#x1F427;', '&#x1F9A2;', '&#x1F9A9;', '&#x1F424;'];
     return avatars[seed % avatars.length];
   }
 </script>
@@ -245,12 +245,12 @@ interface Props {
               </td>
               <td class="px-4 py-4">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
-                  {user.role === 'MENTOR' ? '👨‍🏫 Mentor' : user.role === 'STUDENT' ? '🎓 Student' : '🛡️ Admin'}
+                  {user.role === 'MENTOR' ? '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg> Mentor' : user.role === 'STUDENT' ? '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Student' : '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Admin'}
                 </span>
               </td>
               {type === 'mentors' && (
                 <>
-                  <td class="px-4 py-4 text-sm text-slate-600">{user.department || '—'}</td>
+                  <td class="px-4 py-4 text-sm text-slate-600">{user.department || '\u2014'}</td>
                   <td class="px-4 py-4">{getVerificationBadge(user.isVerifiedMentor)}</td>
                   <td class="px-4 py-4">{getAvailabilityBadge(user.availabilityStatus)}</td>
                 </>

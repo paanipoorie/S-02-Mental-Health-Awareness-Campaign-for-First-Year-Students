@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from 'date-fns';
+import { Globe, MapPin } from 'lucide-react';
 
 interface TodaysMeetingsWidgetProps {
   todaysMeetings: Array<{
@@ -70,7 +71,7 @@ export function TodaysMeetingsWidget({
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-heading-20 text-gray-1000 font-semibold">Today's Meetings</h3>
         <a
-          href="/meetings"
+          href="/events"
           className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
         >
           View all
@@ -81,7 +82,7 @@ export function TodaysMeetingsWidget({
         {sortedMeetings.slice(0, 5).map(meeting => (
           <a
             key={meeting.id}
-            href={`/meetings/${meeting.id}`}
+            href={`/events/${meeting.id}?type=meeting`}
             className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
           >
             <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
@@ -111,7 +112,8 @@ export function TodaysMeetingsWidget({
                   )}
                 </h4>
                 <span className="inline-flex flex-shrink-0 items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700">
-                  {meeting.meetingType === 'ONLINE' ? '🌐' : '📍'} {meeting.meetingType}
+                  {meeting.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-600" /> : <MapPin className="h-3 w-3 text-gray-600" />}
+                  {' '}{meeting.meetingType}
                 </span>
               </div>
 
@@ -121,7 +123,7 @@ export function TodaysMeetingsWidget({
 
               <div className="text-label-12 mt-2 flex flex-wrap items-center gap-3 text-gray-400 font-mono">
                 <span className="flex items-center gap-1">
-                  {formatTime(meeting.time)} · {meeting.durationMinutes} min
+                  {formatTime(meeting.time)} &middot; {meeting.durationMinutes} min
                 </span>
                 <span className="flex items-center gap-1 text-gray-500 font-sans font-medium">
                   {meeting.attendeeCount} attendees
@@ -138,7 +140,7 @@ export function TodaysMeetingsWidget({
       {todaysMeetings.length > 5 && (
         <div className="mt-4 text-center">
           <a
-            href="/meetings"
+            href="/events"
             className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
           >
             View all {todaysMeetings.length} meetings today

@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import rateLimit, { type RateLimitRequestHandler, ipKeyGenerator } from 'express-rate-limit';
-import { env, isTest } from '../config/env.js';
+import { env, isTest, isDevelopment } from '../config/env.js';
 
 export interface RateLimiterConfig {
   windowMs?: number | undefined;
@@ -59,7 +59,7 @@ function defaultKeyGenerator(req: Request): string {
 
 export const authRateLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  maxRequests: 5, // 5 attempts per window
+  maxRequests: isDevelopment ? 1000 : 5, // 5 attempts per window
   message: 'Too many authentication attempts, please try again later',
   code: 'AUTH_RATE_LIMIT_EXCEEDED',
   skipSuccessfulRequests: false,

@@ -3,6 +3,7 @@ import { api } from '@lib/api';
 import { useStore } from '@nanostores/react';
 import { $user, fetchCurrentUser } from '@stores/authStore';
 import { toast } from 'sonner';
+import { Globe, MapPin, Calendar, Clock, User, Link, Users } from 'lucide-react';
 
 interface Registration {
   id: string;
@@ -138,7 +139,7 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
       {/* Back button */}
       <div>
         <a href="/workshops" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
-          ← Back to Workshops
+          &larr; Back to Workshops
         </a>
       </div>
 
@@ -149,7 +150,8 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
             {workshop.category.replace('_', ' ')}
           </span>
           <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-700">
-            {workshop.meetingType === 'ONLINE' ? '🌐 Online' : '📍 Campus'}
+            {workshop.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-600" /> : <MapPin className="h-3 w-3 text-gray-600" />}
+            {' '}{workshop.meetingType === 'ONLINE' ? 'Online' : 'Campus'}
           </span>
         </div>
 
@@ -172,22 +174,26 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
         <div className="mt-8 bg-gray-50 border border-gray-200 rounded-sm p-5 grid gap-4 sm:grid-cols-2 text-sm text-gray-500 font-mono">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span>📅 Date:</span>
+              <Calendar className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <span>Date:</span>
               <strong className="text-gray-900">{formatDate(workshop.date)}</strong>
             </div>
             <div className="flex items-center gap-2">
-              <span>⏰ Time:</span>
+              <Clock className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <span>Time:</span>
               <strong className="text-gray-900">{formatTime(workshop.time)} ({workshop.durationMinutes} mins)</strong>
             </div>
           </div>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span>👤 Mentor:</span>
+              <User className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <span>Mentor:</span>
               <strong className="text-gray-900">{workshop.mentorDisplayName}</strong>
             </div>
             {workshop.meetingType === 'ONLINE' ? (
               <div className="flex items-center gap-2 truncate">
-                <span>🔗 Link:</span>
+                <Link className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                <span>Link:</span>
                 {workshop.meetingLink ? (
                   <a href={workshop.meetingLink} target="_blank" rel="noreferrer" className="text-tertiary hover:underline truncate">
                     {workshop.meetingLink}
@@ -198,7 +204,8 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <span>📍 Location:</span>
+                <MapPin className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                <span>Location:</span>
                 <strong className="text-gray-900">{workshop.location || 'Campus'}</strong>
               </div>
             )}
@@ -208,8 +215,8 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
         {/* Action Panel */}
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-6">
           <div className="flex items-center gap-1.5 text-gray-500 text-sm">
-            <span>👥</span>
-            <strong className="text-gray-900 text-lg font-bold">{activeRegistrations.length}</strong> / {workshop.maxAttendees || '∞'} registered
+            <Users className="h-5 w-5 text-gray-500" />
+            <strong className="text-gray-900 text-lg font-bold">{activeRegistrations.length}</strong> / {workshop.maxAttendees || '\u221E'} registered
           </div>
           <div className="flex gap-3">
             {(isHost || isAdmin) && (
@@ -227,7 +234,7 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
                 onClick={handleCancelRegistration}
                 className="px-6 py-2.5 text-sm font-semibold rounded-sm border bg-green-50 text-green-800 border-green-300 hover:bg-red-50 hover:text-red-850 hover:border-red-300 transition-colors"
               >
-                ✓ Registered
+                {'\u2713'} Registered
               </button>
             ) : isFull ? (
               <button
@@ -262,7 +269,7 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
             <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
               {activeRegistrations.map((reg) => (
                 <div key={reg.id} className="flex items-center gap-2 p-3 bg-gray-50 border border-gray-200 rounded-sm text-sm text-gray-700 font-semibold">
-                  <span>👤</span>
+                  <User className="h-4 w-4 text-gray-500 flex-shrink-0" />
                   <span className="truncate">{reg.anonymousIdentity?.displayName || 'Anonymous Student'}</span>
                 </div>
               ))}

@@ -47,7 +47,7 @@ export function UpcomingWorkshopsWidget({
   if (!upcomingWorkshops || upcomingWorkshops.length === 0) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
-        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Upcoming Workshops</h3>
+        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Upcoming Events</h3>
         <div className="py-8 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
@@ -67,10 +67,10 @@ export function UpcomingWorkshopsWidget({
             Register for workshops to participate and learn.
           </p>
           <a
-            href="/workshops"
+            href="/events"
             className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
           >
-            Browse Workshops
+            Browse Events
           </a>
         </div>
       </div>
@@ -80,9 +80,9 @@ export function UpcomingWorkshopsWidget({
   return (
     <div className={`dashboard-card p-6 ${className}`}>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-heading-20 text-gray-1000 font-semibold">Upcoming Workshops</h3>
+        <h3 className="text-heading-20 text-gray-1000 font-semibold">Upcoming Events</h3>
         <a
-          href="/workshops"
+          href="/events"
           className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
         >
           View all
@@ -95,7 +95,7 @@ export function UpcomingWorkshopsWidget({
           return (
             <a
               key={workshop.id}
-              href={`/workshops/${workshop.id}`}
+              href={`/events/${workshop.id}?type=workshop`}
               className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
             >
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
@@ -148,10 +148,10 @@ export function UpcomingWorkshopsWidget({
       {upcomingWorkshops.length > 4 && (
         <div className="mt-4 text-center">
           <a
-            href="/workshops"
+            href="/events"
             className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
           >
-            View all {upcomingWorkshops.length} workshops
+            View all {upcomingWorkshops.length} events
           </a>
         </div>
       )}

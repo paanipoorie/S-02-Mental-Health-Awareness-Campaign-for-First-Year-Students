@@ -1,3 +1,6 @@
+import { Smile, Star, HelpCircle, Home, Frown, AlertCircle, Activity, Flame, CloudRain, AlertTriangle, BarChart3, ArrowUpCircle, MinusCircle, ArrowDownCircle } from 'lucide-react';
+import type { ReactNode } from 'react';
+
 interface StudentEmotionOverviewWidgetProps {
   studentEmotionOverview: {
     windowHours: number;
@@ -16,17 +19,17 @@ interface StudentEmotionOverviewWidgetProps {
   className?: string;
 }
 
-const EMOTION_EMOJIS: Record<string, string> = {
-  HAPPY: '😊',
-  EXCITED: '🤩',
-  CONFUSED: '😕',
-  HOMESICK: '🏠',
-  LONELY: '😔',
-  SCARED: '😨',
-  ANXIOUS: '😰',
-  BURNT_OUT: '😩',
-  OVERWHELMED: '🤯',
-  STRESSED: '😤',
+const EMOTION_ICONS: Record<string, ReactNode> = {
+  HAPPY: <Smile className="h-4 w-4 text-gray-600" />,
+  EXCITED: <Star className="h-4 w-4 text-gray-600" />,
+  CONFUSED: <HelpCircle className="h-4 w-4 text-gray-600" />,
+  HOMESICK: <Home className="h-4 w-4 text-gray-600" />,
+  LONELY: <Frown className="h-4 w-4 text-gray-600" />,
+  SCARED: <AlertCircle className="h-4 w-4 text-gray-600" />,
+  ANXIOUS: <Activity className="h-4 w-4 text-gray-600" />,
+  BURNT_OUT: <Flame className="h-4 w-4 text-gray-600" />,
+  OVERWHELMED: <CloudRain className="h-4 w-4 text-gray-600" />,
+  STRESSED: <AlertTriangle className="h-4 w-4 text-gray-600" />,
 };
 
 const EMOTION_LABELS: Record<string, string> = {
@@ -48,10 +51,10 @@ const URGENCY_STYLES: Record<string, string> = {
   LOW: 'bg-green-50 text-green-800 border-green-300',
 };
 
-const URGENCY_ICONS: Record<string, string> = {
-  HIGH: '🔴',
-  MEDIUM: '🟡',
-  LOW: '🟢',
+const URGENCY_ICONS: Record<string, ReactNode> = {
+  HIGH: <AlertCircle className="h-3 w-3 text-red-600" />,
+  MEDIUM: <MinusCircle className="h-3 w-3 text-amber-600" />,
+  LOW: <ArrowDownCircle className="h-3 w-3 text-green-600" />,
 };
 
 function formatNumber(num: number): string {
@@ -81,28 +84,28 @@ export function StudentEmotionOverviewWidget({
         <StatCard
           label="Total Logs"
           value={formatNumber(totalLogs)}
-          icon="📊"
+          icon={<BarChart3 className="h-6 w-6 text-gray-500" />}
           borderColor="border-gray-200"
           valueColor="text-gray-1000"
         />
         <StatCard
           label="High Urgency"
           value={formatNumber(totalHighUrgency)}
-          icon="🔴"
+          icon={<ArrowUpCircle className="h-6 w-6 text-red-500" />}
           borderColor="border-red-300 bg-red-50/20"
           valueColor="text-red-700"
         />
         <StatCard
           label="Medium Urgency"
           value={formatNumber(totalMediumUrgency)}
-          icon="🟡"
+          icon={<MinusCircle className="h-6 w-6 text-amber-500" />}
           borderColor="border-amber-300 bg-amber-50/10"
           valueColor="text-amber-700"
         />
         <StatCard
           label="Low Urgency"
           value={formatNumber(totalLowUrgency)}
-          icon="🟢"
+          icon={<ArrowDownCircle className="h-6 w-6 text-green-500" />}
           borderColor="border-green-300 bg-green-50/10"
           valueColor="text-green-700"
         />
@@ -117,7 +120,7 @@ export function StudentEmotionOverviewWidget({
                 <EmotionBar
                   key={emotion}
                   label={EMOTION_LABELS[emotion] || emotion}
-                  emoji={EMOTION_EMOJIS[emotion] || '❓'}
+                  icon={EMOTION_ICONS[emotion] || <HelpCircle className="h-4 w-4 text-gray-400" />}
                   count={count}
                   total={totalLogs}
                 />
@@ -145,8 +148,9 @@ export function StudentEmotionOverviewWidget({
                       {student.studentDisplayName}
                     </p>
                     <div className="mt-0.5 flex items-center gap-2">
-                      <span className="text-label-12 text-gray-600">
-                        {EMOTION_EMOJIS[student.latestEmotion] || '❓'} {EMOTION_LABELS[student.latestEmotion] || student.latestEmotion}
+                      <span className="inline-flex items-center gap-1 text-label-12 text-gray-600">
+                        {EMOTION_ICONS[student.latestEmotion] || <HelpCircle className="h-3.5 w-3.5 text-gray-400" />}
+                        {EMOTION_LABELS[student.latestEmotion] || student.latestEmotion}
                       </span>
                       {student.latestUrgency && (
                         <span
@@ -179,7 +183,7 @@ function StatCard({
 }: {
   label: string;
   value: string;
-  icon: string;
+  icon: ReactNode;
   borderColor: string;
   valueColor: string;
 }) {
@@ -192,7 +196,7 @@ function StatCard({
           <p className="text-label-12 font-medium text-gray-600">{label}</p>
           <p className={`text-heading-32 font-bold mt-1 ${valueColor}`}>{value}</p>
         </div>
-        <span className="text-2xl" role="img" aria-label={label}>{icon}</span>
+        <span aria-label={label}>{icon}</span>
       </div>
     </div>
   );
@@ -200,12 +204,12 @@ function StatCard({
 
 function EmotionBar({
   label,
-  emoji,
+  icon,
   count,
   total,
 }: {
   label: string;
-  emoji: string;
+  icon: ReactNode;
   count: number;
   total: number;
 }) {
@@ -215,7 +219,7 @@ function EmotionBar({
     <div>
       <div className="mb-1 flex items-center justify-between">
         <span className="text-label-13 flex items-center gap-1.5 text-gray-700">
-          <span>{emoji}</span>
+          <span className="flex-shrink-0">{icon}</span>
           <span className="font-medium">{label}</span>
         </span>
         <span className="text-label-12 font-mono text-gray-400">{count}</span>

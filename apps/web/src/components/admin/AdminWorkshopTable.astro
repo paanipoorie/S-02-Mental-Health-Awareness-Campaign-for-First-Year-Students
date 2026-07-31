@@ -60,19 +60,19 @@ interface Props {
 
   function getMeetingTypeBadge(meetingType: string) {
     return meetingType === 'ONLINE'
-      ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">🌐 Online</span>'
-      : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">📍 Offline</span>';
+      ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"><svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> Online</span>'
+      : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800"><svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Offline</span>';
   }
 
   function getCategoryBadge(category: string) {
     const categoryLabels: Record<string, string> = {
-      MENTAL_HEALTH: '🧠 Mental Health',
-      STRESS_MANAGEMENT: '😌 Stress Management',
-      STUDY_SKILLS: '📚 Study Skills',
-      TIME_MANAGEMENT: '⏰ Time Management',
-      MINDFULNESS: '🧘 Mindfulness',
-      CAREER_GUIDANCE: '💼 Career Guidance',
-      GENERAL: '📋 General',
+      MENTAL_HEALTH: '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 2a10 10 0 0110 10c0 5-3 8-5 10l-5-5-5 5C5 20 2 17 2 12A10 10 0 0112 2z"/></svg> Mental Health',
+      STRESS_MANAGEMENT: '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> Stress Management',
+      STUDY_SKILLS: '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Study Skills',
+      TIME_MANAGEMENT: '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Time Management',
+      MINDFULNESS: '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 3l1.91 5.09L19 10l-5.09 1.91L12 17l-1.91-5.09L5 10l5.09-1.91z"/></svg> Mindfulness',
+      CAREER_GUIDANCE: '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg> Career Guidance',
+      GENERAL: '<svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> General',
     };
     const label = categoryLabels[category] || category;
     return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">${label}</span>`;
@@ -197,7 +197,7 @@ interface Props {
                 <p class="font-medium text-slate-900">{workshop.title}</p>
                 <p class="text-sm text-slate-500 truncate max-w-xs">{workshop.description}</p>
                 {workshop.resources && (
-                  <span class="inline-flex items-center gap-1 text-xs text-slate-500 mt-1">📎 {workshop.resources}</span>
+                  <span class="inline-flex items-center gap-1 text-xs text-slate-500 mt-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> {workshop.resources}</span>
                 )}
               </td>
               <td class="px-4 py-4">
@@ -207,19 +207,21 @@ interface Props {
               <td class="px-4 py-4">{getCategoryBadge(workshop.category)}</td>
               <td class="px-4 py-4">
                 <div class="flex items-center gap-2 text-sm text-slate-600">
-                  <span>📅 {formatDate(workshop.date)}</span>
-                  <span>🕐 {formatTime(workshop.time)}</span>
+                  <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  {' '}{formatDate(workshop.date)}
+                  <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {' '}{formatTime(workshop.time)}
                   <span>({workshop.durationMinutes} min)</span>
                 </div>
                 {workshop.meetingLink && (
                   <a href={workshop.meetingLink} target="_blank" rel="noopener noreferrer" class="text-xs text-amber-600 hover:underline">Join Link</a>
                 )}
                 {workshop.location && !workshop.meetingLink && (
-                  <span class="text-xs text-slate-500">📍 {workshop.location}</span>
+                  <span class="text-xs text-slate-500"><svg class="w-3 h-3 inline mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> {workshop.location}</span>
                 )}
               </td>
               <td class="px-4 py-4 text-sm text-slate-600">
-                {workshop.registrationCount} / {workshop.maxAttendees || '∞'}
+                {workshop.registrationCount} / {workshop.maxAttendees || '\u221E'}
               </td>
               <td class="px-4 py-4 text-right">
                 <button

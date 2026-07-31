@@ -22,35 +22,19 @@ const sizeClasses = {
 };
 ---
 
-<div
-  class="emotion-badge"
-  style="--emotion-color: {emotionConfig.color}; --emotion-bg: {emotionConfig.bg}; --emotion-border: {emotionConfig.border};"
+<span
+  class={`${sizeClasses[size]} inline-flex items-center gap-1.5 font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-sm`}
 >
-  <span
-    class="{sizeClasses[size]} inline-flex items-center gap-1.5 rounded-full border-2 font-medium"
-    style="background: var(--emotion-bg); border-color: var(--emotion-border); color: var(--emotion-color);"
-  >
-    <span>{emotionConfig.emoji}</span>
-    <span>{emotionConfig.label}</span>
-  </span>
-
+  <svg class="h-3.5 w-3.5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>{emotionConfig.label}</span>
   {
     showUrgency && urgencyConfig && (
-      <span
-        class="{sizeClasses[size]} ml-2 inline-flex items-center gap-1 rounded-full border-2 font-medium"
-        style="background: {urgencyConfig.bg}; border-color: {urgencyConfig.color}; color: {urgencyConfig.color};"
-      >
-        <span>{urgencyConfig.icon}</span>
-        <span>{urgencyConfig.label}</span>
-      </span>
+      <>
+        <span class="text-gray-300 mx-0.5">·</span>
+        <span class="text-gray-500">{urgencyConfig.label}</span>
+      </>
     )
   }
-</div>
-
-<style is:global>
-  .emotion-badge {
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-  }
-</style>
+</span>

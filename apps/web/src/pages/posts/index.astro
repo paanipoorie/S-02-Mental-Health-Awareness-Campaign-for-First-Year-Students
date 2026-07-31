@@ -20,31 +20,31 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <div class="filters mb-6 flex flex-wrap gap-3">
       <select id="emotion-filter" class="filter-select flex-1 min-w-[180px] rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-label-14 font-semibold text-gray-700 outline-none focus:border-gray-900 transition-colors cursor-pointer">
         <option value="">All Emotions</option>
-        <option value="HAPPY">😊 Happy</option>
-        <option value="EXCITED">🤩 Excited</option>
-        <option value="CONFUSED">😕 Confused</option>
-        <option value="HOMESICK">🏠 Homesick</option>
-        <option value="LONELY">😔 Lonely</option>
-        <option value="SCARED">😨 Scared</option>
-        <option value="ANXIOUS">😰 Anxious</option>
-        <option value="BURNT_OUT">😩 Burnt Out</option>
-        <option value="OVERWHELMED">🤯 Overwhelmed</option>
-        <option value="STRESSED">😤 Stressed</option>
+        <option value="HAPPY">Happy</option>
+        <option value="EXCITED">Excited</option>
+        <option value="CONFUSED">Confused</option>
+        <option value="HOMESICK">Homesick</option>
+        <option value="LONELY">Lonely</option>
+        <option value="SCARED">Scared</option>
+        <option value="ANXIOUS">Anxious</option>
+        <option value="BURNT_OUT">Burnt Out</option>
+        <option value="OVERWHELMED">Overwhelmed</option>
+        <option value="STRESSED">Stressed</option>
       </select>
 
       <select id="category-filter" class="filter-select flex-1 min-w-[180px] rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-label-14 font-semibold text-gray-700 outline-none focus:border-gray-900 transition-colors cursor-pointer">
         <option value="">All Categories</option>
-        <option value="ACADEMICS">📚 Academics</option>
-        <option value="HOSTEL">🏠 Hostel Life</option>
-        <option value="HOMESICKNESS">🏡 Homesickness</option>
-        <option value="FRIENDS">👯 Friends</option>
-        <option value="RELATIONSHIPS">💕 Relationships</option>
-        <option value="TIME_MANAGEMENT">⏰ Time Management</option>
-        <option value="EXAMS">📝 Exams</option>
-        <option value="SLEEP">😴 Sleep</option>
-        <option value="CLUBS">🎭 Clubs</option>
-        <option value="FINANCIAL">💰 Financial</option>
-        <option value="GENERAL">💬 General</option>
+        <option value="ACADEMICS">Academics</option>
+        <option value="HOSTEL">Hostel Life</option>
+        <option value="HOMESICKNESS">Homesickness</option>
+        <option value="FRIENDS">Friends</option>
+        <option value="RELATIONSHIPS">Relationships</option>
+        <option value="TIME_MANAGEMENT">Time Management</option>
+        <option value="EXAMS">Exams</option>
+        <option value="SLEEP">Sleep</option>
+        <option value="CLUBS">Clubs</option>
+        <option value="FINANCIAL">Financial</option>
+        <option value="GENERAL">General</option>
       </select>
     </div>
 
@@ -63,7 +63,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <span id="page-info" class="text-label-14 font-mono text-gray-500">Page 1</span>
       <button
         id="next-page"
-        class="rounded-sm border border-gray-200 bg-background-100 px-4 py-2 text-button-14 font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:hover:bg-background-100 disabled:cursor-not-allowed"
+        class="rounded-sm border border-gray-200 bg-background-100 px-4 py-2 text-button-14 font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
       >
         Next
       </button>
@@ -89,19 +89,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       const pageInfo = document.getElementById('page-info');
       const emotionFilter = document.getElementById('emotion-filter');
       const categoryFilter = document.getElementById('category-filter');
-
-      const EMOTION_EMOJIS = {
-        HAPPY: '😊',
-        EXCITED: '🤩',
-        CONFUSED: '😕',
-        HOMESICK: '🏠',
-        LONELY: '😔',
-        SCARED: '😨',
-        ANXIOUS: '😰',
-        BURNT_OUT: '😩',
-        OVERWHELMED: '🤯',
-        STRESSED: '😤',
-      };
 
       const URGENCY_STYLES = {
         HIGH: 'bg-red-50 text-red-800 border-red-300',
@@ -161,7 +148,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         }
 
         feedContainer.innerHTML = posts.map(post => {
-          const emoji = EMOTION_EMOJIS[post.emotion] || '';
           const categoryClean = post.category ? post.category.replace(/_/g, ' ') : '';
           const replyCount = post._count?.replies || 0;
 
@@ -169,7 +155,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           if (post.emotion) {
             badgeHtml += `
               <span class="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700">
-                ${emoji} ${post.emotion}
+                ${post.emotion}
               </span>
             `;
           }

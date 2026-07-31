@@ -16,13 +16,22 @@ const {
 } = Astro.props;
 
 const navItems = [
-  { href: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
-  { href: '/admin/mentors', label: 'Mentors', icon: '👨‍🏫' },
-  { href: '/admin/students', label: 'Students', icon: '🎓' },
-  { href: '/admin/meetings', label: 'Meetings', icon: '📅' },
-  { href: '/admin/workshops', label: 'Workshops', icon: '🛠️' },
-  { href: '/admin/resources', label: 'Resources', icon: '📚' },
+  { href: '/admin/dashboard', label: 'Dashboard', icon: 'chart-bar' },
+  { href: '/admin/mentors', label: 'Mentors', icon: 'briefcase' },
+  { href: '/admin/students', label: 'Students', icon: 'graduation-cap' },
+  { href: '/admin/meetings', label: 'Meetings', icon: 'calendar' },
+  { href: '/admin/workshops', label: 'Workshops', icon: 'wrench' },
+  { href: '/admin/resources', label: 'Resources', icon: 'book-open' },
 ];
+
+const NAV_ICONS: Record<string, string> = {
+  'chart-bar': '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+  briefcase: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>',
+  'graduation-cap': '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+  calendar: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  wrench: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>',
+  'book-open': '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>',
+};
 ---
 
 <BaseLayout title={title} description={description} currentRole="ADMIN" displayName={adminName}>
@@ -33,7 +42,9 @@ const navItems = [
         <!-- Sidebar Header -->
         <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200">
           <div class="flex items-center gap-2">
-            <span class="text-2xl">🛡️</span>
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
             <span class="text-heading-16 font-bold text-gray-1000">Admin Portal</span>
           </div>
         </div>
@@ -50,7 +61,7 @@ const navItems = [
               }`}
               aria-current={currentPage === item.href.split('/').pop() ? 'page' : undefined}
             >
-              <span class="text-lg">{item.icon}</span>
+              <span class="flex-shrink-0">{NAV_ICONS[item.icon]}</span>
               <span>{item.label}</span>
             </a>
           ))}
@@ -96,7 +107,9 @@ const navItems = [
         <div class="flex flex-col h-full">
           <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200">
             <div class="flex items-center gap-2">
-              <span class="text-2xl">🛡️</span>
+              <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
               <span class="text-heading-16 font-bold text-gray-1000">Admin Portal</span>
             </div>
             <button
@@ -122,7 +135,7 @@ const navItems = [
                 aria-current={currentPage === item.href.split('/').pop() ? 'page' : undefined}
                 onclick="document.getElementById('mobile-sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-backdrop').classList.add('hidden')"
               >
-                <span class="text-lg">{item.icon}</span>
+                <span class="flex-shrink-0">{NAV_ICONS[item.icon]}</span>
                 <span>{item.label}</span>
               </a>
             ))}

@@ -1,3 +1,5 @@
+import { Hospital, Phone, GraduationCap, Handshake, Theater, BookOpen, Heart, Moon, PhoneCall } from 'lucide-react';
+
 interface ResourcesQuickAccessWidgetProps {
   resourcesPreview: Array<{
     id: string;
@@ -9,16 +11,16 @@ interface ResourcesQuickAccessWidgetProps {
   className?: string;
 }
 
-const CATEGORY_ICONS: Record<string, string> = {
-  COUNSELING_CENTER: '🏥',
-  EMERGENCY_CONTACTS: '🚨',
-  FACULTY_ADVISORS: '👨‍🏫',
-  STUDENT_WELFARE: '🤝',
-  CAMPUS_CLUBS: '🎭',
-  SELF_HELP_PDFS: '📚',
-  STRESS_MANAGEMENT: '🧘',
-  SLEEP_HYGIENE: '🌙',
-  EXTERNAL_HELPLINES: '☎️',
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  COUNSELING_CENTER: Hospital,
+  EMERGENCY_CONTACTS: Phone,
+  FACULTY_ADVISORS: GraduationCap,
+  STUDENT_WELFARE: Handshake,
+  CAMPUS_CLUBS: Theater,
+  SELF_HELP_PDFS: BookOpen,
+  STRESS_MANAGEMENT: Heart,
+  SLEEP_HYGIENE: Moon,
+  EXTERNAL_HELPLINES: PhoneCall,
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -57,7 +59,7 @@ export function ResourcesQuickAccessWidget({
           </svg>
           <p className="text-copy-14 mt-3 text-gray-600 font-medium">No resources available</p>
           <a
-            href="/resources"
+            href="/dashboard"
             className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
           >
             Browse Resources
@@ -72,7 +74,7 @@ export function ResourcesQuickAccessWidget({
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-heading-20 text-gray-1000 font-semibold">Quick Access Resources</h3>
         <a
-          href="/resources"
+          href="/dashboard"
           className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
         >
           View all
@@ -80,48 +82,41 @@ export function ResourcesQuickAccessWidget({
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {resourcesPreview.slice(0, 6).map(resource => (
-          <a
-            key={resource.id}
-            href={resource.link || `/resources/${resource.id}`}
-            className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
-          >
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
-              <span className="text-xl">{CATEGORY_ICONS[resource.category] || '📄'}</span>
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <h4 className="text-copy-14 line-clamp-1 font-semibold text-gray-900">
-                {resource.title}
-              </h4>
-              <p className="text-label-12 mt-1 truncate text-gray-500">{resource.description}</p>
-              <span className="mt-2 inline-flex flex-shrink-0 items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-600">
-                {CATEGORY_LABELS[resource.category] || resource.category}
-              </span>
-            </div>
-
-            <svg
-              className="h-5 w-5 flex-shrink-0 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        {resourcesPreview.slice(0, 6).map(resource => {
+          const IconComponent = CATEGORY_ICONS[resource.category] || BookOpen;
+          return (
+            <a
+              key={resource.id}
+              href={resource.link || `/resources/${resource.id}`}
+              className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
-        ))}
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
+                <IconComponent className="h-5 w-5 text-gray-700" />
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <h4 className="text-copy-14 line-clamp-1 font-semibold text-gray-900">
+                  {resource.title}
+                </h4>
+                <p className="text-label-12 mt-1 truncate text-gray-500">{resource.description}</p>
+                <span className="mt-2 inline-flex flex-shrink-0 items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-600">
+                  {CATEGORY_LABELS[resource.category] || resource.category}
+                </span>
+              </div>
+
+              <svg
+                className="h-5 w-5 flex-shrink-0 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          );
+        })}
       </div>
 
-      {resourcesPreview.length > 6 && (
-        <div className="mt-4 text-center">
-          <a
-            href="/resources"
-            className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
-          >
-            View all {resourcesPreview.length} resources
-          </a>
-        </div>
-      )}
     </div>
   );
 }

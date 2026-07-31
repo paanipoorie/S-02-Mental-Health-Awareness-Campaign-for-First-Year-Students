@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { EventListClient } from '../../components/events/EventListClient';
+---
+
+<BaseLayout title="Campus Events | Peerly">
+  <EventListClient client:load />
+</BaseLayout>

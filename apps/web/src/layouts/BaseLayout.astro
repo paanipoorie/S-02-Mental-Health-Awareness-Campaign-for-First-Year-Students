@@ -6,16 +6,12 @@ interface Props {
   title?: string;
   description?: string;
   currentRole?: 'STUDENT' | 'MENTOR' | 'ADMIN' | null;
-  displayName?: string;
-  isVerified?: boolean;
 }
 
 const {
   title = 'Peerly',
   description = 'A safe, confidential anonymous peer support platform for first-year students.',
   currentRole = null,
-  displayName = '',
-  isVerified = false,
 } = Astro.props;
 ---
 
@@ -37,7 +33,7 @@ const {
   <body
     class="flex min-h-screen flex-col bg-background-100 font-sans text-primary antialiased selection:bg-blue-100 selection:text-blue-900"
   >
-    <Navbar currentRole={currentRole} displayName={displayName} isVerified={isVerified} />
+    <Navbar currentRole={currentRole} />
 
     <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
       <slot />
@@ -51,7 +47,6 @@ const {
       >
         <span>© 2026 Peerly. Strictly Confidential & Safe Space.</span>
         <div class="flex items-center gap-4 text-gray-500">
-          <a href="/resources" class="transition-colors hover:text-gray-900">Helplines</a>
           <a href="/privacy" class="transition-colors hover:text-gray-900">Privacy Guarantee</a>
         </div>
       </div>

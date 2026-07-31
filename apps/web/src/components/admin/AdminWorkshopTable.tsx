@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { Globe, MapPin, Brain, Smile, BookOpen, Clock, Sparkles, Briefcase, FileText, Calendar, Link as LinkIcon, Paperclip } from 'lucide-react';
 
 interface Workshop {
   id: string;
@@ -77,22 +78,22 @@ export function AdminWorkshopTable({
         ? 'bg-green-50 text-green-700 border-green-200'
         : 'bg-amber-50 text-amber-700 border-amber-200'
     }`}>
-      {meetingType === 'ONLINE' ? '🌐 Online' : '📍 Offline'}
+      {meetingType === 'ONLINE' ? <><Globe className="h-3 w-3 inline mr-1" /> Online</> : <><MapPin className="h-3 w-3 inline mr-1" /> Offline</>}
     </span>
   );
 
   const getCategoryBadge = (category: string) => {
-    const categoryLabels: Record<string, string> = {
-      MENTAL_HEALTH: '🧠 Mental Health',
-      STRESS_MANAGEMENT: '😌 Stress Management',
-      STUDY_SKILLS: '📚 Study Skills',
-      TIME_MANAGEMENT: '⏰ Time Management',
-      MINDFULNESS: '🧘 Mindfulness',
-      CAREER_GUIDANCE: '💼 Career Guidance',
-      GENERAL: '📋 General',
+    const categoryLabels: Record<string, { label: string; icon: React.ReactNode }> = {
+      MENTAL_HEALTH: { label: 'Mental Health', icon: <Brain className="h-3 w-3 inline mr-1" /> },
+      STRESS_MANAGEMENT: { label: 'Stress Management', icon: <Smile className="h-3 w-3 inline mr-1" /> },
+      STUDY_SKILLS: { label: 'Study Skills', icon: <BookOpen className="h-3 w-3 inline mr-1" /> },
+      TIME_MANAGEMENT: { label: 'Time Management', icon: <Clock className="h-3 w-3 inline mr-1" /> },
+      MINDFULNESS: { label: 'Mindfulness', icon: <Sparkles className="h-3 w-3 inline mr-1" /> },
+      CAREER_GUIDANCE: { label: 'Career Guidance', icon: <Briefcase className="h-3 w-3 inline mr-1" /> },
+      GENERAL: { label: 'General', icon: <FileText className="h-3 w-3 inline mr-1" /> },
     };
-    const label = categoryLabels[category] || category;
-    return <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold border border-gray-200 bg-gray-50 text-gray-700">{label}</span>;
+    const c = categoryLabels[category] || { label: category, icon: null };
+    return <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold border border-gray-200 bg-gray-50 text-gray-700">{c.icon}{c.label}</span>;
   };
 
   const handleFilterChange = (key: string, value: string) => {
@@ -229,7 +230,7 @@ export function AdminWorkshopTable({
                   <p className="font-semibold text-gray-900">{workshop.title}</p>
                   <p className="text-xs font-medium text-gray-500 truncate max-w-xs">{workshop.description}</p>
                   {workshop.resources && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-gray-500 mt-1">📎 {workshop.resources}</span>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-gray-500 mt-1"><Paperclip className="h-3 w-3" /> {workshop.resources}</span>
                   )}
                 </td>
                 <td className="px-4 py-4">
@@ -239,19 +240,21 @@ export function AdminWorkshopTable({
                 <td className="px-4 py-4">{getCategoryBadge(workshop.category)}</td>
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-2 text-xs font-medium text-gray-600">
-                    <span>📅 {formatDate(workshop.date)}</span>
-                    <span>🕐 {formatTime(workshop.time)}</span>
+                    <Calendar className="h-3.5 w-3.5 text-gray-500" />
+                    {' '}{formatDate(workshop.date)}
+                    <Clock className="h-3.5 w-3.5 text-gray-500" />
+                    {' '}{formatTime(workshop.time)}
                     <span>({workshop.durationMinutes} min)</span>
                   </div>
                   {workshop.meetingLink && (
                     <a href={workshop.meetingLink} target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-tertiary hover:underline block mt-1">Join Link</a>
                   )}
                   {workshop.location && !workshop.meetingLink && (
-                    <span className="text-[11px] font-medium text-gray-500 block mt-1">📍 {workshop.location}</span>
+                    <span className="text-[11px] font-medium text-gray-500 block mt-1"><MapPin className="h-3 w-3 inline mr-0.5" /> {workshop.location}</span>
                   )}
                 </td>
                 <td className="px-4 py-4 text-xs font-semibold text-gray-700">
-                  {workshop.registrationCount} / {workshop.maxAttendees || '∞'}
+                  {workshop.registrationCount} / {workshop.maxAttendees || '\u221E'}
                 </td>
                 <td className="px-4 py-4 text-right">
                   <button

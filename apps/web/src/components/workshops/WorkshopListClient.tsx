@@ -3,6 +3,7 @@ import { api } from '@lib/api';
 import { useStore } from '@nanostores/react';
 import { $user, fetchCurrentUser } from '@stores/authStore';
 import { toast } from 'sonner';
+import { Brain, Smile, BookOpen, Clock, Sparkles, Briefcase, FileText, Globe, MapPin, Calendar, User, Link, Users } from 'lucide-react';
 
 interface Workshop {
   id: string;
@@ -99,16 +100,16 @@ export function WorkshopListClient() {
     }
   };
 
-  const getCategoryEmoji = (cat: string) => {
+  const getCategoryIcon = (cat: string) => {
     switch (cat) {
-      case 'MENTAL_HEALTH': return '🧠';
-      case 'STRESS_MANAGEMENT': return '😌';
-      case 'STUDY_SKILLS': return '📚';
-      case 'TIME_MANAGEMENT': return '⏰';
-      case 'MINDFULNESS': return '🧘';
-      case 'CAREER_GUIDANCE': return '💼';
-      case 'GENERAL': return '📋';
-      default: return '📋';
+      case 'MENTAL_HEALTH': return <Brain className="h-3 w-3 text-gray-600" />;
+      case 'STRESS_MANAGEMENT': return <Smile className="h-3 w-3 text-gray-600" />;
+      case 'STUDY_SKILLS': return <BookOpen className="h-3 w-3 text-gray-600" />;
+      case 'TIME_MANAGEMENT': return <Clock className="h-3 w-3 text-gray-600" />;
+      case 'MINDFULNESS': return <Sparkles className="h-3 w-3 text-gray-600" />;
+      case 'CAREER_GUIDANCE': return <Briefcase className="h-3 w-3 text-gray-600" />;
+      case 'GENERAL': return <FileText className="h-3 w-3 text-gray-600" />;
+      default: return <FileText className="h-3 w-3 text-gray-600" />;
     }
   };
 
@@ -158,13 +159,13 @@ export function WorkshopListClient() {
             className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-700 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
           >
             <option value="">All Categories</option>
-            <option value="MENTAL_HEALTH">🧠 Mental Health</option>
-            <option value="STRESS_MANAGEMENT">😌 Stress Management</option>
-            <option value="STUDY_SKILLS">📚 Study Skills</option>
-            <option value="TIME_MANAGEMENT">⏰ Time Management</option>
-            <option value="MINDFULNESS">🧘 Mindfulness</option>
-            <option value="CAREER_GUIDANCE">💼 Career Guidance</option>
-            <option value="GENERAL">📋 General</option>
+            <option value="MENTAL_HEALTH"><Brain className="h-3.5 w-3.5 inline mr-1" /> Mental Health</option>
+            <option value="STRESS_MANAGEMENT"><Smile className="h-3.5 w-3.5 inline mr-1" /> Stress Management</option>
+            <option value="STUDY_SKILLS"><BookOpen className="h-3.5 w-3.5 inline mr-1" /> Study Skills</option>
+            <option value="TIME_MANAGEMENT"><Clock className="h-3.5 w-3.5 inline mr-1" /> Time Management</option>
+            <option value="MINDFULNESS"><Sparkles className="h-3.5 w-3.5 inline mr-1" /> Mindfulness</option>
+            <option value="CAREER_GUIDANCE"><Briefcase className="h-3.5 w-3.5 inline mr-1" /> Career Guidance</option>
+            <option value="GENERAL"><FileText className="h-3.5 w-3.5 inline mr-1" /> General</option>
           </select>
         </div>
 
@@ -175,8 +176,8 @@ export function WorkshopListClient() {
             className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-700 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
           >
             <option value="">All Locations</option>
-            <option value="ONLINE">🌐 Online</option>
-            <option value="OFFLINE">📍 Campus</option>
+            <option value="ONLINE"><Globe className="h-3.5 w-3.5 inline mr-1" /> Online</option>
+            <option value="OFFLINE"><MapPin className="h-3.5 w-3.5 inline mr-1" /> Campus</option>
           </select>
         </div>
       </form>
@@ -220,10 +221,11 @@ export function WorkshopListClient() {
                   {/* Meta details */}
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
-                      {getCategoryEmoji(workshop.category)} {workshop.category.replace('_', ' ')}
+                      {getCategoryIcon(workshop.category)} {workshop.category.replace('_', ' ')}
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700">
-                      {workshop.meetingType === 'ONLINE' ? '🌐' : '📍'} {workshop.meetingType}
+                      {workshop.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-600" /> : <MapPin className="h-3 w-3 text-gray-600" />}
+                      {' '}{workshop.meetingType}
                     </span>
                   </div>
 
@@ -240,20 +242,20 @@ export function WorkshopListClient() {
                   {/* Logistics */}
                   <div className="space-y-2 mt-4 border-t border-gray-200 pt-4 text-label-12 text-gray-500 font-mono">
                     <div className="flex items-center gap-2">
-                      <span>📅</span>
+                      <Calendar className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                       <span className="font-medium text-gray-700">{formatDate(workshop.date)}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span>⏰</span>
+                      <Clock className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                       <span className="font-medium text-gray-700">{formatTime(workshop.time)} ({workshop.durationMinutes} min)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span>👤</span>
+                      <User className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                       <span className="font-sans font-medium text-gray-700">Mentor: <strong className="font-semibold">{workshop.mentorDisplayName}</strong></span>
                     </div>
                     {workshop.meetingType === 'ONLINE' ? (
                       <div className="flex items-center gap-2 truncate">
-                        <span>🔗</span>
+                        <Link className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                         {workshop.meetingLink ? (
                           <a href={workshop.meetingLink} target="_blank" rel="noreferrer" className="text-tertiary hover:underline truncate">
                             {workshop.meetingLink}
@@ -264,7 +266,7 @@ export function WorkshopListClient() {
                       </div>
                     ) : (
                       <div className="flex items-center gap-2 truncate">
-                        <span>📍</span>
+                        <MapPin className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
                         <span className="font-sans font-medium text-gray-700 truncate">{workshop.location || 'Campus'}</span>
                       </div>
                     )}
@@ -274,7 +276,7 @@ export function WorkshopListClient() {
                 {/* Actions */}
                 <div className="mt-6 flex items-center justify-between gap-3 border-t border-gray-200 pt-4">
                   <span className="text-xs text-gray-500">
-                    👥 <strong className="text-gray-700">{workshop.registrationCount}</strong> / {workshop.maxAttendees || '∞'} registered
+                    <Users className="h-3 w-3 inline mr-1" /><strong className="text-gray-700">{workshop.registrationCount}</strong> / {workshop.maxAttendees || '\u221E'} registered
                   </span>
                   <div className="flex gap-2">
                     <a
@@ -289,7 +291,7 @@ export function WorkshopListClient() {
                         onClick={() => handleCancelRegistration(workshop.id)}
                         className="px-4 py-1.5 text-xs font-semibold rounded-sm border bg-green-50 text-green-800 border-green-300 hover:bg-red-50 hover:text-red-800 hover:border-red-300 transition-colors"
                       >
-                        ✓ Registered
+                        {'\u2713'} Registered
                       </button>
                     ) : isFull ? (
                       <button
@@ -320,7 +322,7 @@ export function WorkshopListClient() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-6 border-t border-gray-200">
           <button
-            type="button;;"
+            type="button"
             onClick={() => setPage(prev => Math.max(1, prev - 1))}
             disabled={page === 1}
             className="px-4 py-2 text-button-14 font-semibold text-gray-700 bg-background-100 border border-gray-200 rounded-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"

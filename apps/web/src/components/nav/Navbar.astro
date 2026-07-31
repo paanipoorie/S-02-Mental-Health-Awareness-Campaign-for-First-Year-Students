@@ -1,23 +1,19 @@
 ---
-import RoleBadge from './RoleBadge.astro';
 import { NotificationBell } from '@components/notifications/NotificationBell';
 import { NotificationToast } from '@components/notifications/NotificationToast';
 
 interface Props {
   currentRole?: 'STUDENT' | 'MENTOR' | 'ADMIN' | null;
-  displayName?: string;
-  isVerified?: boolean;
 }
 
-const { currentRole = null, displayName = '', isVerified = false } = Astro.props;
+const { currentRole = null } = Astro.props;
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-gray-200 bg-background-100 py-3 transition-colors"
+  class="sticky top-0 z-50 border-b border-gray-200 bg-background-100 py-3"
 >
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-10 items-center justify-between">
-      <!-- Logo & Brand -->
       <div class="flex items-center gap-2">
         <a href="/" class="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 rounded-sm">
           <svg
@@ -30,15 +26,12 @@ const { currentRole = null, displayName = '', isVerified = false } = Astro.props
           >
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0110.089 18M15 12a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5zm-6 9c.172 0 .343-.003.514-.01M9 21a9.041 9.041 0 01-6.208-3.07 3.562 3.562 0 013.47-4.43H9m12 0H9m12 0v-1.5m0 1.5v1.5M9 12a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" />
           </svg>
-          <div class="flex flex-col">
-            <span class="text-label-14 font-bold tracking-tight text-gray-1000">
-              Peerly
-            </span>
-          </div>
+          <span class="text-label-14 font-bold tracking-tight text-gray-1000">
+            Peerly
+          </span>
         </a>
       </div>
 
-      <!-- Navigation Links based on role -->
       <nav class="hidden items-center gap-1 md:flex" aria-label="Main Navigation">
         {
           currentRole === 'STUDENT' && (
@@ -62,16 +55,10 @@ const { currentRole = null, displayName = '', isVerified = false } = Astro.props
                 Peer Chat
               </a>
               <a
-                href="/workshops"
+                href="/events"
                 class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
               >
-                Workshops
-              </a>
-              <a
-                href="/resources"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Resources
+                Events
               </a>
             </>
           )
@@ -87,22 +74,10 @@ const { currentRole = null, displayName = '', isVerified = false } = Astro.props
                 Dashboard
               </a>
               <a
-                href="/mentor/chats"
+                href="/events"
                 class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
               >
-                Active Chats
-              </a>
-              <a
-                href="/mentor/workshops"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Hosted Workshops
-              </a>
-              <a
-                href="/resources"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Resources
+                Events
               </a>
             </>
           )
@@ -123,59 +98,19 @@ const { currentRole = null, displayName = '', isVerified = false } = Astro.props
               >
                 Verify Mentors
               </a>
-              <a
-                href="/resources"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Manage Resources
-              </a>
-            </>
-          )
-        }
-
-        {
-          !currentRole && (
-            <>
-              <a
-                href="/resources"
-                class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-              >
-                Resources
-              </a>
             </>
           )
         }
       </nav>
 
-      <!-- Notification Bell (authenticated users only) -->
-      {
-        currentRole && (
-          <NotificationBell client:load />
-        )
-      }
-
-      <!-- Notification Toast -->
-      {
-        currentRole && (
-          <NotificationToast client:load />
-        )
-      }
-
-      <!-- User Action / Auth CTA -->
       <div class="flex items-center gap-3">
         {
           currentRole ? (
-            <div class="flex items-center gap-3 rounded-sm border border-gray-200 bg-background-100 px-3 py-1 text-label-13 text-gray-700">
-              <RoleBadge role={currentRole} isVerified={isVerified} />
-              {displayName && (
-                <span class="max-w-[140px] truncate font-semibold text-gray-900">
-                  {displayName}
-                </span>
-              )}
+            <div class="flex items-center gap-3">
+              <NotificationBell client:load />
               <button
                 id="logout-btn"
-                class="ml-1 font-medium text-red-700 hover:text-red-900 hover:underline cursor-pointer border-none bg-transparent p-0 text-label-13 transition-colors focus-visible:outline-none"
-                title="Sign Out"
+                class="font-medium text-gray-700 hover:text-gray-1000 text-sm cursor-pointer border-none bg-transparent p-0 transition-colors focus-visible:outline-none"
               >
                 Logout
               </button>
@@ -202,14 +137,22 @@ const { currentRole = null, displayName = '', isVerified = false } = Astro.props
   </div>
 </header>
 
+<!-- Notification Toast -->
+{
+  currentRole && (
+    <NotificationToast client:load />
+  )
+}
+
 <script>
   import { clearAuthUser } from '../../stores/authStore';
+  import { api } from '../../lib/api';
 
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
       try {
-        await fetch('http://localhost:3000/api/auth/logout', { method: 'POST' });
+        await api.post('/auth/logout');
       } catch (err) {
         console.error('Logout error:', err);
       } finally {
