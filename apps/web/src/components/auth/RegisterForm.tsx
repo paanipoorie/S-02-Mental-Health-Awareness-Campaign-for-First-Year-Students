@@ -7,7 +7,6 @@ export const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState<Role>(Role.STUDENT);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,7 +34,7 @@ export const RegisterForm: React.FC = () => {
       await api.post('/auth/register', {
         universityEmail: email,
         password,
-        role,
+        role: Role.STUDENT,
       });
 
       // Auto login after registration
@@ -56,10 +55,12 @@ export const RegisterForm: React.FC = () => {
 
       setAuthUser(profile, loginRes.accessToken);
 
-      if (role === Role.STUDENT) {
+      if (profile.role === Role.STUDENT) {
         window.location.href = '/dashboard';
-      } else if (role === Role.MENTOR) {
+      } else if (profile.role === Role.MENTOR) {
         window.location.href = '/mentor/dashboard';
+      } else if (profile.role === Role.ADMIN) {
+        window.location.href = '/admin/dashboard';
       } else {
         window.location.href = '/';
       }
@@ -102,43 +103,13 @@ export const RegisterForm: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
           <label className="mb-2 block text-label-13 font-semibold text-gray-700">
-            I am registering as:
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => setRole(Role.STUDENT)}
-              className={`rounded-sm border px-3 py-2.5 text-button-12 font-semibold transition-all cursor-pointer focus-visible:outline-none ${
-                role === Role.STUDENT
-                  ? 'border-gray-1000 bg-gray-100 text-gray-1000'
-                  : 'border-gray-300 bg-background-100 text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              Student (Anonymous)
-            </button>
-            <button
-              type="button"
-              onClick={() => setRole(Role.MENTOR)}
-              className={`rounded-sm border px-3 py-2.5 text-button-12 font-semibold transition-all cursor-pointer focus-visible:outline-none ${
-                role === Role.MENTOR
-                  ? 'border-gray-1000 bg-gray-100 text-gray-1000'
-                  : 'border-gray-300 bg-background-100 text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              Peer Mentor
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label className="mb-2 block text-label-13 font-semibold text-gray-700">
             University Email
           </label>
           <input
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="student@university.edu"
+            placeholder="university@college.edu"
             className="w-full h-10 px-3 py-2 text-label-14 bg-background-100 text-primary border border-gray-300 rounded-sm focus-visible:outline-none focus-visible:border-blue-700 placeholder-gray-400"
             required
           />
