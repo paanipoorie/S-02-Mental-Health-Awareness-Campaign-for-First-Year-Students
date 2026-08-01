@@ -11,9 +11,9 @@ const registerBodySchema = z.object({
     .min(1, 'University email is required')
     .email('Invalid email format')
     .refine(email => {
-      const domain = getUniversityEmailDomain();
+      const domain = getUniversityEmailDomain().toLowerCase();
       console.log(`[DEBUG REFINE] Checking email: ${email} against domain: ${domain}`);
-      return email.endsWith(`@${domain}`);
+      return email.toLowerCase().trim().endsWith(`@${domain}`);
     }, `Email must be a valid ${getUniversityEmailDomain()} address`),
   password: z
     .string()
@@ -32,7 +32,7 @@ const loginBodySchema = z.object({
     .min(1, 'University email is required')
     .email('Invalid email format')
     .refine(
-      email => email.endsWith(`@${getUniversityEmailDomain()}`),
+      email => email.toLowerCase().trim().endsWith(`@${getUniversityEmailDomain().toLowerCase()}`),
       `Email must be a valid ${getUniversityEmailDomain()} address`
     ),
   password: z.string().min(1, 'Password is required'),
@@ -64,7 +64,7 @@ const forgotPasswordBodySchema = z.object({
     .min(1, 'University email is required')
     .email('Invalid email format')
     .refine(
-      email => email.endsWith(`@${getUniversityEmailDomain()}`),
+      email => email.toLowerCase().trim().endsWith(`@${getUniversityEmailDomain().toLowerCase()}`),
       `Email must be a valid ${getUniversityEmailDomain()} address`
     ),
 });

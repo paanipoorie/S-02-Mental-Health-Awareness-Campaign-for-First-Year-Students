@@ -100,9 +100,11 @@ export class AuthError extends Error {
 
 export class AuthService {
   private validateUniversityEmail(email: string): void {
-    if (!email.endsWith(`@${env.UNIVERSITY_EMAIL_DOMAIN}`)) {
+    const normalized = email.toLowerCase().trim();
+    const domain = (env.UNIVERSITY_EMAIL_DOMAIN ?? 'university.edu').toLowerCase();
+    if (!normalized.endsWith(`@${domain}`)) {
       throw new AuthError(
-        `Email must be a valid ${env.UNIVERSITY_EMAIL_DOMAIN} address`,
+        `Email must be a valid ${domain} address`,
         'INVALID_EMAIL_DOMAIN',
         400
       );
@@ -126,7 +128,7 @@ export class AuthService {
 
   private async findUserByEmail(email: string) {
     return prisma.user.findUnique({
-      where: { universityEmail: email },
+      where: { universityEmail: email.toLowerCase().trim() },
       include: {
         anonymousIdentity: true,
       },
@@ -146,7 +148,7 @@ export class AuthService {
 
     const user = await prisma.user.create({
       data: {
-        universityEmail: input.universityEmail,
+        universityEmail: input.universityEmail.toLowerCase().trim(),
         passwordHash,
         role,
         ...(role === Role.MENTOR ? { isVerifiedMentor: false } : {}),
