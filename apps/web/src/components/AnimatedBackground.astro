@@ -3,31 +3,30 @@
 <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true" id="global-motion-bg">
   <!-- Shape 1: Circle -->
   <svg class="absolute w-36 h-36 sm:w-48 sm:h-48 transition-opacity duration-1000 opacity-0" id="global-shape-circle" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(148, 163, 184, 0.045)" stroke-width="1.0" />
+    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(148, 163, 184, 0.015)" stroke-width="0.8" />
   </svg>
   <!-- Shape 2: Square -->
   <svg class="absolute w-40 h-40 sm:w-56 sm:h-56 transition-opacity duration-1000 opacity-0" id="global-shape-square" viewBox="0 0 100 100">
-    <rect x="5" y="5" width="90" height="90" fill="none" stroke="rgba(201, 106, 43, 0.05)" stroke-width="1.0" />
+    <rect x="5" y="5" width="90" height="90" fill="none" stroke="rgba(201, 106, 43, 0.02)" stroke-width="0.8" />
   </svg>
   <!-- Shape 3: Triangle -->
   <svg class="absolute w-36 h-36 sm:w-48 sm:h-48 transition-opacity duration-1000 opacity-0" id="global-shape-triangle" viewBox="0 0 100 100">
-    <polygon points="50,10 90,85 10,85" fill="none" stroke="rgba(148, 163, 184, 0.045)" stroke-width="1.0" />
+    <polygon points="50,10 90,85 10,85" fill="none" stroke="rgba(148, 163, 184, 0.015)" stroke-width="0.8" />
   </svg>
   <!-- Shape 4: Hexagon -->
   <svg class="absolute w-40 h-40 sm:w-56 sm:h-56 transition-opacity duration-1000 opacity-0" id="global-shape-hexagon" viewBox="0 0 100 100">
-    <polygon points="50,6 88,28 88,72 50,94 12,72 12,28" fill="none" stroke="rgba(201, 106, 43, 0.05)" stroke-width="1.0" />
+    <polygon points="50,6 88,28 88,72 50,94 12,72 12,28" fill="none" stroke="rgba(201, 106, 43, 0.02)" stroke-width="0.8" />
   </svg>
   <!-- Connecting lines SVG -->
   <svg class="absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-0" id="global-shapes-connections">
-    <line id="g-line-1" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.02)" stroke-width="0.75" stroke-dasharray="4 4" />
-    <line id="g-line-2" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.02)" stroke-width="0.75" stroke-dasharray="4 4" />
-    <line id="g-line-3" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.02)" stroke-width="0.75" stroke-dasharray="4 4" />
-    <line id="g-line-4" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.02)" stroke-width="0.75" stroke-dasharray="4 4" />
+    <line id="g-line-1" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.008)" stroke-width="0.5" stroke-dasharray="4 4" />
+    <line id="g-line-2" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.008)" stroke-width="0.5" stroke-dasharray="4 4" />
+    <line id="g-line-3" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.008)" stroke-width="0.5" stroke-dasharray="4 4" />
+    <line id="g-line-4" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.008)" stroke-width="0.5" stroke-dasharray="4 4" />
   </svg>
 </div>
 
 <script>
-  // Global motion background logic
   document.addEventListener('DOMContentLoaded', () => {
     const bgContainer = document.getElementById('global-motion-bg');
     if (!bgContainer) return;
@@ -37,52 +36,52 @@
         id: 'global-shape-circle',
         vw: 0.12,
         vh: 0.25,
-        speedX: 0.00002,
-        speedY: 0.000015,
-        speedR: 0.00001,
+        speedX: 0.00001,
+        speedY: 0.000008,
+        speedR: 0.000005,
         ampX: 45,
         ampY: 30,
-        ampR: 1.5,
-        parallax: 0.3,
+        ampR: 1.0,
+        parallax: 0.2,
         size: 160,
       },
       {
         id: 'global-shape-square',
         vw: 0.85,
         vh: 0.20,
-        speedX: 0.000015,
-        speedY: 0.00002,
-        speedR: 0.000015,
+        speedX: 0.000008,
+        speedY: 0.00001,
+        speedR: 0.000008,
         ampX: 35,
         ampY: 35,
-        ampR: 2.0,
-        parallax: 0.6,
+        ampR: 1.5,
+        parallax: 0.4,
         size: 192,
       },
       {
         id: 'global-shape-triangle',
         vw: 0.15,
         vh: 0.75,
-        speedX: 0.00002,
-        speedY: 0.00002,
-        speedR: 0.000015,
+        speedX: 0.00001,
+        speedY: 0.00001,
+        speedR: 0.000008,
         ampX: 40,
         ampY: 35,
-        ampR: 1.2,
-        parallax: 0.4,
+        ampR: 0.8,
+        parallax: 0.3,
         size: 160,
       },
       {
         id: 'global-shape-hexagon',
         vw: 0.82,
         vh: 0.70,
-        speedX: 0.00001,
-        speedY: 0.000015,
-        speedR: 0.00001,
+        speedX: 0.000005,
+        speedY: 0.000008,
+        speedR: 0.000005,
         ampX: 30,
         ampY: 45,
-        ampR: 1.0,
-        parallax: 0.8,
+        ampR: 0.5,
+        parallax: 0.5,
         size: 192,
       }
     ];
@@ -97,13 +96,12 @@
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Show shapes smoothly
     shapes.forEach(shape => {
       const el = document.getElementById(shape.id);
       if (el) {
         setTimeout(() => {
           el.classList.remove('opacity-0');
-        }, 150);
+        }, 300);
       }
     });
 
@@ -111,10 +109,9 @@
     if (connectionsEl) {
       setTimeout(() => {
         connectionsEl.classList.remove('opacity-0');
-      }, 350);
+      }, 500);
     }
 
-    // Resize event
     window.addEventListener('resize', () => {
       width = window.innerWidth;
       height = window.innerHeight;
@@ -128,16 +125,14 @@
       return;
     }
 
-    // Capture cursor moves
     window.addEventListener('mousemove', (e) => {
       targetMouseX = (e.clientX / width) - 0.5;
       targetMouseY = (e.clientY / height) - 0.5;
     });
 
     function updatePositions(time: number) {
-      // Lerp mouse coordinates
-      currentMouseX += (targetMouseX - currentMouseX) * 0.035;
-      currentMouseY += (targetMouseY - currentMouseY) * 0.035;
+      currentMouseX += (targetMouseX - currentMouseX) * 0.02;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.02;
 
       const coords = shapes.map(shape => {
         const el = document.getElementById(shape.id);
@@ -149,14 +144,12 @@
         const baseX = width * shape.vw - (size / 2);
         const baseY = height * shape.vh - (size / 2);
 
-        // Sinusoidal floating path
         const floatX = Math.sin(time * shape.speedX) * shape.ampX * scale;
         const floatY = Math.cos(time * shape.speedY) * shape.ampY * scale;
         const rotate = Math.sin(time * shape.speedR) * shape.ampR;
 
-        // Parallax scaling
-        const pX = currentMouseX * shape.parallax * 70;
-        const pY = currentMouseY * shape.parallax * 70;
+        const pX = currentMouseX * shape.parallax * 40;
+        const pY = currentMouseY * shape.parallax * 40;
 
         const totalX = baseX + floatX + pX;
         const totalY = baseY + floatY + pY;
@@ -169,7 +162,6 @@
         };
       });
 
-      // Update lines
       const connections = [
         { from: 0, to: 1, lineId: 'g-line-1' },
         { from: 1, to: 3, lineId: 'g-line-2' },
