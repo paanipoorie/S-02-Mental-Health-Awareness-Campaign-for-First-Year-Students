@@ -83,24 +83,6 @@ const { currentRole = null } = Astro.props;
           </a>
         </div>
 
-        <!-- Admin Links -->
-        <div
-          id="nav-links-admin"
-          class={`items-center gap-1 ${currentRole === 'ADMIN' ? 'flex' : 'hidden'}`}
-        >
-          <a
-            href="/admin/dashboard"
-            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-          >
-            Dashboard
-          </a>
-          <a
-            href="/admin/mentors"
-            class="text-label-14 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-1000 rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
-          >
-            Verify Mentors
-          </a>
-        </div>
       </nav>
 
       <div class="flex items-center gap-3">
@@ -153,8 +135,6 @@ const { currentRole = null } = Astro.props;
             document.getElementById('nav-links-student')?.classList.remove('flex');
             document.getElementById('nav-links-mentor')?.classList.add('hidden');
             document.getElementById('nav-links-mentor')?.classList.remove('flex');
-            document.getElementById('nav-links-admin')?.classList.add('hidden');
-            document.getElementById('nav-links-admin')?.classList.remove('flex');
             document.getElementById('nav-guest-controls')?.classList.add('hidden');
             document.getElementById('nav-guest-controls')?.classList.remove('flex');
             
@@ -169,12 +149,6 @@ const { currentRole = null } = Astro.props;
               if (mentorNav) {
                 mentorNav.classList.remove('hidden');
                 mentorNav.classList.add('flex');
-              }
-            } else if (role === 'ADMIN') {
-              const adminNav = document.getElementById('nav-links-admin');
-              if (adminNav) {
-                adminNav.classList.remove('hidden');
-                adminNav.classList.add('flex');
               }
             }
             
