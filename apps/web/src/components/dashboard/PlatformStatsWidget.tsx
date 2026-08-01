@@ -1,4 +1,4 @@
-import { Users, GraduationCap, Briefcase, ShieldCheck, MessageSquare, MessageCircle, CalendarCheck, Target, BookOpen } from 'lucide-react';
+import { GraduationCap, ShieldCheck, MessageSquare, CalendarCheck, BookOpen } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 interface PlatformStatsWidgetProps {
@@ -30,22 +30,10 @@ function formatNumber(num: number): string {
 export function PlatformStatsWidget({ platformStats, className = '' }: PlatformStatsWidgetProps) {
   const stats: Array<{ label: string; value: string; icon: ReactNode; key: string }> = [
     {
-      label: 'Total Users',
-      value: formatNumber(platformStats.totalUsers),
-      icon: <Users className="h-6 w-6 text-gray-500" />,
-      key: 'totalUsers',
-    },
-    {
       label: 'Students',
       value: formatNumber(platformStats.totalStudents),
       icon: <GraduationCap className="h-6 w-6 text-gray-500" />,
       key: 'totalStudents',
-    },
-    {
-      label: 'Mentors',
-      value: formatNumber(platformStats.totalMentors),
-      icon: <Briefcase className="h-6 w-6 text-gray-500" />,
-      key: 'totalMentors',
     },
     {
       label: 'Verified Mentors',
@@ -60,28 +48,16 @@ export function PlatformStatsWidget({ platformStats, className = '' }: PlatformS
       key: 'totalPosts',
     },
     {
-      label: 'Active Chats',
-      value: formatNumber(platformStats.activeChats),
-      icon: <MessageCircle className="h-6 w-6 text-gray-500" />,
-      key: 'activeChats',
-    },
-    {
-      label: 'Upcoming Meetings',
-      value: formatNumber(platformStats.upcomingMeetings),
-      icon: <CalendarCheck className="h-6 w-6 text-gray-500" />,
-      key: 'upcomingMeetings',
-    },
-    {
-      label: 'Upcoming Workshops',
-      value: formatNumber(platformStats.upcomingWorkshops),
-      icon: <Target className="h-6 w-6 text-gray-500" />,
-      key: 'upcomingWorkshops',
-    },
-    {
       label: 'Active Resources',
       value: formatNumber(platformStats.activeResources),
       icon: <BookOpen className="h-6 w-6 text-gray-500" />,
       key: 'activeResources',
+    },
+    {
+      label: 'Upcoming Events',
+      value: formatNumber(platformStats.upcomingMeetings + platformStats.upcomingWorkshops),
+      icon: <CalendarCheck className="h-6 w-6 text-gray-500" />,
+      key: 'upcomingEvents',
     },
   ];
 
