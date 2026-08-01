@@ -6,12 +6,14 @@ interface Props {
   title?: string;
   description?: string;
   currentRole?: 'STUDENT' | 'MENTOR' | 'ADMIN' | null;
+  isFullWidth?: boolean;
 }
 
 const {
   title = 'Peerly',
   description = 'A safe, confidential anonymous peer support platform for first-year students.',
   currentRole = null,
+  isFullWidth = false,
 } = Astro.props;
 ---
 
@@ -35,21 +37,23 @@ const {
   >
     <Navbar currentRole={currentRole} />
 
-    <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+    <main class={isFullWidth ? "w-full flex-1 flex flex-col" : "mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8"}>
       <slot />
     </main>
 
-    <footer
-      class="border-t border-gray-200 bg-background-200 py-6 text-center text-xs text-gray-500"
-    >
-      <div
-        class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row"
+    {!isFullWidth && (
+      <footer
+        class="border-t border-gray-200 bg-background-200 py-6 text-center text-xs text-gray-500"
       >
-        <span>© 2026 Peerly. Strictly Confidential & Safe Space.</span>
-        <div class="flex items-center gap-4 text-gray-500">
-          <a href="/privacy" class="transition-colors hover:text-gray-900">Privacy Guarantee</a>
+        <div
+          class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row"
+        >
+          <span>© 2026 Peerly. Strictly Confidential & Safe Space.</span>
+          <div class="flex items-center gap-4 text-gray-500">
+            <a href="/privacy" class="transition-colors hover:text-gray-900">Privacy Guarantee</a>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    )}
   </body>
 </html>
