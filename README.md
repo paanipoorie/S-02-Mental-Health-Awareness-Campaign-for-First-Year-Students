@@ -129,6 +129,16 @@ campus-peer-support/
 
 Review the full [Installation Guide](file:///home/nish4nt/dev/S-02-Mental-Health-Awareness-Campaign-for-First-Year-Students/docs/INSTALLATION.md) for detailed prerequisites.
 
+**One-shot demo:** starts PostgreSQL, syncs the schema, seeds demo accounts, boots the web + API dev servers, and prints all the links:
+
+```bash
+pnpm demo
+```
+
+> Options: `--no-seed` skips reseeding demo data, `--no-db` skips database steps if a database is already running.
+
+Or step by step:
+
 1. **Start PostgreSQL Container**:
    ```bash
    pnpm docker:up
