@@ -85,14 +85,29 @@ export function AdminDashboardClient({ initialData }: AdminDashboardClientProps)
   const [loading, setLoading] = useState(!initialData);
 
   useEffect(() => {
-    if (initialData) return;
     async function loadDashboard() {
       try {
-        if (!user) {
-          await fetchCurrentUser();
+        let currentUser = user;
+        if (!currentUser) {
+          currentUser = await fetchCurrentUser();
         }
-        const data = await dashboardApi.getAdminDashboard();
-        setDashboardData(data);
+        if (!currentUser) {
+          window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+          return;
+        }
+        if (currentUser.role !== 'ADMIN') {
+          if (currentUser.role === 'STUDENT') {
+            window.location.href = '/dashboard';
+            return;
+          } else if (currentUser.role === 'MENTOR') {
+            window.location.href = '/mentor/dashboard';
+            return;
+          }
+        }
+        if (!initialData) {
+          const data = await dashboardApi.getAdminDashboard();
+          setDashboardData(data);
+        }
       } catch (err: any) {
         setError(err.message || 'Failed to load admin dashboard');
       } finally {

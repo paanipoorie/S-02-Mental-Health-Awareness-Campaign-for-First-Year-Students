@@ -113,8 +113,22 @@ export function MentorDashboardClient() {
   useEffect(() => {
     async function loadDashboard() {
       try {
-        if (!user) {
-          await fetchCurrentUser();
+        let currentUser = user;
+        if (!currentUser) {
+          currentUser = await fetchCurrentUser();
+        }
+        if (!currentUser) {
+          window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
+          return;
+        }
+        if (currentUser.role !== 'MENTOR') {
+          if (currentUser.role === 'STUDENT') {
+            window.location.href = '/dashboard';
+            return;
+          } else if (currentUser.role === 'ADMIN') {
+            window.location.href = '/admin/dashboard';
+            return;
+          }
         }
         const data = await dashboardApi.getMentorDashboard();
         setDashboardData(data);
