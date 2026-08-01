@@ -11,8 +11,35 @@ const description = "A simple, anonymous peer support platform for first-year st
   <head>
     <Head title={title} description={description} />
   </head>
-  <body class="bg-background-100 text-primary min-h-screen font-sans antialiased flex flex-col justify-between">
-    <header class="bg-background-100 border-b border-gray-200">
+  <body class="bg-background-100 text-primary min-h-screen font-sans antialiased flex flex-col justify-between relative overflow-x-hidden">
+    <!-- Subtle Premium Motion Background -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true" id="motion-bg">
+      <!-- Shape 1: Circle -->
+      <svg class="absolute w-24 h-24 sm:w-32 sm:h-32 transition-opacity duration-1000 opacity-0" id="shape-circle" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(148, 163, 184, 0.07)" stroke-width="1.2" />
+      </svg>
+      <!-- Shape 2: Square -->
+      <svg class="absolute w-28 h-28 sm:w-36 sm:h-36 transition-opacity duration-1000 opacity-0" id="shape-square" viewBox="0 0 100 100">
+        <rect x="5" y="5" width="90" height="90" fill="none" stroke="rgba(201, 106, 43, 0.08)" stroke-width="1.2" />
+      </svg>
+      <!-- Shape 3: Triangle -->
+      <svg class="absolute w-24 h-24 sm:w-32 sm:h-32 transition-opacity duration-1000 opacity-0" id="shape-triangle" viewBox="0 0 100 100">
+        <polygon points="50,10 90,85 10,85" fill="none" stroke="rgba(148, 163, 184, 0.07)" stroke-width="1.2" />
+      </svg>
+      <!-- Shape 4: Hexagon -->
+      <svg class="absolute w-28 h-28 sm:w-36 sm:h-36 transition-opacity duration-1000 opacity-0" id="shape-hexagon" viewBox="0 0 100 100">
+        <polygon points="50,6 88,28 88,72 50,94 12,72 12,28" fill="none" stroke="rgba(201, 106, 43, 0.08)" stroke-width="1.2" />
+      </svg>
+      <!-- Connecting lines SVG -->
+      <svg class="absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-0" id="shapes-connections">
+        <line id="line-1" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.75" stroke-dasharray="4 4" />
+        <line id="line-2" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.75" stroke-dasharray="4 4" />
+        <line id="line-3" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.75" stroke-dasharray="4 4" />
+        <line id="line-4" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.75" stroke-dasharray="4 4" />
+      </svg>
+    </div>
+
+    <header class="bg-background-100 border-b border-gray-200 relative z-10">
       <div class="mx-auto max-w-4xl px-6">
         <div class="flex h-14 items-center justify-between">
           <div class="flex items-center gap-2">
@@ -43,7 +70,7 @@ const description = "A simple, anonymous peer support platform for first-year st
       </div>
     </header>
 
-    <main class="flex-grow flex flex-col justify-center py-12 md:py-16">
+    <main class="flex-grow flex flex-col justify-center py-12 md:py-16 relative z-10">
       <div class="mx-auto max-w-2xl px-6 w-full text-center">
         <!-- Hero Section -->
         <h1 class="text-heading-36 sm:text-heading-48 font-bold text-gray-1000 tracking-tight mb-3">
@@ -120,7 +147,7 @@ const description = "A simple, anonymous peer support platform for first-year st
       </div>
     </main>
 
-    <footer class="bg-background-100 border-t border-gray-200 py-6">
+    <footer class="bg-background-100 border-t border-gray-200 py-6 relative z-10">
       <div class="mx-auto max-w-4xl px-6">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
           <div class="flex items-center gap-2">
@@ -141,5 +168,184 @@ const description = "A simple, anonymous peer support platform for first-year st
         </div>
       </div>
     </footer>
+
+    <script>
+      // Subtle Premium Motion Background script
+      document.addEventListener('DOMContentLoaded', () => {
+        const bgContainer = document.getElementById('motion-bg');
+        if (!bgContainer) return;
+
+        const shapes = [
+          {
+            id: 'shape-circle',
+            vw: 0.15,
+            vh: 0.22,
+            speedX: 0.00004,
+            speedY: 0.00003,
+            speedR: 0.00002,
+            ampX: 30,
+            ampY: 20,
+            ampR: 2.0,
+            parallax: 0.4,
+            size: 112,
+          },
+          {
+            id: 'shape-square',
+            vw: 0.82,
+            vh: 0.18,
+            speedX: 0.00003,
+            speedY: 0.00004,
+            speedR: 0.00003,
+            ampX: 25,
+            ampY: 25,
+            ampR: 2.5,
+            parallax: 0.7,
+            size: 128,
+          },
+          {
+            id: 'shape-triangle',
+            vw: 0.18,
+            vh: 0.72,
+            speedX: 0.00004,
+            speedY: 0.00004,
+            speedR: 0.00003,
+            ampX: 28,
+            ampY: 22,
+            ampR: 1.8,
+            parallax: 0.5,
+            size: 112,
+          },
+          {
+            id: 'shape-hexagon',
+            vw: 0.80,
+            vh: 0.68,
+            speedX: 0.00002,
+            speedY: 0.00003,
+            speedR: 0.00002,
+            ampX: 22,
+            ampY: 30,
+            ampR: 1.5,
+            parallax: 0.9,
+            size: 128,
+          }
+        ];
+
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        
+        let targetMouseX = 0;
+        let targetMouseY = 0;
+        let currentMouseX = 0;
+        let currentMouseY = 0;
+
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Position shapes initially and fade in
+        shapes.forEach(shape => {
+          const el = document.getElementById(shape.id);
+          if (el) {
+            setTimeout(() => {
+              el.classList.remove('opacity-0');
+            }, 100);
+          }
+        });
+
+        const linesEl = document.getElementById('shapes-connections');
+        if (linesEl) {
+          setTimeout(() => {
+            linesEl.classList.remove('opacity-0');
+          }, 300);
+        }
+
+        // Handle window resizing
+        window.addEventListener('resize', () => {
+          width = window.innerWidth;
+          height = window.innerHeight;
+          if (prefersReduced) {
+            updatePositions(0);
+          }
+        });
+
+        if (prefersReduced) {
+          // Render statically without parallax or animation
+          updatePositions(0);
+          return;
+        }
+
+        // Mouse movement triggers parallax
+        window.addEventListener('mousemove', (e) => {
+          targetMouseX = (e.clientX / width) - 0.5;
+          targetMouseY = (e.clientY / height) - 0.5;
+        });
+
+        function updatePositions(time: number) {
+          // Slow interpolation for smooth lag/parallax effect
+          currentMouseX += (targetMouseX - currentMouseX) * 0.04;
+          currentMouseY += (targetMouseY - currentMouseY) * 0.04;
+
+          const coords = shapes.map(shape => {
+            const el = document.getElementById(shape.id);
+            if (!el) return null;
+
+            // Responsive scale down on small screens
+            const scale = width < 640 ? 0.7 : 1.0;
+            const size = shape.size * scale;
+
+            const baseX = width * shape.vw - (size / 2);
+            const baseY = height * shape.vh - (size / 2);
+
+            // Floating movement using slow sine waves
+            const floatX = Math.sin(time * shape.speedX) * shape.ampX;
+            const floatY = Math.cos(time * shape.speedY) * shape.ampY;
+            const rotate = Math.sin(time * shape.speedR) * shape.ampR;
+
+            // Mouse parallax movement
+            const pX = currentMouseX * shape.parallax * 60;
+            const pY = currentMouseY * shape.parallax * 60;
+
+            const totalX = baseX + floatX + pX;
+            const totalY = baseY + floatY + pY;
+
+            // Apply 3D translate and rotate
+            el.style.transform = `translate3d(${totalX}px, ${totalY}px, 0) rotate(${rotate}deg)`;
+
+            return {
+              x: totalX + (size / 2),
+              y: totalY + (size / 2)
+            };
+          });
+
+          // Draw the dotted connecting lines between centers
+          const connections = [
+            { from: 0, to: 1, lineId: 'line-1' },
+            { from: 1, to: 3, lineId: 'line-2' },
+            { from: 3, to: 2, lineId: 'line-3' },
+            { from: 2, to: 0, lineId: 'line-4' }
+          ];
+
+          connections.forEach(conn => {
+            const fromCoord = coords[conn.from];
+            const toCoord = coords[conn.to];
+            const line = document.getElementById(conn.lineId);
+
+            if (fromCoord && toCoord && line) {
+              line.setAttribute('x1', String(fromCoord.x));
+              line.setAttribute('y1', String(fromCoord.y));
+              line.setAttribute('x2', String(toCoord.x));
+              line.setAttribute('y2', String(toCoord.y));
+            }
+          });
+        }
+
+        // Animation loop
+        let animationFrameId: number;
+        function loop(time: number) {
+          updatePositions(time);
+          animationFrameId = requestAnimationFrame(loop);
+        }
+
+        requestAnimationFrame(loop);
+      });
+    </script>
   </body>
 </html>
