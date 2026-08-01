@@ -35,7 +35,7 @@ const NAV_ICONS: Record<string, string> = {
 ---
 
 <BaseLayout title={title} description={description} currentRole="ADMIN" displayName={adminName} isFullWidth={true}>
-  <div class="flex min-h-[calc(100vh-4rem)] bg-background-200 text-gray-1000">
+  <div class="flex min-h-[calc(100vh-4rem)] text-gray-1000">
     <!-- Desktop Sidebar -->
     <aside class="hidden lg:flex lg:flex-col lg:fixed lg:top-16 lg:left-0 lg:z-20 lg:w-64 lg:h-[calc(100vh-4rem)] bg-background-100 border-r border-gray-200">
       <div class="flex flex-col h-full">
@@ -144,7 +144,7 @@ const NAV_ICONS: Record<string, string> = {
       </aside>
 
       <!-- Page Content -->
-      <div class="flex-1 p-6 lg:p-8 bg-background-200">
+      <div class="flex-1 p-6 lg:p-8">
         <slot />
       </div>
     </main>
