@@ -72,7 +72,7 @@ export function createApp(): Application {
   app.use(`${env.API_PREFIX}`, generalRateLimiter);
 
   // Specific rate limiters for sensitive endpoints
-  const authRateLimiter = createCustomRateLimiter(900000, 5, 'Too many authentication attempts', 'AUTH_RATE_LIMIT');
+  const authRateLimiter = createCustomRateLimiter(900000, 100, 'Too many authentication attempts', 'AUTH_RATE_LIMIT');
   const postRateLimiter = createCustomRateLimiter(60000, 10, 'Too many posts created', 'POST_RATE_LIMIT');
   const chatRateLimiter = createCustomRateLimiter(60000, 30, 'Too many chat messages', 'CHAT_RATE_LIMIT');
   const meetingRateLimiter = createCustomRateLimiter(60000, 5, 'Too many meetings created', 'MEETING_RATE_LIMIT');
