@@ -13,8 +13,8 @@ export interface RateLimiterConfig {
 }
 
 export function createRateLimiter(config: RateLimiterConfig = {}): RateLimitRequestHandler {
-  // Disable rate limiting in test environment
-  if (isTest) {
+  // Disable rate limiting in test and development environments
+  if (isTest || isDevelopment) {
     return ((_req: Request, _res: Response, next: NextFunction) => {
       next();
     }) as RateLimitRequestHandler;
