@@ -30,7 +30,7 @@ export const LoginForm: React.FC = () => {
     setLoading(true);
     try {
       const res = await api.post<LoginResponse>('/auth/login', {
-        universityEmail: email,
+        universityEmail: email.trim().toLowerCase(),
         password,
       });
 

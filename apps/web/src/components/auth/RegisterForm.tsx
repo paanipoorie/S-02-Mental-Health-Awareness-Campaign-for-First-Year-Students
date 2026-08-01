@@ -32,14 +32,14 @@ export const RegisterForm: React.FC = () => {
     setLoading(true);
     try {
       await api.post('/auth/register', {
-        universityEmail: email,
+        universityEmail: email.trim().toLowerCase(),
         password,
         role: Role.STUDENT,
       });
 
       // Auto login after registration
       const loginRes = await api.post<{ accessToken: string; role: Role }>('/auth/login', {
-        universityEmail: email,
+        universityEmail: email.trim().toLowerCase(),
         password,
       });
 
