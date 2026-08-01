@@ -2,6 +2,7 @@
 import StudentLayout from '../../layouts/StudentLayout.astro';
 import PostComposer from '../../components/posts/PostComposer.tsx';
 import { AuthGuard } from '../../components/auth/AuthGuard.tsx';
+import { api } from '../../lib/api';
 ---
 
 <StudentLayout title="Create Post - Anonymous Feed">
@@ -19,21 +20,8 @@ import { AuthGuard } from '../../components/auth/AuthGuard.tsx';
       <PostComposer
         client:visible
         onSubmit={async data => {
-          const token = localStorage.getItem('caps_access_token');
-          const response = await fetch('http://localhost:3001/api/posts', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(data),
-          });
-          const result = await response.json();
-          if (result.success) {
-            window.location.href = `/posts/${result.data.id}`;
-          } else {
-            alert(result.error?.message || 'Failed to create post');
-          }
+          const response = await api.post<{ id: string }>('/posts', data);
+          window.location.href = `/posts/${response.id}`;
         }}
       />
     </main>
