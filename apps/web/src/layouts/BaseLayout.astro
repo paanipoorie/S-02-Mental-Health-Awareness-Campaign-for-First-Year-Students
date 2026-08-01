@@ -1,5 +1,6 @@
 ---
 import Navbar from '../components/nav/Navbar.astro';
+import Head from '../components/Head.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -20,17 +21,7 @@ const {
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
+    <Head title={title} description={description} />
   </head>
   <body
     class="flex min-h-screen flex-col bg-background-100 font-sans text-primary antialiased selection:bg-blue-100 selection:text-blue-900"
