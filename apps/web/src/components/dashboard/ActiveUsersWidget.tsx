@@ -42,7 +42,7 @@ export function ActiveUsersWidget({
             <span className="h-2 w-2 rounded-full bg-blue-500"></span>
             Students ({activeStudents?.length || 0})
           </h4>
-          <div className="max-h-80 space-y-2 overflow-y-auto pr-1">
+          <div className="space-y-3">
             {(activeStudents || []).slice(0, 10).map(student => (
               <div
                 key={student.id}
@@ -85,7 +85,7 @@ export function ActiveUsersWidget({
             <span className="h-2 w-2 rounded-full bg-purple-500"></span>
             Mentors ({activeMentors?.length || 0})
           </h4>
-          <div className="max-h-80 space-y-2 overflow-y-auto pr-1">
+          <div className="space-y-3">
             {(activeMentors || []).slice(0, 10).map(mentor => {
               const avail = AVAILABILITY_CONFIG[mentor.availabilityStatus] || AVAILABILITY_CONFIG.OFFLINE;
               return (

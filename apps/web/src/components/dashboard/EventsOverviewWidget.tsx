@@ -70,7 +70,7 @@ export function EventsOverviewWidget({
             </svg>
             Meetings ({meetingsOverview?.length || 0})
           </h4>
-          <div className="max-h-80 space-y-2 overflow-y-auto pr-1">
+          <div className="space-y-3">
             {(meetingsOverview || []).slice(0, 10).map(meeting => (
               <a
                 key={meeting.id}
@@ -145,7 +145,7 @@ export function EventsOverviewWidget({
             </svg>
             Workshops ({workshopsOverview?.length || 0})
           </h4>
-          <div className="max-h-80 space-y-2 overflow-y-auto pr-1">
+          <div className="space-y-3">
             {(workshopsOverview || []).slice(0, 10).map(workshop => (
               <a
                 key={workshop.id}

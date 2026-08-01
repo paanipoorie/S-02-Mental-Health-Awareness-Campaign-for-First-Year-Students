@@ -226,4 +226,17 @@ const { currentRole = null } = Astro.props;
       }
     });
   }
+
+  // Highlight active main navbar link
+  const currentPath = window.location.pathname;
+  const navLinks = document.querySelectorAll('header nav a');
+  navLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    if (href) {
+      if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
+        link.classList.add('active-nav-link');
+        link.setAttribute('aria-current', 'page');
+      }
+    }
+  });
 </script>

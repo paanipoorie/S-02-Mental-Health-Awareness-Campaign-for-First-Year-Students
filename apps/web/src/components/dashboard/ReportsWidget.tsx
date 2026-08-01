@@ -76,7 +76,7 @@ export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
         </span>
       </div>
 
-      <div className="max-h-96 space-y-3 overflow-y-auto pr-1">
+      <div className="space-y-4">
         {reports.map(report => {
           const typeConfig = TYPE_CONFIG[report.type] || {
             icon: <FileText className="h-5 w-5" style={{ color: '#6b7280' }} />,
