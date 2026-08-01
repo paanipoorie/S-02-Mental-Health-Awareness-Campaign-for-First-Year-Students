@@ -224,7 +224,6 @@ export function AdminResourceTable({
             <option value="SLEEP_HYGIENE">Sleep Hygiene</option>
             <option value="EXTERNAL_HELPLINES">External Helplines</option>
           </select>
-          <button type="button" onClick={onCreate} className="button-primary text-button-12 px-4 py-1.5 rounded-sm">+ Add Resource</button>
         </div>
       </div>
 

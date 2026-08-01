@@ -129,9 +129,16 @@ export function AdminDashboardClient({ initialData }: AdminDashboardClientProps)
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-12">
-      <div className="lg:col-span-12">
-        <PlatformStatsWidget
+    <div className="space-y-8">
+      {/* Page Header */}
+      <div className="border-b border-gray-200 pb-5">
+        <h1 className="text-heading-24 font-bold text-gray-1000">Dashboard</h1>
+        <p className="text-copy-14 text-gray-600 mt-1">Overview of platform usage, events, active users, and moderation reports.</p>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-12">
+        <div className="lg:col-span-12">
+          <PlatformStatsWidget
           platformStats={
             dashboardData?.platformStats || {
               totalUsers: 0,
@@ -171,6 +178,7 @@ export function AdminDashboardClient({ initialData }: AdminDashboardClientProps)
         <ReportsWidget reports={dashboardData?.reports || []} />
       </div>
     </div>
+  </div>
   );
 }
 

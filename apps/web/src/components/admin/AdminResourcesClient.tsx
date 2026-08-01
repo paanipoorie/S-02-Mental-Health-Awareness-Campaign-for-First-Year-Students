@@ -111,12 +111,20 @@ export function AdminResourcesClient({ initialData }: { initialData?: ResourceDa
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 pb-5">
         <div>
           <h1 className="text-heading-24 font-bold text-gray-1000">Resource Management</h1>
           <p className="text-copy-14 text-gray-600 mt-1">Manage mental health resources for students</p>
         </div>
+        <button
+          type="button"
+          onClick={handleCreate}
+          className="button-primary text-button-14 mt-4 sm:mt-0 px-4 py-2 rounded-sm"
+        >
+          + Add Resource
+        </button>
       </div>
 
       <AdminResourceTable

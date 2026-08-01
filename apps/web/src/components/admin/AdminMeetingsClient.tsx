@@ -90,8 +90,9 @@ export function AdminMeetingsClient({ initialData }: { initialData?: MeetingData
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Page Header */}
+      <div className="flex items-center justify-between border-b border-gray-200 pb-5">
         <div>
           <h1 className="text-heading-24 font-bold text-gray-1000">Meeting Management</h1>
           <p className="text-copy-14 text-gray-600 mt-1">View and manage all platform meetings</p>
