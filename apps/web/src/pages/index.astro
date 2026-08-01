@@ -1,19 +1,15 @@
 ---
+import Head from '../components/Head.astro';
 import '@/styles/global.css';
+
+const title = "Peerly — Anonymous Peer Support for Students";
+const description = "A simple, anonymous peer support platform for first-year students. Connect with verified mentors and access resources.";
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link class="js-favicon" rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Peerly — Anonymous Peer Support for Students</title>
-    <meta
-      name="description"
-      content="A simple, anonymous peer support platform for first-year students. Connect with verified mentors and access resources."
-    />
+    <Head title={title} description={description} />
   </head>
   <body class="bg-background-100 text-primary min-h-screen font-sans antialiased flex flex-col justify-between">
     <header class="bg-background-100 border-b border-gray-200">
