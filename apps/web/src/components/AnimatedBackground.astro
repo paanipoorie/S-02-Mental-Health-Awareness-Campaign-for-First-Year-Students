@@ -2,27 +2,27 @@
 ---
 <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true" id="global-motion-bg">
   <!-- Shape 1: Circle -->
-  <svg class="absolute w-36 h-36 sm:w-48 sm:h-48 transition-opacity duration-1000 opacity-0" id="global-shape-circle" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.8" />
+  <svg class="absolute w-44 h-44 sm:w-60 sm:h-60 transition-opacity duration-1000 opacity-0" id="global-shape-circle" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(148, 163, 184, 0.065)" stroke-width="0.8" />
   </svg>
   <!-- Shape 2: Square -->
-  <svg class="absolute w-40 h-40 sm:w-56 sm:h-56 transition-opacity duration-1000 opacity-0" id="global-shape-square" viewBox="0 0 100 100">
-    <rect x="5" y="5" width="90" height="90" fill="none" stroke="rgba(201, 106, 43, 0.04)" stroke-width="0.8" />
+  <svg class="absolute w-48 h-48 sm:w-64 sm:h-64 transition-opacity duration-1000 opacity-0" id="global-shape-square" viewBox="0 0 100 100">
+    <rect x="5" y="5" width="90" height="90" fill="none" stroke="rgba(201, 106, 43, 0.075)" stroke-width="0.8" />
   </svg>
   <!-- Shape 3: Triangle -->
-  <svg class="absolute w-36 h-36 sm:w-48 sm:h-48 transition-opacity duration-1000 opacity-0" id="global-shape-triangle" viewBox="0 0 100 100">
-    <polygon points="50,10 90,85 10,85" fill="none" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.8" />
+  <svg class="absolute w-44 h-44 sm:w-60 sm:h-60 transition-opacity duration-1000 opacity-0" id="global-shape-triangle" viewBox="0 0 100 100">
+    <polygon points="50,10 90,85 10,85" fill="none" stroke="rgba(148, 163, 184, 0.065)" stroke-width="0.8" />
   </svg>
   <!-- Shape 4: Hexagon -->
-  <svg class="absolute w-40 h-40 sm:w-56 sm:h-56 transition-opacity duration-1000 opacity-0" id="global-shape-hexagon" viewBox="0 0 100 100">
-    <polygon points="50,6 88,28 88,72 50,94 12,72 12,28" fill="none" stroke="rgba(201, 106, 43, 0.04)" stroke-width="0.8" />
+  <svg class="absolute w-48 h-48 sm:w-64 sm:h-64 transition-opacity duration-1000 opacity-0" id="global-shape-hexagon" viewBox="0 0 100 100">
+    <polygon points="50,6 88,28 88,72 50,94 12,72 12,28" fill="none" stroke="rgba(201, 106, 43, 0.075)" stroke-width="0.8" />
   </svg>
   <!-- Connecting lines SVG -->
   <svg class="absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-0" id="global-shapes-connections">
-    <line id="g-line-1" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.01)" stroke-width="0.5" stroke-dasharray="4 4" />
-    <line id="g-line-2" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.01)" stroke-width="0.5" stroke-dasharray="4 4" />
-    <line id="g-line-3" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.01)" stroke-width="0.5" stroke-dasharray="4 4" />
-    <line id="g-line-4" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.01)" stroke-width="0.5" stroke-dasharray="4 4" />
+    <line id="g-line-1" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.5" stroke-dasharray="4 4" />
+    <line id="g-line-2" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.5" stroke-dasharray="4 4" />
+    <line id="g-line-3" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.5" stroke-dasharray="4 4" />
+    <line id="g-line-4" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.5" stroke-dasharray="4 4" />
   </svg>
 </div>
 
@@ -34,63 +34,63 @@
     const shapes = [
       {
         id: 'global-shape-circle',
-        vw: 0.12,
-        vh: 0.25,
-        speedX: 0.00001,
-        speedY: 0.000008,
-        speedR: 0.000005,
-        pulseSpeed: 0.0001,
+        vw: 0.10,
+        vh: 0.20,
+        speedX: 0.00002,
+        speedY: 0.000015,
+        speedR: 0.00001,
+        pulseSpeed: 0.0002,
         pulseOffset: 0,
-        ampX: 45,
-        ampY: 30,
-        ampR: 1.0,
-        parallax: 0.2,
-        size: 160,
+        ampX: 120,
+        ampY: 90,
+        ampR: 2.0,
+        parallax: 0.25,
+        size: 190,
       },
       {
         id: 'global-shape-square',
-        vw: 0.85,
-        vh: 0.20,
-        speedX: 0.000008,
-        speedY: 0.00001,
-        speedR: 0.000008,
-        pulseSpeed: 0.00008,
+        vw: 0.88,
+        vh: 0.15,
+        speedX: 0.000015,
+        speedY: 0.00002,
+        speedR: 0.000015,
+        pulseSpeed: 0.00015,
         pulseOffset: 1.5,
-        ampX: 35,
-        ampY: 35,
-        ampR: 1.5,
-        parallax: 0.4,
-        size: 192,
+        ampX: 100,
+        ampY: 110,
+        ampR: 3.0,
+        parallax: 0.45,
+        size: 220,
       },
       {
         id: 'global-shape-triangle',
-        vw: 0.15,
-        vh: 0.75,
-        speedX: 0.00001,
-        speedY: 0.00001,
-        speedR: 0.000008,
-        pulseSpeed: 0.00012,
+        vw: 0.08,
+        vh: 0.78,
+        speedX: 0.00002,
+        speedY: 0.00002,
+        speedR: 0.000018,
+        pulseSpeed: 0.00025,
         pulseOffset: 3.0,
-        ampX: 40,
-        ampY: 35,
-        ampR: 0.8,
-        parallax: 0.3,
-        size: 160,
+        ampX: 110,
+        ampY: 100,
+        ampR: 2.5,
+        parallax: 0.35,
+        size: 190,
       },
       {
         id: 'global-shape-hexagon',
-        vw: 0.82,
-        vh: 0.70,
-        speedX: 0.000005,
-        speedY: 0.000008,
-        speedR: 0.000005,
-        pulseSpeed: 0.00007,
+        vw: 0.85,
+        vh: 0.72,
+        speedX: 0.000012,
+        speedY: 0.000018,
+        speedR: 0.000012,
+        pulseSpeed: 0.00018,
         pulseOffset: 4.5,
-        ampX: 30,
-        ampY: 45,
-        ampR: 0.5,
-        parallax: 0.5,
-        size: 192,
+        ampX: 90,
+        ampY: 120,
+        ampR: 1.8,
+        parallax: 0.55,
+        size: 220,
       }
     ];
 
@@ -104,7 +104,7 @@
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Remove opacity-0 classes immediately to start transition
+    // Remove opacity-0 immediately so they fade in
     shapes.forEach(shape => {
       const el = document.getElementById(shape.id);
       if (el) {
@@ -136,8 +136,8 @@
     });
 
     function updatePositions(time: number) {
-      currentMouseX += (targetMouseX - currentMouseX) * 0.02;
-      currentMouseY += (targetMouseY - currentMouseY) * 0.02;
+      currentMouseX += (targetMouseX - currentMouseX) * 0.03;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.03;
 
       const coords = shapes.map(shape => {
         const el = document.getElementById(shape.id);
@@ -151,20 +151,19 @@
 
         const floatX = Math.sin(time * shape.speedX) * shape.ampX * scale;
         const floatY = Math.cos(time * shape.speedY) * shape.ampY * scale;
-        const rotate = Math.sin(time * shape.speedR) * shape.ampR;
+        const rotate = Math.sin(time * shape.speedR) * shape.ampR * 10;
 
-        // Mouse parallax
-        const pX = currentMouseX * shape.parallax * 40;
-        const pY = currentMouseY * shape.parallax * 40;
+        // Mouse Parallax displacement
+        const pX = currentMouseX * shape.parallax * 60;
+        const pY = currentMouseY * shape.parallax * 60;
 
         const totalX = baseX + floatX + pX;
         const totalY = baseY + floatY + pY;
 
-        // Apply translate3d and rotation
         el.style.transform = `translate3d(${totalX}px, ${totalY}px, 0) rotate(${rotate}deg)`;
         
-        // Opacity pulse (slow sinusoidal wave between 0.6 and 1.0)
-        const pulse = 0.8 + Math.sin(time * shape.pulseSpeed + shape.pulseOffset) * 0.2;
+        // Gentle opacity breathing between 0.75 and 1.05 of base opacity
+        const pulse = 0.9 + Math.sin(time * shape.pulseSpeed + shape.pulseOffset) * 0.15;
         el.style.opacity = String(pulse);
 
         return {
@@ -173,7 +172,7 @@
         };
       });
 
-      // Update dotted connection lines
+      // Connections Update
       const connections = [
         { from: 0, to: 1, lineId: 'g-line-1' },
         { from: 1, to: 3, lineId: 'g-line-2' },
