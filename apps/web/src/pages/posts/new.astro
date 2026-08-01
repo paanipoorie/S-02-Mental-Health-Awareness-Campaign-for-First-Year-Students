@@ -19,10 +19,6 @@ import { api } from '../../lib/api';
       <AuthGuard client:visible />
       <PostComposer
         client:visible
-        onSubmit={async data => {
-          const response = await api.post<{ id: string }>('/posts', data);
-          window.location.href = `/posts/${response.id}`;
-        }}
       />
     </main>
   </div>

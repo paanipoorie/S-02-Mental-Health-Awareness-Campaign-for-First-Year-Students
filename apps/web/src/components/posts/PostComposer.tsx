@@ -3,11 +3,10 @@ import { EmotionPicker } from '../emotion/EmotionPicker';
 import { UrgencyPicker } from '../emotion/UrgencyPicker';
 import { CategoryPicker } from './CategoryPicker';
 import type { PostCategory } from '@shared-types/enums';
+import { api } from '../../lib/api';
 
 interface PostComposerProps {
-  onSubmit: (data: PostComposerData) => Promise<void>;
   initialData?: Partial<PostComposerData>;
-  isLoading?: boolean;
 }
 
 interface PostComposerData {
@@ -18,7 +17,7 @@ interface PostComposerData {
   urgencyLevel?: string;
 }
 
-export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: PostComposerProps) {
+export function PostComposer({ initialData = {} }: PostComposerProps) {
   const [title, setTitle] = useState(initialData.title || '');
   const [body, setBody] = useState(initialData.body || '');
   const [category, setCategory] = useState<PostCategory>(initialData.category || 'GENERAL');
@@ -26,6 +25,7 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
   const [urgency, setUrgency] = useState<string>(initialData.urgencyLevel || '');
   const [errors, setErrors] = useState<Partial<Record<keyof PostComposerData, string>>>({});
   const [submitError, setSubmitError] = useState<string>('');
+  const [submitting, setSubmitting] = useState(false);
 
   const validate = () => {
     const newErrors: Partial<Record<keyof PostComposerData, string>> = {};
@@ -54,16 +54,20 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
 
     if (!validate()) return;
 
+    setSubmitting(true);
     try {
-      await onSubmit({
+      const response = await api.post<{ id: string }>('/posts', {
         title: title.trim(),
         body: body.trim(),
         category,
         emotion: emotion || undefined,
         urgencyLevel: urgency || undefined,
       });
+      window.location.href = `/posts/${response.id}`;
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to create post');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -82,7 +86,7 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
           className={`rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-copy-14 text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors ${
             errors.title ? 'border-red-300' : ''
           }`}
-          disabled={isLoading}
+          disabled={submitting}
           maxLength={200}
           aria-invalid={!!errors.title}
           aria-describedby={errors.title ? 'title-error' : undefined}
@@ -106,7 +110,7 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
           className={`rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-copy-14 text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors resize-vertical min-h-[140px] ${
             errors.body ? 'border-red-300' : ''
           }`}
-          disabled={isLoading}
+          disabled={submitting}
           rows={6}
           maxLength={10000}
           aria-invalid={!!errors.body}
@@ -143,9 +147,9 @@ export function PostComposer({ onSubmit, initialData = {}, isLoading = false }: 
       <button
         type="submit"
         className="self-start rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        disabled={isLoading}
+        disabled={submitting}
       >
-        {isLoading ? 'Posting...' : 'Post Anonymously'}
+        {submitting ? 'Posting...' : 'Post Anonymously'}
       </button>
     </form>
   );
