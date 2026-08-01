@@ -3,6 +3,29 @@ import StudentLayout from '../../layouts/StudentLayout.astro';
 import PostDetailClient from '../../components/posts/PostDetailClient.tsx';
 
 export async function getStaticPaths() {
+  try {
+    const { execSync } = await import('child_process');
+    const path = await import('path');
+    const __filename = new URL(import.meta.url).pathname;
+    const __dirname = path.dirname(__filename);
+    const prismaClientPath = path.resolve(__dirname, '../../../../../apps/api/node_modules/.prisma/client/index.js');
+    
+    // Find workspace root
+    const fs = await import('fs');
+    let dir = __dirname;
+    while (dir && dir !== '/' && !fs.existsSync(path.join(dir, 'pnpm-workspace.yaml'))) {
+      dir = path.dirname(dir);
+    }
+    
+    const stdout = execSync(
+      `node -e "import { PrismaClient } from '${prismaClientPath}'; const p = new PrismaClient(); p.post.findMany({ where: { isDeleted: false }, select: { id: true } }).then(posts => { console.log(JSON.stringify(posts)); p.\\$disconnect(); })"`,
+      { encoding: 'utf8', cwd: dir }
+    );
+    const posts = JSON.parse(stdout.trim());
+    return posts.map((post: any) => ({ params: { id: post.id } }));
+  } catch (e) {
+    console.error('Failed to query posts for static paths:', e);
+  }
   return [];
 }
 
