@@ -191,7 +191,7 @@ test.describe('Peerly E2E Verification Suite', () => {
 
     test('Verify Student Logout', async ({ page }) => {
       await page.click('#logout-btn');
-      await page.waitForURL('**/login');
+      await page.waitForURL(/\/login/);
     });
   });
 
@@ -204,7 +204,7 @@ test.describe('Peerly E2E Verification Suite', () => {
       await expect(page.locator('h1').filter({ hasText: 'Mentor Portal' }).first()).toBeVisible();
       await expect(page.locator('text=Waiting Chats').first()).toBeVisible();
       await expect(page.locator('text=Assigned Students').first()).toBeVisible();
-      await expect(page.locator('text=Student Emotions Overview').first()).toBeVisible();
+      await expect(page.locator('text=Student Emotion Overview').first()).toBeVisible();
 
       // Check current availability status
       const availabilitySelect = page.locator('select[aria-label="Toggle availability"]');
@@ -243,7 +243,7 @@ test.describe('Peerly E2E Verification Suite', () => {
 
     test('Verify Mentor Logout', async ({ page }) => {
       await page.click('#logout-btn');
-      await page.waitForURL('**/login');
+      await page.waitForURL(/\/login/);
     });
   });
 
@@ -254,7 +254,7 @@ test.describe('Peerly E2E Verification Suite', () => {
 
     test('Verify Admin Dashboard & Management views', async ({ page }) => {
       await expect(page.locator('h1').filter({ hasText: 'Dashboard' }).first()).toBeVisible();
-      await expect(page.locator('text=System Statistics').first()).toBeVisible();
+      await expect(page.locator('text=Platform Statistics').first()).toBeVisible();
 
       // 1. Mentors management
       await page.goto('/admin/mentors');
@@ -281,7 +281,7 @@ test.describe('Peerly E2E Verification Suite', () => {
 
     test('Verify Admin Logout', async ({ page }) => {
       await page.click('#logout-btn');
-      await page.waitForURL('**/login');
+      await page.waitForURL(/\/login/);
     });
   });
 });
