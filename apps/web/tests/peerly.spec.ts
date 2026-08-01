@@ -207,21 +207,24 @@ test.describe('Peerly E2E Verification Suite', () => {
       await expect(page.locator('text=Student Emotion Overview').first()).toBeVisible();
 
       // Check current availability status
-      const availabilitySelect = page.locator('select[aria-label="Toggle availability"]');
-      await expect(availabilitySelect).toBeVisible();
+      await expect(page.locator('text=Availability Status').first()).toBeVisible();
 
-      // Change status to BUSY
-      await availabilitySelect.selectOption('BUSY');
+      // Click "Busy" button
+      const busyButton = page.locator('button:has-text("Busy")').first();
+      await expect(busyButton).toBeVisible();
+      await busyButton.click();
       await page.waitForTimeout(1000);
       
       // Reload page and check if it persisted
       await page.reload();
-      await expect(availabilitySelect).toHaveValue('BUSY');
+      await expect(page.locator('text=Current Status').locator('..')).toContainText('Busy');
 
-      // Change back to AVAILABLE
-      await availabilitySelect.selectOption('AVAILABLE');
+      // Change back to "Available"
+      const availableButton = page.locator('button:has-text("Available")').first();
+      await expect(availableButton).toBeVisible();
+      await availableButton.click();
       await page.waitForTimeout(1000);
-      await expect(availabilitySelect).toHaveValue('AVAILABLE');
+      await expect(page.locator('text=Current Status').locator('..')).toContainText('Available');
     });
 
     test('Verify Mentor Priority Feed & Discussions', async ({ page }) => {
