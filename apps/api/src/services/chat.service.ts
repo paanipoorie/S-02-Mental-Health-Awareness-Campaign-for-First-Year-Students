@@ -344,9 +344,7 @@ export const chatService = {
     ]);
 
     const mappedMessages = messages.map(m => {
-      const senderName = m.senderType === 'ANONYMOUS'
-        ? chat.studentIdentity.displayName
-        : 'Mentor';
+      const senderName = m.senderType === 'ANONYMOUS' ? chat.studentIdentity.displayName : 'Mentor';
       return {
         ...m,
         senderName,

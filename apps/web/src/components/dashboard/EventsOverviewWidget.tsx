@@ -48,8 +48,10 @@ export function EventsOverviewWidget({
   className = '',
 }: EventsOverviewWidgetProps) {
   return (
-    <div className={`dashboard-card p-6 bg-background-100 border border-gray-200 rounded-sm ${className}`}>
-      <h3 className="text-heading-16 font-bold text-gray-1000 mb-6">Events Overview</h3>
+    <div
+      className={`dashboard-card bg-background-100 rounded-sm border border-gray-200 p-6 ${className}`}
+    >
+      <h3 className="text-heading-16 text-gray-1000 mb-6 font-bold">Events Overview</h3>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div>
@@ -75,9 +77,9 @@ export function EventsOverviewWidget({
               <a
                 key={meeting.id}
                 href={`/events/${meeting.id}?type=meeting`}
-                className="flex items-start gap-3 rounded-sm border border-gray-200 bg-background-100 p-3 transition-all hover:bg-gray-50 hover:border-gray-300"
+                className="bg-background-100 flex items-start gap-3 rounded-sm border border-gray-200 p-3 transition-all hover:border-gray-300 hover:bg-gray-50"
               >
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100">
                   <svg
                     className="h-5 w-5 text-gray-600"
                     fill="none"
@@ -102,14 +104,22 @@ export function EventsOverviewWidget({
                       {formatDate(meeting.date)}
                     </span>
                     <span className="flex items-center gap-1 font-semibold">
-                      {meeting.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-500" /> : <MapPin className="h-3 w-3 text-gray-500" />}
-                      {' '}{meeting.meetingType === 'ONLINE' ? 'Online' : 'In-person'}
+                      {meeting.meetingType === 'ONLINE' ? (
+                        <Globe className="h-3 w-3 text-gray-500" />
+                      ) : (
+                        <MapPin className="h-3 w-3 text-gray-500" />
+                      )}{' '}
+                      {meeting.meetingType === 'ONLINE' ? 'Online' : 'In-person'}
                     </span>
                     <CategoryBadge category={meeting.category} />
                   </div>
                   <div className="text-label-12 mt-2 flex items-center gap-3 text-gray-500">
-                    <span className="flex items-center gap-1"><Users className="h-3 w-3 text-gray-500" /> {meeting.attendeeCount} attendees</span>
-                    <span className="font-semibold text-gray-600">Host: {meeting.hostDisplayName || meeting.hostType}</span>
+                    <span className="flex items-center gap-1">
+                      <Users className="h-3 w-3 text-gray-500" /> {meeting.attendeeCount} attendees
+                    </span>
+                    <span className="font-semibold text-gray-600">
+                      Host: {meeting.hostDisplayName || meeting.hostType}
+                    </span>
                   </div>
                 </div>
               </a>
@@ -150,9 +160,9 @@ export function EventsOverviewWidget({
               <a
                 key={workshop.id}
                 href={`/events/${workshop.id}?type=workshop`}
-                className="flex items-start gap-3 rounded-sm border border-gray-200 bg-background-100 p-3 transition-all hover:bg-gray-50 hover:border-gray-300"
+                className="bg-background-100 flex items-start gap-3 rounded-sm border border-gray-200 p-3 transition-all hover:border-gray-300 hover:bg-gray-50"
               >
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100">
                   <svg
                     className="h-5 w-5 text-gray-600"
                     fill="none"
@@ -177,16 +187,23 @@ export function EventsOverviewWidget({
                       {formatDate(workshop.date)}
                     </span>
                     <span className="flex items-center gap-1 font-semibold">
-                      {workshop.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-500" /> : <MapPin className="h-3 w-3 text-gray-500" />}
-                      {' '}{workshop.meetingType === 'ONLINE' ? 'Online' : 'In-person'}
+                      {workshop.meetingType === 'ONLINE' ? (
+                        <Globe className="h-3 w-3 text-gray-500" />
+                      ) : (
+                        <MapPin className="h-3 w-3 text-gray-500" />
+                      )}{' '}
+                      {workshop.meetingType === 'ONLINE' ? 'Online' : 'In-person'}
                     </span>
                     <CategoryBadge category={workshop.category} />
                     <span className="flex items-center gap-1 font-semibold">
-                      <Users className="h-3 w-3 text-gray-500" /> {workshop.registrationCount} / {workshop.maxAttendees || '\u221E'}
+                      <Users className="h-3 w-3 text-gray-500" /> {workshop.registrationCount} /{' '}
+                      {workshop.maxAttendees || '\u221E'}
                     </span>
                   </div>
                   <div className="text-label-12 mt-2 flex items-center gap-3 text-gray-500">
-                    <span className="font-semibold text-gray-600">Mentor: {workshop.mentorDisplayName}</span>
+                    <span className="font-semibold text-gray-600">
+                      Mentor: {workshop.mentorDisplayName}
+                    </span>
                   </div>
                 </div>
               </a>

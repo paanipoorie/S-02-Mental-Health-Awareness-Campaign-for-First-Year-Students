@@ -47,7 +47,7 @@ export function UpcomingWorkshopsWidget({
   if (!upcomingWorkshops || upcomingWorkshops.length === 0) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
-        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Upcoming Events</h3>
+        <h3 className="text-heading-20 text-gray-1000 mb-4 font-semibold">Upcoming Events</h3>
         <div className="py-8 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
@@ -62,13 +62,13 @@ export function UpcomingWorkshopsWidget({
               d="M9 20l-5.447-5.447L12 14l5.446-5.447L21 20H9z"
             />
           </svg>
-          <p className="text-copy-14 mt-3 text-gray-600 font-medium">No registered workshops</p>
+          <p className="text-copy-14 mt-3 font-medium text-gray-600">No registered workshops</p>
           <p className="text-label-12 mt-1 text-gray-500">
             Register for workshops to participate and learn.
           </p>
           <a
             href="/events"
-            className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
+            className="bg-primary text-button-14 text-background-100 mt-4 inline-block rounded-sm px-4 py-2 font-semibold transition-colors hover:bg-gray-800"
           >
             Browse Events
           </a>
@@ -83,7 +83,7 @@ export function UpcomingWorkshopsWidget({
         <h3 className="text-heading-20 text-gray-1000 font-semibold">Upcoming Events</h3>
         <a
           href="/events"
-          className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
+          className="text-label-14 text-tertiary font-medium transition-colors hover:underline"
         >
           View all
         </a>
@@ -96,15 +96,10 @@ export function UpcomingWorkshopsWidget({
             <a
               key={workshop.id}
               href={`/events/${workshop.id}?type=workshop`}
-              className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
+              className="bg-background-100 flex items-start gap-4 rounded-sm border border-gray-200 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
             >
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-gray-700">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -125,17 +120,13 @@ export function UpcomingWorkshopsWidget({
                     {workshop.registrationStatus}
                   </span>
                 </div>
-                <p className="text-label-12 mt-1 truncate text-gray-500">
-                  {workshop.description}
-                </p>
-                <div className="text-label-12 mt-2 flex flex-wrap items-center gap-3 text-gray-400 font-mono">
-                  <span className="flex items-center gap-1">
-                    {formatDate(workshop.date)}
-                  </span>
+                <p className="text-label-12 mt-1 truncate text-gray-500">{workshop.description}</p>
+                <div className="text-label-12 mt-2 flex flex-wrap items-center gap-3 font-mono text-gray-400">
+                  <span className="flex items-center gap-1">{formatDate(workshop.date)}</span>
                   <span className="flex items-center gap-1">
                     {formatTime(workshop.time)} · {workshop.durationMinutes} min
                   </span>
-                  <span className="flex items-center gap-1 text-gray-500 font-sans font-medium">
+                  <span className="flex items-center gap-1 font-sans font-medium text-gray-500">
                     By {workshop.mentorDisplayName}
                   </span>
                 </div>
@@ -149,7 +140,7 @@ export function UpcomingWorkshopsWidget({
         <div className="mt-4 text-center">
           <a
             href="/events"
-            className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
+            className="text-label-14 text-tertiary font-medium transition-colors hover:underline"
           >
             View all {upcomingWorkshops.length} events
           </a>

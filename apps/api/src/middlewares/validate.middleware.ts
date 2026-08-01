@@ -17,7 +17,10 @@ function isValidationSchema(schema: ZodTypeAny | ValidationSchema): schema is Va
   return false;
 }
 
-function extractSchema(schema: ValidationSchema, key: 'body' | 'query' | 'params'): ZodTypeAny | undefined {
+function extractSchema(
+  schema: ValidationSchema,
+  key: 'body' | 'query' | 'params'
+): ZodTypeAny | undefined {
   if (schema[key]) return schema[key] as ZodTypeAny;
   if ('shape' in schema && typeof (schema as Record<string, unknown>).shape === 'object') {
     const shape = (schema as Record<string, unknown>).shape as Record<string, unknown>;

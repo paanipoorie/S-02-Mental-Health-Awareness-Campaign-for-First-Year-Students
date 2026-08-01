@@ -24,7 +24,11 @@ export function NotificationBell() {
   const fetchNotifications = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await api.get<{ data: Notification[]; unreadCount: number; pagination: any }>('/notifications?page=1&limit=10');
+      const response = await api.get<{
+        data: Notification[];
+        unreadCount: number;
+        pagination: any;
+      }>('/notifications?page=1&limit=10');
       setNotifications(response.data);
       setUnreadCount(response.unreadCount);
     } catch {
@@ -100,26 +104,26 @@ export function NotificationBell() {
             fetchNotifications();
           }
         }}
-        className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors"
+        className="relative rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-white"
         aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}
       >
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center w-5 h-5 text-[10px] font-bold text-white bg-rose-500 rounded-full border-2 border-slate-950">
+          <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-slate-950 bg-rose-500 text-[10px] font-bold text-white">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 max-h-[32rem] bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden z-50">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-slate-50">
+        <div className="absolute right-0 z-50 mt-2 max-h-[32rem] w-96 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl">
+          <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3">
             <h3 className="text-sm font-semibold text-slate-900">Notifications</h3>
             {unreadCount > 0 && (
               <button
                 type="button"
                 onClick={handleMarkAllAsRead}
-                className="text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors"
+                className="text-xs font-medium text-amber-600 transition-colors hover:text-amber-700"
               >
                 Mark all as read
               </button>
@@ -127,7 +131,7 @@ export function NotificationBell() {
           </div>
           {loading ? (
             <div className="p-6 text-center">
-              <div className="inline-block w-6 h-6 border-2 border-slate-300 border-t-amber-500 rounded-full animate-spin" />
+              <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-slate-300 border-t-amber-500" />
               <p className="mt-2 text-xs text-slate-500">Loading...</p>
             </div>
           ) : (

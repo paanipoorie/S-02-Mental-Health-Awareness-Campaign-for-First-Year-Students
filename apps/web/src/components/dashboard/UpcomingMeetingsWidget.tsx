@@ -40,7 +40,7 @@ export function UpcomingMeetingsWidget({
   if (!upcomingMeetings || upcomingMeetings.length === 0) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
-        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Upcoming Meetings</h3>
+        <h3 className="text-heading-20 text-gray-1000 mb-4 font-semibold">Upcoming Meetings</h3>
         <div className="py-8 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
@@ -55,11 +55,13 @@ export function UpcomingMeetingsWidget({
               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-copy-14 mt-3 text-gray-600 font-medium">No upcoming meetings</p>
-          <p className="text-label-12 mt-1 text-gray-500">You are not attending any meetings. Browse peer-support meetings to join.</p>
+          <p className="text-copy-14 mt-3 font-medium text-gray-600">No upcoming meetings</p>
+          <p className="text-label-12 mt-1 text-gray-500">
+            You are not attending any meetings. Browse peer-support meetings to join.
+          </p>
           <a
             href="/events"
-            className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
+            className="bg-primary text-button-14 text-background-100 mt-4 inline-block rounded-sm px-4 py-2 font-semibold transition-colors hover:bg-gray-800"
           >
             Browse Events
           </a>
@@ -74,7 +76,7 @@ export function UpcomingMeetingsWidget({
         <h3 className="text-heading-20 text-gray-1000 font-semibold">Upcoming Meetings</h3>
         <a
           href="/events"
-          className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
+          className="text-label-14 text-tertiary font-medium transition-colors hover:underline"
         >
           View all
         </a>
@@ -85,15 +87,10 @@ export function UpcomingMeetingsWidget({
           <a
             key={meeting.id}
             href={`/events/${meeting.id}?type=meeting`}
-            className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
+            className="bg-background-100 flex items-start gap-4 rounded-sm border border-gray-200 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
           >
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-gray-700">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -117,13 +114,9 @@ export function UpcomingMeetingsWidget({
                   {meeting.meetingType === 'ONLINE' ? 'Online' : 'In-person'}
                 </span>
               </div>
-              <p className="text-label-12 mt-1 truncate text-gray-500">
-                {meeting.description}
-              </p>
-              <div className="text-label-12 mt-2 flex flex-wrap items-center gap-3 text-gray-400 font-mono">
-                <span className="flex items-center gap-1">
-                  {formatDate(meeting.date)}
-                </span>
+              <p className="text-label-12 mt-1 truncate text-gray-500">{meeting.description}</p>
+              <div className="text-label-12 mt-2 flex flex-wrap items-center gap-3 font-mono text-gray-400">
+                <span className="flex items-center gap-1">{formatDate(meeting.date)}</span>
                 <span className="flex items-center gap-1">
                   {formatTime(meeting.time)} · {meeting.durationMinutes} min
                 </span>
@@ -137,7 +130,7 @@ export function UpcomingMeetingsWidget({
         <div className="mt-4 text-center">
           <a
             href="/events"
-            className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
+            className="text-label-14 text-tertiary font-medium transition-colors hover:underline"
           >
             View all {upcomingMeetings.length} meetings
           </a>

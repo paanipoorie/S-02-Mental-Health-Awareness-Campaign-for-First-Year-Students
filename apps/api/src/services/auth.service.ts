@@ -103,11 +103,7 @@ export class AuthService {
     const normalized = email.toLowerCase().trim();
     const domain = (env.UNIVERSITY_EMAIL_DOMAIN ?? 'university.edu').toLowerCase();
     if (!normalized.endsWith(`@${domain}`)) {
-      throw new AuthError(
-        `Email must be a valid ${domain} address`,
-        'INVALID_EMAIL_DOMAIN',
-        400
-      );
+      throw new AuthError(`Email must be a valid ${domain} address`, 'INVALID_EMAIL_DOMAIN', 400);
     }
   }
 

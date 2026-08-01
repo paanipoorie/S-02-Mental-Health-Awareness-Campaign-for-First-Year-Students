@@ -39,7 +39,12 @@ async function createTestUser(role: Role, isVerifiedMentor = false) {
     });
   }
 
-  const token = signAccessToken({ userId: user.id, role, email: user.universityEmail, anonymousIdentityId: anon.id });
+  const token = signAccessToken({
+    userId: user.id,
+    role,
+    email: user.universityEmail,
+    anonymousIdentityId: anon.id,
+  });
   return { user, token, anon };
 }
 
@@ -108,7 +113,9 @@ describe('Chat Support Integration Tests', () => {
 
     expect(listResponse.body.success).toBe(true);
     expect(listResponse.body.data.length).toBe(1);
-    expect(listResponse.body.data[0].body).toBe('Hello mentor, I need advice on handling workload.');
+    expect(listResponse.body.data[0].body).toBe(
+      'Hello mentor, I need advice on handling workload.'
+    );
   });
 
   it('should allow marking messages in a chat thread as read', async () => {

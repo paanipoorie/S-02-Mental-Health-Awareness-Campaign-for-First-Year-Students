@@ -35,7 +35,12 @@ interface MeetingDetail {
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
-  return date.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+  return date.toLocaleDateString([], {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 }
 
 function formatTime(timeStr: string): string {
@@ -82,7 +87,8 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
 
   const handleCancelMeeting = async () => {
     if (!meeting) return;
-    if (!confirm('Are you sure you want to cancel and delete this meeting? This cannot be undone.')) return;
+    if (!confirm('Are you sure you want to cancel and delete this meeting? This cannot be undone.'))
+      return;
 
     try {
       await api.delete(`/meetings/${meeting.id}`);
@@ -95,94 +101,114 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto py-12 px-4 animate-pulse space-y-6">
-        <div className="h-4 bg-gray-200 rounded-sm w-1/4" />
-        <div className="h-48 bg-gray-200 rounded-sm w-full" />
-        <div className="h-32 bg-gray-200 rounded-sm w-full" />
+      <div className="mx-auto max-w-3xl animate-pulse space-y-6 px-4 py-12">
+        <div className="h-4 w-1/4 rounded-sm bg-gray-200" />
+        <div className="h-48 w-full rounded-sm bg-gray-200" />
+        <div className="h-32 w-full rounded-sm bg-gray-200" />
       </div>
     );
   }
 
   if (!meeting) {
     return (
-      <div className="text-center py-16 max-w-md mx-auto">
+      <div className="mx-auto max-w-md py-16 text-center">
         <h2 className="text-heading-24 font-bold text-gray-900">Meeting not found</h2>
-        <p className="text-copy-14 text-gray-500 mt-2">The meeting may have been cancelled or deleted.</p>
-        <a href="/events" className="mt-6 inline-block rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors">
+        <p className="text-copy-14 mt-2 text-gray-500">
+          The meeting may have been cancelled or deleted.
+        </p>
+        <a
+          href="/events"
+          className="bg-primary text-button-14 text-background-100 mt-6 inline-block rounded-sm px-5 py-2.5 font-semibold transition-colors hover:bg-gray-800"
+        >
           Back to Events
         </a>
       </div>
     );
   }
 
-  const isHost = user?.role === 'STUDENT'
-    ? meeting.hostIdentityId === user?.anonymousIdentityId
-    : meeting.hostUserId === user?.userId;
+  const isHost =
+    user?.role === 'STUDENT'
+      ? meeting.hostIdentityId === user?.anonymousIdentityId
+      : meeting.hostUserId === user?.userId;
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       {/* Back button */}
       <div>
-        <a href="/events" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
+        <a
+          href="/events"
+          className="text-label-14 text-tertiary flex items-center gap-1.5 font-semibold transition-colors hover:underline"
+        >
           &larr; Back to Events
         </a>
       </div>
 
       {/* Main card */}
-      <div className="rounded-sm border border-gray-200 bg-background-100 p-6 sm:p-8 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-          <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-700 uppercase tracking-wide">
+      <div className="bg-background-100 rounded-sm border border-gray-200 p-6 shadow-sm sm:p-8">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-700">
             {meeting.category.replace('_', ' ')}
           </span>
           <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-700">
-            {meeting.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-600" /> : <MapPin className="h-3 w-3 text-gray-600" />}
-            {' '}{meeting.meetingType === 'ONLINE' ? 'Online' : 'Offline'}
+            {meeting.meetingType === 'ONLINE' ? (
+              <Globe className="h-3 w-3 text-gray-600" />
+            ) : (
+              <MapPin className="h-3 w-3 text-gray-600" />
+            )}{' '}
+            {meeting.meetingType === 'ONLINE' ? 'Online' : 'Offline'}
           </span>
         </div>
 
-        <h1 className="text-heading-28 sm:text-heading-32 font-bold text-gray-1000 leading-tight">
+        <h1 className="text-heading-28 sm:text-heading-32 text-gray-1000 font-bold leading-tight">
           {meeting.title}
         </h1>
 
-        <p className="text-copy-15 text-gray-700 mt-4 leading-relaxed whitespace-pre-wrap">
+        <p className="text-copy-15 mt-4 whitespace-pre-wrap leading-relaxed text-gray-700">
           {meeting.description}
         </p>
 
         {/* Meeting Logistics Panel */}
-        <div className="mt-8 bg-gray-50 border border-gray-200 rounded-sm p-5 grid gap-4 sm:grid-cols-2 text-sm text-gray-500 font-mono">
+        <div className="mt-8 grid gap-4 rounded-sm border border-gray-200 bg-gray-50 p-5 font-mono text-sm text-gray-500 sm:grid-cols-2">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <Calendar className="h-4 w-4 flex-shrink-0 text-gray-500" />
               <span>Date:</span>
               <strong className="text-gray-900">{formatDate(meeting.date)}</strong>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <Clock className="h-4 w-4 flex-shrink-0 text-gray-500" />
               <span>Time:</span>
-              <strong className="text-gray-900">{formatTime(meeting.time)} ({meeting.durationMinutes} mins)</strong>
+              <strong className="text-gray-900">
+                {formatTime(meeting.time)} ({meeting.durationMinutes} mins)
+              </strong>
             </div>
           </div>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <User className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <User className="h-4 w-4 flex-shrink-0 text-gray-500" />
               <span>Host:</span>
               <strong className="text-gray-900">{meeting.hostDisplayName || 'Anonymous'}</strong>
             </div>
             {meeting.meetingType === 'ONLINE' ? (
               <div className="flex items-center gap-2 truncate">
-                <Link className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                <Link className="h-4 w-4 flex-shrink-0 text-gray-500" />
                 <span>Link:</span>
                 {meeting.meetingLink ? (
-                  <a href={meeting.meetingLink} target="_blank" rel="noreferrer" className="text-tertiary hover:underline truncate">
+                  <a
+                    href={meeting.meetingLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-tertiary truncate hover:underline"
+                  >
                     {meeting.meetingLink}
                   </a>
                 ) : (
-                  <span className="text-gray-400 italic">No link provided</span>
+                  <span className="italic text-gray-400">No link provided</span>
                 )}
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                <MapPin className="h-4 w-4 flex-shrink-0 text-gray-500" />
                 <span>Location:</span>
                 <strong className="text-gray-900">{meeting.location || 'Campus'}</strong>
               </div>
@@ -192,16 +218,19 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
 
         {/* Action Panel */}
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-6">
-          <div className="flex items-center gap-1.5 text-gray-500 text-sm">
+          <div className="flex items-center gap-1.5 text-sm text-gray-500">
             <Users className="h-5 w-5 text-gray-500" />
-            <strong className="text-gray-900 text-lg font-bold">{meeting.attendees.length}</strong> attending
+            <strong className="text-lg font-bold text-gray-900">
+              {meeting.attendees.length}
+            </strong>{' '}
+            attending
           </div>
           <div className="flex gap-3">
             {isHost && (
               <button
                 type="button"
                 onClick={handleCancelMeeting}
-                className="px-5 py-2.5 text-sm font-semibold text-red-800 bg-red-50 border border-red-300 rounded-sm hover:bg-red-100 transition-colors"
+                className="rounded-sm border border-red-300 bg-red-50 px-5 py-2.5 text-sm font-semibold text-red-800 transition-colors hover:bg-red-100"
               >
                 Cancel Meeting
               </button>
@@ -209,10 +238,10 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
             <button
               type="button"
               onClick={handleRSVP}
-              className={`px-6 py-2.5 text-sm font-semibold rounded-sm border transition-colors ${
+              className={`rounded-sm border px-6 py-2.5 text-sm font-semibold transition-colors ${
                 meeting.isAttending
-                  ? 'bg-green-50 text-green-800 border-green-300'
-                  : 'bg-primary hover:bg-gray-800 text-background-100 border-transparent'
+                  ? 'border-green-300 bg-green-50 text-green-800'
+                  : 'bg-primary text-background-100 border-transparent hover:bg-gray-800'
               }`}
             >
               {meeting.isAttending ? '\u2713 Going' : 'RSVP to Join'}
@@ -222,18 +251,23 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
       </div>
 
       {/* Attendees list section */}
-      <div className="rounded-sm border border-gray-200 bg-background-100 p-6 shadow-sm">
-        <h3 className="text-heading-18 font-bold text-gray-900 mb-4">
-          Attendees List
-        </h3>
+      <div className="bg-background-100 rounded-sm border border-gray-200 p-6 shadow-sm">
+        <h3 className="text-heading-18 mb-4 font-bold text-gray-900">Attendees List</h3>
         {meeting.attendees.length === 0 ? (
-          <p className="text-sm text-gray-400 italic">No one has RSVP'd yet. Be the first to join!</p>
+          <p className="text-sm italic text-gray-400">
+            No one has RSVP'd yet. Be the first to join!
+          </p>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-            {meeting.attendees.map((attendee) => (
-              <div key={attendee.id} className="flex items-center gap-2 p-3 bg-gray-50 border border-gray-200 rounded-sm text-sm text-gray-700 font-semibold">
-                <User className="h-4 w-4 text-gray-500 flex-shrink-0" />
-                <span className="truncate">{attendee.anonymousIdentity?.displayName || 'Anonymous Student'}</span>
+            {meeting.attendees.map(attendee => (
+              <div
+                key={attendee.id}
+                className="flex items-center gap-2 rounded-sm border border-gray-200 bg-gray-50 p-3 text-sm font-semibold text-gray-700"
+              >
+                <User className="h-4 w-4 flex-shrink-0 text-gray-500" />
+                <span className="truncate">
+                  {attendee.anonymousIdentity?.displayName || 'Anonymous Student'}
+                </span>
               </div>
             ))}
           </div>

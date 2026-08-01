@@ -147,7 +147,11 @@ describe('Student Full Journey E2E Integration Test', () => {
     expect(meetingResponse.body.success).toBe(true);
 
     // 11. Schedule a Workshop (as mentor) and register Student for it
-    const mentorToken = signAccessToken({ userId: mentor.id, role: Role.MENTOR, email: mentor.universityEmail });
+    const mentorToken = signAccessToken({
+      userId: mentor.id,
+      role: Role.MENTOR,
+      email: mentor.universityEmail,
+    });
     const workshopResponse = await request(app)
       .post('/api/workshops')
       .set('Authorization', `Bearer ${mentorToken}`)

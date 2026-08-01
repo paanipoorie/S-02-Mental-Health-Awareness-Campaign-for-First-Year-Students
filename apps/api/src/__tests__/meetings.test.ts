@@ -27,7 +27,12 @@ async function createTestUser(role: Role, isVerifiedMentor = false) {
     },
   });
 
-  const token = signAccessToken({ userId: user.id, role, email: user.universityEmail, anonymousIdentityId: anon.id });
+  const token = signAccessToken({
+    userId: user.id,
+    role,
+    email: user.universityEmail,
+    anonymousIdentityId: anon.id,
+  });
   return { user, token, anon };
 }
 

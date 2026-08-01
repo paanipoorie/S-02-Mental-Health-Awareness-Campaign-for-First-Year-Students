@@ -49,15 +49,20 @@ describe('Post Service Unit Tests', () => {
     expect(postDetail?.title).toBe('Unit Test Post');
 
     // Update post as someone else -> throws FORBIDDEN
-    await expect(postService.updatePost(post.id, bystanderAnon.id, { title: 'Hacked title' }))
-      .rejects.toThrow('FORBIDDEN');
+    await expect(
+      postService.updatePost(post.id, bystanderAnon.id, { title: 'Hacked title' })
+    ).rejects.toThrow('FORBIDDEN');
 
     // Update post as author -> success
-    const updatedPost = await postService.updatePost(post.id, studentAnon.id, { title: 'Updated Unit Title' });
+    const updatedPost = await postService.updatePost(post.id, studentAnon.id, {
+      title: 'Updated Unit Title',
+    });
     expect(updatedPost?.title).toBe('Updated Unit Title');
 
     // Create reply
-    const reply = await postService.createReply(post.id, bystanderAnon.id, { body: 'Friendly unit test reply' });
+    const reply = await postService.createReply(post.id, bystanderAnon.id, {
+      body: 'Friendly unit test reply',
+    });
     expect(reply).toBeDefined();
     expect(reply.body).toBe('Friendly unit test reply');
 
@@ -66,8 +71,7 @@ describe('Post Service Unit Tests', () => {
     expect(deleteReplyResult).toBe(true);
 
     // Delete post as bystander -> throws FORBIDDEN
-    await expect(postService.deletePost(post.id, bystanderAnon.id))
-      .rejects.toThrow('FORBIDDEN');
+    await expect(postService.deletePost(post.id, bystanderAnon.id)).rejects.toThrow('FORBIDDEN');
 
     // Delete post as author -> success
     const deletePostResult = await postService.deletePost(post.id, studentAnon.id);

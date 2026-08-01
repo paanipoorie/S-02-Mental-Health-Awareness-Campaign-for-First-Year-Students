@@ -9,9 +9,24 @@ interface MentorAvailabilityToggleProps {
 }
 
 const STATUS_OPTIONS = [
-  { value: 'AVAILABLE', label: 'Available', icon: <Circle className="h-5 w-5 fill-green-500 text-green-500" />, style: 'bg-green-50 border-green-300 text-green-800' },
-  { value: 'BUSY', label: 'Busy', icon: <Dot className="h-5 w-5 text-amber-500" />, style: 'bg-amber-50 border-amber-300 text-amber-800' },
-  { value: 'OFFLINE', label: 'Offline', icon: <Moon className="h-5 w-5 text-gray-500" />, style: 'bg-gray-100 border-gray-300 text-gray-800' },
+  {
+    value: 'AVAILABLE',
+    label: 'Available',
+    icon: <Circle className="h-5 w-5 fill-green-500 text-green-500" />,
+    style: 'bg-green-50 border-green-300 text-green-800',
+  },
+  {
+    value: 'BUSY',
+    label: 'Busy',
+    icon: <Dot className="h-5 w-5 text-amber-500" />,
+    style: 'bg-amber-50 border-amber-300 text-amber-800',
+  },
+  {
+    value: 'OFFLINE',
+    label: 'Offline',
+    icon: <Moon className="h-5 w-5 text-gray-500" />,
+    style: 'bg-gray-100 border-gray-300 text-gray-800',
+  },
 ] as const;
 
 export function MentorAvailabilityToggle({
@@ -41,16 +56,14 @@ export function MentorAvailabilityToggle({
 
   return (
     <div className={`dashboard-card p-6 ${className}`}>
-      <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Availability Status</h3>
+      <h3 className="text-heading-20 text-gray-1000 mb-4 font-semibold">Availability Status</h3>
 
-      <div className="mb-4 flex items-center gap-4 rounded-sm border border-gray-200 bg-background-100 p-4">
-        <div
-          className="flex h-10 w-10 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700"
-        >
+      <div className="bg-background-100 mb-4 flex items-center gap-4 rounded-sm border border-gray-200 p-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-gray-700">
           {currentStatus.icon}
         </div>
         <div className="flex-1">
-          <p className="text-label-12 text-gray-500 font-medium">Current Status</p>
+          <p className="text-label-12 font-medium text-gray-500">Current Status</p>
           <p className="text-copy-14 font-semibold text-gray-900">{currentStatus.label}</p>
         </div>
         {loading && (
@@ -69,7 +82,7 @@ export function MentorAvailabilityToggle({
               className={`flex items-center justify-center gap-2 rounded-sm px-4 py-2.5 text-sm font-semibold transition-all ${
                 isSelected
                   ? `border ${option.style} shadow-sm`
-                  : 'border border-gray-200 bg-background-100 text-gray-700 hover:bg-gray-50'
+                  : 'bg-background-100 border border-gray-200 text-gray-700 hover:bg-gray-50'
               } disabled:cursor-not-allowed disabled:opacity-80`}
             >
               <span className="flex-shrink-0">{option.icon}</span>
@@ -85,8 +98,9 @@ export function MentorAvailabilityToggle({
         </div>
       )}
 
-      <p className="text-label-12 mt-4 text-gray-500 leading-normal">
-        Students can see your availability status when requesting support. Set to <strong>Available</strong> to receive new chat requests.
+      <p className="text-label-12 mt-4 leading-normal text-gray-500">
+        Students can see your availability status when requesting support. Set to{' '}
+        <strong>Available</strong> to receive new chat requests.
       </p>
     </div>
   );

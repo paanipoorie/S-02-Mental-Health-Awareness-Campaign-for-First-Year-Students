@@ -67,7 +67,11 @@ export const meetingController = {
     try {
       const query = req.query as unknown as GetMeetingsQuery;
       const userId = req.user?.userId;
-      const filters: { upcoming?: boolean; category?: MeetingCategory; hostType?: MeetingHostType } = {};
+      const filters: {
+        upcoming?: boolean;
+        category?: MeetingCategory;
+        hostType?: MeetingHostType;
+      } = {};
       if (query.upcoming !== undefined) filters.upcoming = query.upcoming;
       if (query.category) filters.category = query.category;
       if (query.hostType) filters.hostType = query.hostType;

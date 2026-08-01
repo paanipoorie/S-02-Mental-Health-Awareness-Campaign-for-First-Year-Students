@@ -1,4 +1,19 @@
-import { Smile, Star, HelpCircle, Home, Frown, AlertCircle, Activity, Flame, CloudRain, AlertTriangle, BarChart3, ArrowUpCircle, MinusCircle, ArrowDownCircle } from 'lucide-react';
+import {
+  Smile,
+  Star,
+  HelpCircle,
+  Home,
+  Frown,
+  AlertCircle,
+  Activity,
+  Flame,
+  CloudRain,
+  AlertTriangle,
+  BarChart3,
+  ArrowUpCircle,
+  MinusCircle,
+  ArrowDownCircle,
+} from 'lucide-react';
 import type { ReactNode } from 'react';
 
 interface StudentEmotionOverviewWidgetProps {
@@ -78,7 +93,9 @@ export function StudentEmotionOverviewWidget({
 
   return (
     <div className={`dashboard-card p-6 ${className}`}>
-      <h3 className="text-heading-20 mb-6 text-gray-1000 font-semibold">Student Emotion Overview (24h)</h3>
+      <h3 className="text-heading-20 text-gray-1000 mb-6 font-semibold">
+        Student Emotion Overview (24h)
+      </h3>
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
@@ -126,7 +143,9 @@ export function StudentEmotionOverviewWidget({
                 />
               ))
             ) : (
-              <p className="text-label-12 py-4 text-center text-gray-400">No emotional status logged today.</p>
+              <p className="text-label-12 py-4 text-center text-gray-400">
+                No emotional status logged today.
+              </p>
             )}
           </div>
         </div>
@@ -140,21 +159,25 @@ export function StudentEmotionOverviewWidget({
               priorityStudents.slice(0, 8).map((student, index) => (
                 <div
                   key={student.studentIdentityId}
-                  className="flex items-center gap-3 rounded-sm border border-gray-200 bg-background-100 p-3"
+                  className="bg-background-100 flex items-center gap-3 rounded-sm border border-gray-200 p-3"
                 >
-                  <span className="text-label-12 w-5 text-right text-gray-400 font-mono">{index + 1}.</span>
+                  <span className="text-label-12 w-5 text-right font-mono text-gray-400">
+                    {index + 1}.
+                  </span>
                   <div className="min-w-0 flex-1">
                     <p className="text-copy-14 truncate font-semibold text-gray-900">
                       {student.studentDisplayName}
                     </p>
                     <div className="mt-0.5 flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 text-label-12 text-gray-600">
-                        {EMOTION_ICONS[student.latestEmotion] || <HelpCircle className="h-3.5 w-3.5 text-gray-400" />}
+                      <span className="text-label-12 inline-flex items-center gap-1 text-gray-600">
+                        {EMOTION_ICONS[student.latestEmotion] || (
+                          <HelpCircle className="h-3.5 w-3.5 text-gray-400" />
+                        )}
                         {EMOTION_LABELS[student.latestEmotion] || student.latestEmotion}
                       </span>
                       {student.latestUrgency && (
                         <span
-                          className={`inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 text-[10px] font-semibold border ${URGENCY_STYLES[student.latestUrgency] || 'bg-gray-100 text-gray-800 border-gray-300'}`}
+                          className={`inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-[10px] font-semibold ${URGENCY_STYLES[student.latestUrgency] || 'border-gray-300 bg-gray-100 text-gray-800'}`}
                         >
                           {URGENCY_ICONS[student.latestUrgency] || ''}
                           {student.latestUrgency}
@@ -165,7 +188,9 @@ export function StudentEmotionOverviewWidget({
                 </div>
               ))
             ) : (
-              <p className="text-label-12 py-4 text-center text-gray-400">No students are currently flagged as priority.</p>
+              <p className="text-label-12 py-4 text-center text-gray-400">
+                No students are currently flagged as priority.
+              </p>
             )}
           </div>
         </div>
@@ -188,13 +213,11 @@ function StatCard({
   valueColor: string;
 }) {
   return (
-    <div
-      className={`rounded-sm border p-4 bg-background-100 ${borderColor}`}
-    >
+    <div className={`bg-background-100 rounded-sm border p-4 ${borderColor}`}>
       <div className="flex items-center justify-between">
         <div>
           <p className="text-label-12 font-medium text-gray-600">{label}</p>
-          <p className={`text-heading-32 font-bold mt-1 ${valueColor}`}>{value}</p>
+          <p className={`text-heading-32 mt-1 font-bold ${valueColor}`}>{value}</p>
         </div>
         <span aria-label={label}>{icon}</span>
       </div>
@@ -225,10 +248,7 @@ function EmotionBar({
         <span className="text-label-12 font-mono text-gray-400">{count}</span>
       </div>
       <div className="h-1.5 overflow-hidden rounded-sm bg-gray-100">
-        <div
-          className="h-full rounded-sm bg-gray-1000"
-          style={{ width: `${percentage}%` }}
-        />
+        <div className="bg-gray-1000 h-full rounded-sm" style={{ width: `${percentage}%` }} />
       </div>
     </div>
   );

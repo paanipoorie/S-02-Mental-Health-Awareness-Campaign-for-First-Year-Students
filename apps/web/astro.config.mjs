@@ -13,8 +13,8 @@ export default defineConfig({
     plugins: [tailwindcss()],
     server: {
       fs: {
-        strict: false
-      }
-    }
+        strict: false,
+      },
+    },
   },
 });

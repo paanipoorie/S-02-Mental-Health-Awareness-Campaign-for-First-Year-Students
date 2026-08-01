@@ -201,10 +201,10 @@ export function MentorDashboardClient() {
         <TodaysWorkshopsWidget todaysWorkshops={dashboardData?.todaysWorkshops || []} />
       </div>
 
-      <div className="lg:col-span-12 grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:col-span-12 lg:grid-cols-3">
         <MentorAvailabilityToggle
           initialAvailability={dashboardData?.mentorAvailability || 'OFFLINE'}
-          className="h-full flex flex-col justify-between"
+          className="flex h-full flex-col justify-between"
         />
         <RecentDiscussionsWidget
           recentDiscussions={dashboardData?.recentDiscussions || []}

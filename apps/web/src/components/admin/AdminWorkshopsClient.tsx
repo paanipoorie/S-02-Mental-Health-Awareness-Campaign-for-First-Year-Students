@@ -33,7 +33,9 @@ interface WorkshopData {
 
 export function AdminWorkshopsClient({ initialData }: { initialData?: WorkshopData }) {
   const [workshops, setWorkshops] = useState(initialData?.data || []);
-  const [pagination, setPagination] = useState(initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 });
+  const [pagination, setPagination] = useState(
+    initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 }
+  );
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(!initialData);
@@ -44,7 +46,11 @@ export function AdminWorkshopsClient({ initialData }: { initialData?: WorkshopDa
     }
   }, [initialData]);
 
-  const fetchWorkshops = async (page: number, searchQuery: string, filterOptions: Record<string, string>) => {
+  const fetchWorkshops = async (
+    page: number,
+    searchQuery: string,
+    filterOptions: Record<string, string>
+  ) => {
     setLoading(true);
     try {
       const response = await adminApi.getWorkshops({
@@ -53,7 +59,12 @@ export function AdminWorkshopsClient({ initialData }: { initialData?: WorkshopDa
         search: searchQuery || undefined,
         meetingType: filterOptions.meetingType || undefined,
         category: filterOptions.category || undefined,
-        upcoming: filterOptions.upcoming === 'true' ? true : filterOptions.upcoming === 'false' ? false : undefined,
+        upcoming:
+          filterOptions.upcoming === 'true'
+            ? true
+            : filterOptions.upcoming === 'false'
+              ? false
+              : undefined,
       });
       setWorkshops(response.data);
       setPagination(response.pagination);
@@ -65,7 +76,10 @@ export function AdminWorkshopsClient({ initialData }: { initialData?: WorkshopDa
   };
 
   const handleDelete = async (workshopId: string) => {
-    if (!confirm('Are you sure you want to force delete this workshop? This action cannot be undone.')) return;
+    if (
+      !confirm('Are you sure you want to force delete this workshop? This action cannot be undone.')
+    )
+      return;
     try {
       await adminApi.deleteWorkshop(workshopId);
       toast.success('Workshop deleted successfully');
@@ -96,8 +110,8 @@ export function AdminWorkshopsClient({ initialData }: { initialData?: WorkshopDa
       {/* Page Header */}
       <div className="flex items-center justify-between border-b border-gray-200 pb-5">
         <div>
-          <h1 className="text-heading-24 font-bold text-gray-1000">Workshop Management</h1>
-          <p className="text-copy-14 text-gray-600 mt-1">View and manage all platform workshops</p>
+          <h1 className="text-heading-24 text-gray-1000 font-bold">Workshop Management</h1>
+          <p className="text-copy-14 mt-1 text-gray-600">View and manage all platform workshops</p>
         </div>
       </div>
 

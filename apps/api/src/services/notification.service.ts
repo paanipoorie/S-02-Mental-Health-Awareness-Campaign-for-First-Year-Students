@@ -23,11 +23,7 @@ export const notificationService = {
     return notification;
   },
 
-  async getNotifications(
-    userId: string,
-    page: number = 1,
-    limit: number = 20
-  ) {
+  async getNotifications(userId: string, page: number = 1, limit: number = 20) {
     const skip = (page - 1) * limit;
 
     const [notifications, total, unreadCount] = await Promise.all([

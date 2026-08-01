@@ -30,7 +30,9 @@ interface MeetingData {
 
 export function AdminMeetingsClient({ initialData }: { initialData?: MeetingData }) {
   const [meetings, setMeetings] = useState(initialData?.data || []);
-  const [pagination, setPagination] = useState(initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 });
+  const [pagination, setPagination] = useState(
+    initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 }
+  );
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(!initialData);
@@ -41,7 +43,11 @@ export function AdminMeetingsClient({ initialData }: { initialData?: MeetingData
     }
   }, [initialData]);
 
-  const fetchMeetings = async (page: number, searchQuery: string, filterOptions: Record<string, string>) => {
+  const fetchMeetings = async (
+    page: number,
+    searchQuery: string,
+    filterOptions: Record<string, string>
+  ) => {
     setLoading(true);
     try {
       const response = await adminApi.getMeetings({
@@ -51,7 +57,12 @@ export function AdminMeetingsClient({ initialData }: { initialData?: MeetingData
         hostType: filterOptions.hostType || undefined,
         meetingType: filterOptions.meetingType || undefined,
         category: filterOptions.category || undefined,
-        upcoming: filterOptions.upcoming === 'true' ? true : filterOptions.upcoming === 'false' ? false : undefined,
+        upcoming:
+          filterOptions.upcoming === 'true'
+            ? true
+            : filterOptions.upcoming === 'false'
+              ? false
+              : undefined,
       });
       setMeetings(response.data);
       setPagination(response.pagination);
@@ -63,7 +74,10 @@ export function AdminMeetingsClient({ initialData }: { initialData?: MeetingData
   };
 
   const handleDelete = async (meetingId: string) => {
-    if (!confirm('Are you sure you want to force delete this meeting? This action cannot be undone.')) return;
+    if (
+      !confirm('Are you sure you want to force delete this meeting? This action cannot be undone.')
+    )
+      return;
     try {
       await adminApi.deleteMeeting(meetingId);
       toast.success('Meeting deleted successfully');
@@ -94,8 +108,8 @@ export function AdminMeetingsClient({ initialData }: { initialData?: MeetingData
       {/* Page Header */}
       <div className="flex items-center justify-between border-b border-gray-200 pb-5">
         <div>
-          <h1 className="text-heading-24 font-bold text-gray-1000">Meeting Management</h1>
-          <p className="text-copy-14 text-gray-600 mt-1">View and manage all platform meetings</p>
+          <h1 className="text-heading-24 text-gray-1000 font-bold">Meeting Management</h1>
+          <p className="text-copy-14 mt-1 text-gray-600">View and manage all platform meetings</p>
         </div>
       </div>
 

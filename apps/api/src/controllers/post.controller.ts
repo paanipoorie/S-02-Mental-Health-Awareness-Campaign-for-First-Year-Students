@@ -129,7 +129,8 @@ export const postController = {
       const { id } = req.params as GetPostParams;
       const data = req.body as CreateReplyInput;
 
-      const identityId = user.role === 'MENTOR' || user.role === 'ADMIN' ? user.userId : user.anonymousIdentityId;
+      const identityId =
+        user.role === 'MENTOR' || user.role === 'ADMIN' ? user.userId : user.anonymousIdentityId;
 
       if (!identityId) {
         throw new ApiError(404, 'Anonymous identity not found');
@@ -154,7 +155,8 @@ export const postController = {
       const user = req.user!;
       const { id, replyId } = req.params as DeleteReplyParams;
 
-      const identityId = user.role === 'MENTOR' || user.role === 'ADMIN' ? user.userId : user.anonymousIdentityId;
+      const identityId =
+        user.role === 'MENTOR' || user.role === 'ADMIN' ? user.userId : user.anonymousIdentityId;
 
       if (!identityId) {
         throw new ApiError(404, 'Anonymous identity not found');

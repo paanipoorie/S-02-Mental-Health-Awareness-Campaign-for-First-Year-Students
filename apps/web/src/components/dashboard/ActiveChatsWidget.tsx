@@ -19,7 +19,7 @@ export function ActiveChatsWidget({ activeChats, className = '' }: ActiveChatsWi
   if (!activeChats || activeChats.length === 0) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
-        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Active Chats</h3>
+        <h3 className="text-heading-20 text-gray-1000 mb-4 font-semibold">Active Chats</h3>
         <div className="py-8 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
@@ -34,11 +34,13 @@ export function ActiveChatsWidget({ activeChats, className = '' }: ActiveChatsWi
               d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
             />
           </svg>
-          <p className="text-copy-14 mt-3 text-gray-600 font-medium">No active chats</p>
-          <p className="text-label-12 mt-1 text-gray-500">Initiate an anonymous conversation with a peer mentor.</p>
+          <p className="text-copy-14 mt-3 font-medium text-gray-600">No active chats</p>
+          <p className="text-label-12 mt-1 text-gray-500">
+            Initiate an anonymous conversation with a peer mentor.
+          </p>
           <a
             href="/chat"
-            className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
+            className="bg-primary text-button-14 text-background-100 mt-4 inline-block rounded-sm px-4 py-2 font-semibold transition-colors hover:bg-gray-800"
           >
             Start Chat
           </a>
@@ -53,7 +55,7 @@ export function ActiveChatsWidget({ activeChats, className = '' }: ActiveChatsWi
         <h3 className="text-heading-20 text-gray-1000 font-semibold">Active Chats</h3>
         <a
           href="/chat"
-          className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
+          className="text-label-14 text-tertiary font-medium transition-colors hover:underline"
         >
           View all
         </a>
@@ -64,15 +66,10 @@ export function ActiveChatsWidget({ activeChats, className = '' }: ActiveChatsWi
           <a
             key={chat.id}
             href={`/chat?threadId=${chat.id}`}
-            className="flex items-center gap-4 rounded-sm border border-gray-200 bg-background-100 p-3 transition-colors hover:bg-gray-50 focus-visible:outline-none"
+            className="bg-background-100 flex items-center gap-4 rounded-sm border border-gray-200 p-3 transition-colors hover:bg-gray-50 focus-visible:outline-none"
           >
-            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200 text-gray-700">
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-gray-700">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -87,7 +84,7 @@ export function ActiveChatsWidget({ activeChats, className = '' }: ActiveChatsWi
                   {chat.mentorDisplayName || chat.studentDisplayName}
                 </p>
                 {chat.unreadCount > 0 && (
-                  <span className="flex h-5 min-w-5 flex-shrink-0 items-center justify-center rounded-sm bg-blue-700 px-1.5 text-xs font-semibold text-background-100">
+                  <span className="text-background-100 flex h-5 min-w-5 flex-shrink-0 items-center justify-center rounded-sm bg-blue-700 px-1.5 text-xs font-semibold">
                     {chat.unreadCount > 9 ? '9+' : chat.unreadCount}
                   </span>
                 )}

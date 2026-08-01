@@ -3,50 +3,59 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Privacy Guarantee | Peerly">
-  <div class="max-w-4xl mx-auto py-12 px-4 sm:px-6">
+  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6">
     <div class="mb-12 text-center">
       <h1 class="text-heading-48 text-gray-1000 mb-4">Privacy-First Architecture</h1>
-      <p class="text-copy-18 text-gray-400">How student anonymity is cryptographically and architecturally guaranteed at Peerly.</p>
+      <p class="text-copy-18 text-gray-400">
+        How student anonymity is cryptographically and architecturally guaranteed at Peerly.
+      </p>
     </div>
 
     <div class="space-y-8">
       <!-- Section 1 -->
-      <div class="dashboard-card p-8 rounded-lg bg-[#1F2937] border border-[#374151]">
+      <div class="dashboard-card rounded-lg border border-[#374151] bg-[#1F2937] p-8">
         <h2 class="text-heading-24 text-gray-1000 mb-4 flex items-center gap-3">
-          <span class="w-2 h-8 rounded-full bg-[var(--color-tertiary)] inline-block"></span>
+          <span class="inline-block h-8 w-2 rounded-full bg-[var(--color-tertiary)]"></span>
           Database-Level Separation
         </h2>
-        <p class="text-copy-16 text-gray-300 mb-4">
-          To prevent exposure of personal identity, the database contains two completely separate identity systems:
+        <p class="text-copy-16 mb-4 text-gray-300">
+          To prevent exposure of personal identity, the database contains two completely separate
+          identity systems:
         </p>
-        <ul class="list-disc list-inside space-y-2 text-copy-14 text-gray-400 ml-4 mb-6">
-          <li><strong class="text-gray-200">User credentials</strong> (university email, password hash, role) are strictly isolated.</li>
-          <li><strong class="text-gray-200">Anonymous identity</strong> (generated animal name and avatar seed) is used for all peer features.</li>
+        <ul class="text-copy-14 mb-6 ml-4 list-inside list-disc space-y-2 text-gray-400">
+          <li>
+            <strong class="text-gray-200">User credentials</strong> (university email, password hash,
+            role) are strictly isolated.
+          </li>
+          <li>
+            <strong class="text-gray-200">Anonymous identity</strong> (generated animal name and avatar
+            seed) is used for all peer features.
+          </li>
         </ul>
         <div class="overflow-x-auto">
           <table class="w-full border-collapse text-left text-xs font-semibold text-gray-400">
             <thead>
               <tr class="border-b border-gray-200">
-                <th class="py-2 px-4">Feature Table</th>
-                <th class="py-2 px-4">Identity Reference</th>
-                <th class="py-2 px-4">Direct User Access</th>
+                <th class="px-4 py-2">Feature Table</th>
+                <th class="px-4 py-2">Identity Reference</th>
+                <th class="px-4 py-2">Direct User Access</th>
               </tr>
             </thead>
             <tbody>
               <tr class="border-b border-gray-200/20">
-                <td class="py-2 px-4">Discussion Forum (Posts & Replies)</td>
-                <td class="py-2 px-4 text-emerald-400">anonymousIdentityId</td>
-                <td class="py-2 px-4 text-rose-400">Blocked</td>
+                <td class="px-4 py-2">Discussion Forum (Posts & Replies)</td>
+                <td class="px-4 py-2 text-emerald-400">anonymousIdentityId</td>
+                <td class="px-4 py-2 text-rose-400">Blocked</td>
               </tr>
               <tr class="border-b border-gray-200/20">
-                <td class="py-2 px-4">Peer Chats & Messages</td>
-                <td class="py-2 px-4 text-emerald-400">studentIdentityId / senderId</td>
-                <td class="py-2 px-4 text-rose-400">Blocked</td>
+                <td class="px-4 py-2">Peer Chats & Messages</td>
+                <td class="px-4 py-2 text-emerald-400">studentIdentityId / senderId</td>
+                <td class="px-4 py-2 text-rose-400">Blocked</td>
               </tr>
               <tr class="border-b border-gray-200/20">
-                <td class="py-2 px-4">Workshops & Meetings</td>
-                <td class="py-2 px-4 text-emerald-400">hostIdentityId / attendeeId</td>
-                <td class="py-2 px-4 text-rose-400">Blocked</td>
+                <td class="px-4 py-2">Workshops & Meetings</td>
+                <td class="px-4 py-2 text-emerald-400">hostIdentityId / attendeeId</td>
+                <td class="px-4 py-2 text-rose-400">Blocked</td>
               </tr>
             </tbody>
           </table>
@@ -54,41 +63,49 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <!-- Section 2 -->
-      <div class="dashboard-card p-8 rounded-lg bg-[#1F2937] border border-[#374151]">
+      <div class="dashboard-card rounded-lg border border-[#374151] bg-[#1F2937] p-8">
         <h2 class="text-heading-24 text-gray-1000 mb-4 flex items-center gap-3">
-          <span class="w-2 h-8 rounded-full bg-[var(--color-tertiary)] inline-block"></span>
+          <span class="inline-block h-8 w-2 rounded-full bg-[var(--color-tertiary)]"></span>
           Service-Layer Boundaries
         </h2>
         <p class="text-copy-16 text-gray-300">
-          Only the Core Auth Service and Identity Service are allowed to map your logged-in credentials to your active session. All other student features (discussions, chats, group meetings, and emotion logs) run exclusively using the generated pseudonyms.
+          Only the Core Auth Service and Identity Service are allowed to map your logged-in
+          credentials to your active session. All other student features (discussions, chats, group
+          meetings, and emotion logs) run exclusively using the generated pseudonyms.
         </p>
       </div>
 
       <!-- Section 3 -->
-      <div class="dashboard-card p-8 rounded-lg bg-[#1F2937] border border-[#374151]">
+      <div class="dashboard-card rounded-lg border border-[#374151] bg-[#1F2937] p-8">
         <h2 class="text-heading-24 text-gray-1000 mb-4 flex items-center gap-3">
-          <span class="w-2 h-8 rounded-full bg-[var(--color-tertiary)] inline-block"></span>
+          <span class="inline-block h-8 w-2 rounded-full bg-[var(--color-tertiary)]"></span>
           Mentor Transparency
         </h2>
         <p class="text-copy-16 text-gray-300">
-          To build trust and verify professionalism, mentors are not anonymous. Their real names, departments, and "Verified Mentor" status are displayed to all users. However, mentors never see the real emails, names, or backend user IDs of the students they chat with.
+          To build trust and verify professionalism, mentors are not anonymous. Their real names,
+          departments, and "Verified Mentor" status are displayed to all users. However, mentors
+          never see the real emails, names, or backend user IDs of the students they chat with.
         </p>
       </div>
 
       <!-- Section 4 -->
-      <div class="dashboard-card p-8 rounded-lg bg-[#1F2937] border border-[#374151]">
+      <div class="dashboard-card rounded-lg border border-[#374151] bg-[#1F2937] p-8">
         <h2 class="text-heading-24 text-gray-1000 mb-4 flex items-center gap-3">
-          <span class="w-2 h-8 rounded-full bg-[var(--color-tertiary)] inline-block"></span>
+          <span class="inline-block h-8 w-2 rounded-full bg-[var(--color-tertiary)]"></span>
           Automated Privacy Regression Audits
         </h2>
         <p class="text-copy-16 text-gray-300">
-          Every API build runs an automated anonymity suite which asserts that student-facing payloads never return emails, password hashes, or internal database identifiers.
+          Every API build runs an automated anonymity suite which asserts that student-facing
+          payloads never return emails, password hashes, or internal database identifiers.
         </p>
       </div>
     </div>
-    
+
     <div class="mt-12 text-center">
-      <a href="/" class="inline-flex items-center justify-center px-6 py-3 border border-gray-200 hover:bg-gray-100 text-button-14 rounded font-bold transition-all">
+      <a
+        href="/"
+        class="text-button-14 inline-flex items-center justify-center rounded border border-gray-200 px-6 py-3 font-bold transition-all hover:bg-gray-100"
+      >
         Back to Home
       </a>
     </div>

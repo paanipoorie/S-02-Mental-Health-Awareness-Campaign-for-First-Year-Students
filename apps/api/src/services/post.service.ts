@@ -113,7 +113,7 @@ export const postService = {
     }
 
     const repliesWithAuthor = await Promise.all(
-      post.replies.map(async (reply) => {
+      post.replies.map(async reply => {
         const anon = await prisma.anonymousIdentity.findUnique({
           where: { id: reply.anonymousIdentityId },
           select: { displayName: true },

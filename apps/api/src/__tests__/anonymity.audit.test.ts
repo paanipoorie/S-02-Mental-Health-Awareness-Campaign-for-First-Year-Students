@@ -99,14 +99,11 @@ describe('Anonymity Audit - Verify No PII Leaks in Student Data', () => {
       for (const [key, value] of Object.entries(obj)) {
         const fullPath = path ? `${path}.${key}` : key;
         // These fields should NEVER appear in student-facing responses
-        const forbiddenKeys = [
-          'universityEmail',
-          'passwordHash',
-          'userId',
-          'email',
-        ];
+        const forbiddenKeys = ['universityEmail', 'passwordHash', 'userId', 'email'];
         if (forbiddenKeys.includes(key)) {
-          throw new Error(`PII LEAK in ${context}: Found forbidden field '${fullPath}' = ${JSON.stringify(value)}`);
+          throw new Error(
+            `PII LEAK in ${context}: Found forbidden field '${fullPath}' = ${JSON.stringify(value)}`
+          );
         }
         if (value && typeof value === 'object') {
           checkRecursive(value, fullPath);
@@ -121,12 +118,18 @@ describe('Anonymity Audit - Verify No PII Leaks in Student Data', () => {
       const response = await request(app)
         .post('/api/posts')
         .set('Authorization', `Bearer ${studentToken}`)
-        .send({ title: 'New Post Title', body: 'Body content that is long enough for validation', category: 'GENERAL' })
+        .send({
+          title: 'New Post Title',
+          body: 'Body content that is long enough for validation',
+          category: 'GENERAL',
+        })
         .expect(201);
 
       assertNoStudentPII(response.body, 'POST /api/posts');
       // Should contain anonymous display name
-      expect(response.body.data.anonymousIdentity.displayName).toMatch(/^Anonymous [A-Z][a-z]+ [A-Z][a-z]+$/);
+      expect(response.body.data.anonymousIdentity.displayName).toMatch(
+        /^Anonymous [A-Z][a-z]+ [A-Z][a-z]+$/
+      );
       expect(response.body.data.anonymousIdentity.userId).toBeUndefined();
     });
   });

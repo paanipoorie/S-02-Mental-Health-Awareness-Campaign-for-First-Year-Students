@@ -1,4 +1,16 @@
-import { Flag, AlertTriangle, User, Mail, Ban, Phone, FileText, MessageSquare, MessageCircle, Calendar, Target } from 'lucide-react';
+import {
+  Flag,
+  AlertTriangle,
+  User,
+  Mail,
+  Ban,
+  Phone,
+  FileText,
+  MessageSquare,
+  MessageCircle,
+  Calendar,
+  Target,
+} from 'lucide-react';
 import type { ReactNode } from 'react';
 
 interface ReportsWidgetProps {
@@ -15,12 +27,36 @@ interface ReportsWidgetProps {
 }
 
 const TYPE_CONFIG: Record<string, { icon: ReactNode; color: string; bg: string }> = {
-  CONTENT_FLAG: { icon: <Flag className="h-5 w-5" style={{ color: '#ef4444' }} />, color: '#ef4444', bg: '#fee2e2' },
-  CHAT_CONCERN: { icon: <AlertTriangle className="h-5 w-5" style={{ color: '#f59e0b' }} />, color: '#f59e0b', bg: '#fef3c7' },
-  USER_REPORT: { icon: <User className="h-5 w-5" style={{ color: '#8b5cf6' }} />, color: '#8b5cf6', bg: '#f3e8ff' },
-  SPAM: { icon: <Mail className="h-5 w-5" style={{ color: '#ec4899' }} />, color: '#ec4899', bg: '#fce7f3' },
-  HARASSMENT: { icon: <Ban className="h-5 w-5" style={{ color: '#dc2626' }} />, color: '#dc2626', bg: '#fee2e2' },
-  SELF_HARM: { icon: <Phone className="h-5 w-5" style={{ color: '#ef4444' }} />, color: '#ef4444', bg: '#fee2e2' },
+  CONTENT_FLAG: {
+    icon: <Flag className="h-5 w-5" style={{ color: '#ef4444' }} />,
+    color: '#ef4444',
+    bg: '#fee2e2',
+  },
+  CHAT_CONCERN: {
+    icon: <AlertTriangle className="h-5 w-5" style={{ color: '#f59e0b' }} />,
+    color: '#f59e0b',
+    bg: '#fef3c7',
+  },
+  USER_REPORT: {
+    icon: <User className="h-5 w-5" style={{ color: '#8b5cf6' }} />,
+    color: '#8b5cf6',
+    bg: '#f3e8ff',
+  },
+  SPAM: {
+    icon: <Mail className="h-5 w-5" style={{ color: '#ec4899' }} />,
+    color: '#ec4899',
+    bg: '#fce7f3',
+  },
+  HARASSMENT: {
+    icon: <Ban className="h-5 w-5" style={{ color: '#dc2626' }} />,
+    color: '#dc2626',
+    bg: '#fee2e2',
+  },
+  SELF_HARM: {
+    icon: <Phone className="h-5 w-5" style={{ color: '#ef4444' }} />,
+    color: '#ef4444',
+    bg: '#fee2e2',
+  },
 };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
@@ -43,8 +79,10 @@ const TARGET_TYPE_ICONS: Record<string, ReactNode> = {
 export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
   if (!reports || reports.length === 0) {
     return (
-      <div className={`dashboard-card p-6 bg-background-100 border border-gray-200 rounded-sm ${className}`}>
-        <h3 className="text-heading-16 font-bold text-gray-1000 mb-4">Moderation Reports</h3>
+      <div
+        className={`dashboard-card bg-background-100 rounded-sm border border-gray-200 p-6 ${className}`}
+      >
+        <h3 className="text-heading-16 text-gray-1000 mb-4 font-bold">Moderation Reports</h3>
         <div className="py-8 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
@@ -68,9 +106,11 @@ export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
   }
 
   return (
-    <div className={`dashboard-card p-6 bg-background-100 border border-gray-200 rounded-sm ${className}`}>
+    <div
+      className={`dashboard-card bg-background-100 rounded-sm border border-gray-200 p-6 ${className}`}
+    >
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-heading-16 font-bold text-gray-1000">Moderation Reports</h3>
+        <h3 className="text-heading-16 text-gray-1000 font-bold">Moderation Reports</h3>
         <span className="flex h-5 min-w-5 items-center justify-center rounded-full border border-red-200 bg-red-50 px-1.5 text-xs font-bold text-red-700">
           {reports.length}
         </span>
@@ -88,12 +128,14 @@ export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
             color: '#6b7280',
             bg: '#f3f4f6',
           };
-          const targetIcon = TARGET_TYPE_ICONS[report.targetType] || <FileText className="h-3.5 w-3.5 text-gray-500" />;
+          const targetIcon = TARGET_TYPE_ICONS[report.targetType] || (
+            <FileText className="h-3.5 w-3.5 text-gray-500" />
+          );
 
           return (
             <div
               key={report.id}
-              className="rounded-sm border border-gray-200 bg-background-100 p-4 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+              className="bg-background-100 rounded-sm border border-gray-200 p-4 transition-colors hover:border-gray-300 hover:bg-gray-50"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex min-w-0 flex-1 items-start gap-3">
@@ -117,7 +159,7 @@ export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
                       </span>
                     </div>
 
-                    <p className="text-copy-13 mt-1 line-clamp-2 text-gray-600 leading-relaxed">
+                    <p className="text-copy-13 mt-1 line-clamp-2 leading-relaxed text-gray-600">
                       {report.reason}
                     </p>
 
@@ -132,13 +174,13 @@ export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
 
                 <div className="flex flex-shrink-0 flex-col items-end gap-1.5">
                   <time
-                    className="text-[10px] font-mono whitespace-nowrap text-gray-400"
+                    className="whitespace-nowrap font-mono text-[10px] text-gray-400"
                     dateTime={report.createdAt}
                   >
                     {formatDate(report.createdAt, true)}
                   </time>
                   <button
-                    className="text-label-12 whitespace-nowrap text-tertiary font-bold hover:underline"
+                    className="text-label-12 text-tertiary whitespace-nowrap font-bold hover:underline"
                     onClick={() => window.open(`/admin/reports/${report.id}`, '_blank')}
                   >
                     View Details

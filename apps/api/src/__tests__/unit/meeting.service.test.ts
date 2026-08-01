@@ -48,7 +48,10 @@ async function createStudentAndMentor(studentEmail: string, mentorEmail: string)
 
 describe('Meeting and Workshop Service Unit Tests', () => {
   it('should verify meeting scheduling, RSVP toggles, and cancellation', async () => {
-    const { student, student2 } = await createStudentAndMentor('meetunit1@test.edu', 'meetunit2@test.edu');
+    const { student, student2 } = await createStudentAndMentor(
+      'meetunit1@test.edu',
+      'meetunit2@test.edu'
+    );
 
     // Create meeting
     const meeting = await meetingService.createMeeting(student.id, Role.STUDENT, {
@@ -77,7 +80,10 @@ describe('Meeting and Workshop Service Unit Tests', () => {
   });
 
   it('should verify workshop scheduling, registration, and attendance tracking', async () => {
-    const { student, studentAnon, mentor } = await createStudentAndMentor('meetunit3@test.edu', 'meetunit4@test.edu');
+    const { student, studentAnon, mentor } = await createStudentAndMentor(
+      'meetunit3@test.edu',
+      'meetunit4@test.edu'
+    );
 
     // Create workshop
     const workshop = await workshopService.createWorkshop(mentor.id, {
@@ -103,7 +109,11 @@ describe('Meeting and Workshop Service Unit Tests', () => {
     expect(reg.status).toBe('REGISTERED');
 
     // Mark Attendance
-    const attendance = await workshopService.markAttendance(workshop.id, studentAnon.id, 'ATTENDED' as any);
+    const attendance = await workshopService.markAttendance(
+      workshop.id,
+      studentAnon.id,
+      'ATTENDED' as any
+    );
     expect(attendance.status).toBe('ATTENDED');
     expect(attendance.attendedAt).not.toBeNull();
 

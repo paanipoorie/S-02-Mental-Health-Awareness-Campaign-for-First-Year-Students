@@ -3,7 +3,21 @@ import { api } from '@lib/api';
 import { useStore } from '@nanostores/react';
 import { $user, fetchCurrentUser } from '@stores/authStore';
 import { toast } from 'sonner';
-import { Brain, Smile, BookOpen, Clock, Sparkles, Briefcase, FileText, Globe, MapPin, Calendar, User, Link, Users } from 'lucide-react';
+import {
+  Brain,
+  Smile,
+  BookOpen,
+  Clock,
+  Sparkles,
+  Briefcase,
+  FileText,
+  Globe,
+  MapPin,
+  Calendar,
+  User,
+  Link,
+  Users,
+} from 'lucide-react';
 
 interface Workshop {
   id: string;
@@ -25,7 +39,12 @@ interface Workshop {
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
-  return date.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  return date.toLocaleDateString([], {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 }
 
 function formatTime(timeStr: string): string {
@@ -59,7 +78,9 @@ export function WorkshopListClient() {
       if (category) params.append('category', category);
       if (type) params.append('meetingType', type);
 
-      const response = await api.get<{ workshops: Workshop[]; totalPages: number }>(`/workshops?${params.toString()}`);
+      const response = await api.get<{ workshops: Workshop[]; totalPages: number }>(
+        `/workshops?${params.toString()}`
+      );
       setWorkshops(response.workshops);
       setTotalPages(response.totalPages);
     } catch (err: any) {
@@ -102,26 +123,34 @@ export function WorkshopListClient() {
 
   const getCategoryIcon = (cat: string) => {
     switch (cat) {
-      case 'MENTAL_HEALTH': return <Brain className="h-3 w-3 text-gray-600" />;
-      case 'STRESS_MANAGEMENT': return <Smile className="h-3 w-3 text-gray-600" />;
-      case 'STUDY_SKILLS': return <BookOpen className="h-3 w-3 text-gray-600" />;
-      case 'TIME_MANAGEMENT': return <Clock className="h-3 w-3 text-gray-600" />;
-      case 'MINDFULNESS': return <Sparkles className="h-3 w-3 text-gray-600" />;
-      case 'CAREER_GUIDANCE': return <Briefcase className="h-3 w-3 text-gray-600" />;
-      case 'GENERAL': return <FileText className="h-3 w-3 text-gray-600" />;
-      default: return <FileText className="h-3 w-3 text-gray-600" />;
+      case 'MENTAL_HEALTH':
+        return <Brain className="h-3 w-3 text-gray-600" />;
+      case 'STRESS_MANAGEMENT':
+        return <Smile className="h-3 w-3 text-gray-600" />;
+      case 'STUDY_SKILLS':
+        return <BookOpen className="h-3 w-3 text-gray-600" />;
+      case 'TIME_MANAGEMENT':
+        return <Clock className="h-3 w-3 text-gray-600" />;
+      case 'MINDFULNESS':
+        return <Sparkles className="h-3 w-3 text-gray-600" />;
+      case 'CAREER_GUIDANCE':
+        return <Briefcase className="h-3 w-3 text-gray-600" />;
+      case 'GENERAL':
+        return <FileText className="h-3 w-3 text-gray-600" />;
+      default:
+        return <FileText className="h-3 w-3 text-gray-600" />;
     }
   };
 
   const showHostButton = user?.role === 'MENTOR' || user?.role === 'ADMIN';
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-heading-32 font-bold text-gray-1000">Mentor Workshops</h1>
-          <p className="text-copy-14 text-gray-500 mt-1">
+          <h1 className="text-heading-32 text-gray-1000 font-bold">Mentor Workshops</h1>
+          <p className="text-copy-14 mt-1 text-gray-500">
             Attend professional, mentor-guided workshops on stress, sleep, welfare, and academics.
           </p>
         </div>
@@ -129,7 +158,7 @@ export function WorkshopListClient() {
           <div>
             <a
               href="/workshops/new"
-              className="inline-block rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors focus-visible:outline-none"
+              className="bg-primary text-button-14 text-background-100 inline-block rounded-sm px-5 py-2.5 font-semibold transition-colors hover:bg-gray-800 focus-visible:outline-none"
             >
               + Host a Workshop
             </a>
@@ -138,46 +167,83 @@ export function WorkshopListClient() {
       </div>
 
       {/* Filter and Search Bar */}
-      <form onSubmit={handleSearchSubmit} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 bg-background-100 p-5 rounded-sm border border-gray-200 shadow-sm">
-        <div className="sm:col-span-2 relative">
+      <form
+        onSubmit={handleSearchSubmit}
+        className="bg-background-100 grid gap-3 rounded-sm border border-gray-200 p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-4"
+      >
+        <div className="relative sm:col-span-2">
           <input
             type="search"
             placeholder="Search workshops..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400"
+            onChange={e => setSearch(e.target.value)}
+            className="bg-background-100 w-full rounded-sm border border-gray-200 py-2 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900"
           />
-          <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          <svg
+            className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
         </div>
 
         <div>
           <select
             value={category}
-            onChange={(e) => { setCategory(e.target.value); setPage(1); }}
-            className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-700 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
+            onChange={e => {
+              setCategory(e.target.value);
+              setPage(1);
+            }}
+            className="bg-background-100 w-full cursor-pointer rounded-sm border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none transition-colors focus:border-gray-900"
           >
             <option value="">All Categories</option>
-            <option value="MENTAL_HEALTH"><Brain className="h-3.5 w-3.5 inline mr-1" /> Mental Health</option>
-            <option value="STRESS_MANAGEMENT"><Smile className="h-3.5 w-3.5 inline mr-1" /> Stress Management</option>
-            <option value="STUDY_SKILLS"><BookOpen className="h-3.5 w-3.5 inline mr-1" /> Study Skills</option>
-            <option value="TIME_MANAGEMENT"><Clock className="h-3.5 w-3.5 inline mr-1" /> Time Management</option>
-            <option value="MINDFULNESS"><Sparkles className="h-3.5 w-3.5 inline mr-1" /> Mindfulness</option>
-            <option value="CAREER_GUIDANCE"><Briefcase className="h-3.5 w-3.5 inline mr-1" /> Career Guidance</option>
-            <option value="GENERAL"><FileText className="h-3.5 w-3.5 inline mr-1" /> General</option>
+            <option value="MENTAL_HEALTH">
+              <Brain className="mr-1 inline h-3.5 w-3.5" /> Mental Health
+            </option>
+            <option value="STRESS_MANAGEMENT">
+              <Smile className="mr-1 inline h-3.5 w-3.5" /> Stress Management
+            </option>
+            <option value="STUDY_SKILLS">
+              <BookOpen className="mr-1 inline h-3.5 w-3.5" /> Study Skills
+            </option>
+            <option value="TIME_MANAGEMENT">
+              <Clock className="mr-1 inline h-3.5 w-3.5" /> Time Management
+            </option>
+            <option value="MINDFULNESS">
+              <Sparkles className="mr-1 inline h-3.5 w-3.5" /> Mindfulness
+            </option>
+            <option value="CAREER_GUIDANCE">
+              <Briefcase className="mr-1 inline h-3.5 w-3.5" /> Career Guidance
+            </option>
+            <option value="GENERAL">
+              <FileText className="mr-1 inline h-3.5 w-3.5" /> General
+            </option>
           </select>
         </div>
 
         <div>
           <select
             value={type}
-            onChange={(e) => { setType(e.target.value); setPage(1); }}
-            className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-700 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
+            onChange={e => {
+              setType(e.target.value);
+              setPage(1);
+            }}
+            className="bg-background-100 w-full cursor-pointer rounded-sm border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none transition-colors focus:border-gray-900"
           >
             <option value="">All Locations</option>
-            <option value="ONLINE"><Globe className="h-3.5 w-3.5 inline mr-1" /> Online</option>
-            <option value="OFFLINE"><MapPin className="h-3.5 w-3.5 inline mr-1" /> Campus</option>
+            <option value="ONLINE">
+              <Globe className="mr-1 inline h-3.5 w-3.5" /> Online
+            </option>
+            <option value="OFFLINE">
+              <MapPin className="mr-1 inline h-3.5 w-3.5" /> Campus
+            </option>
           </select>
         </div>
       </form>
@@ -186,88 +252,117 @@ export function WorkshopListClient() {
       {loading ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-background-100 border border-gray-200 rounded-sm p-6 h-64 animate-pulse flex flex-col justify-between">
+            <div
+              key={i}
+              className="bg-background-100 flex h-64 animate-pulse flex-col justify-between rounded-sm border border-gray-200 p-6"
+            >
               <div className="space-y-3">
-                <div className="h-4 bg-gray-200 rounded-sm w-1/3" />
-                <div className="h-6 bg-gray-200 rounded-sm w-3/4" />
-                <div className="h-4 bg-gray-200 rounded-sm w-full" />
+                <div className="h-4 w-1/3 rounded-sm bg-gray-200" />
+                <div className="h-6 w-3/4 rounded-sm bg-gray-200" />
+                <div className="h-4 w-full rounded-sm bg-gray-200" />
               </div>
-              <div className="h-10 bg-gray-200 rounded-sm w-full" />
+              <div className="h-10 w-full rounded-sm bg-gray-200" />
             </div>
           ))}
         </div>
       ) : workshops.length === 0 ? (
-        <div className="text-center py-16 border border-gray-200 rounded-sm bg-background-100">
-          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        <div className="bg-background-100 rounded-sm border border-gray-200 py-16 text-center">
+          <svg
+            className="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+            />
           </svg>
-          <h3 className="mt-4 text-heading-18 font-bold text-gray-900">No workshops found</h3>
-          <p className="mt-2 text-copy-14 text-gray-500 max-w-sm mx-auto">
-            There are no workshops scheduled right now. Check back soon for updates from our mentors!
+          <h3 className="text-heading-18 mt-4 font-bold text-gray-900">No workshops found</h3>
+          <p className="text-copy-14 mx-auto mt-2 max-w-sm text-gray-500">
+            There are no workshops scheduled right now. Check back soon for updates from our
+            mentors!
           </p>
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {workshops.map((workshop) => {
+          {workshops.map(workshop => {
             const isRegistered = workshop.registrationStatus === 'REGISTERED';
-            const isFull = workshop.maxAttendees !== null && workshop.registrationCount >= workshop.maxAttendees;
+            const isFull =
+              workshop.maxAttendees !== null && workshop.registrationCount >= workshop.maxAttendees;
 
             return (
               <div
                 key={workshop.id}
-                className="flex flex-col justify-between bg-background-100 border border-gray-200 rounded-sm p-6 hover:bg-gray-50 transition-colors focus-visible:outline-none"
+                className="bg-background-100 flex flex-col justify-between rounded-sm border border-gray-200 p-6 transition-colors hover:bg-gray-50 focus-visible:outline-none"
               >
                 <div>
                   {/* Meta details */}
-                  <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="mb-3 flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
                       {getCategoryIcon(workshop.category)} {workshop.category.replace('_', ' ')}
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700">
-                      {workshop.meetingType === 'ONLINE' ? <Globe className="h-3 w-3 text-gray-600" /> : <MapPin className="h-3 w-3 text-gray-600" />}
-                      {' '}{workshop.meetingType}
+                      {workshop.meetingType === 'ONLINE' ? (
+                        <Globe className="h-3 w-3 text-gray-600" />
+                      ) : (
+                        <MapPin className="h-3 w-3 text-gray-600" />
+                      )}{' '}
+                      {workshop.meetingType}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-heading-18 font-bold text-gray-900">
-                    {workshop.title}
-                  </h3>
+                  <h3 className="text-heading-18 font-bold text-gray-900">{workshop.title}</h3>
 
                   {/* Description */}
-                  <p className="text-copy-14 text-gray-600 mt-2 line-clamp-3 leading-normal">
+                  <p className="text-copy-14 mt-2 line-clamp-3 leading-normal text-gray-600">
                     {workshop.description}
                   </p>
 
                   {/* Logistics */}
-                  <div className="space-y-2 mt-4 border-t border-gray-200 pt-4 text-label-12 text-gray-500 font-mono">
+                  <div className="text-label-12 mt-4 space-y-2 border-t border-gray-200 pt-4 font-mono text-gray-500">
                     <div className="flex items-center gap-2">
-                      <Calendar className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
+                      <Calendar className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
                       <span className="font-medium text-gray-700">{formatDate(workshop.date)}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Clock className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
-                      <span className="font-medium text-gray-700">{formatTime(workshop.time)} ({workshop.durationMinutes} min)</span>
+                      <Clock className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
+                      <span className="font-medium text-gray-700">
+                        {formatTime(workshop.time)} ({workshop.durationMinutes} min)
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <User className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
-                      <span className="font-sans font-medium text-gray-700">Mentor: <strong className="font-semibold">{workshop.mentorDisplayName}</strong></span>
+                      <User className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
+                      <span className="font-sans font-medium text-gray-700">
+                        Mentor:{' '}
+                        <strong className="font-semibold">{workshop.mentorDisplayName}</strong>
+                      </span>
                     </div>
                     {workshop.meetingType === 'ONLINE' ? (
                       <div className="flex items-center gap-2 truncate">
-                        <Link className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
+                        <Link className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
                         {workshop.meetingLink ? (
-                          <a href={workshop.meetingLink} target="_blank" rel="noreferrer" className="text-tertiary hover:underline truncate">
+                          <a
+                            href={workshop.meetingLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-tertiary truncate hover:underline"
+                          >
                             {workshop.meetingLink}
                           </a>
                         ) : (
-                          <span className="text-gray-400 italic">No link provided</span>
+                          <span className="italic text-gray-400">No link provided</span>
                         )}
                       </div>
                     ) : (
                       <div className="flex items-center gap-2 truncate">
-                        <MapPin className="h-3.5 w-3.5 text-gray-500 flex-shrink-0" />
-                        <span className="font-sans font-medium text-gray-700 truncate">{workshop.location || 'Campus'}</span>
+                        <MapPin className="h-3.5 w-3.5 flex-shrink-0 text-gray-500" />
+                        <span className="truncate font-sans font-medium text-gray-700">
+                          {workshop.location || 'Campus'}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -276,12 +371,14 @@ export function WorkshopListClient() {
                 {/* Actions */}
                 <div className="mt-6 flex items-center justify-between gap-3 border-t border-gray-200 pt-4">
                   <span className="text-xs text-gray-500">
-                    <Users className="h-3 w-3 inline mr-1" /><strong className="text-gray-700">{workshop.registrationCount}</strong> / {workshop.maxAttendees || '\u221E'} registered
+                    <Users className="mr-1 inline h-3 w-3" />
+                    <strong className="text-gray-700">{workshop.registrationCount}</strong> /{' '}
+                    {workshop.maxAttendees || '\u221E'} registered
                   </span>
                   <div className="flex gap-2">
                     <a
                       href={`/workshops/${workshop.id}`}
-                      className="px-3.5 py-1.5 text-xs font-semibold text-gray-700 bg-background-100 hover:bg-gray-50 border border-gray-200 rounded-sm transition-colors"
+                      className="bg-background-100 rounded-sm border border-gray-200 px-3.5 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                     >
                       Details
                     </a>
@@ -289,7 +386,7 @@ export function WorkshopListClient() {
                       <button
                         type="button"
                         onClick={() => handleCancelRegistration(workshop.id)}
-                        className="px-4 py-1.5 text-xs font-semibold rounded-sm border bg-green-50 text-green-800 border-green-300 hover:bg-red-50 hover:text-red-800 hover:border-red-300 transition-colors"
+                        className="rounded-sm border border-green-300 bg-green-50 px-4 py-1.5 text-xs font-semibold text-green-800 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-800"
                       >
                         {'\u2713'} Registered
                       </button>
@@ -297,7 +394,7 @@ export function WorkshopListClient() {
                       <button
                         type="button"
                         disabled
-                        className="px-4 py-1.5 text-xs font-semibold rounded-sm bg-gray-100 text-gray-450 border border-gray-200 cursor-not-allowed"
+                        className="text-gray-450 cursor-not-allowed rounded-sm border border-gray-200 bg-gray-100 px-4 py-1.5 text-xs font-semibold"
                       >
                         Full
                       </button>
@@ -305,7 +402,7 @@ export function WorkshopListClient() {
                       <button
                         type="button"
                         onClick={() => handleRegister(workshop.id)}
-                        className="px-4 py-1.5 text-xs font-semibold rounded-sm bg-primary hover:bg-gray-800 text-background-100 transition-colors"
+                        className="bg-primary text-background-100 rounded-sm px-4 py-1.5 text-xs font-semibold transition-colors hover:bg-gray-800"
                       >
                         Register
                       </button>
@@ -320,23 +417,23 @@ export function WorkshopListClient() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+        <div className="flex items-center justify-between border-t border-gray-200 pt-6">
           <button
             type="button"
             onClick={() => setPage(prev => Math.max(1, prev - 1))}
             disabled={page === 1}
-            className="px-4 py-2 text-button-14 font-semibold text-gray-700 bg-background-100 border border-gray-200 rounded-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="text-button-14 bg-background-100 rounded-sm border border-gray-200 px-4 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
           >
             Previous
           </button>
-          <span className="text-label-14 text-gray-500 font-mono font-medium">
+          <span className="text-label-14 font-mono font-medium text-gray-500">
             Page {page} of {totalPages}
           </span>
           <button
             type="button"
             onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
             disabled={page === totalPages}
-            className="px-4 py-2 text-button-14 font-semibold text-gray-700 bg-background-100 border border-gray-200 rounded-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="text-button-14 bg-background-100 rounded-sm border border-gray-200 px-4 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
           >
             Next
           </button>

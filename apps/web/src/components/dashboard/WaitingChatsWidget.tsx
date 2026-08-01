@@ -22,7 +22,7 @@ export function WaitingChatsWidget({ waitingChats, className = '' }: WaitingChat
   if (!waitingChats || waitingChats.length === 0) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
-        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Waiting Chats</h3>
+        <h3 className="text-heading-20 text-gray-1000 mb-4 font-semibold">Waiting Chats</h3>
         <div className="py-8 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
@@ -37,7 +37,7 @@ export function WaitingChatsWidget({ waitingChats, className = '' }: WaitingChat
               d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
             />
           </svg>
-          <p className="text-copy-14 mt-3 text-gray-600 font-medium">No students waiting</p>
+          <p className="text-copy-14 mt-3 font-medium text-gray-600">No students waiting</p>
           <p className="text-label-12 mt-1 text-gray-500">
             Students awaiting mentor assignment will appear here.
           </p>
@@ -60,9 +60,9 @@ export function WaitingChatsWidget({ waitingChats, className = '' }: WaitingChat
           <a
             key={chat.id}
             href={`/chat?threadId=${chat.id}`}
-            className="flex items-start gap-4 rounded-sm border border-gray-200 bg-background-100 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
+            className="bg-background-100 flex items-start gap-4 rounded-sm border border-gray-200 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
           >
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100">
               <span className="text-base font-bold text-gray-700">
                 {chat.studentDisplayName.charAt(0).toUpperCase()}
               </span>
@@ -77,7 +77,7 @@ export function WaitingChatsWidget({ waitingChats, className = '' }: WaitingChat
                   Waiting
                 </span>
               </div>
-              <p className="text-label-12 mt-1 text-gray-500 font-mono">
+              <p className="text-label-12 mt-1 font-mono text-gray-500">
                 Requested {formatDistanceToNow(new Date(chat.createdAt), { addSuffix: true })}
               </p>
               {chat.latestEmotion && (
@@ -91,7 +91,7 @@ export function WaitingChatsWidget({ waitingChats, className = '' }: WaitingChat
               )}
             </div>
 
-            <span className="text-label-12 flex-shrink-0 font-semibold text-tertiary hover:underline">
+            <span className="text-label-12 text-tertiary flex-shrink-0 font-semibold hover:underline">
               Assign
             </span>
           </a>
@@ -102,7 +102,7 @@ export function WaitingChatsWidget({ waitingChats, className = '' }: WaitingChat
         <div className="mt-4 text-center">
           <a
             href="/chat"
-            className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
+            className="text-label-14 text-tertiary font-medium transition-colors hover:underline"
           >
             View all {waitingChats.length} waiting chats
           </a>

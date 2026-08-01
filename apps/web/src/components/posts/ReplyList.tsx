@@ -15,7 +15,7 @@ interface ReplyListProps {
 export function ReplyList({ replies, onReply, onDeleteReply }: ReplyListProps) {
   if (replies.length === 0) {
     return (
-      <div className="py-6 text-center text-gray-400 font-medium">
+      <div className="py-6 text-center font-medium text-gray-400">
         No replies yet. Be the first to respond!
       </div>
     );
@@ -28,11 +28,11 @@ export function ReplyList({ replies, onReply, onDeleteReply }: ReplyListProps) {
           <div className="flex items-center gap-2">
             <span className="text-label-12 font-bold text-gray-900">{reply.authorName}</span>
             {reply.isMentor && (
-              <span className="text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded-sm">
+              <span className="rounded-sm border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700">
                 Verified Mentor
               </span>
             )}
-            <span className="text-gray-300 font-mono text-label-12">·</span>
+            <span className="text-label-12 font-mono text-gray-300">·</span>
             <time className="text-label-12 font-mono text-gray-400" dateTime={reply.createdAt}>
               {new Date(reply.createdAt).toLocaleString([], {
                 month: 'short',
@@ -43,19 +43,19 @@ export function ReplyList({ replies, onReply, onDeleteReply }: ReplyListProps) {
             </time>
           </div>
           <div
-            className="text-copy-14 text-gray-700 mt-2 leading-relaxed whitespace-pre-wrap"
+            className="text-copy-14 mt-2 whitespace-pre-wrap leading-relaxed text-gray-700"
             dangerouslySetInnerHTML={{ __html: reply.body }}
           />
-          <div className="flex items-center gap-3 mt-2">
+          <div className="mt-2 flex items-center gap-3">
             <button
-              className="text-label-12 font-semibold text-tertiary hover:underline cursor-pointer focus-visible:outline-none"
+              className="text-label-12 text-tertiary cursor-pointer font-semibold hover:underline focus-visible:outline-none"
               onClick={() => onReply(reply.id)}
             >
               Reply
             </button>
             {onDeleteReply && (
               <button
-                className="text-label-12 font-semibold text-red-600 hover:underline cursor-pointer focus-visible:outline-none"
+                className="text-label-12 cursor-pointer font-semibold text-red-600 hover:underline focus-visible:outline-none"
                 onClick={() => onDeleteReply(reply.id)}
               >
                 Delete

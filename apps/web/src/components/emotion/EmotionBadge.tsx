@@ -1,6 +1,20 @@
 import { getEmotionConfig } from '@lib/emotionConstants';
 import { getUrgencyConfig } from '@lib/emotionConstants';
-import { Smile, Sparkles, HelpCircle, Home, Frown, AlertTriangle, AlertCircle, BatteryLow, Brain, Zap, ChevronDown, Minus, ChevronUp } from 'lucide-react';
+import {
+  Smile,
+  Sparkles,
+  HelpCircle,
+  Home,
+  Frown,
+  AlertTriangle,
+  AlertCircle,
+  BatteryLow,
+  Brain,
+  Zap,
+  ChevronDown,
+  Minus,
+  ChevronUp,
+} from 'lucide-react';
 import type { EmotionType, UrgencyLevel } from '@lib/emotionConstants';
 
 interface EmotionBadgeProps {
@@ -52,12 +66,14 @@ export function EmotionBadge({
   const UrgencyIcon = urgencyConfig ? urgencyIconMap[urgencyConfig.level] || Minus : null;
 
   return (
-    <span className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-sm ${className}`}>
+    <span
+      className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} rounded-sm border border-gray-200 bg-gray-50 font-medium text-gray-700 ${className}`}
+    >
       <EmotionIcon className="h-3.5 w-3.5 text-gray-600" />
       <span>{emotionConfig.label}</span>
       {showUrgency && urgencyConfig && UrgencyIcon && (
         <>
-          <span className="text-gray-300 mx-0.5">·</span>
+          <span className="mx-0.5 text-gray-300">·</span>
           <UrgencyIcon className="h-3 w-3 text-gray-500" />
           <span className="text-gray-500">{urgencyConfig.label}</span>
         </>

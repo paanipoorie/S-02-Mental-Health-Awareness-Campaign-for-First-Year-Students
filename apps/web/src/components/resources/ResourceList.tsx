@@ -106,7 +106,7 @@ export function ResourceList() {
 
       {error && (
         <div
-          className="rounded-sm bg-red-50 p-4 text-red-700 border border-red-200 text-sm"
+          className="rounded-sm border border-red-200 bg-red-50 p-4 text-sm text-red-700"
           role="alert"
         >
           {error}
@@ -114,7 +114,7 @@ export function ResourceList() {
       )}
 
       {resources.length === 0 && !loading && (
-        <div className="py-12 text-center border border-gray-200 bg-background-100 rounded-sm">
+        <div className="bg-background-100 rounded-sm border border-gray-200 py-12 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
             fill="none"
@@ -129,9 +129,7 @@ export function ResourceList() {
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          <h3 className="mt-2 text-sm font-bold text-gray-900">
-            No resources found
-          </h3>
+          <h3 className="mt-2 text-sm font-bold text-gray-900">No resources found</h3>
           <p className="mt-1 text-xs text-gray-500">
             {selectedCategory || searchQuery
               ? 'Try adjusting your filters or search terms'
@@ -155,22 +153,25 @@ export function ResourceList() {
       </div>
 
       {totalPages > 1 && (
-        <nav className="flex items-center justify-center gap-3 pt-4 border-t border-gray-200" aria-label="Pagination">
+        <nav
+          className="flex items-center justify-center gap-3 border-t border-gray-200 pt-4"
+          aria-label="Pagination"
+        >
           <button
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="rounded-sm border border-gray-200 bg-background-100 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+            className="bg-background-100 rounded-sm border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Previous page"
           >
             Previous
           </button>
-          <span className="text-xs font-mono text-gray-500">
+          <span className="font-mono text-xs text-gray-500">
             Page {page} of {totalPages}
           </span>
           <button
             onClick={() => setPage(p => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className="rounded-sm border border-gray-200 bg-background-100 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+            className="bg-background-100 rounded-sm border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Next page"
           >
             Next

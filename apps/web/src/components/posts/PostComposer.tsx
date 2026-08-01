@@ -83,7 +83,7 @@ export function PostComposer({ initialData = {} }: PostComposerProps) {
           value={title}
           onChange={e => setTitle(e.target.value)}
           placeholder="What's on your mind? (min 5 characters)"
-          className={`rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-copy-14 text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors ${
+          className={`bg-background-100 text-copy-14 rounded-sm border border-gray-200 px-3.5 py-2 text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900 ${
             errors.title ? 'border-red-300' : ''
           }`}
           disabled={submitting}
@@ -92,7 +92,7 @@ export function PostComposer({ initialData = {} }: PostComposerProps) {
           aria-describedby={errors.title ? 'title-error' : undefined}
         />
         {errors.title && (
-          <span id="title-error" className="text-label-12 text-red-600 font-semibold">
+          <span id="title-error" className="text-label-12 font-semibold text-red-600">
             {errors.title}
           </span>
         )}
@@ -107,7 +107,7 @@ export function PostComposer({ initialData = {} }: PostComposerProps) {
           value={body}
           onChange={e => setBody(e.target.value)}
           placeholder="Write your post here... (min 10 characters)"
-          className={`rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-copy-14 text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors resize-vertical min-h-[140px] ${
+          className={`bg-background-100 text-copy-14 resize-vertical min-h-[140px] rounded-sm border border-gray-200 px-3.5 py-2 text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900 ${
             errors.body ? 'border-red-300' : ''
           }`}
           disabled={submitting}
@@ -117,7 +117,7 @@ export function PostComposer({ initialData = {} }: PostComposerProps) {
           aria-describedby={errors.body ? 'body-error' : undefined}
         />
         {errors.body && (
-          <span id="body-error" className="text-label-12 text-red-600 font-semibold">
+          <span id="body-error" className="text-label-12 font-semibold text-red-600">
             {errors.body}
           </span>
         )}
@@ -129,24 +129,28 @@ export function PostComposer({ initialData = {} }: PostComposerProps) {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-label-13 font-semibold text-gray-700">How are you feeling? (optional)</label>
+        <label className="text-label-13 font-semibold text-gray-700">
+          How are you feeling? (optional)
+        </label>
         <EmotionPicker selectedEmotion={emotion as any} onSelect={setEmotion} />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-label-13 font-semibold text-gray-700">Urgency level (optional)</label>
+        <label className="text-label-13 font-semibold text-gray-700">
+          Urgency level (optional)
+        </label>
         <UrgencyPicker selectedUrgency={urgency as any} onSelect={setUrgency} />
       </div>
 
       {submitError && (
-        <div className="rounded-sm border border-red-300 bg-red-50 p-3 text-sm text-red-800 font-semibold">
+        <div className="rounded-sm border border-red-300 bg-red-50 p-3 text-sm font-semibold text-red-800">
           {submitError}
         </div>
       )}
 
       <button
         type="submit"
-        className="self-start rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-primary text-button-14 text-background-100 self-start rounded-sm px-5 py-2.5 font-semibold transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
         disabled={submitting}
       >
         {submitting ? 'Posting...' : 'Post Anonymously'}

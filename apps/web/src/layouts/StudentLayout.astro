@@ -12,11 +12,7 @@ const {
 } = Astro.props;
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  currentRole="STUDENT"
->
+<BaseLayout title={title} description={description} currentRole="STUDENT">
   <div class="space-y-6">
     <slot />
   </div>

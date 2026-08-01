@@ -1,6 +1,7 @@
 ---
 import { NotificationBell } from '@components/notifications/NotificationBell';
 import { NotificationToast } from '@components/notifications/NotificationToast';
+import Brand from './Brand.astro';
 
 interface Props {
   currentRole?: 'STUDENT' | 'MENTOR' | 'ADMIN' | null;
@@ -9,27 +10,11 @@ interface Props {
 const { currentRole = null } = Astro.props;
 ---
 
-<header
-  class="sticky top-0 z-50 border-b border-gray-200 bg-background-100 py-3"
->
+<header class="bg-background-100 sticky top-0 z-50 border-b border-gray-200 py-3">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-10 items-center justify-between">
       <div class="flex items-center gap-2">
-        <a href="/" class="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 rounded-sm">
-          <svg
-            class="h-5 w-5 text-gray-1000"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0110.089 18M15 12a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5zm-6 9c.172 0 .343-.003.514-.01M9 21a9.041 9.041 0 01-6.208-3.07 3.562 3.562 0 013.47-4.43H9m12 0H9m12 0v-1.5m0 1.5v1.5M9 12a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" />
-          </svg>
-          <span class="text-label-14 font-bold tracking-tight text-gray-1000">
-            Peerly
-          </span>
-        </a>
+        <Brand currentRole={currentRole} />
       </div>
 
       <nav class="hidden items-center gap-1 md:flex" aria-label="Main Navigation">
@@ -40,25 +25,25 @@ const { currentRole = null } = Astro.props;
         >
           <a
             href="/dashboard"
-            class="text-label-14 font-medium text-slate-300 hover:bg-gray-800 hover:text-white rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+            class="text-label-14 rounded-sm px-3 py-1.5 font-medium text-slate-300 transition-colors hover:bg-gray-800 hover:text-white focus-visible:outline-none"
           >
             Dashboard
           </a>
           <a
             href="/posts"
-            class="text-label-14 font-medium text-slate-300 hover:bg-gray-800 hover:text-white rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+            class="text-label-14 rounded-sm px-3 py-1.5 font-medium text-slate-300 transition-colors hover:bg-gray-800 hover:text-white focus-visible:outline-none"
           >
             Discussions
           </a>
           <a
             href="/chat"
-            class="text-label-14 font-medium text-slate-300 hover:bg-gray-800 hover:text-white rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+            class="text-label-14 rounded-sm px-3 py-1.5 font-medium text-slate-300 transition-colors hover:bg-gray-800 hover:text-white focus-visible:outline-none"
           >
             Peer Chat
           </a>
           <a
             href="/events"
-            class="text-label-14 font-medium text-slate-300 hover:bg-gray-800 hover:text-white rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+            class="text-label-14 rounded-sm px-3 py-1.5 font-medium text-slate-300 transition-colors hover:bg-gray-800 hover:text-white focus-visible:outline-none"
           >
             Events
           </a>
@@ -71,42 +56,38 @@ const { currentRole = null } = Astro.props;
         >
           <a
             href="/mentor/dashboard"
-            class="text-label-14 font-medium text-slate-300 hover:bg-gray-800 hover:text-white rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+            class="text-label-14 rounded-sm px-3 py-1.5 font-medium text-slate-300 transition-colors hover:bg-gray-800 hover:text-white focus-visible:outline-none"
           >
             Dashboard
           </a>
           <a
             href="/posts"
-            class="text-label-14 font-medium text-slate-300 hover:bg-gray-800 hover:text-white rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+            class="text-label-14 rounded-sm px-3 py-1.5 font-medium text-slate-300 transition-colors hover:bg-gray-800 hover:text-white focus-visible:outline-none"
           >
             Discussions
           </a>
           <a
             href="/chat"
-            class="text-label-14 font-medium text-slate-300 hover:bg-gray-800 hover:text-white rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+            class="text-label-14 rounded-sm px-3 py-1.5 font-medium text-slate-300 transition-colors hover:bg-gray-800 hover:text-white focus-visible:outline-none"
           >
             Peer Chat
           </a>
           <a
             href="/events"
-            class="text-label-14 font-medium text-slate-300 hover:bg-gray-800 hover:text-white rounded-sm px-3 py-1.5 transition-colors focus-visible:outline-none"
+            class="text-label-14 rounded-sm px-3 py-1.5 font-medium text-slate-300 transition-colors hover:bg-gray-800 hover:text-white focus-visible:outline-none"
           >
             Events
           </a>
         </div>
-
       </nav>
 
       <div class="flex items-center gap-3">
         <!-- Logged-in Controls -->
-        <div
-          id="nav-user-controls"
-          class={`items-center gap-3 ${currentRole ? 'flex' : 'hidden'}`}
-        >
+        <div id="nav-user-controls" class={`items-center gap-3 ${currentRole ? 'flex' : 'hidden'}`}>
           <NotificationBell client:load />
           <button
             id="logout-btn"
-            class="font-medium text-gray-700 hover:text-gray-1000 text-sm cursor-pointer border-none bg-transparent p-0 transition-colors focus-visible:outline-none"
+            class="hover:text-gray-1000 cursor-pointer border-none bg-transparent p-0 text-sm font-medium text-gray-700 transition-colors focus-visible:outline-none"
           >
             Logout
           </button>
@@ -119,13 +100,13 @@ const { currentRole = null } = Astro.props;
         >
           <a
             href="/login"
-            class="rounded-sm border border-gray-200 bg-background-100 px-3 py-1.5 text-button-12 font-medium text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none"
+            class="bg-background-100 text-button-12 rounded-sm border border-gray-200 px-3 py-1.5 font-medium text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none"
           >
             Sign In
           </a>
           <a
             href="/register"
-            class="rounded-sm bg-primary px-3 py-1.5 text-button-12 font-semibold text-background-100 transition-colors hover:bg-gray-800 focus-visible:outline-none"
+            class="bg-primary text-button-12 text-background-100 rounded-sm px-3 py-1.5 font-semibold transition-colors hover:bg-gray-800 focus-visible:outline-none"
           >
             Get Started
           </a>
@@ -133,7 +114,7 @@ const { currentRole = null } = Astro.props;
       </div>
 
       <script is:inline>
-        (function() {
+        (function () {
           const rawUser = localStorage.getItem('caps_user_profile');
           let role = null;
           if (rawUser) {
@@ -141,7 +122,20 @@ const { currentRole = null } = Astro.props;
               role = JSON.parse(rawUser).role;
             } catch (e) {}
           }
-          
+
+          const brandLink = document.getElementById('brand-link');
+          if (brandLink) {
+            if (role === 'STUDENT') {
+              brandLink.href = '/dashboard';
+            } else if (role === 'MENTOR') {
+              brandLink.href = '/mentor/dashboard';
+            } else if (role === 'ADMIN') {
+              brandLink.href = '/admin/dashboard';
+            } else {
+              brandLink.href = '/';
+            }
+          }
+
           if (role) {
             document.getElementById('nav-links-student')?.classList.add('hidden');
             document.getElementById('nav-links-student')?.classList.remove('flex');
@@ -149,7 +143,7 @@ const { currentRole = null } = Astro.props;
             document.getElementById('nav-links-mentor')?.classList.remove('flex');
             document.getElementById('nav-guest-controls')?.classList.add('hidden');
             document.getElementById('nav-guest-controls')?.classList.remove('flex');
-            
+
             if (role === 'STUDENT') {
               const studentNav = document.getElementById('nav-links-student');
               if (studentNav) {
@@ -163,7 +157,7 @@ const { currentRole = null } = Astro.props;
                 mentorNav.classList.add('flex');
               }
             }
-            
+
             const userControls = document.getElementById('nav-user-controls');
             if (userControls) {
               userControls.classList.remove('hidden');
@@ -175,7 +169,7 @@ const { currentRole = null } = Astro.props;
               userControls.classList.add('hidden');
               userControls.classList.remove('flex');
             }
-            
+
             const guestControls = document.getElementById('nav-guest-controls');
             if (guestControls) {
               guestControls.classList.remove('hidden');
@@ -189,11 +183,7 @@ const { currentRole = null } = Astro.props;
 </header>
 
 <!-- Notification Toast -->
-{
-  currentRole && (
-    <NotificationToast client:load />
-  )
-}
+{currentRole && <NotificationToast client:load />}
 
 <script>
   import { clearAuthUser } from '../../stores/authStore';

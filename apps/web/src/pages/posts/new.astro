@@ -6,20 +6,23 @@ import { api } from '../../lib/api';
 ---
 
 <StudentLayout title="Create Post - Anonymous Feed">
-  <div class="create-post-page max-w-2xl mx-auto py-10 px-4">
+  <div class="create-post-page mx-auto max-w-2xl px-4 py-10">
     <header class="page-header mb-6">
-      <a href="/posts" class="back-link text-label-14 font-semibold text-tertiary hover:underline inline-flex items-center gap-1 mb-4">
+      <a
+        href="/posts"
+        class="back-link text-label-14 text-tertiary mb-4 inline-flex items-center gap-1 font-semibold hover:underline"
+      >
         ← Back to Posts
       </a>
-      <h1 class="text-heading-32 font-bold text-gray-1000">Create Anonymous Post</h1>
-      <p class="text-copy-14 text-gray-500 mt-1">Share your thoughts anonymously with the university community</p>
+      <h1 class="text-heading-32 text-gray-1000 font-bold">Create Anonymous Post</h1>
+      <p class="text-copy-14 mt-1 text-gray-500">
+        Share your thoughts anonymously with the university community
+      </p>
     </header>
 
-    <main class="create-post-main rounded-sm border border-gray-200 bg-background-100 p-6">
+    <main class="create-post-main bg-background-100 rounded-sm border border-gray-200 p-6">
       <AuthGuard client:visible />
-      <PostComposer
-        client:visible
-      />
+      <PostComposer client:visible />
     </main>
   </div>
 </StudentLayout>

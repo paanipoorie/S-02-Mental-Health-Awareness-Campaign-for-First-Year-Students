@@ -7,7 +7,13 @@ import {
   WorkshopRegistrationStatus,
 } from '@campus-peer-support/shared-types/enums';
 
-export { MeetingType, MeetingHostType, MeetingCategory, WorkshopCategory, WorkshopRegistrationStatus };
+export {
+  MeetingType,
+  MeetingHostType,
+  MeetingCategory,
+  WorkshopCategory,
+  WorkshopRegistrationStatus,
+};
 
 export const createMeetingSchema = z.object({
   body: z.object({

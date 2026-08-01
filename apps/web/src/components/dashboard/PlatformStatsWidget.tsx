@@ -63,16 +63,18 @@ export function PlatformStatsWidget({ platformStats, className = '' }: PlatformS
 
   return (
     <div className={`dashboard-card p-6 ${className}`}>
-      <h3 className="text-heading-16 font-bold text-gray-1000 mb-6">Platform Statistics</h3>
-      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <h3 className="text-heading-16 text-gray-1000 mb-6 font-bold">Platform Statistics</h3>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {stats.map(stat => (
           <div
             key={stat.key}
-            className="rounded-sm border border-gray-200 bg-background-100 p-4 hover:bg-gray-50 transition-colors flex items-center justify-between"
+            className="bg-background-100 flex items-center justify-between rounded-sm border border-gray-200 p-4 transition-colors hover:bg-gray-50"
           >
             <div>
-              <p className="text-label-12 font-medium text-gray-700 leading-none">{stat.label}</p>
-              <p className="text-heading-20 font-bold text-gray-1000 mt-2 leading-none">{stat.value}</p>
+              <p className="text-label-12 font-medium leading-none text-gray-700">{stat.label}</p>
+              <p className="text-heading-20 text-gray-1000 mt-2 font-bold leading-none">
+                {stat.value}
+              </p>
             </div>
             <span aria-hidden="true">{stat.icon}</span>
           </div>

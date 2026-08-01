@@ -3,66 +3,96 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Safety Guide | Peerly">
-  <div class="max-w-4xl mx-auto py-12 px-4 sm:px-6">
+  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6">
     <div class="mb-12 text-center">
       <h1 class="text-heading-48 text-gray-1000 mb-4">Safety & Support Guide</h1>
-      <p class="text-copy-18 text-gray-400">If you are in distress, crisis support is always available 24/7.</p>
+      <p class="text-copy-18 text-gray-400">
+        If you are in distress, crisis support is always available 24/7.
+      </p>
     </div>
 
     <div class="space-y-8">
-      <div class="dashboard-card p-8 rounded-lg border border-red-500/30 bg-[#291B1F]">
-        <h2 class="text-heading-24 text-red-400 mb-4 flex items-center gap-3">
-          <svg class="h-6 w-6 text-red-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+      <div class="dashboard-card rounded-lg border border-red-500/30 bg-[#291B1F] p-8">
+        <h2 class="text-heading-24 mb-4 flex items-center gap-3 text-red-400">
+          <svg
+            class="h-6 w-6 text-red-500"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+            ></path>
           </svg>
           Emergency Contacts
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-copy-16 text-gray-300">
+        <div class="text-copy-16 grid grid-cols-1 gap-6 text-gray-300 md:grid-cols-2">
           <div>
-            <h3 class="font-bold text-gray-200 mb-1">Campus Security Hotline</h3>
-            <p class="text-red-400 font-bold text-heading-24">+1 (555) 0199</p>
-            <p class="text-xs text-gray-400">Available 24/7 for security, safety escorts, and physical emergencies.</p>
+            <h3 class="mb-1 font-bold text-gray-200">Campus Security Hotline</h3>
+            <p class="text-heading-24 font-bold text-red-400">+1 (555) 0199</p>
+            <p class="text-xs text-gray-400">
+              Available 24/7 for security, safety escorts, and physical emergencies.
+            </p>
           </div>
           <div>
-            <h3 class="font-bold text-gray-200 mb-1">Campus Emergency Clinic</h3>
-            <p class="text-red-400 font-bold text-heading-24">+1 (555) 0188</p>
-            <p class="text-xs text-gray-400">Located at Student Center, West Wing. Open 24 hours.</p>
+            <h3 class="mb-1 font-bold text-gray-200">Campus Emergency Clinic</h3>
+            <p class="text-heading-24 font-bold text-red-400">+1 (555) 0188</p>
+            <p class="text-xs text-gray-400">
+              Located at Student Center, West Wing. Open 24 hours.
+            </p>
           </div>
         </div>
       </div>
 
-      <div class="dashboard-card p-8 rounded-lg bg-[#1F2937] border border-[#374151]">
+      <div class="dashboard-card rounded-lg border border-[#374151] bg-[#1F2937] p-8">
         <h2 class="text-heading-24 text-gray-1000 mb-4 flex items-center gap-3">
-          <span class="w-2 h-8 rounded-full bg-[var(--color-tertiary)] inline-block"></span>
+          <span class="inline-block h-8 w-2 rounded-full bg-[var(--color-tertiary)]"></span>
           National & External Hotlines
         </h2>
-        <div class="space-y-4 text-copy-16 text-gray-300">
+        <div class="text-copy-16 space-y-4 text-gray-300">
           <div>
             <h3 class="font-bold text-gray-200">National Suicide Prevention Lifeline</h3>
-            <p class="text-emerald-400 font-semibold">Dial 988 (Free, Confidential, 24/7)</p>
+            <p class="font-semibold text-emerald-400">Dial 988 (Free, Confidential, 24/7)</p>
           </div>
           <div>
             <h3 class="font-bold text-gray-200">Crisis Text Line</h3>
-            <p class="text-emerald-400 font-semibold">Text HOME to 741741 (Free, Confidential, 24/7)</p>
+            <p class="font-semibold text-emerald-400">
+              Text HOME to 741741 (Free, Confidential, 24/7)
+            </p>
           </div>
         </div>
       </div>
 
-      <div class="dashboard-card p-8 rounded-lg bg-[#1F2937] border border-[#374151]">
+      <div class="dashboard-card rounded-lg border border-[#374151] bg-[#1F2937] p-8">
         <h2 class="text-heading-24 text-gray-1000 mb-4 flex items-center gap-3">
-          <span class="w-2 h-8 rounded-full bg-[var(--color-tertiary)] inline-block"></span>
+          <span class="inline-block h-8 w-2 rounded-full bg-[var(--color-tertiary)]"></span>
           Staying Safe on Peerly
         </h2>
-        <ul class="list-disc list-inside space-y-3 text-copy-14 text-gray-300 ml-4">
-          <li><strong>Protect Your Anonymity:</strong> Do not post your phone number, social handles, or email in discussions or group chats.</li>
-          <li><strong>Respect Peers:</strong> Refrain from abusive responses. You can block or mute discussion replies that you find distressing.</li>
-          <li><strong>Report Activity:</strong> If a user is spamming or behaves inappropriately, raise a support request to the admin staff.</li>
+        <ul class="text-copy-14 ml-4 list-inside list-disc space-y-3 text-gray-300">
+          <li>
+            <strong>Protect Your Anonymity:</strong> Do not post your phone number, social handles, or
+            email in discussions or group chats.
+          </li>
+          <li>
+            <strong>Respect Peers:</strong> Refrain from abusive responses. You can block or mute discussion
+            replies that you find distressing.
+          </li>
+          <li>
+            <strong>Report Activity:</strong> If a user is spamming or behaves inappropriately, raise
+            a support request to the admin staff.
+          </li>
         </ul>
       </div>
     </div>
 
     <div class="mt-12 text-center">
-      <a href="/" class="inline-flex items-center justify-center px-6 py-3 border border-gray-200 hover:bg-gray-100 text-button-14 rounded font-bold transition-all">
+      <a
+        href="/"
+        class="text-button-14 inline-flex items-center justify-center rounded border border-gray-200 px-6 py-3 font-bold transition-all hover:bg-gray-100"
+      >
         Back to Home
       </a>
     </div>

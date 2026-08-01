@@ -26,7 +26,7 @@ export function ResourceCard({ resource, onClick }: ResourceCardProps) {
 
   return (
     <article
-      className="flex flex-col justify-between bg-background-100 border border-gray-200 rounded-sm p-5 hover:bg-gray-50 transition-colors cursor-pointer focus-visible:outline-none"
+      className="bg-background-100 flex cursor-pointer flex-col justify-between rounded-sm border border-gray-200 p-5 transition-colors hover:bg-gray-50 focus-visible:outline-none"
       onClick={onClick}
       role="button"
       tabIndex={0}
@@ -39,18 +39,18 @@ export function ResourceCard({ resource, onClick }: ResourceCardProps) {
     >
       <div>
         <div className="mb-3 flex items-start justify-between gap-3">
-          <h3 className="line-clamp-2 flex-1 text-heading-18 font-bold text-gray-900 leading-tight">
+          <h3 className="text-heading-18 line-clamp-2 flex-1 font-bold leading-tight text-gray-900">
             {resource.title}
           </h3>
           <ResourceCategoryBadge category={resource.category} size="sm" />
         </div>
-        <p className="mb-4 line-clamp-3 text-copy-14 text-gray-600 leading-normal">
+        <p className="text-copy-14 mb-4 line-clamp-3 leading-normal text-gray-600">
           {resource.description}
         </p>
       </div>
 
       <div className="flex items-center justify-between border-t border-gray-200 pt-3">
-        <time className="text-xs font-mono text-gray-400" dateTime={resource.updatedAt}>
+        <time className="font-mono text-xs text-gray-400" dateTime={resource.updatedAt}>
           Updated {formatDate(resource.updatedAt)}
         </time>
         {resource.link && (

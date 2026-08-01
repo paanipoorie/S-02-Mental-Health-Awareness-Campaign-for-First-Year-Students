@@ -80,7 +80,9 @@ interface AdminDashboardClientProps {
 export function AdminDashboardClient({ initialData }: AdminDashboardClientProps) {
   const user = useStore($user);
   const isLoading = useStore($isLoading);
-  const [dashboardData, setDashboardData] = useState<AdminDashboardData | null>(initialData || null);
+  const [dashboardData, setDashboardData] = useState<AdminDashboardData | null>(
+    initialData || null
+  );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(!initialData);
 
@@ -131,7 +133,7 @@ export function AdminDashboardClient({ initialData }: AdminDashboardClientProps)
   if (error) {
     return (
       <div className="py-12 text-center">
-        <p className="text-copy-14 text-red-600 font-semibold">{error}</p>
+        <p className="text-copy-14 font-semibold text-red-600">{error}</p>
         <button
           onClick={() => window.location.reload()}
           className="button-primary text-button-14 mt-4 rounded-sm px-4 py-2"
@@ -146,52 +148,56 @@ export function AdminDashboardClient({ initialData }: AdminDashboardClientProps)
     <div className="space-y-8">
       {/* Page Header */}
       <div className="border-b border-gray-200 pb-5">
-        <h1 className="text-heading-24 font-bold text-gray-1000">Dashboard</h1>
-        <p className="text-copy-14 text-gray-600 mt-1">Overview of platform usage, events, and moderation reports.</p>
+        <h1 className="text-heading-24 text-gray-1000 font-bold">Dashboard</h1>
+        <p className="text-copy-14 mt-1 text-gray-600">
+          Overview of platform usage, events, and moderation reports.
+        </p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-12">
         <div className="lg:col-span-12">
           <PlatformStatsWidget
-          platformStats={
-            dashboardData?.platformStats || {
-              totalUsers: 0,
-              totalStudents: 0,
-              totalMentors: 0,
-              totalAdmins: 0,
-              verifiedMentors: 0,
-              totalPosts: 0,
-              totalChats: 0,
-              activeChats: 0,
-              totalMeetings: 0,
-              upcomingMeetings: 0,
-              totalWorkshops: 0,
-              upcomingWorkshops: 0,
-              totalResources: 0,
-              activeResources: 0,
+            platformStats={
+              dashboardData?.platformStats || {
+                totalUsers: 0,
+                totalStudents: 0,
+                totalMentors: 0,
+                totalAdmins: 0,
+                verifiedMentors: 0,
+                totalPosts: 0,
+                totalChats: 0,
+                activeChats: 0,
+                totalMeetings: 0,
+                upcomingMeetings: 0,
+                totalWorkshops: 0,
+                upcomingWorkshops: 0,
+                totalResources: 0,
+                activeResources: 0,
+              }
             }
-          }
-        />
-      </div>
+          />
+        </div>
 
-      <div className="lg:col-span-12">
-        <EventsOverviewWidget
-          meetingsOverview={dashboardData?.meetingsOverview || []}
-          workshopsOverview={dashboardData?.workshopsOverview || []}
-        />
-      </div>
+        <div className="lg:col-span-12">
+          <EventsOverviewWidget
+            meetingsOverview={dashboardData?.meetingsOverview || []}
+            workshopsOverview={dashboardData?.workshopsOverview || []}
+          />
+        </div>
 
-      <div className="lg:col-span-12">
-        <ReportsWidget reports={dashboardData?.reports || []} />
+        <div className="lg:col-span-12">
+          <ReportsWidget reports={dashboardData?.reports || []} />
+        </div>
       </div>
     </div>
-  </div>
   );
 }
 
 function AdminDashboardSkeleton({ className = '' }: { className?: string }) {
   return (
-    <div className={`dashboard-card animate-pulse p-6 bg-background-100 border border-gray-200 rounded-sm ${className}`}>
+    <div
+      className={`dashboard-card bg-background-100 animate-pulse rounded-sm border border-gray-200 p-6 ${className}`}
+    >
       <div className="mb-4 h-6 w-1/4 rounded-sm bg-gray-200" />
       <div className="space-y-3">
         <div className="h-4 w-3/4 rounded-sm bg-gray-200" />

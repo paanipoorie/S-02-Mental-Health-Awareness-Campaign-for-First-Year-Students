@@ -13,11 +13,7 @@ router.use(authenticate);
 
 router.get('/', validate(getNotificationsQuerySchema), notificationController.getNotifications);
 router.get('/unread-count', notificationController.getUnreadCount);
-router.patch(
-  '/:id/read',
-  validate(notificationParamsSchema),
-  notificationController.markAsRead
-);
+router.patch('/:id/read', validate(notificationParamsSchema), notificationController.markAsRead);
 router.patch('/read-all', notificationController.markAllAsRead);
 
 export default router;

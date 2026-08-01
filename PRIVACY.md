@@ -19,16 +19,16 @@ The database contains two completely separate identity tables:
 
 Every feature table that records student activity uses `AnonymousIdentity.id` as its foreign key:
 
-| Feature Table | Identity FK | Never References |
-|---|---|---|
-| `Post` | `anonymousIdentityId` | ❌ `User.id` |
-| `PostReply` | `anonymousIdentityId` | ❌ `User.id` |
-| `EmotionLog` | `anonymousIdentityId` | ❌ `User.id` |
-| `ChatThread` | `studentIdentityId` | ❌ `User.id` |
-| `ChatMessage` | `senderId` (with `senderType`) | ❌ `User.id` for students |
-| `Meeting` | `hostIdentityId` (student hosts) | ❌ `User.id` for students |
-| `MeetingAttendee` | `anonymousIdentityId` | ❌ `User.id` |
-| `WorkshopRegistration` | `anonymousIdentityId` | ❌ `User.id` |
+| Feature Table          | Identity FK                      | Never References          |
+| ---------------------- | -------------------------------- | ------------------------- |
+| `Post`                 | `anonymousIdentityId`            | ❌ `User.id`              |
+| `PostReply`            | `anonymousIdentityId`            | ❌ `User.id`              |
+| `EmotionLog`           | `anonymousIdentityId`            | ❌ `User.id`              |
+| `ChatThread`           | `studentIdentityId`              | ❌ `User.id`              |
+| `ChatMessage`          | `senderId` (with `senderType`)   | ❌ `User.id` for students |
+| `Meeting`              | `hostIdentityId` (student hosts) | ❌ `User.id` for students |
+| `MeetingAttendee`      | `anonymousIdentityId`            | ❌ `User.id`              |
+| `WorkshopRegistration` | `anonymousIdentityId`            | ❌ `User.id`              |
 
 This is enforced both at the schema level (Prisma foreign keys) and at the service layer (query boundaries).
 

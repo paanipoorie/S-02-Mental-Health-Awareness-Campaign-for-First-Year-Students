@@ -35,7 +35,9 @@ interface UserData {
 
 export function AdminStudentsClient({ initialData }: { initialData?: UserData }) {
   const [users, setUsers] = useState(initialData?.data || []);
-  const [pagination, setPagination] = useState(initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 });
+  const [pagination, setPagination] = useState(
+    initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 }
+  );
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(!initialData);
@@ -46,7 +48,11 @@ export function AdminStudentsClient({ initialData }: { initialData?: UserData })
     }
   }, [initialData]);
 
-  const fetchUsers = async (page: number, searchQuery: string, filterOptions: Record<string, string>) => {
+  const fetchUsers = async (
+    page: number,
+    searchQuery: string,
+    filterOptions: Record<string, string>
+  ) => {
     setLoading(true);
     try {
       const response = await adminApi.getUsers({
@@ -54,7 +60,12 @@ export function AdminStudentsClient({ initialData }: { initialData?: UserData })
         limit: pagination.limit,
         role: 'STUDENT',
         search: searchQuery || undefined,
-        isActive: filterOptions.isActive === 'true' ? true : filterOptions.isActive === 'false' ? false : undefined,
+        isActive:
+          filterOptions.isActive === 'true'
+            ? true
+            : filterOptions.isActive === 'false'
+              ? false
+              : undefined,
       });
       setUsers(response.data);
       setPagination(response.pagination);
@@ -66,10 +77,13 @@ export function AdminStudentsClient({ initialData }: { initialData?: UserData })
   };
 
   const handleToggleStatus = async (userId: string, isActive: boolean) => {
-    if (!confirm(`Are you sure you want to ${isActive ? 'deactivate' : 'activate'} this student?`)) return;
+    if (!confirm(`Are you sure you want to ${isActive ? 'deactivate' : 'activate'} this student?`))
+      return;
     try {
       await adminApi.updateUserStatus(userId, isActive);
-      toast.success(isActive ? 'Student activated successfully' : 'Student deactivated successfully');
+      toast.success(
+        isActive ? 'Student activated successfully' : 'Student deactivated successfully'
+      );
       fetchUsers(pagination.page, search, filters);
     } catch (error: any) {
       toast.error(error.message || 'Failed to update student status');
@@ -97,8 +111,8 @@ export function AdminStudentsClient({ initialData }: { initialData?: UserData })
       {/* Page Header */}
       <div className="flex items-center justify-between border-b border-gray-200 pb-5">
         <div>
-          <h1 className="text-heading-24 font-bold text-gray-1000">Student Management</h1>
-          <p className="text-copy-14 text-gray-600 mt-1">View and manage student accounts</p>
+          <h1 className="text-heading-24 text-gray-1000 font-bold">Student Management</h1>
+          <p className="text-copy-14 mt-1 text-gray-600">View and manage student accounts</p>
         </div>
       </div>
 

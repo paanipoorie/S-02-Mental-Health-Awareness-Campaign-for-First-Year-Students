@@ -27,7 +27,9 @@ describe('Identity Service Unit Tests', () => {
     expect(fetchedById).not.toBeNull();
     expect(fetchedById?.displayName).toBe(identity.displayName);
 
-    const fetchedByDisplayName = await identityService.getAnonymousIdentityByDisplayName(identity.displayName);
+    const fetchedByDisplayName = await identityService.getAnonymousIdentityByDisplayName(
+      identity.displayName
+    );
     expect(fetchedByDisplayName).not.toBeNull();
     expect(fetchedByDisplayName?.id).toBe(identity.id);
   });

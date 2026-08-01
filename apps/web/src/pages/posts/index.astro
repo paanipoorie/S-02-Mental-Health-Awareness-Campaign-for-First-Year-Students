@@ -3,22 +3,29 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Anonymous Discussions | Peerly">
-  <div class="posts-page py-10 max-w-3xl mx-auto px-4">
-    <header class="page-header mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <div class="posts-page mx-auto max-w-3xl px-4 py-10">
+    <header
+      class="page-header mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+    >
       <div>
-        <h1 class="text-heading-32 font-bold text-gray-1000">Discussions Feed</h1>
-        <p class="text-copy-14 text-gray-500 mt-1">Share your thoughts and get anonymous peer support</p>
+        <h1 class="text-heading-32 text-gray-1000 font-bold">Discussions Feed</h1>
+        <p class="text-copy-14 mt-1 text-gray-500">
+          Share your thoughts and get anonymous peer support
+        </p>
       </div>
       <a
         href="/posts/new"
-        class="inline-block rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors focus-visible:outline-none"
+        class="bg-primary text-button-14 text-background-100 inline-block rounded-sm px-5 py-2.5 font-semibold transition-colors hover:bg-gray-800 focus-visible:outline-none"
       >
         + New Post
       </a>
     </header>
 
     <div class="filters mb-6 flex flex-wrap gap-3">
-      <select id="emotion-filter" class="filter-select flex-1 min-w-[180px] rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-label-14 font-semibold text-gray-700 outline-none focus:border-gray-900 transition-colors cursor-pointer">
+      <select
+        id="emotion-filter"
+        class="filter-select bg-background-100 text-label-14 min-w-[180px] flex-1 cursor-pointer rounded-sm border border-gray-200 px-3.5 py-2 font-semibold text-gray-700 outline-none transition-colors focus:border-gray-900"
+      >
         <option value="">All Emotions</option>
         <option value="HAPPY">Happy</option>
         <option value="EXCITED">Excited</option>
@@ -32,7 +39,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <option value="STRESSED">Stressed</option>
       </select>
 
-      <select id="category-filter" class="filter-select flex-1 min-w-[180px] rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-label-14 font-semibold text-gray-700 outline-none focus:border-gray-900 transition-colors cursor-pointer">
+      <select
+        id="category-filter"
+        class="filter-select bg-background-100 text-label-14 min-w-[180px] flex-1 cursor-pointer rounded-sm border border-gray-200 px-3.5 py-2 font-semibold text-gray-700 outline-none transition-colors focus:border-gray-900"
+      >
         <option value="">All Categories</option>
         <option value="ACADEMICS">Academics</option>
         <option value="HOSTEL">Hostel Life</option>
@@ -49,13 +59,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </div>
 
     <div id="posts-feed" class="space-y-4">
-      <div class="py-12 text-center text-gray-500 font-medium">Loading posts...</div>
+      <div class="py-12 text-center font-medium text-gray-500">Loading posts...</div>
     </div>
 
-    <div class="pagination flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
+    <div class="pagination mt-8 flex items-center justify-between border-t border-gray-200 pt-6">
       <button
         id="prev-page"
-        class="rounded-sm border border-gray-200 bg-background-100 px-4 py-2 text-button-14 font-semibold text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:hover:bg-background-100 disabled:cursor-not-allowed"
+        class="bg-background-100 text-button-14 disabled:hover:bg-background-100 rounded-sm border border-gray-200 px-4 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
         disabled
       >
         Previous
@@ -63,7 +73,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <span id="page-info" class="text-label-14 font-mono text-gray-500">Page 1</span>
       <button
         id="next-page"
-        class="rounded-sm border border-gray-200 bg-background-100 px-4 py-2 text-button-14 font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+        class="bg-background-100 text-button-14 rounded-sm border border-gray-200 px-4 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-50"
       >
         Next
       </button>
@@ -98,15 +108,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       function formatDate(dateStr) {
         const date = new Date(dateStr);
-        return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        return date.toLocaleDateString([], {
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        });
       }
 
       async function fetchPosts() {
-        feedContainer.innerHTML = '<div class="py-12 text-center text-gray-500 font-medium">Loading posts...</div>';
-        
+        feedContainer.innerHTML =
+          '<div class="py-12 text-center text-gray-500 font-medium">Loading posts...</div>';
+
         const params = new URLSearchParams({
           page: currentPage,
-          limit: limit
+          limit: limit,
         });
         if (selectedEmotion) params.append('emotion', selectedEmotion);
         if (selectedCategory) params.append('category', selectedCategory);
@@ -114,8 +130,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         try {
           const res = await fetch(`http://localhost:3001/api/posts?${params.toString()}`, {
             headers: {
-              'Authorization': `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           });
 
           if (res.status === 401) {
@@ -132,7 +148,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             feedContainer.innerHTML = `<div class="py-12 text-center text-red-600 font-semibold border border-red-200 bg-red-50 rounded-sm">Error: ${result.error?.message || 'Failed to load posts'}</div>`;
           }
         } catch (err) {
-          feedContainer.innerHTML = '<div class="py-12 text-center text-red-600 font-semibold border border-red-200 bg-red-50 rounded-sm">Failed to connect to the server</div>';
+          feedContainer.innerHTML =
+            '<div class="py-12 text-center text-red-600 font-semibold border border-red-200 bg-red-50 rounded-sm">Failed to connect to the server</div>';
         }
       }
 
@@ -147,28 +164,30 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           return;
         }
 
-        feedContainer.innerHTML = posts.map(post => {
-          const categoryClean = post.category ? post.category.replace(/_/g, ' ') : '';
-          const replyCount = post._count?.replies || 0;
+        feedContainer.innerHTML = posts
+          .map(post => {
+            const categoryClean = post.category ? post.category.replace(/_/g, ' ') : '';
+            const replyCount = post._count?.replies || 0;
 
-          let badgeHtml = '';
-          if (post.emotion) {
-            badgeHtml += `
+            let badgeHtml = '';
+            if (post.emotion) {
+              badgeHtml += `
               <span class="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-700">
                 ${post.emotion}
               </span>
             `;
-          }
-          if (post.urgencyLevel && post.urgencyLevel !== 'NONE') {
-            const style = URGENCY_STYLES[post.urgencyLevel] || 'bg-gray-50 text-gray-600 border-gray-200';
-            badgeHtml += `
+            }
+            if (post.urgencyLevel && post.urgencyLevel !== 'NONE') {
+              const style =
+                URGENCY_STYLES[post.urgencyLevel] || 'bg-gray-50 text-gray-600 border-gray-200';
+              badgeHtml += `
               <span class="inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 text-xs font-semibold ${style}">
                 ${post.urgencyLevel}
               </span>
             `;
-          }
+            }
 
-          return `
+            return `
             <a href="/posts/${post.id}" class="block rounded-sm border border-gray-200 bg-background-100 p-5 hover:bg-gray-50 transition-colors focus-visible:outline-none">
               <header class="flex items-center justify-between gap-4 mb-3">
                 <div class="flex items-center gap-2">
@@ -195,7 +214,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               </footer>
             </a>
           `;
-        }).join('');
+          })
+          .join('');
       }
 
       function updatePagination(pagination) {
@@ -206,13 +226,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       }
 
       // Event listeners
-      emotionFilter.addEventListener('change', (e) => {
+      emotionFilter.addEventListener('change', e => {
         selectedEmotion = e.target.value;
         currentPage = 1;
         fetchPosts();
       });
 
-      categoryFilter.addEventListener('change', (e) => {
+      categoryFilter.addEventListener('change', e => {
         selectedCategory = e.target.value;
         currentPage = 1;
         fetchPosts();

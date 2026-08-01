@@ -23,7 +23,7 @@ export function RecentDiscussionsWidget({
   if (!recentDiscussions || recentDiscussions.length === 0) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
-        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Recent Discussions</h3>
+        <h3 className="text-heading-20 text-gray-1000 mb-4 font-semibold">Recent Discussions</h3>
         <div className="py-8 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
@@ -38,11 +38,13 @@ export function RecentDiscussionsWidget({
               d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
             />
           </svg>
-          <p className="text-copy-14 mt-3 text-gray-600 font-medium">No discussions yet</p>
-          <p className="text-label-12 mt-1 text-gray-500">Be the first to share an anonymous story or post.</p>
+          <p className="text-copy-14 mt-3 font-medium text-gray-600">No discussions yet</p>
+          <p className="text-label-12 mt-1 text-gray-500">
+            Be the first to share an anonymous story or post.
+          </p>
           <a
             href="/posts/new"
-            className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
+            className="bg-primary text-button-14 text-background-100 mt-4 inline-block rounded-sm px-4 py-2 font-semibold transition-colors hover:bg-gray-800"
           >
             Create Post
           </a>
@@ -57,7 +59,7 @@ export function RecentDiscussionsWidget({
         <h3 className="text-heading-20 text-gray-1000 font-semibold">Recent Discussions</h3>
         <a
           href="/posts"
-          className="text-label-14 font-medium text-tertiary hover:underline transition-colors"
+          className="text-label-14 text-tertiary font-medium transition-colors hover:underline"
         >
           View all
         </a>
@@ -68,7 +70,7 @@ export function RecentDiscussionsWidget({
           <a
             key={post.id}
             href={`/posts/${post.id}`}
-            className="flex flex-col rounded-sm border border-gray-200 bg-background-100 p-3 transition-colors hover:bg-gray-50 focus-visible:outline-none"
+            className="bg-background-100 flex flex-col rounded-sm border border-gray-200 p-3 transition-colors hover:bg-gray-50 focus-visible:outline-none"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
@@ -86,9 +88,14 @@ export function RecentDiscussionsWidget({
               )}
             </div>
 
-            <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-3 text-label-12 text-gray-500">
+            <div className="text-label-12 mt-3 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-3 text-gray-500">
               <span className="flex items-center gap-1">
-                <svg className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="h-3.5 w-3.5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -99,7 +106,12 @@ export function RecentDiscussionsWidget({
                 {post.anonymousDisplayName}
               </span>
               <span className="flex items-center gap-1">
-                <svg className="h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="h-3.5 w-3.5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"

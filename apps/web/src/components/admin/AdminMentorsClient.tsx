@@ -35,7 +35,9 @@ interface MentorData {
 
 export function AdminMentorsClient({ initialData }: { initialData?: MentorData }) {
   const [mentors, setMentors] = useState(initialData?.data || []);
-  const [pagination, setPagination] = useState(initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 });
+  const [pagination, setPagination] = useState(
+    initialData?.pagination || { page: 1, limit: 20, total: 0, totalPages: 0 }
+  );
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(!initialData);
@@ -46,14 +48,23 @@ export function AdminMentorsClient({ initialData }: { initialData?: MentorData }
     }
   }, [initialData]);
 
-  const fetchMentors = async (page: number, searchQuery: string, filterOptions: Record<string, string>) => {
+  const fetchMentors = async (
+    page: number,
+    searchQuery: string,
+    filterOptions: Record<string, string>
+  ) => {
     setLoading(true);
     try {
       const response = await adminApi.getMentors({
         page,
         limit: pagination.limit,
         search: searchQuery || undefined,
-        isVerified: filterOptions.isVerified === 'true' ? true : filterOptions.isVerified === 'false' ? false : undefined,
+        isVerified:
+          filterOptions.isVerified === 'true'
+            ? true
+            : filterOptions.isVerified === 'false'
+              ? false
+              : undefined,
         availabilityStatus: filterOptions.availabilityStatus || undefined,
       });
       setMentors(response.data);
@@ -96,8 +107,10 @@ export function AdminMentorsClient({ initialData }: { initialData?: MentorData }
       {/* Page Header */}
       <div className="flex items-center justify-between border-b border-gray-200 pb-5">
         <div>
-          <h1 className="text-heading-24 font-bold text-gray-1000">Mentor Management</h1>
-          <p className="text-copy-14 text-gray-600 mt-1">Manage mentor verification and view mentor details</p>
+          <h1 className="text-heading-24 text-gray-1000 font-bold">Mentor Management</h1>
+          <p className="text-copy-14 mt-1 text-gray-600">
+            Manage mentor verification and view mentor details
+          </p>
         </div>
       </div>
 

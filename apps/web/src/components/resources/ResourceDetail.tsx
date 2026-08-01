@@ -67,7 +67,7 @@ export function ResourceDetail() {
 
   if (error || !resource) {
     return (
-      <div className="py-12 text-center border border-gray-200 bg-background-100 rounded-sm p-6">
+      <div className="bg-background-100 rounded-sm border border-gray-200 p-6 py-12 text-center">
         <svg
           className="mx-auto h-12 w-12 text-gray-400"
           fill="none"
@@ -82,15 +82,13 @@ export function ResourceDetail() {
             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
           />
         </svg>
-        <h3 className="mt-2 text-sm font-bold text-gray-900">
-          Resource not found
-        </h3>
+        <h3 className="mt-2 text-sm font-bold text-gray-900">Resource not found</h3>
         <p className="mt-1 text-xs text-gray-500">
           {error ?? 'The resource you are looking for does not exist.'}
         </p>
         <button
           onClick={goBack}
-          className="bg-primary hover:bg-gray-800 mt-4 rounded-sm px-4 py-2 text-xs font-semibold text-background-100 transition-colors"
+          className="bg-primary text-background-100 mt-4 rounded-sm px-4 py-2 text-xs font-semibold transition-colors hover:bg-gray-800"
         >
           Back to Resources
         </button>
@@ -99,18 +97,20 @@ export function ResourceDetail() {
   }
 
   return (
-    <article className="space-y-6 border border-gray-200 bg-background-100 rounded-sm p-6">
+    <article className="bg-background-100 space-y-6 rounded-sm border border-gray-200 p-6">
       <header className="border-b border-gray-200 pb-4">
         <div className="mb-3 flex items-start justify-between gap-3">
-          <h1 className="text-heading-24 font-bold text-gray-1000 leading-tight">
+          <h1 className="text-heading-24 text-gray-1000 font-bold leading-tight">
             {resource.title}
           </h1>
           <ResourceCategoryBadge category={resource.category} size="md" />
         </div>
-        <p className="text-copy-14 text-gray-900 font-medium leading-relaxed">{resource.description}</p>
+        <p className="text-copy-14 font-medium leading-relaxed text-gray-900">
+          {resource.description}
+        </p>
       </header>
 
-      <div className="prose prose-gray max-w-none text-copy-14 text-gray-900 leading-relaxed">
+      <div className="prose prose-gray text-copy-14 max-w-none leading-relaxed text-gray-900">
         <div dangerouslySetInnerHTML={{ __html: resource.content }} />
       </div>
 
@@ -120,7 +120,7 @@ export function ResourceDetail() {
             href={resource.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-primary hover:bg-gray-800 inline-flex items-center gap-2 rounded-sm px-4 py-2 text-xs font-semibold text-background-100 transition-colors"
+            className="bg-primary text-background-100 inline-flex items-center gap-2 rounded-sm px-4 py-2 text-xs font-semibold transition-colors hover:bg-gray-800"
           >
             <svg
               className="h-3.5 w-3.5"
@@ -141,15 +141,12 @@ export function ResourceDetail() {
         </div>
       )}
 
-      <footer className="border-t border-gray-200 pt-4 text-xs font-mono text-gray-400">
+      <footer className="border-t border-gray-200 pt-4 font-mono text-xs text-gray-400">
         <p>Last updated: {formatDate(resource.updatedAt)}</p>
       </footer>
 
-      <div className="pt-4 border-t border-gray-200">
-        <button
-          onClick={goBack}
-          className="text-tertiary hover:underline text-xs font-semibold"
-        >
+      <div className="border-t border-gray-200 pt-4">
+        <button onClick={goBack} className="text-tertiary text-xs font-semibold hover:underline">
           ← Back to Resources
         </button>
       </div>

@@ -1,24 +1,24 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-primary: #F9FAFB;
-  --color-secondary: #CBD5E1;
-  --color-tertiary: #C96A2B;
-  --color-neutral: #94A3B8;
+  --color-primary: #f9fafb;
+  --color-secondary: #cbd5e1;
+  --color-tertiary: #c96a2b;
+  --color-neutral: #94a3b8;
   --color-background-100: #111827;
-  --color-background-200: #1F2937;
+  --color-background-200: #1f2937;
 
-  --color-gray-50: #1F2937;
+  --color-gray-50: #1f2937;
   --color-gray-100: #263445;
   --color-gray-200: #374151;
-  --color-gray-300: #4B5563;
-  --color-gray-400: #94A3B8;
-  --color-gray-500: #94A3B8;
-  --color-gray-600: #CBD5E1;
-  --color-gray-700: #CBD5E1;
-  --color-gray-800: #CBD5E1;
-  --color-gray-900: #CBD5E1;
-  --color-gray-1000: #F9FAFB;
+  --color-gray-300: #4b5563;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #94a3b8;
+  --color-gray-600: #cbd5e1;
+  --color-gray-700: #cbd5e1;
+  --color-gray-800: #cbd5e1;
+  --color-gray-900: #cbd5e1;
+  --color-gray-1000: #f9fafb;
 
   --color-gray-alpha-100: rgba(255, 255, 255, 0.05);
   --color-gray-alpha-200: rgba(255, 255, 255, 0.08);
@@ -31,121 +31,123 @@
   --color-gray-alpha-900: rgba(255, 255, 255, 0.7);
   --color-gray-alpha-1000: rgba(255, 255, 255, 0.91);
 
-  --color-slate-50: #1F2937;
+  --color-slate-50: #1f2937;
   --color-slate-100: #263445;
   --color-slate-200: #374151;
-  --color-slate-300: #4B5563;
-  --color-slate-400: #94A3B8;
-  --color-slate-500: #94A3B8;
-  --color-slate-600: #CBD5E1;
-  --color-slate-700: #CBD5E1;
-  --color-slate-800: #CBD5E1;
-  --color-slate-900: #CBD5E1;
+  --color-slate-300: #4b5563;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #94a3b8;
+  --color-slate-600: #cbd5e1;
+  --color-slate-700: #cbd5e1;
+  --color-slate-800: #cbd5e1;
+  --color-slate-900: #cbd5e1;
   --color-slate-950: #111827;
 
-  --color-zinc-50: #1F2937;
+  --color-zinc-50: #1f2937;
   --color-zinc-100: #263445;
   --color-zinc-200: #374151;
-  --color-zinc-300: #4B5563;
-  --color-zinc-400: #94A3B8;
-  --color-zinc-500: #94A3B8;
-  --color-zinc-600: #CBD5E1;
-  --color-zinc-700: #CBD5E1;
-  --color-zinc-800: #CBD5E1;
-  --color-zinc-900: #CBD5E1;
+  --color-zinc-300: #4b5563;
+  --color-zinc-400: #94a3b8;
+  --color-zinc-500: #94a3b8;
+  --color-zinc-600: #cbd5e1;
+  --color-zinc-700: #cbd5e1;
+  --color-zinc-800: #cbd5e1;
+  --color-zinc-900: #cbd5e1;
   --color-zinc-950: #111827;
 
-  --color-neutral-50: #1F2937;
+  --color-neutral-50: #1f2937;
   --color-neutral-100: #263445;
   --color-neutral-200: #374151;
-  --color-neutral-300: #4B5563;
-  --color-neutral-400: #94A3B8;
-  --color-neutral-500: #94A3B8;
-  --color-neutral-600: #CBD5E1;
-  --color-neutral-700: #CBD5E1;
-  --color-neutral-800: #CBD5E1;
-  --color-neutral-900: #CBD5E1;
+  --color-neutral-300: #4b5563;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #94a3b8;
+  --color-neutral-600: #cbd5e1;
+  --color-neutral-700: #cbd5e1;
+  --color-neutral-800: #cbd5e1;
+  --color-neutral-900: #cbd5e1;
   --color-neutral-950: #111827;
 
   --color-blue-100: rgba(37, 99, 235, 0.15);
   --color-blue-200: rgba(37, 99, 235, 0.25);
   --color-blue-300: rgba(37, 99, 235, 0.4);
   --color-blue-400: rgba(37, 99, 235, 0.6);
-  --color-blue-500: #2563EB;
-  --color-blue-600: #1D4ED8;
-  --color-blue-700: #2563EB;
-  --color-blue-800: #1D4ED8;
-  --color-blue-900: #1E40AF;
+  --color-blue-500: #2563eb;
+  --color-blue-600: #1d4ed8;
+  --color-blue-700: #2563eb;
+  --color-blue-800: #1d4ed8;
+  --color-blue-900: #1e40af;
   --color-blue-1000: #172554;
 
   --color-red-100: rgba(220, 38, 38, 0.15);
   --color-red-200: rgba(220, 38, 38, 0.25);
   --color-red-300: rgba(220, 38, 38, 0.4);
   --color-red-400: rgba(220, 38, 38, 0.6);
-  --color-red-500: #DC2626;
-  --color-red-600: #B91C1C;
-  --color-red-700: #DC2626;
-  --color-red-800: #B91C1C;
-  --color-red-900: #991B1B;
-  --color-red-1000: #450A0A;
+  --color-red-500: #dc2626;
+  --color-red-600: #b91c1c;
+  --color-red-700: #dc2626;
+  --color-red-800: #b91c1c;
+  --color-red-900: #991b1b;
+  --color-red-1000: #450a0a;
 
   --color-amber-100: rgba(217, 119, 6, 0.15);
   --color-amber-200: rgba(217, 119, 6, 0.25);
   --color-amber-300: rgba(217, 119, 6, 0.4);
   --color-amber-400: rgba(217, 119, 6, 0.6);
-  --color-amber-500: #D97706;
-  --color-amber-600: #B45309;
-  --color-amber-700: #D97706;
-  --color-amber-800: #B45309;
-  --color-amber-900: #78350F;
-  --color-amber-1000: #451A03;
+  --color-amber-500: #d97706;
+  --color-amber-600: #b45309;
+  --color-amber-700: #d97706;
+  --color-amber-800: #b45309;
+  --color-amber-900: #78350f;
+  --color-amber-1000: #451a03;
 
   --color-green-100: rgba(22, 163, 74, 0.15);
   --color-green-200: rgba(22, 163, 74, 0.25);
   --color-green-300: rgba(22, 163, 74, 0.4);
   --color-green-400: rgba(22, 163, 74, 0.6);
-  --color-green-500: #16A34A;
-  --color-green-600: #15803D;
-  --color-green-700: #16A34A;
-  --color-green-800: #15803D;
+  --color-green-500: #16a34a;
+  --color-green-600: #15803d;
+  --color-green-700: #16a34a;
+  --color-green-800: #15803d;
   --color-green-900: #166534;
-  --color-green-1000: #052E16;
+  --color-green-1000: #052e16;
 
   --color-teal-100: rgba(13, 148, 136, 0.15);
   --color-teal-200: rgba(13, 148, 136, 0.25);
   --color-teal-300: rgba(13, 148, 136, 0.4);
   --color-teal-400: rgba(13, 148, 136, 0.6);
-  --color-teal-500: #0D9488;
-  --color-teal-600: #0D9488;
-  --color-teal-700: #0F766E;
-  --color-teal-800: #0F766E;
-  --color-teal-900: #115E59;
-  --color-teal-1000: #134E4A;
+  --color-teal-500: #0d9488;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #0f766e;
+  --color-teal-900: #115e59;
+  --color-teal-1000: #134e4a;
 
   --color-purple-100: rgba(147, 51, 234, 0.15);
   --color-purple-200: rgba(147, 51, 234, 0.25);
   --color-purple-300: rgba(147, 51, 234, 0.4);
   --color-purple-400: rgba(147, 51, 234, 0.6);
-  --color-purple-500: #9333EA;
-  --color-purple-600: #9333EA;
-  --color-purple-700: #7E22CE;
-  --color-purple-800: #7E22CE;
-  --color-purple-900: #6B21A8;
-  --color-purple-1000: #581C87;
+  --color-purple-500: #9333ea;
+  --color-purple-600: #9333ea;
+  --color-purple-700: #7e22ce;
+  --color-purple-800: #7e22ce;
+  --color-purple-900: #6b21a8;
+  --color-purple-1000: #581c87;
 
   --color-pink-100: rgba(219, 39, 119, 0.15);
   --color-pink-200: rgba(219, 39, 119, 0.25);
   --color-pink-300: rgba(219, 39, 119, 0.4);
   --color-pink-400: rgba(219, 39, 119, 0.6);
-  --color-pink-500: #DB2777;
-  --color-pink-600: #DB2777;
-  --color-pink-700: #BE185D;
-  --color-pink-800: #BE185D;
-  --color-pink-900: #9D174D;
+  --color-pink-500: #db2777;
+  --color-pink-600: #db2777;
+  --color-pink-700: #be185d;
+  --color-pink-800: #be185d;
+  --color-pink-900: #9d174d;
   --color-pink-1000: #831843;
 
-  --font-sans: 'Geist Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: 'Geist Mono', SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:
+    'Geist Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
 }
 
 @utility text-heading-72 {
@@ -313,11 +315,13 @@
 }
 
 @utility dashboard-card {
-  background-color: #1F2937;
+  background-color: #1f2937;
   border: 1px solid #374151;
   border-radius: 6px;
   box-shadow: none;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 @utility dashboard-card-hover {
@@ -329,32 +333,45 @@
 @layer base {
   body {
     background-color: #111827;
-    color: #F9FAFB;
+    color: #f9fafb;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     outline: none;
     background-color: #111827 !important;
     border-color: #374151 !important;
-    color: #F9FAFB !important;
-    transition: box-shadow 0.15s ease, border-color 0.15s ease;
-  }
-  
-  input::placeholder, select::placeholder, textarea::placeholder {
-    color: #94A3B8 !important;
+    color: #f9fafb !important;
+    transition:
+      box-shadow 0.15s ease,
+      border-color 0.15s ease;
   }
 
-  input:focus-visible, select:focus-visible, textarea:focus-visible {
-    border-color: #C96A2B !important;
-    box-shadow: 0 0 0 2px #111827, 0 0 0 4px #C96A2B !important;
+  input::placeholder,
+  select::placeholder,
+  textarea::placeholder {
+    color: #94a3b8 !important;
   }
 
-  button:focus-visible, a:focus-visible {
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    border-color: #c96a2b !important;
+    box-shadow:
+      0 0 0 2px #111827,
+      0 0 0 4px #c96a2b !important;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px #111827, 0 0 0 4px #C96A2B !important;
+    box-shadow:
+      0 0 0 2px #111827,
+      0 0 0 4px #c96a2b !important;
   }
 }
 
@@ -362,8 +379,8 @@
 
 /* White Background Containers -> Card Background */
 .bg-white,
-[class*="bg-white"] {
-  background-color: #1F2937 !important;
+[class*='bg-white'] {
+  background-color: #1f2937 !important;
 }
 
 /* Row Hover states */
@@ -384,22 +401,22 @@ a.bg-primary,
 button.bg-primary-600,
 a.bg-primary-600,
 .bg-primary {
-  background-color: #C96A2B !important;
-  color: #FFFFFF !important;
+  background-color: #c96a2b !important;
+  color: #ffffff !important;
 }
 button.bg-primary:hover,
 a.bg-primary:hover,
 button.bg-primary-600:hover,
 a.bg-primary-600:hover,
 .bg-primary:hover {
-  background-color: #B85C22 !important;
+  background-color: #b85c22 !important;
 }
 button.bg-primary:active,
 a.bg-primary:active,
 button.bg-primary-600:active,
 a.bg-primary-600:active,
 .bg-primary:active {
-  background-color: #A44F1A !important;
+  background-color: #a44f1a !important;
 }
 
 /* Secondary Button Override */
@@ -410,8 +427,8 @@ a.border-slate-300,
 .border-gray-200.bg-background-100,
 .border-slate-300.bg-white {
   background-color: transparent !important;
-  border-color: #4B5563 !important;
-  color: #CBD5E1 !important;
+  border-color: #4b5563 !important;
+  color: #cbd5e1 !important;
 }
 button.border-gray-200:hover,
 a.border-gray-200:hover,
@@ -420,8 +437,8 @@ a.border-slate-300:hover,
 .border-gray-200.bg-background-100:hover,
 .border-slate-300.bg-white:hover {
   background-color: #263445 !important;
-  border-color: #4B5563 !important;
-  color: #FFFFFF !important;
+  border-color: #4b5563 !important;
+  color: #ffffff !important;
 }
 
 /* Navbar & Active Link overrides */
@@ -432,16 +449,16 @@ header.bg-background-100 {
 }
 header a,
 header button {
-  color: #CBD5E1 !important;
+  color: #cbd5e1 !important;
 }
 header a:hover,
 header button:hover {
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 /* Style active navbar link custom class and state */
 header a.active-nav-link,
-header a[aria-current="page"] {
-  color: #C96A2B !important;
+header a[aria-current='page'] {
+  color: #c96a2b !important;
 }
 
 /* Sidebar navigation */
@@ -451,23 +468,23 @@ aside.bg-background-100 {
   border-color: #374151 !important;
 }
 aside a {
-  color: #CBD5E1 !important;
+  color: #cbd5e1 !important;
   background-color: transparent !important;
 }
 aside a:hover {
-  background-color: #1F2937 !important;
-  color: #FFFFFF !important;
+  background-color: #1f2937 !important;
+  color: #ffffff !important;
 }
 aside a.active-sidebar-link,
-aside a[aria-current="page"] {
-  background-color: #C96A2B !important;
-  color: #FFFFFF !important;
+aside a[aria-current='page'] {
+  background-color: #c96a2b !important;
+  color: #ffffff !important;
 }
 
 /* Notification unread indicator */
 button span.bg-rose-500,
 .bg-rose-500,
 .unread-indicator {
-  background-color: #C96A2B !important;
-  color: #FFFFFF !important;
+  background-color: #c96a2b !important;
+  color: #ffffff !important;
 }

@@ -1,0 +1,33 @@
+---
+interface Props {
+  currentRole?: 'STUDENT' | 'MENTOR' | 'ADMIN' | null;
+  class?: string;
+}
+
+const { currentRole = null, class: className = '' } = Astro.props;
+
+let homeHref = '/';
+if (currentRole === 'STUDENT') {
+  homeHref = '/dashboard';
+} else if (currentRole === 'MENTOR') {
+  homeHref = '/mentor/dashboard';
+} else if (currentRole === 'ADMIN') {
+  homeHref = '/admin/dashboard';
+}
+---
+
+<a
+  id="brand-link"
+  href={homeHref}
+  class={`flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 rounded-sm ${className}`}
+>
+  <img
+    src="/favicon/favicon.svg"
+    alt="Peerly Logo"
+    class="h-[22px] w-[22px] flex-shrink-0 object-contain"
+    width="22"
+    height="22"
+    loading="eager"
+  />
+  <span class="text-label-14 text-gray-1000 font-bold tracking-tight"> Peerly </span>
+</a>

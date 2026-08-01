@@ -3,20 +3,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Page Not Found | Peerly">
-  <div class="max-w-md mx-auto py-24 px-4 text-center">
+  <div class="mx-auto max-w-md px-4 py-24 text-center">
     <div class="mb-6 flex justify-center">
-      <div class="p-6 rounded-full bg-[var(--color-gray-100)] border border-[var(--color-gray-200)] text-[var(--color-tertiary)]">
-        <svg class="h-16 w-16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+      <div
+        class="rounded-full border border-[var(--color-gray-200)] bg-[var(--color-gray-100)] p-6 text-[var(--color-tertiary)]"
+      >
+        <svg
+          class="h-16 w-16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path>
         </svg>
       </div>
     </div>
     <h1 class="text-heading-64 text-gray-1000 mb-2">404</h1>
-    <h2 class="text-heading-24 text-gray-200 mb-4">Page Not Found</h2>
-    <p class="text-copy-16 text-gray-400 mb-8">
-      We couldn't find the page you are looking for. It might have been moved, deleted, or never existed in this safe space.
+    <h2 class="text-heading-24 mb-4 text-gray-200">Page Not Found</h2>
+    <p class="text-copy-16 mb-8 text-gray-400">
+      We couldn't find the page you are looking for. It might have been moved, deleted, or never
+      existed in this safe space.
     </p>
-    <a href="/" class="inline-flex items-center justify-center px-6 py-3 bg-[var(--color-tertiary)] hover:bg-[#B85C22] text-white text-button-14 rounded font-bold transition-all">
+    <a
+      href="/"
+      class="text-button-14 inline-flex items-center justify-center rounded bg-[var(--color-tertiary)] px-6 py-3 font-bold text-white transition-all hover:bg-[#B85C22]"
+    >
       Return to Safety (Home)
     </a>
   </div>

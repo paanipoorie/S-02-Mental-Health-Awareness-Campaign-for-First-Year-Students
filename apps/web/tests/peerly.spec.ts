@@ -33,7 +33,7 @@ test.describe('Peerly E2E Verification Suite', () => {
       // 1. Landing Page
       await page.goto('/');
       await expect(page).toHaveTitle(/Peerly/);
-      
+
       // Verify landing page content
       await expect(page.locator('text=Peerly').first()).toBeVisible();
       await expect(page.locator('text=Peer support, verified by your university.')).toBeVisible();
@@ -83,12 +83,12 @@ test.describe('Peerly E2E Verification Suite', () => {
       await waitHydration(page);
       await expect(page).toHaveTitle(/Sign In | Peerly/);
       await expect(page.locator('h2').first()).toContainText('Sign In');
-      
+
       // Enter incorrect credentials
       await page.fill('input[type="email"]', 'wrong@university.edu');
       await page.fill('input[type="password"]', 'WrongPassword123');
       await page.click('button[type="submit"]');
-      
+
       // Check for error text
       await expect(page.locator('text=Invalid credentials').first()).toBeVisible();
 
@@ -106,25 +106,34 @@ test.describe('Peerly E2E Verification Suite', () => {
     });
 
     test('Verify Student Dashboard', async ({ page }) => {
-      await expect(page.locator('text=No Mentor Assigned').or(page.locator('text=Contact Mentor')).first()).toBeVisible();
+      await expect(
+        page.locator('text=No Mentor Assigned').or(page.locator('text=Contact Mentor')).first()
+      ).toBeVisible();
       await expect(page.locator('text=Announcements').first()).toBeVisible();
       await expect(page.locator('text=Quick Access Resources').first()).toBeVisible();
     });
 
     test('Verify Student Discussions (Forum) & Emotion Tagging', async ({ page }) => {
       await page.goto('/posts');
-      await expect(page.locator('h1').filter({ hasText: 'Discussions Feed' }).first()).toBeVisible();
+      await expect(
+        page.locator('h1').filter({ hasText: 'Discussions Feed' }).first()
+      ).toBeVisible();
 
       // Click create new discussion button
       await page.click('a[href="/posts/new"]');
       await page.waitForSelector('input[id="title"]');
       await waitHydration(page);
-      await expect(page.locator('h1').filter({ hasText: 'Create Anonymous Post' }).first()).toBeVisible();
+      await expect(
+        page.locator('h1').filter({ hasText: 'Create Anonymous Post' }).first()
+      ).toBeVisible();
 
       // Create new discussion topic
       const uniqueTitle = `Anxiety during midterms - ${Date.now()}`;
       await page.fill('input[id="title"]', uniqueTitle);
-      await page.fill('textarea[id="body"]', 'I am feeling highly anxious about the upcoming calculus midterms. Any tips?');
+      await page.fill(
+        'textarea[id="body"]',
+        'I am feeling highly anxious about the upcoming calculus midterms. Any tips?'
+      );
       await page.selectOption('select[aria-label="Post category"]', 'ACADEMICS');
       await page.click('button[aria-label="Anxious"]');
       await page.click('button[aria-label="High"]');
@@ -139,25 +148,35 @@ test.describe('Peerly E2E Verification Suite', () => {
 
       // Add a reply
       await page.click('button:has-text("+ Reply")');
-      await page.fill('textarea[placeholder="Write your reply..."]', 'Don\'t worry, you are not alone! We can study together.');
+      await page.fill(
+        'textarea[placeholder="Write your reply..."]',
+        "Don't worry, you are not alone! We can study together."
+      );
       await page.click('button:has-text("Post Reply")');
 
       // Verify reply appears
-      await expect(page.locator('text=Don\'t worry, you are not alone! We can study together.').first()).toBeVisible();
+      await expect(
+        page.locator("text=Don't worry, you are not alone! We can study together.").first()
+      ).toBeVisible();
     });
 
     test('Verify Peer Chat', async ({ page }) => {
       await page.goto('/chat');
-      await expect(page.locator('text=Your Messages').or(page.locator('text=Select a conversation')).first()).toBeVisible();
+      await expect(
+        page.locator('text=Your Messages').or(page.locator('text=Select a conversation')).first()
+      ).toBeVisible();
 
       // Click on a thread if available
       const thread = page.locator('a[href*="threadId="]');
-      if (await thread.count() > 0) {
+      if ((await thread.count()) > 0) {
         await thread.first().click();
         await page.waitForTimeout(1000);
-        
+
         // Try to send a message
-        await page.fill('input[placeholder="Type a message anonymously..."]', 'Hello Mentor! Are you available?');
+        await page.fill(
+          'input[placeholder="Type a message anonymously..."]',
+          'Hello Mentor! Are you available?'
+        );
         await page.click('button:has(svg)');
         await expect(page.locator('text=Hello Mentor! Are you available?').first()).toBeVisible();
       }
@@ -169,13 +188,19 @@ test.describe('Peerly E2E Verification Suite', () => {
 
       // Click on first event details
       const viewDetailsLink = page.locator('a[href*="/meetings/"]').first();
-      if (await viewDetailsLink.count() > 0) {
+      if ((await viewDetailsLink.count()) > 0) {
         await viewDetailsLink.click();
-        await expect(page.locator('button:has-text("RSVP")').or(page.locator('button:has-text("Register")')).or(page.locator('button:has-text("Cancel RSVP")')).first()).toBeVisible();
-        
+        await expect(
+          page
+            .locator('button:has-text("RSVP")')
+            .or(page.locator('button:has-text("Register")'))
+            .or(page.locator('button:has-text("Cancel RSVP")'))
+            .first()
+        ).toBeVisible();
+
         // Toggle RSVP/Registration if button present
         const rsvpButton = page.locator('button:has-text("RSVP")').first();
-        if (await rsvpButton.count() > 0) {
+        if ((await rsvpButton.count()) > 0) {
           await rsvpButton.click();
           await page.waitForTimeout(1000);
           await expect(page.locator('button:has-text("Cancel RSVP")').first()).toBeVisible();
@@ -215,7 +240,7 @@ test.describe('Peerly E2E Verification Suite', () => {
       await expect(busyButton).toBeVisible();
       await busyButton.click();
       await page.waitForTimeout(1000);
-      
+
       // Reload page and check if it persisted
       await page.reload();
       await expect(page.locator('text=Current Status').locator('..')).toContainText('Busy');
@@ -231,10 +256,10 @@ test.describe('Peerly E2E Verification Suite', () => {
     test('Verify Mentor Priority Feed & Discussions', async ({ page }) => {
       await page.goto('/mentor/priority-feed');
       await expect(page.locator('h2').filter({ hasText: 'Priority Feed' }).first()).toBeVisible();
-      
+
       // Check if we can view posts from here
       const postLink = page.locator('a[href*="/posts/"]').first();
-      if (await postLink.count() > 0) {
+      if ((await postLink.count()) > 0) {
         await postLink.click();
         await expect(page.locator('textarea[placeholder*="response"]').first()).toBeVisible();
       }
@@ -242,7 +267,9 @@ test.describe('Peerly E2E Verification Suite', () => {
 
     test('Verify Mentor Peer Chat', async ({ page }) => {
       await page.goto('/chat');
-      await expect(page.locator('text=Your Messages').or(page.locator('text=Select a conversation')).first()).toBeVisible();
+      await expect(
+        page.locator('text=Your Messages').or(page.locator('text=Select a conversation')).first()
+      ).toBeVisible();
     });
 
     test('Verify Mentor Logout', async ({ page }) => {
@@ -262,25 +289,35 @@ test.describe('Peerly E2E Verification Suite', () => {
 
       // 1. Mentors management
       await page.goto('/admin/mentors');
-      await expect(page.locator('h1').filter({ hasText: 'Mentor Management' }).first()).toBeVisible();
+      await expect(
+        page.locator('h1').filter({ hasText: 'Mentor Management' }).first()
+      ).toBeVisible();
       await expect(page.locator('text=mentor1@university.edu').first()).toBeVisible();
 
       // 2. Students management
       await page.goto('/admin/students');
-      await expect(page.locator('h1').filter({ hasText: 'Student Management' }).first()).toBeVisible();
+      await expect(
+        page.locator('h1').filter({ hasText: 'Student Management' }).first()
+      ).toBeVisible();
       await expect(page.locator('text=student1@university.edu').first()).toBeVisible();
 
       // 3. Meetings management
       await page.goto('/admin/meetings');
-      await expect(page.locator('h1').filter({ hasText: 'Meeting Management' }).first()).toBeVisible();
+      await expect(
+        page.locator('h1').filter({ hasText: 'Meeting Management' }).first()
+      ).toBeVisible();
 
       // 4. Workshops management
       await page.goto('/admin/workshops');
-      await expect(page.locator('h1').filter({ hasText: 'Workshop Management' }).first()).toBeVisible();
+      await expect(
+        page.locator('h1').filter({ hasText: 'Workshop Management' }).first()
+      ).toBeVisible();
 
       // 5. Resources management
       await page.goto('/admin/resources');
-      await expect(page.locator('h1').filter({ hasText: 'Resource Management' }).first()).toBeVisible();
+      await expect(
+        page.locator('h1').filter({ hasText: 'Resource Management' }).first()
+      ).toBeVisible();
     });
 
     test('Verify Admin Logout', async ({ page }) => {

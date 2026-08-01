@@ -30,7 +30,7 @@ export function CategoryPicker({
       <select
         value={selectedCategory || ''}
         onChange={e => onSelect(e.target.value as PostCategory)}
-        className="rounded-sm border border-gray-200 bg-background-100 px-3.5 py-2 text-copy-14 text-gray-900 outline-none focus:border-gray-900 transition-colors cursor-pointer w-full"
+        className="bg-background-100 text-copy-14 w-full cursor-pointer rounded-sm border border-gray-200 px-3.5 py-2 text-gray-900 outline-none transition-colors focus:border-gray-900"
         aria-label="Post category"
       >
         <option value="">Select a category</option>

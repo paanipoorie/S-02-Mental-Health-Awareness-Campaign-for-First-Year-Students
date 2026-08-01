@@ -1,7 +1,21 @@
 import { getEmotionConfig } from '@lib/emotionConstants';
 import { getUrgencyConfig } from '@lib/emotionConstants';
 import { EmotionBadge } from '@components/emotion/EmotionBadge';
-import { Smile, Sparkles, HelpCircle, Home, Frown, AlertTriangle, AlertCircle, BatteryLow, Brain, Zap, ChevronDown, Minus, ChevronUp } from 'lucide-react';
+import {
+  Smile,
+  Sparkles,
+  HelpCircle,
+  Home,
+  Frown,
+  AlertTriangle,
+  AlertCircle,
+  BatteryLow,
+  Brain,
+  Zap,
+  ChevronDown,
+  Minus,
+  ChevronUp,
+} from 'lucide-react';
 
 interface EmotionSummaryCardProps {
   currentEmotion: {
@@ -43,7 +57,7 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
   if (!currentEmotion || !currentEmotion.emotion) {
     return (
       <div className={`dashboard-card p-6 ${className}`}>
-        <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Current Emotion</h3>
+        <h3 className="text-heading-20 text-gray-1000 mb-4 font-semibold">Current Emotion</h3>
         <div className="py-8 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
@@ -64,7 +78,7 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
           </p>
           <a
             href="/posts/new"
-            className="mt-4 inline-block rounded-sm bg-primary px-4 py-2 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors"
+            className="bg-primary text-button-14 text-background-100 mt-4 inline-block rounded-sm px-4 py-2 font-semibold transition-colors hover:bg-gray-800"
           >
             Log Emotion
           </a>
@@ -83,7 +97,7 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
 
   return (
     <div className={`dashboard-card p-6 ${className}`}>
-      <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Current Emotion</h3>
+      <h3 className="text-heading-20 text-gray-1000 mb-4 font-semibold">Current Emotion</h3>
 
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
@@ -95,7 +109,7 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
           </div>
           <div>
             <p className="text-label-12 font-medium text-gray-500">Currently feeling</p>
-            <p className="text-heading-20 font-bold text-gray-1000">{emotionConfig.label}</p>
+            <p className="text-heading-20 text-gray-1000 font-bold">{emotionConfig.label}</p>
             <p className="text-label-12 text-gray-500">
               Updated {formatTimeAgo(new Date(currentEmotion.createdAt!))}
             </p>
@@ -112,7 +126,7 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
       </div>
 
       {urgencyConfig && UrgencyIcon && (
-        <div className="mt-4 rounded-sm border p-3 border-gray-200 bg-background-200">
+        <div className="bg-background-200 mt-4 rounded-sm border border-gray-200 p-3">
           <div className="flex items-center gap-2">
             <span className="text-heading-16 text-gray-800">
               <UrgencyIcon className="h-5 w-5 text-gray-700" />
@@ -125,7 +139,9 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
               {urgencyConfig.level === 'MEDIUM' && (
                 <> - Peers and mentors are available for guidance.</>
               )}
-              {urgencyConfig.level === 'LOW' && <> - Regular status update, no immediate response requested.</>}
+              {urgencyConfig.level === 'LOW' && (
+                <> - Regular status update, no immediate response requested.</>
+              )}
             </p>
           </div>
         </div>
@@ -134,7 +150,7 @@ export function EmotionSummaryCard({ currentEmotion, className = '' }: EmotionSu
       <div className="mt-4 border-t border-gray-200 pt-4">
         <a
           href="/posts/new"
-          className="inline-block rounded-sm border border-gray-300 bg-background-100 px-4 py-2 text-button-14 font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
+          className="bg-background-100 text-button-14 inline-block rounded-sm border border-gray-300 px-4 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-100"
         >
           Update Emotion
         </a>

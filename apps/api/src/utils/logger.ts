@@ -47,7 +47,12 @@ function generateCorrelationId(): string {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 }
 
-function formatLog(level: LogLevel, message: string, meta?: Record<string, unknown>, correlationId?: string): string {
+function formatLog(
+  level: LogLevel,
+  message: string,
+  meta?: Record<string, unknown>,
+  correlationId?: string
+): string {
   const entry: LogEntry = {
     timestamp: new Date().toISOString(),
     level,
@@ -84,10 +89,14 @@ export const logger = {
   },
   child(correlationId: string) {
     return {
-      info: (message: string, meta?: Record<string, unknown>) => logger.info(message, meta, correlationId),
-      warn: (message: string, meta?: Record<string, unknown>) => logger.warn(message, meta, correlationId),
-      error: (message: string, meta?: Record<string, unknown>) => logger.error(message, meta, correlationId),
-      debug: (message: string, meta?: Record<string, unknown>) => logger.debug(message, meta, correlationId),
+      info: (message: string, meta?: Record<string, unknown>) =>
+        logger.info(message, meta, correlationId),
+      warn: (message: string, meta?: Record<string, unknown>) =>
+        logger.warn(message, meta, correlationId),
+      error: (message: string, meta?: Record<string, unknown>) =>
+        logger.error(message, meta, correlationId),
+      debug: (message: string, meta?: Record<string, unknown>) =>
+        logger.debug(message, meta, correlationId),
     };
   },
 };

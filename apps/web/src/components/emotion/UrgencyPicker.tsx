@@ -24,10 +24,10 @@ export function UrgencyPicker({ selectedUrgency, onSelect, className = '' }: Urg
           <button
             key={level}
             type="button"
-            className={`flex items-center justify-center gap-2 p-2.5 rounded-sm border text-xs font-medium transition-colors ${
+            className={`flex items-center justify-center gap-2 rounded-sm border p-2.5 text-xs font-medium transition-colors ${
               isSelected
                 ? 'border-gray-900 bg-gray-100 text-gray-900'
-                : 'border-gray-200 bg-background-100 text-gray-700 hover:bg-gray-50 hover:border-gray-300'
+                : 'bg-background-100 border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'
             }`}
             onClick={() => onSelect(level)}
             aria-label={label}

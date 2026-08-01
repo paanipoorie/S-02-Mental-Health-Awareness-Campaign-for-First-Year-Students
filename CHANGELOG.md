@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0-mvp] - 2026-07-29
 
 ### Added
+
 - **Monorepo setup**: Express backend, Astro frontend, and shared types packages.
 - **Database modeling**: Prisma models mapping Users, Identities, Emotions, Posts, Chat, Meetings, Workshops, Resources, and Audits.
 - **Anonymous identity generator**: Automatic noun-adjective display name seeds to separate credentials from posts.
@@ -20,16 +21,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security configs**: Structured Helmet security headers, CORS blocks, and route-level rate limits.
 
 ### Changed
+
 - **Router validation**: Simplified Express route validators (`chat.routes.ts`) to use single validation middleware sheets.
 - **Admin authentication**: Registered token decoding middleware on the admin router.
 - **Anonymity mapping**: Mapped database joins dynamically at service bounds to yield flat names (`anonymousDisplayName`, `senderName`) for frontends.
 
 ### Fixed
+
 - **Mentor replies**: Resolved 404 access bugs in `post.controller.ts` where unassigned mentors were blocked from replying.
 - **Test parallelism**: Configured test executions sequentially to avoid database transaction collisions.
 - **Test schemas**: Corrected mock inputs in `anonymity.audit.test.ts` to satisfy Zod validation constraints.
 
 ### Frontend Additions
+
 - **Post Detail page**: `/posts/[id]` with threaded replies, reply composer, emotion/urgency display, and soft delete.
 - **Chat Inbox**: `/chat` with thread list, unread badges, emotion previews for mentors, and "New Chat" action.
 - **Chat Conversation**: `/chat/[threadId]` with live Socket.io messaging, typing indicators, read receipts, and scroll-to-bottom.
@@ -40,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0-alpha] - 2026-07-15
 
 ### Added
+
 - Docker Compose dev container definitions.
 - Health check endpoints and schema migrations.
 - Base Geist CSS styling imports.

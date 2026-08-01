@@ -69,18 +69,16 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-sm border border-gray-200 bg-background-100 p-8 shadow-sm">
+    <div className="bg-background-100 mx-auto w-full max-w-md rounded-sm border border-gray-200 p-8 shadow-sm">
       <div className="mb-8">
-        <h2 className="text-heading-24 font-bold text-gray-1000">
-          Sign In
-        </h2>
-        <p className="mt-1.5 text-label-13 text-gray-600">
+        <h2 className="text-heading-24 text-gray-1000 font-bold">Sign In</h2>
+        <p className="text-label-13 mt-1.5 text-gray-600">
           Access your peer support workspace anonymously.
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 flex items-center gap-2 rounded-sm border border-red-300 bg-red-100/50 p-4 text-label-13 text-red-800">
+        <div className="text-label-13 mb-6 flex items-center gap-2 rounded-sm border border-red-300 bg-red-100/50 p-4 text-red-800">
           <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
@@ -95,7 +93,7 @@ export const LoginForm: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="mb-2 block text-label-13 font-semibold text-gray-700">
+          <label className="text-label-13 mb-2 block font-semibold text-gray-700">
             University Email Address
           </label>
           <input
@@ -103,21 +101,19 @@ export const LoginForm: React.FC = () => {
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="university@college.edu"
-            className="w-full h-10 px-3 py-2 text-label-14 bg-background-100 text-primary border border-gray-300 rounded-sm focus-visible:outline-none focus-visible:border-blue-700 placeholder-gray-400"
+            className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
             required
           />
         </div>
 
         <div>
-          <label className="mb-2 block text-label-13 font-semibold text-gray-700">
-            Password
-          </label>
+          <label className="text-label-13 mb-2 block font-semibold text-gray-700">Password</label>
           <input
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full h-10 px-3 py-2 text-label-14 bg-background-100 text-primary border border-gray-300 rounded-sm focus-visible:outline-none focus-visible:border-blue-700 placeholder-gray-400"
+            className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
             required
           />
         </div>
@@ -125,11 +121,11 @@ export const LoginForm: React.FC = () => {
         <button
           type="submit"
           disabled={loading}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-sm bg-primary px-4 py-2.5 text-button-14 font-semibold text-background-100 transition-colors hover:bg-gray-800 disabled:opacity-50 cursor-pointer"
+          className="bg-primary text-button-14 text-background-100 mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm px-4 py-2.5 font-semibold transition-colors hover:bg-gray-800 disabled:opacity-50"
         >
           {loading ? (
             <>
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-background-100/30 border-t-background-100"></div>
+              <div className="border-background-100/30 border-t-background-100 h-4 w-4 animate-spin rounded-full border-2"></div>
               <span>Signing In...</span>
             </>
           ) : (
@@ -141,7 +137,7 @@ export const LoginForm: React.FC = () => {
       <div className="mt-8 border-t border-gray-200 pt-6 text-center">
         <p className="text-label-13 text-gray-600">
           Don't have an account yet?{' '}
-          <a href="/register" className="ml-1 font-semibold text-tertiary hover:underline">
+          <a href="/register" className="text-tertiary ml-1 font-semibold hover:underline">
             Register now
           </a>
         </p>

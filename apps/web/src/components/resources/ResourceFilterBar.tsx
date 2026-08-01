@@ -57,7 +57,7 @@ export function ResourceFilterBar({
             value={searchQuery}
             onChange={e => onSearchChange(e.target.value)}
             placeholder="Search resources by keyword..."
-            className="w-full rounded-sm border border-gray-200 bg-background-100 py-2 pl-10 pr-4 text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors"
+            className="bg-background-100 w-full rounded-sm border border-gray-200 py-2 pl-10 pr-4 text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900"
           />
         </div>
       </form>
@@ -74,13 +74,15 @@ export function ResourceFilterBar({
             {isExpanded ? 'Show less' : 'Show all'}
           </button>
         </div>
-        <div className={`flex flex-wrap gap-2 ${!isExpanded ? 'max-h-[38px] overflow-hidden' : ''}`}>
+        <div
+          className={`flex flex-wrap gap-2 ${!isExpanded ? 'max-h-[38px] overflow-hidden' : ''}`}
+        >
           <button
             onClick={() => onCategoryChange('')}
             className={`rounded-sm border px-3 py-1.5 text-xs font-semibold transition-colors ${
               selectedCategory === ''
                 ? 'bg-primary border-primary text-background-100'
-                : 'border-gray-200 bg-background-100 text-gray-700 hover:bg-gray-50'
+                : 'bg-background-100 border-gray-200 text-gray-700 hover:bg-gray-50'
             }`}
           >
             All Categories
@@ -92,11 +94,11 @@ export function ResourceFilterBar({
               className={`flex items-center gap-1.5 rounded-sm border px-3 py-1 text-xs font-semibold transition-colors ${
                 selectedCategory === category
                   ? 'bg-primary border-primary text-background-100'
-                  : 'border-gray-200 bg-background-100 text-gray-700 hover:bg-gray-50'
+                  : 'bg-background-100 border-gray-200 text-gray-700 hover:bg-gray-50'
               }`}
             >
               <ResourceCategoryBadge category={category} size="sm" />
-              <span className="text-xs font-mono text-gray-400">({count})</span>
+              <span className="font-mono text-xs text-gray-400">({count})</span>
             </button>
           ))}
         </div>

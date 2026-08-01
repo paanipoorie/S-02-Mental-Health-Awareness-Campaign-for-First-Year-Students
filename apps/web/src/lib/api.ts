@@ -125,7 +125,9 @@ export const api = {
 
 export const notificationApi = {
   getNotifications(page: number = 1, limit: number = 20) {
-    return api.get<{ data: any[]; unreadCount: number; pagination: any }>(`/notifications?page=${page}&limit=${limit}`);
+    return api.get<{ data: any[]; unreadCount: number; pagination: any }>(
+      `/notifications?page=${page}&limit=${limit}`
+    );
   },
   getUnreadCount() {
     return api.get<{ unreadCount: number }>('/notifications/unread-count');
@@ -157,14 +159,26 @@ export const adminApi = {
   getStats(): Promise<AdminDashboardData['platformStats']> {
     return api.get('/admin/stats');
   },
-  getUsers(query: { page: number; limit: number; role?: string; isActive?: boolean; search?: string }) {
+  getUsers(query: {
+    page: number;
+    limit: number;
+    role?: string;
+    isActive?: boolean;
+    search?: string;
+  }) {
     const params = new URLSearchParams();
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined) params.append(key, String(value));
     });
     return api.get(`/admin/users?${params.toString()}`);
   },
-  getMentors(query: { page: number; limit: number; isVerified?: boolean; availabilityStatus?: string; search?: string }) {
+  getMentors(query: {
+    page: number;
+    limit: number;
+    isVerified?: boolean;
+    availabilityStatus?: string;
+    search?: string;
+  }) {
     const params = new URLSearchParams();
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined) params.append(key, String(value));
@@ -177,7 +191,15 @@ export const adminApi = {
   verifyMentor(mentorId: string, isVerified: boolean) {
     return api.patch(`/admin/mentors/${mentorId}/verify`, { isVerified });
   },
-  getMeetings(query: { page: number; limit: number; hostType?: string; meetingType?: string; category?: string; upcoming?: boolean; search?: string }) {
+  getMeetings(query: {
+    page: number;
+    limit: number;
+    hostType?: string;
+    meetingType?: string;
+    category?: string;
+    upcoming?: boolean;
+    search?: string;
+  }) {
     const params = new URLSearchParams();
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined) params.append(key, String(value));
@@ -187,7 +209,14 @@ export const adminApi = {
   deleteMeeting(meetingId: string) {
     return api.delete(`/admin/meetings/${meetingId}`);
   },
-  getWorkshops(query: { page: number; limit: number; meetingType?: string; category?: string; upcoming?: boolean; search?: string }) {
+  getWorkshops(query: {
+    page: number;
+    limit: number;
+    meetingType?: string;
+    category?: string;
+    upcoming?: boolean;
+    search?: string;
+  }) {
     const params = new URLSearchParams();
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined) params.append(key, String(value));
@@ -197,23 +226,52 @@ export const adminApi = {
   deleteWorkshop(workshopId: string) {
     return api.delete(`/admin/workshops/${workshopId}`);
   },
-  getResources(query: { page: number; limit: number; category?: string; isActive?: boolean; search?: string }) {
+  getResources(query: {
+    page: number;
+    limit: number;
+    category?: string;
+    isActive?: boolean;
+    search?: string;
+  }) {
     const params = new URLSearchParams();
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined) params.append(key, String(value));
     });
     return api.get(`/admin/resources?${params.toString()}`);
   },
-  createResource(data: { title: string; description: string; category: string; content: string; link?: string | null; isActive: boolean }) {
+  createResource(data: {
+    title: string;
+    description: string;
+    category: string;
+    content: string;
+    link?: string | null;
+    isActive: boolean;
+  }) {
     return api.post('/admin/resources', data);
   },
-  updateResource(resourceId: string, data: { title?: string; description?: string; category?: string; content?: string; link?: string | null; isActive?: boolean }) {
+  updateResource(
+    resourceId: string,
+    data: {
+      title?: string;
+      description?: string;
+      category?: string;
+      content?: string;
+      link?: string | null;
+      isActive?: boolean;
+    }
+  ) {
     return api.patch(`/admin/resources/${resourceId}`, data);
   },
   deleteResource(resourceId: string) {
     return api.delete(`/admin/resources/${resourceId}`);
   },
-  getActionLogs(query: { page: number; limit: number; adminUserId?: string; actionType?: string; targetType?: string }) {
+  getActionLogs(query: {
+    page: number;
+    limit: number;
+    adminUserId?: string;
+    actionType?: string;
+    targetType?: string;
+  }) {
     const params = new URLSearchParams();
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined) params.append(key, String(value));

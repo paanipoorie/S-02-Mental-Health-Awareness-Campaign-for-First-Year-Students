@@ -24,7 +24,7 @@ export function NotificationToast() {
     const handleNewNotification = (notification: Notification) => {
       setToast({ ...notification, visible: true });
       setTimeout(() => {
-        setToast(prev => prev ? { ...prev, visible: false } : null);
+        setToast(prev => (prev ? { ...prev, visible: false } : null));
       }, 5000);
     };
 
@@ -39,34 +39,43 @@ export function NotificationToast() {
 
   const getIcon = () => {
     switch (toast.type) {
-      case 'NEW_REPLY': return <MessageSquare className="h-5 w-5 text-slate-500" />;
-      case 'NEW_CHAT_MESSAGE': return <Mail className="h-5 w-5 text-slate-500" />;
-      case 'MENTOR_ASSIGNED': return <Briefcase className="h-5 w-5 text-slate-500" />;
-      default: return <Bell className="h-5 w-5 text-slate-500" />;
+      case 'NEW_REPLY':
+        return <MessageSquare className="h-5 w-5 text-slate-500" />;
+      case 'NEW_CHAT_MESSAGE':
+        return <Mail className="h-5 w-5 text-slate-500" />;
+      case 'MENTOR_ASSIGNED':
+        return <Briefcase className="h-5 w-5 text-slate-500" />;
+      default:
+        return <Bell className="h-5 w-5 text-slate-500" />;
     }
   };
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-[100] max-w-sm bg-white rounded-xl shadow-2xl border border-slate-200 p-4 animate-slide-up transition-all duration-300"
+      className="animate-slide-up fixed bottom-4 right-4 z-[100] max-w-sm rounded-xl border border-slate-200 bg-white p-4 shadow-2xl transition-all duration-300"
       role="alert"
     >
       <div className="flex items-start gap-3">
         <span className="flex-shrink-0" aria-hidden="true">
           {getIcon()}
         </span>
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-slate-900">{toast.title}</p>
-          <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">{toast.body}</p>
+          <p className="mt-0.5 line-clamp-2 text-xs text-slate-500">{toast.body}</p>
         </div>
         <button
           type="button"
           onClick={() => setToast(null)}
-          className="p-1 text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0"
+          className="flex-shrink-0 p-1 text-slate-400 transition-colors hover:text-slate-600"
           aria-label="Dismiss"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>

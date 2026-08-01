@@ -19,26 +19,31 @@ import notificationRoutes from './routes/notification.routes.js';
 import meetingRoutes from './routes/meeting.routes.js';
 import { requestLoggerMiddleware } from './utils/logger.js';
 import { errorHandler } from './middlewares/error.middleware.js';
-import { generalRateLimiter, createCustomRateLimiter } from './middlewares/rateLimiter.middleware.js';
+import {
+  generalRateLimiter,
+  createCustomRateLimiter,
+} from './middlewares/rateLimiter.middleware.js';
 
 export function createApp(): Application {
   const app = express();
 
   const helmetOptions: Record<string, unknown> = {
     crossOriginResourcePolicy: { policy: 'cross-origin' },
-    contentSecurityPolicy: isDevelopment ? false : {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", 'data:', 'https:'],
-        fontSrc: ["'self'"],
-        connectSrc: ["'self'"],
-        frameAncestors: ["'none'"],
-        baseUri: ["'self'"],
-        formAction: ["'self'"],
-      },
-    },
+    contentSecurityPolicy: isDevelopment
+      ? false
+      : {
+          directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", 'data:', 'https:'],
+            fontSrc: ["'self'"],
+            connectSrc: ["'self'"],
+            frameAncestors: ["'none'"],
+            baseUri: ["'self'"],
+            formAction: ["'self'"],
+          },
+        },
     hsts: {
       maxAge: 31536000,
       includeSubDomains: true,
@@ -72,10 +77,30 @@ export function createApp(): Application {
   app.use(`${env.API_PREFIX}`, generalRateLimiter);
 
   // Specific rate limiters for sensitive endpoints
-  const authRateLimiter = createCustomRateLimiter(900000, 100, 'Too many authentication attempts', 'AUTH_RATE_LIMIT');
-  const postRateLimiter = createCustomRateLimiter(60000, 10, 'Too many posts created', 'POST_RATE_LIMIT');
-  const chatRateLimiter = createCustomRateLimiter(60000, 30, 'Too many chat messages', 'CHAT_RATE_LIMIT');
-  const meetingRateLimiter = createCustomRateLimiter(60000, 5, 'Too many meetings created', 'MEETING_RATE_LIMIT');
+  const authRateLimiter = createCustomRateLimiter(
+    900000,
+    100,
+    'Too many authentication attempts',
+    'AUTH_RATE_LIMIT'
+  );
+  const postRateLimiter = createCustomRateLimiter(
+    60000,
+    10,
+    'Too many posts created',
+    'POST_RATE_LIMIT'
+  );
+  const chatRateLimiter = createCustomRateLimiter(
+    60000,
+    30,
+    'Too many chat messages',
+    'CHAT_RATE_LIMIT'
+  );
+  const meetingRateLimiter = createCustomRateLimiter(
+    60000,
+    5,
+    'Too many meetings created',
+    'MEETING_RATE_LIMIT'
+  );
 
   app.use(`${env.API_PREFIX}/health`, healthRoutes);
   app.use(`${env.API_PREFIX}/auth`, authRateLimiter, authRoutes);

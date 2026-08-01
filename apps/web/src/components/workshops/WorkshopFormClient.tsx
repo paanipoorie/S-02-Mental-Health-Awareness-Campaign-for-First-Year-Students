@@ -78,9 +78,9 @@ export function WorkshopFormClient() {
 
   if (checking) {
     return (
-      <div className="max-w-xl mx-auto py-12 px-4 animate-pulse space-y-4">
-        <div className="h-4 bg-gray-200 rounded-sm w-1/4" />
-        <div className="h-10 bg-gray-200 rounded-sm w-full" />
+      <div className="mx-auto max-w-xl animate-pulse space-y-4 px-4 py-12">
+        <div className="h-4 w-1/4 rounded-sm bg-gray-200" />
+        <div className="h-10 w-full rounded-sm bg-gray-200" />
       </div>
     );
   }
@@ -89,10 +89,15 @@ export function WorkshopFormClient() {
 
   if (!isAuthorized) {
     return (
-      <div className="text-center py-16 max-w-md mx-auto">
+      <div className="mx-auto max-w-md py-16 text-center">
         <h2 className="text-heading-24 font-bold text-gray-900">Unauthorized</h2>
-        <p className="text-copy-14 text-gray-500 mt-2">Only verified mentors and administrators can schedule workshops.</p>
-        <a href="/events" className="mt-6 inline-block rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors">
+        <p className="text-copy-14 mt-2 text-gray-500">
+          Only verified mentors and administrators can schedule workshops.
+        </p>
+        <a
+          href="/events"
+          className="bg-primary text-button-14 text-background-100 mt-6 inline-block rounded-sm px-5 py-2.5 font-semibold transition-colors hover:bg-gray-800"
+        >
           Back to Events
         </a>
       </div>
@@ -100,32 +105,35 @@ export function WorkshopFormClient() {
   }
 
   return (
-    <div className="max-w-xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="mx-auto max-w-xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       {/* Back button */}
       <div>
-        <a href="/events" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
+        <a
+          href="/events"
+          className="text-label-14 text-tertiary flex items-center gap-1.5 font-semibold transition-colors hover:underline"
+        >
           ← Back to Events
         </a>
       </div>
 
-      <div className="rounded-sm border border-gray-200 bg-background-100 p-6 sm:p-8 shadow-sm">
-        <h1 className="text-heading-24 font-bold text-gray-1000 mb-1">
-          Host a Workshop
-        </h1>
-        <p className="text-copy-14 text-gray-500 mb-6">
+      <div className="bg-background-100 rounded-sm border border-gray-200 p-6 shadow-sm sm:p-8">
+        <h1 className="text-heading-24 text-gray-1000 mb-1 font-bold">Host a Workshop</h1>
+        <p className="text-copy-14 mb-6 text-gray-500">
           Schedule a mentor-led workshop on mental health, sleep, welfare, or academics.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-label-12 font-bold text-gray-700 mb-1.5">Workshop Title *</label>
+            <label htmlFor="title" className="text-label-12 mb-1.5 block font-bold text-gray-700">
+              Workshop Title *
+            </label>
             <input
               type="text"
               id="title"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400"
+              onChange={e => setFormData({ ...formData, title: e.target.value })}
+              className="bg-background-100 w-full rounded-sm border border-gray-200 px-3.5 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900"
               placeholder="e.g. Stress Relief and Breathing Techniques"
               required
             />
@@ -133,13 +141,18 @@ export function WorkshopFormClient() {
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-label-12 font-bold text-gray-700 mb-1.5">Description *</label>
+            <label
+              htmlFor="description"
+              className="text-label-12 mb-1.5 block font-bold text-gray-700"
+            >
+              Description *
+            </label>
             <textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={e => setFormData({ ...formData, description: e.target.value })}
               rows={3}
-              className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400 resize-y"
+              className="bg-background-100 w-full resize-y rounded-sm border border-gray-200 px-3.5 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900"
               placeholder="Detail the agenda of this workshop."
               required
             />
@@ -148,12 +161,17 @@ export function WorkshopFormClient() {
           {/* Category & Duration */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="category" className="block text-label-12 font-bold text-gray-700 mb-1.5">Category *</label>
+              <label
+                htmlFor="category"
+                className="text-label-12 mb-1.5 block font-bold text-gray-700"
+              >
+                Category *
+              </label>
               <select
                 id="category"
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-750 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
+                onChange={e => setFormData({ ...formData, category: e.target.value })}
+                className="bg-background-100 text-gray-750 w-full cursor-pointer rounded-sm border border-gray-200 px-3 py-2 text-sm outline-none transition-colors focus:border-gray-900"
               >
                 <option value="MENTAL_HEALTH">Mental Health</option>
                 <option value="STRESS_MANAGEMENT">Stress Management</option>
@@ -165,12 +183,19 @@ export function WorkshopFormClient() {
               </select>
             </div>
             <div>
-              <label htmlFor="duration" className="block text-label-12 font-bold text-gray-700 mb-1.5">Duration (mins) *</label>
+              <label
+                htmlFor="duration"
+                className="text-label-12 mb-1.5 block font-bold text-gray-700"
+              >
+                Duration (mins) *
+              </label>
               <select
                 id="duration"
                 value={formData.durationMinutes}
-                onChange={(e) => setFormData({ ...formData, durationMinutes: Number(e.target.value) })}
-                className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-750 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors cursor-pointer"
+                onChange={e =>
+                  setFormData({ ...formData, durationMinutes: Number(e.target.value) })
+                }
+                className="bg-background-100 text-gray-750 w-full cursor-pointer rounded-sm border border-gray-200 px-3 py-2 text-sm outline-none transition-colors focus:border-gray-900"
               >
                 <option value={30}>30 Minutes</option>
                 <option value={60}>1 Hour</option>
@@ -184,24 +209,28 @@ export function WorkshopFormClient() {
           {/* Date & Time */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="date" className="block text-label-12 font-bold text-gray-700 mb-1.5">Date *</label>
+              <label htmlFor="date" className="text-label-12 mb-1.5 block font-bold text-gray-700">
+                Date *
+              </label>
               <input
                 type="date"
                 id="date"
                 value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-750 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors"
+                onChange={e => setFormData({ ...formData, date: e.target.value })}
+                className="bg-background-100 text-gray-750 w-full rounded-sm border border-gray-200 px-3 py-2 text-sm outline-none transition-colors focus:border-gray-900"
                 required
               />
             </div>
             <div>
-              <label htmlFor="time" className="block text-label-12 font-bold text-gray-700 mb-1.5">Time (HH:mm) *</label>
+              <label htmlFor="time" className="text-label-12 mb-1.5 block font-bold text-gray-700">
+                Time (HH:mm) *
+              </label>
               <input
                 type="time"
                 id="time"
                 value={formData.time}
-                onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                className="w-full px-3 py-2 bg-background-100 border border-gray-200 text-gray-750 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors"
+                onChange={e => setFormData({ ...formData, time: e.target.value })}
+                className="bg-background-100 text-gray-750 w-full rounded-sm border border-gray-200 px-3 py-2 text-sm outline-none transition-colors focus:border-gray-900"
                 required
               />
             </div>
@@ -210,25 +239,35 @@ export function WorkshopFormClient() {
           {/* Max Attendees & Resources */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="maxAttendees" className="block text-label-12 font-bold text-gray-700 mb-1.5">Max Attendees (optional)</label>
+              <label
+                htmlFor="maxAttendees"
+                className="text-label-12 mb-1.5 block font-bold text-gray-700"
+              >
+                Max Attendees (optional)
+              </label>
               <input
                 type="number"
                 id="maxAttendees"
                 value={formData.maxAttendees}
-                onChange={(e) => setFormData({ ...formData, maxAttendees: e.target.value })}
-                className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400"
+                onChange={e => setFormData({ ...formData, maxAttendees: e.target.value })}
+                className="bg-background-100 w-full rounded-sm border border-gray-200 px-3.5 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900"
                 placeholder="Unlimited if empty"
                 min={1}
               />
             </div>
             <div>
-              <label htmlFor="resources" className="block text-label-12 font-bold text-gray-700 mb-1.5">Resources Info (optional)</label>
+              <label
+                htmlFor="resources"
+                className="text-label-12 mb-1.5 block font-bold text-gray-700"
+              >
+                Resources Info (optional)
+              </label>
               <input
                 type="text"
                 id="resources"
                 value={formData.resources}
-                onChange={(e) => setFormData({ ...formData, resources: e.target.value })}
-                className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400"
+                onChange={e => setFormData({ ...formData, resources: e.target.value })}
+                className="bg-background-100 w-full rounded-sm border border-gray-200 px-3.5 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900"
                 placeholder="Links, PDFs info, etc."
               />
             </div>
@@ -236,27 +275,29 @@ export function WorkshopFormClient() {
 
           {/* Location Mode */}
           <div>
-            <label className="block text-label-12 font-bold text-gray-700 mb-2">Location Mode *</label>
+            <label className="text-label-12 mb-2 block font-bold text-gray-700">
+              Location Mode *
+            </label>
             <div className="flex gap-4">
-              <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
                 <input
                   type="radio"
                   name="meetingType"
                   value="ONLINE"
                   checked={formData.meetingType === 'ONLINE'}
                   onChange={() => setFormData({ ...formData, meetingType: 'ONLINE' })}
-                  className="w-4 h-4 text-primary bg-background-100 border-gray-300 focus:ring-gray-900"
+                  className="text-primary bg-background-100 h-4 w-4 border-gray-300 focus:ring-gray-900"
                 />
                 Online Link
               </label>
-              <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
                 <input
                   type="radio"
                   name="meetingType"
                   value="OFFLINE"
                   checked={formData.meetingType === 'OFFLINE'}
                   onChange={() => setFormData({ ...formData, meetingType: 'OFFLINE' })}
-                  className="w-4 h-4 text-primary bg-background-100 border-gray-300 focus:ring-gray-900"
+                  className="text-primary bg-background-100 h-4 w-4 border-gray-300 focus:ring-gray-900"
                 />
                 Physical Location
               </label>
@@ -266,36 +307,46 @@ export function WorkshopFormClient() {
           {/* Dynamic Link or Location inputs */}
           {formData.meetingType === 'ONLINE' ? (
             <div>
-              <label htmlFor="meetingLink" className="block text-label-12 font-bold text-gray-700 mb-1.5">Meeting Link (optional)</label>
+              <label
+                htmlFor="meetingLink"
+                className="text-label-12 mb-1.5 block font-bold text-gray-700"
+              >
+                Meeting Link (optional)
+              </label>
               <input
                 type="url"
                 id="meetingLink"
                 value={formData.meetingLink}
-                onChange={(e) => setFormData({ ...formData, meetingLink: e.target.value })}
-                className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400"
+                onChange={e => setFormData({ ...formData, meetingLink: e.target.value })}
+                className="bg-background-100 w-full rounded-sm border border-gray-200 px-3.5 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900"
                 placeholder="https://zoom.us/j/12345678"
               />
             </div>
           ) : (
             <div>
-              <label htmlFor="location" className="block text-label-12 font-bold text-gray-700 mb-1.5">Campus Location (optional)</label>
+              <label
+                htmlFor="location"
+                className="text-label-12 mb-1.5 block font-bold text-gray-700"
+              >
+                Campus Location (optional)
+              </label>
               <input
                 type="text"
                 id="location"
                 value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="w-full px-3.5 py-2 bg-background-100 border border-gray-200 text-gray-900 rounded-sm text-sm focus:border-gray-900 outline-none transition-colors placeholder-gray-400"
+                onChange={e => setFormData({ ...formData, location: e.target.value })}
+                className="bg-background-100 w-full rounded-sm border border-gray-200 px-3.5 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none transition-colors focus:border-gray-900"
                 placeholder="e.g. Auditorium Hall C"
               />
             </div>
           )}
 
           {/* Submit */}
-          <div className="pt-4 border-t border-gray-250">
+          <div className="border-gray-250 border-t pt-4">
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-primary hover:bg-gray-800 text-background-100 font-semibold rounded-sm text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-primary text-background-100 w-full rounded-sm py-2.5 text-sm font-semibold transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? 'Scheduling workshop...' : 'Schedule Workshop'}
             </button>

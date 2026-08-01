@@ -1,5 +1,17 @@
 import { useState, useEffect } from 'react';
-import { GraduationCap, Briefcase, Globe, MapPin, BookOpen, MessageCircle, PartyPopper, Wrench, FileText, Calendar, Clock } from 'lucide-react';
+import {
+  GraduationCap,
+  Briefcase,
+  Globe,
+  MapPin,
+  BookOpen,
+  MessageCircle,
+  PartyPopper,
+  Wrench,
+  FileText,
+  Calendar,
+  Clock,
+} from 'lucide-react';
 
 interface AdminMeetingTableProps {
   meetings: Array<{
@@ -58,41 +70,68 @@ function formatTime(timeStr: string) {
 
 function getHostTypeBadge(hostType: string) {
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold border ${
-      hostType === 'STUDENT'
-        ? 'bg-blue-50 text-blue-700 border-blue-200'
-        : 'bg-purple-50 text-purple-700 border-purple-200'
-    }`}>
-      {hostType === 'STUDENT' ? <><GraduationCap className="h-3 w-3 inline mr-1" /> Student</> : <><Briefcase className="h-3 w-3 inline mr-1" /> Mentor</>}
+    <span
+      className={`inline-flex items-center rounded-sm border px-2 py-0.5 text-[11px] font-bold ${
+        hostType === 'STUDENT'
+          ? 'border-blue-200 bg-blue-50 text-blue-700'
+          : 'border-purple-200 bg-purple-50 text-purple-700'
+      }`}
+    >
+      {hostType === 'STUDENT' ? (
+        <>
+          <GraduationCap className="mr-1 inline h-3 w-3" /> Student
+        </>
+      ) : (
+        <>
+          <Briefcase className="mr-1 inline h-3 w-3" /> Mentor
+        </>
+      )}
     </span>
   );
 }
 
 function getMeetingTypeBadge(meetingType: string) {
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold border ${
-      meetingType === 'ONLINE'
-        ? 'bg-green-50 text-green-700 border-green-200'
-        : 'bg-amber-50 text-amber-700 border-amber-200'
-    }`}>
-      {meetingType === 'ONLINE' ? <><Globe className="h-3 w-3 inline mr-1" /> Online</> : <><MapPin className="h-3 w-3 inline mr-1" /> Offline</>}
+    <span
+      className={`inline-flex items-center rounded-sm border px-2 py-0.5 text-[11px] font-bold ${
+        meetingType === 'ONLINE'
+          ? 'border-green-200 bg-green-50 text-green-700'
+          : 'border-amber-200 bg-amber-50 text-amber-700'
+      }`}
+    >
+      {meetingType === 'ONLINE' ? (
+        <>
+          <Globe className="mr-1 inline h-3 w-3" /> Online
+        </>
+      ) : (
+        <>
+          <MapPin className="mr-1 inline h-3 w-3" /> Offline
+        </>
+      )}
     </span>
   );
 }
 
 function getCategoryBadge(category: string) {
   const categoryLabels: Record<string, { label: string; icon: React.ReactNode }> = {
-    STUDY_GROUP: { label: 'Study Group', icon: <BookOpen className="h-3 w-3 inline mr-1" /> },
-    PEER_DISCUSSION: { label: 'Peer Discussion', icon: <MessageCircle className="h-3 w-3 inline mr-1" /> },
-    MENTOR_OFFICE_HOURS: { label: 'Office Hours', icon: <Briefcase className="h-3 w-3 inline mr-1" /> },
-    SOCIAL: { label: 'Social', icon: <PartyPopper className="h-3 w-3 inline mr-1" /> },
-    WORKSHOP: { label: 'Workshop', icon: <Wrench className="h-3 w-3 inline mr-1" /> },
-    GENERAL: { label: 'General', icon: <FileText className="h-3 w-3 inline mr-1" /> },
+    STUDY_GROUP: { label: 'Study Group', icon: <BookOpen className="mr-1 inline h-3 w-3" /> },
+    PEER_DISCUSSION: {
+      label: 'Peer Discussion',
+      icon: <MessageCircle className="mr-1 inline h-3 w-3" />,
+    },
+    MENTOR_OFFICE_HOURS: {
+      label: 'Office Hours',
+      icon: <Briefcase className="mr-1 inline h-3 w-3" />,
+    },
+    SOCIAL: { label: 'Social', icon: <PartyPopper className="mr-1 inline h-3 w-3" /> },
+    WORKSHOP: { label: 'Workshop', icon: <Wrench className="mr-1 inline h-3 w-3" /> },
+    GENERAL: { label: 'General', icon: <FileText className="mr-1 inline h-3 w-3" /> },
   };
   const c = categoryLabels[category] || { label: category, icon: null };
   return (
-    <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold border border-gray-200 bg-gray-50 text-gray-700">
-      {c.icon}{c.label}
+    <span className="inline-flex items-center rounded-sm border border-gray-200 bg-gray-50 px-2 py-0.5 text-[11px] font-bold text-gray-700">
+      {c.icon}
+      {c.label}
     </span>
   );
 }
@@ -121,30 +160,58 @@ export function AdminMeetingTable({
 
   if (isLoading) {
     return (
-      <div className="dashboard-card bg-background-100 border border-gray-200 rounded-sm">
+      <div className="dashboard-card bg-background-100 rounded-sm border border-gray-200">
         <div className="table-container">
-          <table className="w-full text-copy-13" role="table">
+          <table className="text-copy-13 w-full" role="table">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Meeting</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Host</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Type</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Category</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Date & Time</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Attendees</th>
-                <th className="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">Actions</th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Meeting
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Host
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Type
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Category
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Date & Time
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Attendees
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {Array.from({ length: 5 }).map((_, i) => (
                 <tr key={i} className="animate-pulse border-b border-gray-200">
-                  <td className="px-4 py-4"><div className="h-4 w-48 bg-gray-200 rounded-sm" /></td>
-                  <td className="px-4 py-4"><div className="h-4 w-24 bg-gray-200 rounded-sm" /></td>
-                  <td className="px-4 py-4"><div className="h-4 w-20 bg-gray-200 rounded-sm" /></td>
-                  <td className="px-4 py-4"><div className="h-4 w-24 bg-gray-200 rounded-sm" /></td>
-                  <td className="px-4 py-4"><div className="h-4 w-32 bg-gray-200 rounded-sm" /></td>
-                  <td className="px-4 py-4"><div className="h-4 w-16 bg-gray-200 rounded-sm" /></td>
-                  <td className="px-4 py-4 text-right"><div className="h-6 w-24 bg-gray-200 rounded-sm mx-auto" /></td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 w-48 rounded-sm bg-gray-200" />
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 w-24 rounded-sm bg-gray-200" />
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 w-20 rounded-sm bg-gray-200" />
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 w-24 rounded-sm bg-gray-200" />
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 w-32 rounded-sm bg-gray-200" />
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 w-16 rounded-sm bg-gray-200" />
+                  </td>
+                  <td className="px-4 py-4 text-right">
+                    <div className="mx-auto h-6 w-24 rounded-sm bg-gray-200" />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -156,12 +223,22 @@ export function AdminMeetingTable({
 
   if (meetings.length === 0) {
     return (
-      <div className="dashboard-card bg-background-100 border border-gray-200 rounded-sm">
+      <div className="dashboard-card bg-background-100 rounded-sm border border-gray-200">
         <div className="py-12 text-center">
-          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <svg
+            className="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
           </svg>
-          <h3 className="mt-2 text-lg font-bold text-gray-1000">No meetings found</h3>
+          <h3 className="text-gray-1000 mt-2 text-lg font-bold">No meetings found</h3>
           <p className="mt-1 text-xs text-gray-500">Try adjusting your search or filters.</p>
         </div>
       </div>
@@ -169,21 +246,33 @@ export function AdminMeetingTable({
   }
 
   return (
-    <div className="dashboard-card bg-background-100 border border-gray-200 rounded-sm">
+    <div className="dashboard-card bg-background-100 rounded-sm border border-gray-200">
       {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 p-4 bg-background-100 border-b border-gray-200 rounded-t-sm">
-        <div className="relative max-w-xs w-full">
-          <label htmlFor="search" className="sr-only">Search meetings</label>
+      <div className="bg-background-100 mb-6 flex flex-col gap-4 rounded-t-sm border-b border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative w-full max-w-xs">
+          <label htmlFor="search" className="sr-only">
+            Search meetings
+          </label>
           <input
             type="search"
             id="search"
             placeholder="Search meetings..."
             value={search}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="w-full pl-10 pr-4 py-1.5 border border-gray-200 rounded-sm text-xs font-semibold bg-background-100 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors"
+            onChange={e => handleSearchChange(e.target.value)}
+            className="bg-background-100 w-full rounded-sm border border-gray-200 py-1.5 pl-10 pr-4 text-xs font-semibold placeholder-gray-400 outline-none transition-colors focus:border-gray-900"
           />
-          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          <svg
+            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
         </div>
 
@@ -191,8 +280,8 @@ export function AdminMeetingTable({
           <select
             id="host-type-filter"
             value={filters.hostType || ''}
-            onChange={(e) => handleFilterChange('hostType', e.target.value)}
-            className="px-3 py-1.5 border border-gray-200 rounded-sm text-xs font-semibold bg-background-100 outline-none focus:border-gray-900 transition-colors"
+            onChange={e => handleFilterChange('hostType', e.target.value)}
+            className="bg-background-100 rounded-sm border border-gray-200 px-3 py-1.5 text-xs font-semibold outline-none transition-colors focus:border-gray-900"
           >
             <option value="">All Host Types</option>
             <option value="STUDENT">Student</option>
@@ -202,8 +291,8 @@ export function AdminMeetingTable({
           <select
             id="meeting-type-filter"
             value={filters.meetingType || ''}
-            onChange={(e) => handleFilterChange('meetingType', e.target.value)}
-            className="px-3 py-1.5 border border-gray-200 rounded-sm text-xs font-semibold bg-background-100 outline-none focus:border-gray-900 transition-colors"
+            onChange={e => handleFilterChange('meetingType', e.target.value)}
+            className="bg-background-100 rounded-sm border border-gray-200 px-3 py-1.5 text-xs font-semibold outline-none transition-colors focus:border-gray-900"
           >
             <option value="">All Types</option>
             <option value="ONLINE">Online</option>
@@ -213,8 +302,8 @@ export function AdminMeetingTable({
           <select
             id="category-filter"
             value={filters.category || ''}
-            onChange={(e) => handleFilterChange('category', e.target.value)}
-            className="px-3 py-1.5 border border-gray-200 rounded-sm text-xs font-semibold bg-background-100 outline-none focus:border-gray-900 transition-colors"
+            onChange={e => handleFilterChange('category', e.target.value)}
+            className="bg-background-100 rounded-sm border border-gray-200 px-3 py-1.5 text-xs font-semibold outline-none transition-colors focus:border-gray-900"
           >
             <option value="">All Categories</option>
             <option value="STUDY_GROUP">Study Group</option>
@@ -225,13 +314,13 @@ export function AdminMeetingTable({
             <option value="GENERAL">General</option>
           </select>
 
-          <label className="inline-flex items-center gap-2 cursor-pointer">
+          <label className="inline-flex cursor-pointer items-center gap-2">
             <input
               type="checkbox"
               id="upcoming-filter"
               checked={filters.upcoming}
-              onChange={(e) => handleFilterChange('upcoming', String(e.target.checked))}
-              className="w-4 h-4 text-primary border-gray-200 rounded-sm focus:ring-0 focus:ring-offset-0"
+              onChange={e => handleFilterChange('upcoming', String(e.target.checked))}
+              className="text-primary h-4 w-4 rounded-sm border-gray-200 focus:ring-0 focus:ring-offset-0"
             />
             <span className="text-xs font-semibold text-gray-700">Upcoming only</span>
           </label>
@@ -240,54 +329,84 @@ export function AdminMeetingTable({
 
       {/* Table */}
       <div className="overflow-x-auto px-4 pb-4">
-        <table className="w-full text-copy-13" role="table">
+        <table className="text-copy-13 w-full" role="table">
           <thead>
             <tr className="border-b border-gray-200">
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Meeting</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Host</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Type</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Category</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Date & Time</th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Attendees</th>
-              <th className="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">Actions</th>
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                Meeting
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                Host
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                Type
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                Category
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                Date & Time
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                Attendees
+              </th>
+              <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-gray-700">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {meetings.map((meeting) => (
-              <tr key={meeting.id} className="hover:bg-gray-50 border-b border-gray-200 transition-colors">
+            {meetings.map(meeting => (
+              <tr
+                key={meeting.id}
+                className="border-b border-gray-200 transition-colors hover:bg-gray-50"
+              >
                 <td className="px-4 py-4">
                   <p className="font-semibold text-gray-900">{meeting.title}</p>
-                  <p className="text-xs font-medium text-gray-500 truncate max-w-xs">{meeting.description}</p>
+                  <p className="max-w-xs truncate text-xs font-medium text-gray-500">
+                    {meeting.description}
+                  </p>
                 </td>
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-2">
                     {getHostTypeBadge(meeting.hostType)}
-                    <span className="text-xs font-semibold text-gray-700">{meeting.hostDisplayName || 'Unknown'}</span>
+                    <span className="text-xs font-semibold text-gray-700">
+                      {meeting.hostDisplayName || 'Unknown'}
+                    </span>
                   </div>
                 </td>
                 <td className="px-4 py-4">{getMeetingTypeBadge(meeting.meetingType)}</td>
                 <td className="px-4 py-4">{getCategoryBadge(meeting.category)}</td>
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-2 text-xs font-medium text-gray-600">
-                    <Calendar className="h-3.5 w-3.5 text-gray-500" />
-                    {' '}{formatDate(meeting.date)}
-                    <Clock className="h-3.5 w-3.5 text-gray-500" />
-                    {' '}{formatTime(meeting.time)}
+                    <Calendar className="h-3.5 w-3.5 text-gray-500" /> {formatDate(meeting.date)}
+                    <Clock className="h-3.5 w-3.5 text-gray-500" /> {formatTime(meeting.time)}
                     <span>({meeting.durationMinutes} min)</span>
                   </div>
                   {meeting.meetingLink && (
-                    <a href={meeting.meetingLink} target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-tertiary hover:underline block mt-1">Join Link</a>
+                    <a
+                      href={meeting.meetingLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-tertiary mt-1 block text-[11px] font-bold hover:underline"
+                    >
+                      Join Link
+                    </a>
                   )}
                   {meeting.location && !meeting.meetingLink && (
-                    <span className="text-[11px] font-medium text-gray-500 block mt-1"><MapPin className="h-3 w-3 inline mr-0.5" /> {meeting.location}</span>
+                    <span className="mt-1 block text-[11px] font-medium text-gray-500">
+                      <MapPin className="mr-0.5 inline h-3 w-3" /> {meeting.location}
+                    </span>
                   )}
                 </td>
-                <td className="px-4 py-4 text-xs font-semibold text-gray-700">{meeting.attendeeCount}</td>
+                <td className="px-4 py-4 text-xs font-semibold text-gray-700">
+                  {meeting.attendeeCount}
+                </td>
                 <td className="px-4 py-4 text-right">
                   <button
                     type="button"
                     onClick={() => onDelete(meeting.id)}
-                    className="px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-sm hover:bg-red-100 transition-colors"
+                    className="rounded-sm border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition-colors hover:bg-red-100"
                   >
                     Force Delete
                   </button>
@@ -299,7 +418,7 @@ export function AdminMeetingTable({
 
         {/* Pagination */}
         {pagination.totalPages > 1 && !isLoading && (
-          <div className="flex items-center justify-between px-4 py-4 border-t border-gray-200 bg-background-100 rounded-b-sm">
+          <div className="bg-background-100 flex items-center justify-between rounded-b-sm border-t border-gray-200 px-4 py-4">
             <p className="text-xs font-medium text-gray-700">
               Showing page {pagination.page} of {pagination.totalPages} ({pagination.total} total)
             </p>
@@ -308,7 +427,7 @@ export function AdminMeetingTable({
                 type="button"
                 onClick={() => onPageChange(pagination.page - 1)}
                 disabled={pagination.page === 1}
-                className="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-background-100 border border-gray-200 rounded-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="bg-background-100 rounded-sm border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Previous
               </button>
@@ -316,7 +435,7 @@ export function AdminMeetingTable({
                 type="button"
                 onClick={() => onPageChange(pagination.page + 1)}
                 disabled={pagination.page === pagination.totalPages}
-                className="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-background-100 border border-gray-200 rounded-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="bg-background-100 rounded-sm border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Next
               </button>

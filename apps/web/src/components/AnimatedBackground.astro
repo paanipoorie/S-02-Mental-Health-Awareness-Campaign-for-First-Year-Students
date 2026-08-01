@@ -1,41 +1,119 @@
 ---
+
 ---
-<div class="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true" id="global-motion-bg">
+
+<div
+  class="pointer-events-none fixed inset-0 z-0 select-none overflow-hidden"
+  aria-hidden="true"
+  id="global-motion-bg"
+>
   <!-- Shape 1: Circle -->
-  <svg class="absolute w-44 h-44 sm:w-60 sm:h-60 transition-opacity duration-1000 opacity-0" id="global-shape-circle" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(148, 163, 184, 0.065)" stroke-width="0.8" />
+  <svg
+    class="absolute h-44 w-44 opacity-0 transition-opacity duration-1000 sm:h-60 sm:w-60"
+    id="global-shape-circle"
+    viewBox="0 0 100 100"
+  >
+    <circle
+      cx="50"
+      cy="50"
+      r="45"
+      fill="none"
+      stroke="rgba(148, 163, 184, 0.065)"
+      stroke-width="0.8"></circle>
   </svg>
   <!-- Shape 2: Square -->
-  <svg class="absolute w-48 h-48 sm:w-64 sm:h-64 transition-opacity duration-1000 opacity-0" id="global-shape-square" viewBox="0 0 100 100">
-    <rect x="5" y="5" width="90" height="90" fill="none" stroke="rgba(201, 106, 43, 0.075)" stroke-width="0.8" />
+  <svg
+    class="absolute h-48 w-48 opacity-0 transition-opacity duration-1000 sm:h-64 sm:w-64"
+    id="global-shape-square"
+    viewBox="0 0 100 100"
+  >
+    <rect
+      x="5"
+      y="5"
+      width="90"
+      height="90"
+      fill="none"
+      stroke="rgba(201, 106, 43, 0.075)"
+      stroke-width="0.8"></rect>
   </svg>
   <!-- Shape 3: Triangle -->
-  <svg class="absolute w-44 h-44 sm:w-60 sm:h-60 transition-opacity duration-1000 opacity-0" id="global-shape-triangle" viewBox="0 0 100 100">
-    <polygon points="50,10 90,85 10,85" fill="none" stroke="rgba(148, 163, 184, 0.065)" stroke-width="0.8" />
+  <svg
+    class="absolute h-44 w-44 opacity-0 transition-opacity duration-1000 sm:h-60 sm:w-60"
+    id="global-shape-triangle"
+    viewBox="0 0 100 100"
+  >
+    <polygon
+      points="50,10 90,85 10,85"
+      fill="none"
+      stroke="rgba(148, 163, 184, 0.065)"
+      stroke-width="0.8"></polygon>
   </svg>
   <!-- Shape 4: Hexagon -->
-  <svg class="absolute w-48 h-48 sm:w-64 sm:h-64 transition-opacity duration-1000 opacity-0" id="global-shape-hexagon" viewBox="0 0 100 100">
-    <polygon points="50,6 88,28 88,72 50,94 12,72 12,28" fill="none" stroke="rgba(201, 106, 43, 0.075)" stroke-width="0.8" />
+  <svg
+    class="absolute h-48 w-48 opacity-0 transition-opacity duration-1000 sm:h-64 sm:w-64"
+    id="global-shape-hexagon"
+    viewBox="0 0 100 100"
+  >
+    <polygon
+      points="50,6 88,28 88,72 50,94 12,72 12,28"
+      fill="none"
+      stroke="rgba(201, 106, 43, 0.075)"
+      stroke-width="0.8"></polygon>
   </svg>
   <!-- Connecting lines SVG -->
-  <svg class="absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-0" id="global-shapes-connections">
-    <line id="g-line-1" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.5" stroke-dasharray="4 4" />
-    <line id="g-line-2" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.5" stroke-dasharray="4 4" />
-    <line id="g-line-3" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.5" stroke-dasharray="4 4" />
-    <line id="g-line-4" x1="0" y1="0" x2="0" y2="0" stroke="rgba(148, 163, 184, 0.03)" stroke-width="0.5" stroke-dasharray="4 4" />
+  <svg
+    class="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-1000"
+    id="global-shapes-connections"
+  >
+    <line
+      id="g-line-1"
+      x1="0"
+      y1="0"
+      x2="0"
+      y2="0"
+      stroke="rgba(148, 163, 184, 0.03)"
+      stroke-width="0.5"
+      stroke-dasharray="4 4"></line>
+    <line
+      id="g-line-2"
+      x1="0"
+      y1="0"
+      x2="0"
+      y2="0"
+      stroke="rgba(148, 163, 184, 0.03)"
+      stroke-width="0.5"
+      stroke-dasharray="4 4"></line>
+    <line
+      id="g-line-3"
+      x1="0"
+      y1="0"
+      x2="0"
+      y2="0"
+      stroke="rgba(148, 163, 184, 0.03)"
+      stroke-width="0.5"
+      stroke-dasharray="4 4"></line>
+    <line
+      id="g-line-4"
+      x1="0"
+      y1="0"
+      x2="0"
+      y2="0"
+      stroke="rgba(148, 163, 184, 0.03)"
+      stroke-width="0.5"
+      stroke-dasharray="4 4"></line>
   </svg>
 </div>
 
 <script>
-  (function() {
+  (function () {
     const bgContainer = document.getElementById('global-motion-bg');
     if (!bgContainer) return;
 
     const shapes = [
       {
         id: 'global-shape-circle',
-        vw: 0.10,
-        vh: 0.20,
+        vw: 0.1,
+        vh: 0.2,
         speedX: 0.00002,
         speedY: 0.000015,
         speedR: 0.00001,
@@ -91,12 +169,12 @@
         ampR: 1.8,
         parallax: 0.55,
         size: 220,
-      }
+      },
     ];
 
     let width = window.innerWidth;
     let height = window.innerHeight;
-    
+
     let targetMouseX = 0;
     let targetMouseY = 0;
     let currentMouseX = 0;
@@ -130,9 +208,9 @@
       return;
     }
 
-    window.addEventListener('mousemove', (e) => {
-      targetMouseX = (e.clientX / width) - 0.5;
-      targetMouseY = (e.clientY / height) - 0.5;
+    window.addEventListener('mousemove', e => {
+      targetMouseX = e.clientX / width - 0.5;
+      targetMouseY = e.clientY / height - 0.5;
     });
 
     function updatePositions(time: number) {
@@ -146,8 +224,8 @@
         const scale = width < 640 ? 0.65 : 1.0;
         const size = shape.size * scale;
 
-        const baseX = width * shape.vw - (size / 2);
-        const baseY = height * shape.vh - (size / 2);
+        const baseX = width * shape.vw - size / 2;
+        const baseY = height * shape.vh - size / 2;
 
         const floatX = Math.sin(time * shape.speedX) * shape.ampX * scale;
         const floatY = Math.cos(time * shape.speedY) * shape.ampY * scale;
@@ -161,14 +239,14 @@
         const totalY = baseY + floatY + pY;
 
         el.style.transform = `translate3d(${totalX}px, ${totalY}px, 0) rotate(${rotate}deg)`;
-        
+
         // Gentle opacity breathing between 0.75 and 1.05 of base opacity
         const pulse = 0.9 + Math.sin(time * shape.pulseSpeed + shape.pulseOffset) * 0.15;
         el.style.opacity = String(pulse);
 
         return {
-          x: totalX + (size / 2),
-          y: totalY + (size / 2)
+          x: totalX + size / 2,
+          y: totalY + size / 2,
         };
       });
 
@@ -177,7 +255,7 @@
         { from: 0, to: 1, lineId: 'g-line-1' },
         { from: 1, to: 3, lineId: 'g-line-2' },
         { from: 3, to: 2, lineId: 'g-line-3' },
-        { from: 2, to: 0, lineId: 'g-line-4' }
+        { from: 2, to: 0, lineId: 'g-line-4' },
       ];
 
       connections.forEach(conn => {

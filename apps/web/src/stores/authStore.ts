@@ -1,5 +1,11 @@
 import { atom } from 'nanostores';
-import { getStoredUser, setStoredUser, clearAuthSession, setAccessToken, type UserProfile } from '../lib/auth';
+import {
+  getStoredUser,
+  setStoredUser,
+  clearAuthSession,
+  setAccessToken,
+  type UserProfile,
+} from '../lib/auth';
 import { api } from '../lib/api';
 
 export const $user = atom<UserProfile | null>(getStoredUser());

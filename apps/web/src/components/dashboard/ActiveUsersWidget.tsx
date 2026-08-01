@@ -33,8 +33,10 @@ export function ActiveUsersWidget({
   className = '',
 }: ActiveUsersWidgetProps) {
   return (
-    <div className={`dashboard-card p-6 bg-background-100 border border-gray-200 rounded-sm ${className}`}>
-      <h3 className="text-heading-16 font-bold text-gray-1000 mb-6">Active Users</h3>
+    <div
+      className={`dashboard-card bg-background-100 rounded-sm border border-gray-200 p-6 ${className}`}
+    >
+      <h3 className="text-heading-16 text-gray-1000 mb-6 font-bold">Active Users</h3>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div>
@@ -46,9 +48,9 @@ export function ActiveUsersWidget({
             {(activeStudents || []).slice(0, 10).map(student => (
               <div
                 key={student.id}
-                className="flex items-center gap-3 rounded-sm border border-gray-200 bg-background-100 p-3 hover:bg-gray-50 transition-colors"
+                className="bg-background-100 flex items-center gap-3 rounded-sm border border-gray-200 p-3 transition-colors hover:bg-gray-50"
               >
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100">
                   <span className="text-sm font-bold text-gray-700">
                     {student.anonymousDisplayName.charAt(0).toUpperCase()}
                   </span>
@@ -66,11 +68,11 @@ export function ActiveUsersWidget({
                   </div>
                 </div>
                 <div className="flex-shrink-0 text-right">
-                  <p className="text-[11px] font-mono text-gray-400">
+                  <p className="font-mono text-[11px] text-gray-400">
                     Joined {formatDate(student.createdAt, true)}
                   </p>
                   {student.lastEmotionAt && (
-                    <p className="text-[10px] font-semibold text-gray-500 mt-0.5">
+                    <p className="mt-0.5 text-[10px] font-semibold text-gray-500">
                       Emotion: {formatDate(student.lastEmotionAt, true)}
                     </p>
                   )}
@@ -87,14 +89,15 @@ export function ActiveUsersWidget({
           </h4>
           <div className="space-y-3">
             {(activeMentors || []).slice(0, 10).map(mentor => {
-              const avail = AVAILABILITY_CONFIG[mentor.availabilityStatus] || AVAILABILITY_CONFIG.OFFLINE;
+              const avail =
+                AVAILABILITY_CONFIG[mentor.availabilityStatus] || AVAILABILITY_CONFIG.OFFLINE;
               return (
                 <div
                   key={mentor.id}
-                  className="flex items-center justify-between rounded-sm border border-gray-200 bg-background-100 p-3 hover:bg-gray-50 transition-colors"
+                  className="bg-background-100 flex items-center justify-between rounded-sm border border-gray-200 p-3 transition-colors hover:bg-gray-50"
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-gray-100 border border-gray-200">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100">
                       <span className="text-sm font-bold text-gray-700">
                         {mentor.displayName.charAt(0).toUpperCase()}
                       </span>
@@ -117,11 +120,13 @@ export function ActiveUsersWidget({
                     </div>
                   </div>
                   <div className="flex flex-shrink-0 flex-col items-end gap-1">
-                    <span className={`inline-flex items-center rounded-sm border px-2 py-0.5 text-[10px] font-bold ${avail.color} ${avail.bg}`}>
+                    <span
+                      className={`inline-flex items-center rounded-sm border px-2 py-0.5 text-[10px] font-bold ${avail.color} ${avail.bg}`}
+                    >
                       {avail.label}
                     </span>
                     {mentor.lastSeenAt && (
-                      <span className="text-[10px] font-mono text-gray-400">
+                      <span className="font-mono text-[10px] text-gray-400">
                         Seen {formatDate(mentor.lastSeenAt, true)}
                       </span>
                     )}

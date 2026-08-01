@@ -69,18 +69,29 @@ function getCategoryLabel(cat: string): string {
 
 function getUrgencyBadgeClass(level: string | null): string {
   switch (level) {
-    case 'HIGH': return 'bg-red-50 text-red-800 border-red-300';
-    case 'MEDIUM': return 'bg-amber-50 text-amber-800 border-amber-300';
-    case 'LOW': return 'bg-green-50 text-green-800 border-green-300';
-    default: return 'bg-gray-50 text-gray-600 border-gray-200';
+    case 'HIGH':
+      return 'bg-red-50 text-red-800 border-red-300';
+    case 'MEDIUM':
+      return 'bg-amber-50 text-amber-800 border-amber-300';
+    case 'LOW':
+      return 'bg-green-50 text-green-800 border-green-300';
+    default:
+      return 'bg-gray-50 text-gray-600 border-gray-200';
   }
 }
 
 function getEmotionLabel(emotion: string | null): string {
   const map: Record<string, string> = {
-    HAPPY: 'Happy', EXCITED: 'Excited', CONFUSED: 'Confused', HOMESICK: 'Homesick',
-    LONELY: 'Lonely', SCARED: 'Scared', ANXIOUS: 'Anxious', BURNT_OUT: 'Burnt Out',
-    OVERWHELMED: 'Overwhelmed', STRESSED: 'Stressed',
+    HAPPY: 'Happy',
+    EXCITED: 'Excited',
+    CONFUSED: 'Confused',
+    HOMESICK: 'Homesick',
+    LONELY: 'Lonely',
+    SCARED: 'Scared',
+    ANXIOUS: 'Anxious',
+    BURNT_OUT: 'Burnt Out',
+    OVERWHELMED: 'Overwhelmed',
+    STRESSED: 'Stressed',
   };
   return map[emotion || ''] || '';
 }
@@ -103,7 +114,9 @@ export function PostDetailClient({ postId }: { postId: string }) {
     }
   };
 
-  useEffect(() => { fetchPost(); }, [postId]);
+  useEffect(() => {
+    fetchPost();
+  }, [postId]);
 
   const handleReply = async (body: string) => {
     try {
@@ -140,20 +153,23 @@ export function PostDetailClient({ postId }: { postId: string }) {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto py-12 px-4 animate-pulse space-y-6">
-        <div className="h-4 bg-gray-200 rounded-sm w-1/4" />
-        <div className="h-48 bg-gray-200 rounded-sm w-full" />
-        <div className="h-32 bg-gray-200 rounded-sm w-full" />
+      <div className="mx-auto max-w-3xl animate-pulse space-y-6 px-4 py-12">
+        <div className="h-4 w-1/4 rounded-sm bg-gray-200" />
+        <div className="h-48 w-full rounded-sm bg-gray-200" />
+        <div className="h-32 w-full rounded-sm bg-gray-200" />
       </div>
     );
   }
 
   if (!post) {
     return (
-      <div className="text-center py-16 max-w-md mx-auto">
+      <div className="mx-auto max-w-md py-16 text-center">
         <h2 className="text-heading-24 font-bold text-gray-900">Post not found</h2>
-        <p className="text-copy-14 text-gray-500 mt-2">This post may have been deleted.</p>
-        <a href="/posts" className="mt-6 inline-block rounded-sm bg-primary hover:bg-gray-800 text-background-100 font-semibold px-5 py-2.5 text-sm transition-colors">
+        <p className="text-copy-14 mt-2 text-gray-500">This post may have been deleted.</p>
+        <a
+          href="/posts"
+          className="bg-primary text-background-100 mt-6 inline-block rounded-sm px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-800"
+        >
           Back to Discussions
         </a>
       </div>
@@ -161,32 +177,40 @@ export function PostDetailClient({ postId }: { postId: string }) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       <div>
-        <a href="/posts" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
+        <a
+          href="/posts"
+          className="text-label-14 text-tertiary flex items-center gap-1.5 font-semibold transition-colors hover:underline"
+        >
           ← Back to Discussions
         </a>
       </div>
 
-      <div className="rounded-sm border border-gray-200 bg-background-100 p-6 sm:p-8 shadow-sm">
-        <div className="flex items-center justify-between mb-5">
+      <div className="bg-background-100 rounded-sm border border-gray-200 p-6 shadow-sm sm:p-8">
+        <div className="mb-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-sm bg-gray-100 border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-700">
+            <div className="flex h-10 w-10 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-sm font-bold text-gray-700">
               {(post.anonymousDisplayName || 'Anonymous').charAt(0)}
             </div>
             <div>
-              <p className="text-copy-14 font-bold text-gray-900">{post.anonymousDisplayName || 'Anonymous'}</p>
-              <p className="text-label-12 text-gray-400 font-mono">{timeAgo(post.createdAt)}</p>
+              <p className="text-copy-14 font-bold text-gray-900">
+                {post.anonymousDisplayName || 'Anonymous'}
+              </p>
+              <p className="text-label-12 font-mono text-gray-400">{timeAgo(post.createdAt)}</p>
             </div>
           </div>
           {post.isOwn && (
-            <button onClick={handleDeletePost} className="text-label-12 font-semibold text-red-600 border border-red-200 hover:bg-red-50 px-3 py-1.5 rounded-sm transition-colors">
+            <button
+              onClick={handleDeletePost}
+              className="text-label-12 rounded-sm border border-red-200 px-3 py-1.5 font-semibold text-red-600 transition-colors hover:bg-red-50"
+            >
               Delete
             </button>
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 mb-4">
+        <div className="mb-4 flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
             {getCategoryLabel(post.category)}
           </span>
@@ -196,33 +220,35 @@ export function PostDetailClient({ postId }: { postId: string }) {
             </span>
           )}
           {post.urgencyLevel && post.urgencyLevel !== 'NONE' && (
-            <span className={`inline-flex items-center gap-1 rounded-sm border px-2.5 py-0.5 text-xs font-semibold ${getUrgencyBadgeClass(post.urgencyLevel)}`}>
+            <span
+              className={`inline-flex items-center gap-1 rounded-sm border px-2.5 py-0.5 text-xs font-semibold ${getUrgencyBadgeClass(post.urgencyLevel)}`}
+            >
               {post.urgencyLevel}
             </span>
           )}
         </div>
 
-        <h1 className="text-heading-28 sm:text-heading-32 font-bold text-gray-1000 leading-tight mb-4">
+        <h1 className="text-heading-28 sm:text-heading-32 text-gray-1000 mb-4 font-bold leading-tight">
           {post.title}
         </h1>
 
-        <div className="text-copy-15 text-gray-700 leading-relaxed whitespace-pre-wrap font-sans">
+        <div className="text-copy-15 whitespace-pre-wrap font-sans leading-relaxed text-gray-700">
           {post.body}
         </div>
 
-        <div className="mt-6 text-label-12 text-gray-400 font-mono">
+        <div className="text-label-12 mt-6 font-mono text-gray-400">
           Posted {formatDate(post.createdAt)}
         </div>
       </div>
 
-      <div className="rounded-sm border border-gray-200 bg-background-100 p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+      <div className="bg-background-100 rounded-sm border border-gray-200 p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between border-b border-gray-200 pb-4">
           <h2 className="text-heading-18 font-bold text-gray-900">
             Replies ({post.replies.length})
           </h2>
           <button
             onClick={() => setReplying(v => !v)}
-            className="text-label-14 font-semibold text-tertiary hover:underline"
+            className="text-label-14 text-tertiary font-semibold hover:underline"
           >
             {replying ? 'Cancel' : '+ Reply'}
           </button>
@@ -235,32 +261,44 @@ export function PostDetailClient({ postId }: { postId: string }) {
         )}
 
         {post.replies.length === 0 ? (
-          <p className="text-copy-14 text-gray-400 italic text-center py-6">No replies yet. Be the first to respond!</p>
+          <p className="text-copy-14 py-6 text-center italic text-gray-400">
+            No replies yet. Be the first to respond!
+          </p>
         ) : (
           <div className="space-y-4">
-            {post.replies.map((reply) => (
-              <div key={reply.id} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
-                <div className="flex items-center justify-between mb-2">
+            {post.replies.map(reply => (
+              <div
+                key={reply.id}
+                className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0"
+              >
+                <div className="mb-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-sm bg-gray-100 border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-xs font-bold text-gray-600">
                       {reply.authorName.charAt(0)}
                     </div>
-                    <span className="text-label-12 font-bold text-gray-900">{reply.authorName}</span>
+                    <span className="text-label-12 font-bold text-gray-900">
+                      {reply.authorName}
+                    </span>
                     {reply.isMentor && (
-                      <span className="text-[10px] font-semibold text-blue-800 bg-blue-50 border border-blue-200 rounded-sm px-1.5 py-0.5">
+                      <span className="rounded-sm border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-800">
                         Verified Mentor
                       </span>
                     )}
-                    <span className="text-gray-300 font-mono text-label-12">·</span>
-                    <span className="text-label-12 font-mono text-gray-400">{timeAgo(reply.createdAt)}</span>
+                    <span className="text-label-12 font-mono text-gray-300">·</span>
+                    <span className="text-label-12 font-mono text-gray-400">
+                      {timeAgo(reply.createdAt)}
+                    </span>
                   </div>
                   {reply.isOwn && (
-                    <button onClick={() => handleDeleteReply(reply.id)} className="text-label-12 font-semibold text-red-600 hover:underline">
+                    <button
+                      onClick={() => handleDeleteReply(reply.id)}
+                      className="text-label-12 font-semibold text-red-600 hover:underline"
+                    >
                       Delete
                     </button>
                   )}
                 </div>
-                <div className="text-copy-14 text-gray-700 leading-relaxed whitespace-pre-wrap pl-9">
+                <div className="text-copy-14 whitespace-pre-wrap pl-9 leading-relaxed text-gray-700">
                   {reply.body}
                 </div>
               </div>
