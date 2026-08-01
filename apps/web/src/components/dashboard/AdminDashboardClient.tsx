@@ -3,7 +3,6 @@ import { useStore } from '@nanostores/react';
 import { $user, $isLoading, fetchCurrentUser } from '@stores/authStore';
 import { dashboardApi } from '@lib/api';
 import { PlatformStatsWidget } from './PlatformStatsWidget';
-import { ActiveUsersWidget } from './ActiveUsersWidget';
 import { EventsOverviewWidget } from './EventsOverviewWidget';
 import { ReportsWidget } from './ReportsWidget';
 
@@ -133,7 +132,7 @@ export function AdminDashboardClient({ initialData }: AdminDashboardClientProps)
       {/* Page Header */}
       <div className="border-b border-gray-200 pb-5">
         <h1 className="text-heading-24 font-bold text-gray-1000">Dashboard</h1>
-        <p className="text-copy-14 text-gray-600 mt-1">Overview of platform usage, events, active users, and moderation reports.</p>
+        <p className="text-copy-14 text-gray-600 mt-1">Overview of platform usage, events, and moderation reports.</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-12">
@@ -160,17 +159,10 @@ export function AdminDashboardClient({ initialData }: AdminDashboardClientProps)
         />
       </div>
 
-      <div className="lg:col-span-7">
+      <div className="lg:col-span-12">
         <EventsOverviewWidget
           meetingsOverview={dashboardData?.meetingsOverview || []}
           workshopsOverview={dashboardData?.workshopsOverview || []}
-        />
-      </div>
-
-      <div className="lg:col-span-5">
-        <ActiveUsersWidget
-          activeStudents={dashboardData?.activeStudents || []}
-          activeMentors={dashboardData?.activeMentors || []}
         />
       </div>
 
