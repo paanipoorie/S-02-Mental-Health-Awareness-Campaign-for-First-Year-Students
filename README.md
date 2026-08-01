@@ -61,17 +61,17 @@ We have systematically implemented both the backend APIs and corresponding front
 The platform follows a **privacy-first, layered architecture** to ensure student confidentiality is structurally guaranteed.
 
 ```
-┌─────────────┐     HTTPS/WSS      ┌─────────────┐     Prisma      ┌─────────────┐
+┌─────────────┐     HTTPS/WSS       ┌─────────────┐     Prisma      ┌─────────────┐
 │   Browser   │ ◄─────────────────► │  Express    │ ◄─────────────► │ PostgreSQL  │
 │  (Astro)    │                     │   API       │                 │  (Prisma)   │
 └─────────────┘                     └──────┬──────┘                 └─────────────┘
-                                            │
-                                            │ Socket.io
-                                            ▼
+                                           │
+                                           │ Socket.io
+                                           ▼
                                      ┌─────────────┐
                                      │  Real-time  │
                                      │  (Chat,     │
-                                     │   Presence,  │
+                                     │   Presence, │
                                      │   Notifs)   │
                                      └─────────────┘
 ```

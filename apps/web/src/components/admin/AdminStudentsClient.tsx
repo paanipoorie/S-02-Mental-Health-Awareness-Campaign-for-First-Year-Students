@@ -52,6 +52,7 @@ export function AdminStudentsClient({ initialData }: { initialData?: UserData })
       const response = await adminApi.getUsers({
         page,
         limit: pagination.limit,
+        role: 'STUDENT',
         search: searchQuery || undefined,
         isActive: filterOptions.isActive === 'true' ? true : filterOptions.isActive === 'false' ? false : undefined,
       });
