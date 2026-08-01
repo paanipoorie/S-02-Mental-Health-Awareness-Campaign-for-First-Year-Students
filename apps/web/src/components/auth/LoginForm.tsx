@@ -102,7 +102,7 @@ export const LoginForm: React.FC = () => {
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="student@university.edu"
+            placeholder="university@college.edu"
             className="w-full h-10 px-3 py-2 text-label-14 bg-background-100 text-primary border border-gray-300 rounded-sm focus-visible:outline-none focus-visible:border-blue-700 placeholder-gray-400"
             required
           />
