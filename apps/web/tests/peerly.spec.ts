@@ -138,8 +138,9 @@ test.describe('Peerly E2E Verification Suite', () => {
       await expect(page.locator('text=HIGH').first()).toBeVisible();
 
       // Add a reply
-      await page.fill('textarea[placeholder="Share your supportive response anonymously..."]', 'Don\'t worry, you are not alone! We can study together.');
-      await page.click('button[type="submit"]');
+      await page.click('button:has-text("+ Reply")');
+      await page.fill('textarea[placeholder="Write your reply..."]', 'Don\'t worry, you are not alone! We can study together.');
+      await page.click('button:has-text("Post Reply")');
 
       // Verify reply appears
       await expect(page.locator('text=Don\'t worry, you are not alone! We can study together.').first()).toBeVisible();
