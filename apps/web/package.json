@@ -27,5 +27,8 @@
     "socket.io-client": "^4.8.3",
     "sonner": "^2.0.7",
     "tailwindcss": "^4.3.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
   }
 }
