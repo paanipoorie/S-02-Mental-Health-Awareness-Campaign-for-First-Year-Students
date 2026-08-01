@@ -187,18 +187,19 @@ export function MentorDashboardClient() {
         <TodaysWorkshopsWidget todaysWorkshops={dashboardData?.todaysWorkshops || []} />
       </div>
 
-      <div className="lg:col-span-4">
+      <div className="lg:col-span-12 grid gap-6 lg:grid-cols-3">
         <MentorAvailabilityToggle
           initialAvailability={dashboardData?.mentorAvailability || 'OFFLINE'}
+          className="h-full flex flex-col justify-between"
         />
-      </div>
-
-      <div className="lg:col-span-4">
-        <RecentDiscussionsWidget recentDiscussions={dashboardData?.recentDiscussions || []} />
-      </div>
-
-      <div className="lg:col-span-4">
-        <AnnouncementsWidget announcements={dashboardData?.announcements || []} />
+        <RecentDiscussionsWidget
+          recentDiscussions={dashboardData?.recentDiscussions || []}
+          className="h-full"
+        />
+        <AnnouncementsWidget
+          announcements={dashboardData?.announcements || []}
+          className="h-full"
+        />
       </div>
     </div>
   );

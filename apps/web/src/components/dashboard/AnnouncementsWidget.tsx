@@ -34,15 +34,13 @@ export function AnnouncementsWidget({ announcements, className = '' }: Announcem
   }
 
   return (
-    <div className={`dashboard-card ${className}`}>
-      <div className="border-b border-gray-200 px-6 py-4">
-        <h3 className="text-heading-20 text-gray-1000 font-semibold">Announcements</h3>
-      </div>
-      <div className="divide-y divide-gray-100">
+    <div className={`dashboard-card p-6 ${className}`}>
+      <h3 className="text-heading-20 mb-4 text-gray-1000 font-semibold">Announcements</h3>
+      <div className="space-y-3">
         {announcements.map(announcement => (
           <div
             key={announcement.id}
-            className="px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer"
+            className="flex flex-col rounded-sm border border-gray-200 bg-background-100 p-3 transition-colors hover:bg-gray-50 cursor-pointer"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 flex-1">
@@ -54,7 +52,7 @@ export function AnnouncementsWidget({ announcements, className = '' }: Announcem
                 </p>
               </div>
               <time
-                className="text-label-12 flex-shrink-0 whitespace-nowrap text-gray-400"
+                className="text-label-12 flex-shrink-0 whitespace-nowrap text-gray-400 font-mono"
                 dateTime={announcement.createdAt}
               >
                 {formatDate(announcement.createdAt)}
