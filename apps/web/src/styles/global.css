@@ -452,13 +452,14 @@ aside.bg-background-100 {
 }
 aside a {
   color: #CBD5E1 !important;
+  background-color: transparent !important;
 }
 aside a:hover {
-  background-color: #324154 !important;
+  background-color: #1F2937 !important;
   color: #FFFFFF !important;
 }
-aside a[aria-current="page"],
-aside a.bg-gray-100 {
+aside a.active-sidebar-link,
+aside a[aria-current="page"] {
   background-color: #C96A2B !important;
   color: #FFFFFF !important;
 }

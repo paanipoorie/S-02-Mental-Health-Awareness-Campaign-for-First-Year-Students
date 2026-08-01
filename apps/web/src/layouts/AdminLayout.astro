@@ -53,8 +53,8 @@ const NAV_ICONS: Record<string, string> = {
               href={item.href}
               class={`flex items-center gap-3 px-4 py-2.5 rounded-md text-sm font-medium transition-all duration-150 ${
                 currentPage === item.href.split('/').pop()
-                  ? 'bg-gray-100 text-gray-1000 shadow-sm'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-gray-1000'
+                  ? 'active-sidebar-link shadow-sm'
+                  : 'text-slate-300 hover:bg-gray-800 hover:text-white'
               }`}
               aria-current={currentPage === item.href.split('/').pop() ? 'page' : undefined}
             >
@@ -123,8 +123,8 @@ const NAV_ICONS: Record<string, string> = {
                 href={item.href}
                 class={`flex items-center gap-3 px-3 py-2 rounded-sm text-sm font-semibold transition-colors ${
                   currentPage === item.href.split('/').pop()
-                    ? 'bg-gray-100 text-gray-1000'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-1000'
+                    ? 'active-sidebar-link'
+                    : 'text-slate-300 hover:bg-gray-800 hover:text-white'
                 }`}
                 aria-current={currentPage === item.href.split('/').pop() ? 'page' : undefined}
                 onclick="document.getElementById('mobile-sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-backdrop').classList.add('hidden')"
