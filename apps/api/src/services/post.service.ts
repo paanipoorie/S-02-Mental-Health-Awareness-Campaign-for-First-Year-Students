@@ -112,9 +112,46 @@ export const postService = {
       return null;
     }
 
+    const repliesWithAuthor = await Promise.all(
+      post.replies.map(async (reply) => {
+        const anon = await prisma.anonymousIdentity.findUnique({
+          where: { id: reply.anonymousIdentityId },
+          select: { displayName: true },
+        });
+
+        if (anon) {
+          return {
+            id: reply.id,
+            postId: reply.postId,
+            body: reply.body,
+            createdAt: reply.createdAt,
+            isDeleted: reply.isDeleted,
+            authorName: anon.displayName,
+            isMentor: false,
+          };
+        }
+
+        const user = await prisma.user.findUnique({
+          where: { id: reply.anonymousIdentityId },
+          select: { role: true, isVerifiedMentor: true },
+        });
+
+        return {
+          id: reply.id,
+          postId: reply.postId,
+          body: reply.body,
+          createdAt: reply.createdAt,
+          isDeleted: reply.isDeleted,
+          authorName: user?.role === 'ADMIN' ? 'Administrator' : 'Peer Mentor',
+          isMentor: user?.role === 'MENTOR' ? user.isVerifiedMentor : false,
+        };
+      })
+    );
+
     return {
       ...post,
       anonymousDisplayName: post.anonymousIdentity?.displayName,
+      replies: repliesWithAuthor,
     };
   },
 

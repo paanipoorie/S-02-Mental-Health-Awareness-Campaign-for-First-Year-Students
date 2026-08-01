@@ -62,7 +62,7 @@ export function MeetingFormClient() {
 
       await api.post('/meetings', payload);
       toast.success('Meeting scheduled successfully!');
-      window.location.href = '/meetings';
+      window.location.href = '/events';
     } catch (err: any) {
       toast.error(err.message || 'Failed to create meeting');
     } finally {
@@ -74,8 +74,8 @@ export function MeetingFormClient() {
     <div className="max-w-xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
       {/* Back button */}
       <div>
-        <a href="/meetings" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
-          ← Back to Meetings
+        <a href="/events" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
+          ← Back to Events
         </a>
       </div>
 

@@ -172,10 +172,10 @@ export function PostDetailClient({ postId }: { postId: string }) {
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-sm bg-gray-100 border border-gray-200 flex items-center justify-center text-sm font-bold text-gray-700">
-              {post.anonymousDisplayName.charAt(0)}
+              {(post.anonymousDisplayName || 'Anonymous').charAt(0)}
             </div>
             <div>
-              <p className="text-copy-14 font-bold text-gray-900">{post.anonymousDisplayName}</p>
+              <p className="text-copy-14 font-bold text-gray-900">{post.anonymousDisplayName || 'Anonymous'}</p>
               <p className="text-label-12 text-gray-400 font-mono">{timeAgo(post.createdAt)}</p>
             </div>
           </div>

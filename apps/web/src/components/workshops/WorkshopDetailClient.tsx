@@ -100,7 +100,7 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
     try {
       await api.delete(`/workshops/${workshop.id}`);
       toast.success('Workshop cancelled successfully.');
-      window.location.href = '/workshops';
+      window.location.href = '/events';
     } catch (err: any) {
       toast.error(err.message || 'Failed to cancel workshop');
     }
@@ -121,8 +121,8 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
       <div className="text-center py-16 max-w-md mx-auto">
         <h2 className="text-heading-24 font-bold text-gray-900">Workshop not found</h2>
         <p className="text-copy-14 text-gray-500 mt-2">The workshop may have been cancelled or deleted.</p>
-        <a href="/workshops" className="mt-6 inline-block rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors">
-          Back to Workshops
+        <a href="/events" className="mt-6 inline-block rounded-sm bg-primary px-5 py-2.5 text-button-14 font-semibold text-background-100 hover:bg-gray-800 transition-colors">
+          Back to Events
         </a>
       </div>
     );
@@ -138,8 +138,8 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
     <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
       {/* Back button */}
       <div>
-        <a href="/workshops" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
-          &larr; Back to Workshops
+        <a href="/events" className="text-label-14 font-semibold text-tertiary hover:underline flex items-center gap-1.5 transition-colors">
+          &larr; Back to Events
         </a>
       </div>
 
