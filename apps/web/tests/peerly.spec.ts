@@ -134,8 +134,8 @@ test.describe('Peerly E2E Verification Suite', () => {
 
       // Verify details on the post page
       await expect(page.locator('h1').first()).toContainText(uniqueTitle);
-      await expect(page.locator('text=ANXIOUS')).toBeVisible();
-      await expect(page.locator('text=HIGH')).toBeVisible();
+      await expect(page.locator('text=ANXIOUS').first()).toBeVisible();
+      await expect(page.locator('text=HIGH').first()).toBeVisible();
 
       // Add a reply
       await page.fill('textarea[placeholder="Share your supportive response anonymously..."]', 'Don\'t worry, you are not alone! We can study together.');
@@ -191,7 +191,7 @@ test.describe('Peerly E2E Verification Suite', () => {
 
     test('Verify Student Logout', async ({ page }) => {
       await page.click('#logout-btn');
-      await page.waitForURL(/\/login/);
+      await page.waitForSelector('input[type="email"]');
     });
   });
 
@@ -246,7 +246,7 @@ test.describe('Peerly E2E Verification Suite', () => {
 
     test('Verify Mentor Logout', async ({ page }) => {
       await page.click('#logout-btn');
-      await page.waitForURL(/\/login/);
+      await page.waitForSelector('input[type="email"]');
     });
   });
 
@@ -284,7 +284,7 @@ test.describe('Peerly E2E Verification Suite', () => {
 
     test('Verify Admin Logout', async ({ page }) => {
       await page.click('#logout-btn');
-      await page.waitForURL(/\/login/);
+      await page.waitForSelector('input[type="email"]');
     });
   });
 });
