@@ -96,19 +96,22 @@ export const LoginForm: React.FC = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+<form onSubmit={handleSubmit} className="space-y-5">
         <div>
           <label className="text-label-13 mb-2 block font-semibold text-gray-700">
-            University Email Address
+            Chandigarh University Email Address
           </label>
           <input
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="university@college.edu"
+            placeholder="25bcs10067@cuchd.in"
             className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
             required
           />
+          <p className="text-label-12 mt-1.5 text-gray-500">
+            Use your official Chandigarh University email (@cuchd.in).
+          </p>
         </div>
 
         <div>
