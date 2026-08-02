@@ -106,6 +106,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         LOW: 'bg-green-50 text-green-800 border-green-300',
       };
 
+      const CATEGORY_MAP = {
+        ACADEMICS: 'Academics',
+        HOSTEL: 'Hostel',
+        HOMESICKNESS: 'Homesickness',
+        FRIENDS: 'Friends',
+        RELATIONSHIPS: 'Relationships',
+        TIME_MANAGEMENT: 'Time Management',
+        EXAMS: 'Exams',
+        SLEEP: 'Sleep',
+        CLUBS: 'Clubs',
+        FINANCIAL: 'Financial',
+        GENERAL: 'General',
+      };
+
       function formatDate(dateStr) {
         const date = new Date(dateStr);
         return date.toLocaleDateString([], {
@@ -166,7 +180,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
         feedContainer.innerHTML = posts
           .map(post => {
-            const categoryClean = post.category ? post.category.replace(/_/g, ' ') : '';
+            const categoryClean = post.category ? (CATEGORY_MAP[post.category] || post.category) : 'General';
             const replyCount = post._count?.replies || 0;
 
             let badgeHtml = '';
@@ -195,7 +209,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                   <span class="text-gray-300 font-mono text-label-12">·</span>
                   <time class="text-label-12 text-gray-400 font-mono" datetime="${post.createdAt}">${formatDate(post.createdAt)}</time>
                 </div>
-                <span class="text-label-12 font-semibold text-tertiary bg-blue-50/50 border border-blue-200 rounded-sm px-2 py-0.5">${categoryClean}</span>
+                <span class="category-badge">${categoryClean}</span>
               </header>
 
               <h2 class="text-heading-18 font-bold text-gray-900 mb-2 leading-tight">${post.title}</h2>

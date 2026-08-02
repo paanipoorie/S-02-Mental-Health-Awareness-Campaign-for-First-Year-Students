@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '@lib/api';
+import { getCategoryLabel } from '@lib/categoryConstants';
 import { useStore } from '@nanostores/react';
 import { $user, fetchCurrentUser } from '@stores/authStore';
 import { ReplyComposer } from './ReplyComposer';
@@ -50,22 +51,6 @@ function timeAgo(dateStr: string): string {
   return `${days}d ago`;
 }
 
-function getCategoryLabel(cat: string): string {
-  const map: Record<string, string> = {
-    ACADEMICS: 'Academics',
-    HOSTEL: 'Hostel',
-    HOMESICKNESS: 'Homesickness',
-    FRIENDS: 'Friends',
-    RELATIONSHIPS: 'Relationships',
-    TIME_MANAGEMENT: 'Time Management',
-    EXAMS: 'Exams',
-    SLEEP: 'Sleep',
-    CLUBS: 'Clubs',
-    FINANCIAL: 'Financial',
-    GENERAL: 'General',
-  };
-  return map[cat] || 'General';
-}
 
 function getUrgencyBadgeClass(level: string | null): string {
   switch (level) {
@@ -211,7 +196,7 @@ export function PostDetailClient({ postId }: { postId: string }) {
         </div>
 
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
+          <span className="category-badge">
             {getCategoryLabel(post.category)}
           </span>
           {post.emotion && (

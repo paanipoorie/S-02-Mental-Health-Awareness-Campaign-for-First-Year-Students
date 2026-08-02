@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../lib/api.js';
+import { getCategoryLabel } from '../../lib/categoryConstants';
 import { EmotionBadge } from '../emotion/EmotionBadge.tsx';
 import type { PostCategory } from '@campus-peer-support/shared-types/enums';
 
@@ -200,8 +201,8 @@ export function PriorityPostList() {
                     {post.urgencyLevel}
                   </span>
                 )}
-                <span class="rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                  {post.category.replace(/_/g, ' ')}
+                <span class="category-badge">
+                  {getCategoryLabel(post.category)}
                 </span>
               </div>
               <time

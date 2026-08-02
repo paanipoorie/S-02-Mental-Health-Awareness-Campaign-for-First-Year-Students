@@ -488,3 +488,35 @@ button span.bg-rose-500,
   background-color: #c96a2b !important;
   color: #ffffff !important;
 }
+
+/* --- Category Badges Styling --- */
+:root {
+  --accent: #d98a42;
+  --accent-muted: rgba(205, 113, 44, 0.16);
+  --accent-border: rgba(205, 113, 44, 0.40);
+}
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 8px; /* consistent with emotion badges px-2 py-1 (4px 8px) */
+  font-size: 12px; /* consistent with text-xs */
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 9999px;
+  background-color: var(--accent-muted);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  transition: all 0.15s ease-in-out;
+}
+
+.category-badge:hover,
+.category-badge:focus-visible {
+  background-color: rgba(205, 113, 44, 0.22);
+  border-color: rgba(205, 113, 44, 0.50);
+  outline: none;
+}
+
