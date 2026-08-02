@@ -33,10 +33,10 @@ export async function requireVerifiedMentor(
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.userId },
-      select: { isVerifiedMentor: true },
+      select: { role: true, isVerifiedMentor: true },
     });
 
-    if (!user || !user.isVerifiedMentor) {
+    if (!user || user.role !== 'MENTOR' || !user.isVerifiedMentor) {
       return next(ApiError.forbidden('Mentor not verified', 'FORBIDDEN'));
     }
 
@@ -62,10 +62,10 @@ export async function gateUnverifiedMentor(
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.userId },
-      select: { isVerifiedMentor: true },
+      select: { role: true, isVerifiedMentor: true },
     });
 
-    if (!user || !user.isVerifiedMentor) {
+    if (!user || user.role !== 'MENTOR' || !user.isVerifiedMentor) {
       return next(ApiError.forbidden('Mentor account is pending verification', 'FORBIDDEN'));
     }
 
