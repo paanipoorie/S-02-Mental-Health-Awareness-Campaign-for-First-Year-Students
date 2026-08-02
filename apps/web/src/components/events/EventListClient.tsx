@@ -73,6 +73,7 @@ export function EventListClient() {
   const [rawEvents, setRawEvents] = useState<EventItem[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Filter states
   const [search, setSearch] = useState('');
@@ -107,6 +108,7 @@ export function EventListClient() {
 
   const fetchEvents = async () => {
     setLoading(true);
+    setError(null);
     try {
       if (!user) {
         await fetchCurrentUser();
@@ -125,6 +127,7 @@ export function EventListClient() {
 
       setRawEvents(combined);
     } catch (err: any) {
+      setError(err.message || 'Failed to fetch events');
       toast.error(err.message || 'Failed to fetch events');
     } finally {
       setLoading(false);
@@ -371,6 +374,17 @@ export function EventListClient() {
               <div className="h-10 w-full rounded-sm bg-gray-200" />
             </div>
           ))}
+        </div>
+      ) : error ? (
+        <div className="bg-background-100 rounded-sm border border-gray-200 py-16 text-center">
+          <h3 className="text-heading-18 font-bold text-red-600">Failed to load events</h3>
+          <p className="text-copy-14 mx-auto mt-2 max-w-sm text-gray-500">{error}</p>
+          <button
+            onClick={fetchEvents}
+            className="bg-primary text-background-100 mt-6 inline-block rounded-sm px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-800"
+          >
+            Retry
+          </button>
         </div>
       ) : paginatedEvents.length === 0 ? (
         <div className="bg-background-100 rounded-sm border border-gray-200 py-16 text-center">

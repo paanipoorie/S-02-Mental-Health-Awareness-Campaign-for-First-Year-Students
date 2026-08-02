@@ -35,6 +35,7 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatInfo, setChatInfo] = useState<ChatInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
@@ -52,46 +53,44 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
   }, []);
 
   const fetchChatInfo = async () => {
-    try {
-      const data = await api.get<ChatInfo>(`/chats/${threadId}`);
-      setChatInfo(data);
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to load chat');
-    }
+    const data = await api.get<ChatInfo>(`/chats/${threadId}`);
+    setChatInfo(data);
   };
 
   const fetchMessages = async (pageNum: number = 1, append: boolean = false) => {
+    const res = await api.get<{
+      data: Message[];
+      pagination: { page: number; totalPages: number };
+    }>(`/chats/${threadId}/messages?page=${pageNum}&limit=50`);
+    if (append) {
+      setMessages(prev => [...res.data, ...prev]);
+    } else {
+      setMessages(res.data);
+    }
+    setHasMore(res.pagination.page < res.pagination.totalPages);
+    if (!append) {
+      setTimeout(scrollToBottom, 100);
+    }
+  };
+
+  const loadData = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const res = await api.get<{
-        data: Message[];
-        pagination: { page: number; totalPages: number };
-      }>(`/chats/${threadId}/messages?page=${pageNum}&limit=50`);
-      if (append) {
-        setMessages(prev => [...res.data, ...prev]);
-      } else {
-        setMessages(res.data);
+      if (!user) {
+        await fetchCurrentUser();
       }
-      setHasMore(res.pagination.page < res.pagination.totalPages);
-      if (!append) {
-        setTimeout(scrollToBottom, 100);
-      }
+      await Promise.all([fetchChatInfo(), fetchMessages(1, false)]);
     } catch (err: any) {
-      toast.error(err.message || 'Failed to load messages');
+      setError(err.message || 'Failed to load chat');
+      toast.error(err.message || 'Failed to load chat');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!user) {
-      fetchCurrentUser().then(() => {
-        fetchChatInfo();
-        fetchMessages();
-      });
-    } else {
-      fetchChatInfo();
-      fetchMessages();
-    }
+    loadData();
   }, [threadId]);
 
   useEffect(() => {
@@ -167,10 +166,14 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
     }, 2000);
   };
 
-  const loadMore = () => {
+  const loadMore = async () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    fetchMessages(nextPage, true);
+    try {
+      await fetchMessages(nextPage, true);
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to load older messages');
+    }
   };
 
   const isStudent = user?.role === 'STUDENT';
@@ -191,6 +194,21 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
             </div>
           ))}
         </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
+        <h3 className="text-heading-18 text-red-600 font-bold">Failed to load chat</h3>
+        <p className="text-copy-14 mt-2 text-gray-500">{error}</p>
+        <button
+          onClick={loadData}
+          className="bg-primary text-background-100 mt-6 inline-block rounded-sm px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-800"
+        >
+          Retry
+        </button>
       </div>
     );
   }

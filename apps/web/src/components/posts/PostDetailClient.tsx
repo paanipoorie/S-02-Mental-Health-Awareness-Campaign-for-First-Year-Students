@@ -85,14 +85,18 @@ export function PostDetailClient({ postId }: { postId: string }) {
   const user = useStore($user);
   const [post, setPost] = useState<PostDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [replying, setReplying] = useState(false);
 
   const fetchPost = async () => {
+    setLoading(true);
+    setError(null);
     try {
       if (!user) await fetchCurrentUser();
       const data = await api.get<PostDetail>(`/posts/${postId}`);
       setPost(data);
     } catch (err: any) {
+      setError(err.message || 'Failed to load post');
       toast.error(err.message || 'Failed to load post');
     } finally {
       setLoading(false);
@@ -142,6 +146,21 @@ export function PostDetailClient({ postId }: { postId: string }) {
         <div className="h-4 w-1/4 rounded-sm bg-gray-200" />
         <div className="h-48 w-full rounded-sm bg-gray-200" />
         <div className="h-32 w-full rounded-sm bg-gray-200" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mx-auto max-w-md py-16 text-center">
+        <h2 className="text-heading-24 font-bold text-red-600">Failed to load post</h2>
+        <p className="text-copy-14 mt-2 text-gray-500">{error}</p>
+        <button
+          onClick={fetchPost}
+          className="bg-primary text-background-100 mt-6 inline-block rounded-sm px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-800"
+        >
+          Retry
+        </button>
       </div>
     );
   }

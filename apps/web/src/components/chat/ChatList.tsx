@@ -52,13 +52,17 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
   const user = useStore($user);
   const [chats, setChats] = useState<ChatThread[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchChats = async () => {
+    setLoading(true);
+    setError(null);
     try {
       if (!user) await fetchCurrentUser();
       const res = await api.get<{ data: ChatThread[] }>('/chats');
       setChats(res.data);
     } catch (err: any) {
+      setError(err.message || 'Failed to load chats');
       toast.error(err.message || 'Failed to load chats');
     } finally {
       setLoading(false);
@@ -93,6 +97,21 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
             </div>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
+        <h3 className="text-heading-16 text-red-600 font-bold">Failed to load chats</h3>
+        <p className="text-copy-13 mt-2 text-gray-500">{error}</p>
+        <button
+          onClick={fetchChats}
+          className="bg-primary text-background-100 mt-4 inline-block rounded-sm px-4 py-2 text-xs font-semibold transition-colors hover:bg-gray-800"
+        >
+          Retry
+        </button>
       </div>
     );
   }

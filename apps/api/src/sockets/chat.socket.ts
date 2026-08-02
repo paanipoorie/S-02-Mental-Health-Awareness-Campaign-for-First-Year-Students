@@ -20,6 +20,7 @@ export function handleChatSocket(io: Server, socket: AuthenticatedSocket) {
   socket.on('chat:join', async (data: { threadId: string }) => {
     try {
       const { threadId } = data;
+      console.log(`[Chat] socket:join event received for thread ${threadId} by user ${userId} with role ${role}`);
 
       // Verify user is a participant in this thread
       const thread = await prisma.chatThread.findUnique({
@@ -31,6 +32,7 @@ export function handleChatSocket(io: Server, socket: AuthenticatedSocket) {
       });
 
       if (!thread) {
+        console.warn(`[Chat] Thread ${threadId} not found in database`);
         socket.emit('chat:error', { message: 'Chat thread not found' });
         return;
       }
@@ -47,6 +49,7 @@ export function handleChatSocket(io: Server, socket: AuthenticatedSocket) {
       const isMentor = role === 'MENTOR' && thread.mentorId === userId;
 
       if (!isStudent && !isMentor) {
+        console.warn(`[Chat] Authorization failed: user ${userId} (role: ${role}) tried to join thread ${threadId}. isStudent: ${isStudent}, isMentor: ${isMentor}`);
         socket.emit('chat:error', { message: 'Not authorized to join this chat' });
         return;
       }
