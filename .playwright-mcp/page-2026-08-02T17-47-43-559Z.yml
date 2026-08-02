@@ -1,0 +1,42 @@
+- generic [active] [ref=f21e1]:
+  - generic [ref=f21e2]:
+    - banner [ref=f21e3]:
+      - generic [ref=f21e5]:
+        - link "Peerly Logo Peerly" [ref=f21e7] [cursor=pointer]:
+          - /url: /
+          - img "Peerly Logo" [ref=f21e8]
+          - generic [ref=f21e9]: Peerly
+        - navigation "Main Navigation"
+        - generic [ref=f21e11]:
+          - link "Sign In" [ref=f21e12] [cursor=pointer]:
+            - /url: /login
+          - link "Get Started" [ref=f21e13] [cursor=pointer]:
+            - /url: /register
+    - main [ref=f21e14]:
+      - generic [ref=f21e17]:
+        - generic [ref=f21e18]:
+          - heading "Sign In" [level=2] [ref=f21e19]
+          - paragraph [ref=f21e20]: Access your peer support workspace anonymously.
+        - generic [ref=f21e64]: Invalid credentials
+        - generic [ref=f21e21]:
+          - generic [ref=f21e22]:
+            - generic [ref=f21e23]: University Email Address
+            - textbox "university@college.edu" [ref=f21e24]: mentor1@university.edu
+          - generic [ref=f21e25]:
+            - generic [ref=f21e26]: Password
+            - textbox "••••••••" [ref=f21e27]: Password123
+          - button "Sign In" [ref=f21e28] [cursor=pointer]
+        - paragraph [ref=f21e31]:
+          - text: Don't have an account yet?
+          - link "Register now" [ref=f21e32] [cursor=pointer]:
+            - /url: /register
+    - contentinfo [ref=f21e33]:
+      - generic [ref=f21e34]:
+        - generic [ref=f21e35]: © 2026 Peerly. Strictly Confidential & Safe Space.
+        - link "Privacy Guarantee" [ref=f21e37] [cursor=pointer]:
+          - /url: /privacy
+  - generic [ref=f21e40]:
+    - button [ref=f21e41]
+    - button [ref=f21e47]
+    - button [ref=f21e51]
+    - button [ref=f21e59]

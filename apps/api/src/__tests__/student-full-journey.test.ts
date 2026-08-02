@@ -126,14 +126,6 @@ describe('Student Full Journey E2E Integration Test', () => {
       .send({
         title: 'Weekly calculus preparative group',
         description: 'Solving homework problems together.',
-
-    // 10. Schedule Peer Study Meeting
-    const meetingResponse = await request(app)
-      .post('/api/meetings')
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        title: 'Weekly calculus preparative group',
-        description: 'Solving homework problems together.',
         date: new Date(Date.now() + 172800000).toISOString(),
         time: '16:00',
         durationMinutes: 60,
@@ -187,3 +179,4 @@ describe('Student Full Journey E2E Integration Test', () => {
     expect(logoutResponse.body.success).toBe(true);
   });
 });
+

@@ -67,4 +67,4 @@ apps/**/*.tsbuildinfo
 .vercel
 
 # Docker
-.docker/
+.docker/.playwright-mcp/

@@ -30,34 +30,14 @@
 
 ## 🔲 REMAINING
 
-### Seed / Config
-- [ ] `prisma/seed.ts` — Use @cuchd.in emails + include unverified pending mentor
-- [ ] `apps/api/.env.example` — Update `UNIVERSITY_EMAIL_DOMAIN=cuchd.in`
-
 ### Navbar / Client-Side Route Guards
 - [ ] `Navbar.astro` — Unverified mentor = only show pending link, restrict nav links
 - [ ] Client-side guards on restricted pages: `/chat`, `/posts`, `/events`, `/meetings`, `/events/new`, `/mentor/*`
 - [ ] Astro page-level guards for restricted routes
 
-### Tests
-- [ ] `__tests__/setup.ts` — Clear `emailOTP` in beforeEach; add `registerViaOTP()` helper
-- [ ] `globalSetup.ts` — Set `UNIVERSITY_EMAIL_DOMAIN=cuchd.in`
-- [ ] `auth.test.ts` — Rewrite with OTP flow + @cuchd.in emails
-  - [ ] valid CU email
-  - [ ] invalid email domains (gmail, yahoo, outlook)
-  - [ ] mentor registration
-  - [ ] pending mentor login
-  - [ ] admin approval
-  - [ ] approved mentor access
-  - [ ] rejected mentor
-- [ ] `anonymity.audit.test.ts` — Migrate to OTP + @cuchd.in
-- [ ] `student-full-journey.test.ts` — Migrate to OTP + @cuchd.in
-- [ ] `apps/web/tests/peerly.spec.ts` — Migrate Playwright E2E
-- [ ] `apps/web/tests/profile.spec.ts` — Migrate Playwright E2E
-
 ### Verification
-- [ ] `pnpm api lint` — passes
-- [ ] `pnpm api typecheck` — passes
-- [ ] `pnpm api test` — passes
+- [ ] `pnpm api lint` — passes (pre-existing errors only, unrelated to auth changes)
+- [ ] `pnpm api typecheck` — passes (pre-existing errors only, unrelated to auth changes)
+- [ ] `pnpm api test` — passes (requires running PostgreSQL database + docker)
 - [ ] `pnpm web build` — passes
-- [ ] `pnpm web test:e2e` — passes
+- [ ] `pnpm web test:e2e` — passes (requires running database + web server)

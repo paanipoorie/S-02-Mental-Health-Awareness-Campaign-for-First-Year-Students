@@ -1,0 +1,168 @@
+- generic [active] [ref=f22e1]:
+  - generic [ref=f22e2]:
+    - banner [ref=f22e3]:
+      - generic [ref=f22e5]:
+        - link "Peerly Logo Peerly" [ref=f22e7] [cursor=pointer]:
+          - /url: /mentor/dashboard
+          - img "Peerly Logo" [ref=f22e8]
+          - generic [ref=f22e9]: Peerly
+        - navigation "Main Navigation" [ref=f22e10]:
+          - generic [ref=f22e11]:
+            - link "Dashboard" [ref=f22e12] [cursor=pointer]:
+              - /url: /mentor/dashboard
+            - link "Discussions" [ref=f22e13] [cursor=pointer]:
+              - /url: /posts
+            - link "Peer Chat" [ref=f22e14] [cursor=pointer]:
+              - /url: /chat
+            - link "Events" [ref=f22e15] [cursor=pointer]:
+              - /url: /events
+        - generic [ref=f22e17]:
+          - button "Notifications" [ref=f22e20]
+          - button "Logout" [ref=f22e24] [cursor=pointer]
+    - main [ref=f22e25]:
+      - generic [ref=f22e26]:
+        - generic [ref=f22e28]:
+          - heading "Mentor Portal" [level=1] [ref=f22e29]
+          - paragraph [ref=f22e30]: Welcome, Peer Mentor
+        - generic [ref=f22e32]:
+          - generic [ref=f22e34]:
+            - heading "Waiting Chats" [level=3] [ref=f22e35]
+            - generic [ref=f22e36]:
+              - paragraph [ref=f22e39]: No students waiting
+              - paragraph [ref=f22e40]: Students awaiting mentor assignment will appear here.
+          - generic [ref=f22e42]:
+            - heading "Assigned Students" [level=3] [ref=f22e43]
+            - generic [ref=f22e44]:
+              - paragraph [ref=f22e47]: No assigned students
+              - paragraph [ref=f22e48]: Accept waiting chats to see assigned students here.
+          - generic [ref=f22e50]:
+            - heading "Student Emotion Overview (24h)" [level=3] [ref=f22e51]
+            - generic [ref=f22e52]:
+              - generic [ref=f22e54]:
+                - generic [ref=f22e55]:
+                  - paragraph [ref=f22e56]: Total Logs
+                  - paragraph [ref=f22e57]: "1"
+                - generic "Total Logs" [ref=f22e58]
+              - generic [ref=f22e62]:
+                - generic [ref=f22e63]:
+                  - paragraph [ref=f22e64]: High Urgency
+                  - paragraph [ref=f22e65]: "1"
+                - generic "High Urgency" [ref=f22e66]
+              - generic [ref=f22e71]:
+                - generic [ref=f22e72]:
+                  - paragraph [ref=f22e73]: Medium Urgency
+                  - paragraph [ref=f22e74]: "0"
+                - generic "Medium Urgency" [ref=f22e75]
+              - generic [ref=f22e79]:
+                - generic [ref=f22e80]:
+                  - paragraph [ref=f22e81]: Low Urgency
+                  - paragraph [ref=f22e82]: "0"
+                - generic "Low Urgency" [ref=f22e83]
+            - generic [ref=f22e87]:
+              - generic [ref=f22e88]:
+                - heading "Top Emotions" [level=4] [ref=f22e89]
+                - generic [ref=f22e90]:
+                  - generic [ref=f22e92]:
+                    - generic [ref=f22e93]: Anxious
+                    - generic [ref=f22e98]: "1"
+                  - generic [ref=f22e102]:
+                    - generic [ref=f22e103]: Happy
+                    - generic [ref=f22e109]: "0"
+                  - generic [ref=f22e112]:
+                    - generic [ref=f22e113]: Excited
+                    - generic [ref=f22e118]: "0"
+                  - generic [ref=f22e121]:
+                    - generic [ref=f22e122]: Confused
+                    - generic [ref=f22e128]: "0"
+                  - generic [ref=f22e131]:
+                    - generic [ref=f22e132]: Homesick
+                    - generic [ref=f22e138]: "0"
+              - generic [ref=f22e140]:
+                - heading "Priority Support Required (0)" [level=4] [ref=f22e141]
+                - paragraph [ref=f22e143]: No students are currently flagged as priority.
+          - generic [ref=f22e145]:
+            - heading "Today's Meetings" [level=3] [ref=f22e146]
+            - generic [ref=f22e147]:
+              - paragraph [ref=f22e150]: No meetings today
+              - paragraph [ref=f22e151]: Your scheduled meetings for today will appear here.
+          - generic [ref=f22e153]:
+            - heading "Today's Workshops" [level=3] [ref=f22e154]
+            - generic [ref=f22e155]:
+              - paragraph [ref=f22e158]: No workshops today
+              - paragraph [ref=f22e159]: Your hosted workshops for today will appear here.
+          - generic [ref=f22e160]:
+            - generic [ref=f22e161]:
+              - heading "Availability Status" [level=3] [ref=f22e162]
+              - generic [ref=f22e167]:
+                - paragraph [ref=f22e168]: Current Status
+                - paragraph [ref=f22e169]: Available
+              - generic [ref=f22e170]:
+                - button "Available" [disabled] [ref=f22e171]
+                - button "Busy" [ref=f22e176]
+                - button "Offline" [ref=f22e181]
+              - paragraph [ref=f22e186]:
+                - text: Students can see your availability status when requesting support. Set to
+                - strong [ref=f22e187]: Available
+                - text: to receive new chat requests.
+            - generic [ref=f22e188]:
+              - generic [ref=f22e189]:
+                - heading "Recent Discussions" [level=3] [ref=f22e190]
+                - link "View all" [ref=f22e191] [cursor=pointer]:
+                  - /url: /posts
+              - generic [ref=f22e192]:
+                - link "Overwhelmed by academic load The midterms are approaching and I don't think I can pass the calculus courses. There is too much syllabus. Anxious · High Anonymous Calm Dolphin 1 reply less than a minute ago" [ref=f22e193] [cursor=pointer]:
+                  - /url: /posts/cmsc3for0000hsn4hcw445lfi
+                  - generic [ref=f22e194]:
+                    - generic [ref=f22e195]:
+                      - heading "Overwhelmed by academic load" [level=4] [ref=f22e196]
+                      - paragraph [ref=f22e197]: The midterms are approaching and I don't think I can pass the calculus courses. There is too much syllabus.
+                    - generic [ref=f22e198]:
+                      - generic [ref=f22e201]: Anxious
+                      - generic [ref=f22e202]: ·
+                      - generic [ref=f22e205]: High
+                  - generic [ref=f22e206]:
+                    - generic [ref=f22e207]: Anonymous Calm Dolphin
+                    - generic [ref=f22e210]: 1 reply
+                    - generic [ref=f22e213]: less than a minute ago
+                - link "Feeling lonely in the hostel It is my first week here and I haven't made any friends. I really miss home and family. Lonely · Medium Anonymous Brave Sparrow 2 replies less than a minute ago" [ref=f22e214] [cursor=pointer]:
+                  - /url: /posts/cmsc3foqw000fsn4hg3hql7qz
+                  - generic [ref=f22e215]:
+                    - generic [ref=f22e216]:
+                      - heading "Feeling lonely in the hostel" [level=4] [ref=f22e217]
+                      - paragraph [ref=f22e218]: It is my first week here and I haven't made any friends. I really miss home and family.
+                    - generic [ref=f22e219]:
+                      - generic [ref=f22e223]: Lonely
+                      - generic [ref=f22e224]: ·
+                      - generic [ref=f22e226]: Medium
+                  - generic [ref=f22e227]:
+                    - generic [ref=f22e228]: Anonymous Brave Sparrow
+                    - generic [ref=f22e231]: 2 replies
+                    - generic [ref=f22e234]: less than a minute ago
+            - generic [ref=f22e235]:
+              - heading "Announcements" [level=3] [ref=f22e236]
+              - generic [ref=f22e237]:
+                - generic [ref=f22e239] [cursor=pointer]:
+                  - generic [ref=f22e240]:
+                    - heading "Welcome to Campus Peer Support" [level=4] [ref=f22e241]
+                    - paragraph [ref=f22e242]: This platform is designed to provide confidential, anonymous support for first-year students.
+                  - time [ref=f22e243]: Aug 2, 2026
+                - generic [ref=f22e245] [cursor=pointer]:
+                  - generic [ref=f22e246]:
+                    - heading "New Resources Available" [level=4] [ref=f22e247]
+                    - paragraph [ref=f22e248]: Check out the updated Resource Hub with new self-help guides and emergency contacts.
+                  - time [ref=f22e249]: Aug 1, 2026
+                - generic [ref=f22e251] [cursor=pointer]:
+                  - generic [ref=f22e252]:
+                    - heading "Mentor Office Hours This Week" [level=4] [ref=f22e253]
+                    - paragraph [ref=f22e254]: Several mentors are hosting office hours. Browse the Meetings section to join.
+                  - time [ref=f22e255]: Jul 31, 2026
+    - contentinfo [ref=f22e256]:
+      - generic [ref=f22e257]:
+        - generic [ref=f22e258]: © 2026 Peerly. Strictly Confidential & Safe Space.
+        - link "Privacy Guarantee" [ref=f22e260] [cursor=pointer]:
+          - /url: /privacy
+  - generic [ref=f22e263]:
+    - button [ref=f22e264]
+    - button [ref=f22e270]
+    - button [ref=f22e274]
+    - button [ref=f22e282]

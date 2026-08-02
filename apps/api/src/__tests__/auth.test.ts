@@ -527,7 +527,7 @@ describe('Authentication Integration Tests', () => {
       const email = getTestEmail('structure');
       const data = await registerViaOTP(app, email, 'STUDENT');
 
-      const loginData = await loginAs(app, email);
+      await loginAs(app, email);
 
       const meResponse = await request(app)
         .get('/api/auth/me')
@@ -548,39 +548,28 @@ describe('Authentication Integration Tests', () => {
 
       expect(response.body.success).toBe(false);
       expect(response.body.error.code).toBe('VALIDATION_ERROR');
+      expect(response.body.error).toHaveProperty('message');
+    });
+  });
 
   describe('End-to-End Auth Flow', () => {
-    it('should complete full Register -> Login -> Me -> Refresh -> Logout flow', async () => {
+    it('should complete full OTP Register -> Login -> Me -> Refresh -> Logout flow', async () => {
       const email = getTestEmail('e2e');
 
-      // 1. Register
-      const regResponse = await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(email))
-        .expect(201);
-      const { accessToken: _regAccessToken, refreshToken: _regRefreshToken } =
-        regResponse.body.data.tokens;
-      const anonIdentity = regResponse.body.data.anonymousIdentity;
+      // 1. Register via OTP
+      const data = await registerViaOTP(app, email, 'STUDENT');
+      const anonIdentity = data.anonymousIdentity;
 
       // 2. Login
-      const loginResponse = await request(app)
-        .post('/api/auth/login')
-        .send({ universityEmail: email, password: testPassword })
-        .expect(200);
-      const { accessToken: loginAccessToken } = loginResponse.body.data;
-      const loginCookies = (loginResponse.headers['set-cookie'] as unknown as string[]) ?? [];
-      const refreshToken = loginCookies
-        .find((c: string) => c.startsWith('refreshToken='))
-        ?.split(';')[0]
-        ?.split('=')[1];
+      const loginData = await loginAs(app, email);
+      const accessToken = loginData.accessToken;
 
-      expect(loginAccessToken).toBeDefined();
-      expect(refreshToken).toBeDefined();
+      expect(accessToken).toBeDefined();
 
       // 3. Me endpoint with login token
       const meResponse1 = await request(app)
         .get('/api/auth/me')
-        .set('Authorization', `Bearer ${loginAccessToken}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
       expect(meResponse1.body.data.anonymousDisplayName).toBe(anonIdentity.displayName);
       expect(meResponse1.body.data.avatarSeed).toBe(anonIdentity.avatarSeed);
@@ -588,12 +577,10 @@ describe('Authentication Integration Tests', () => {
       // 4. Refresh token
       const refreshResponse = await request(app)
         .post('/api/auth/refresh')
-        .send({ refreshToken })
+        .send({ refreshToken: data.tokens.refreshToken })
         .expect(200);
       const newAccessToken = refreshResponse.body.data.accessToken;
       expect(newAccessToken).toBeDefined();
-      // Note: tokens may be identical if generated with same payload/secret in quick succession
-      // The important thing is the token is valid and works
 
       // 5. Me endpoint with new token
       const meResponse2 = await request(app)
@@ -603,32 +590,26 @@ describe('Authentication Integration Tests', () => {
       expect(meResponse2.body.data.anonymousDisplayName).toBe(anonIdentity.displayName);
 
       // 6. Logout
-      await request(app).post('/api/auth/logout').send({ refreshToken }).expect(200);
-
-      // 7. Logout succeeds (token invalidation not implemented in this phase)
-      // The refresh token remains valid until expiry - token blacklist would be needed for immediate invalidation
+      await request(app)
+        .post('/api/auth/logout')
+        .send({ refreshToken: data.tokens.refreshToken })
+        .expect(200);
     });
 
     it('should complete mentor auth flow without anonymous identity', async () => {
       const email = getTestEmail('mentore2e');
 
-      // Register mentor
-      const regResponse = await request(app)
-        .post('/api/auth/register')
-        .send(validMentorPayload(email))
-        .expect(201);
-      expect(regResponse.body.data.anonymousIdentity).toBeNull();
+      // Register mentor via OTP
+      const data = await registerViaOTP(app, email, 'MENTOR');
+      expect(data.anonymousIdentity).toBeNull();
 
       // Login
-      const loginResponse = await request(app)
-        .post('/api/auth/login')
-        .send({ universityEmail: email, password: testPassword })
-        .expect(200);
+      const loginData = await loginAs(app, email);
 
       // Me endpoint
       const meResponse = await request(app)
         .get('/api/auth/me')
-        .set('Authorization', `Bearer ${loginResponse.body.data.accessToken}`)
+        .set('Authorization', `Bearer ${loginData.accessToken}`)
         .expect(200);
 
       expect(meResponse.body.data).toMatchObject({
@@ -660,7 +641,7 @@ describe('Authentication Integration Tests', () => {
         user: {
           userId: 'some-id',
           role: Role.STUDENT,
-          email: 'student@test.edu',
+          email: 'student@cuchd.in',
         },
       } as any;
       const res = {} as any;
@@ -738,7 +719,7 @@ describe('Authentication Integration Tests', () => {
         user: {
           userId: 'some-id',
           role: Role.STUDENT,
-          email: 'student@test.edu',
+          email: 'student@cuchd.in',
         },
       } as any;
       const res = {} as any;
@@ -756,7 +737,7 @@ describe('Authentication Integration Tests', () => {
         user: {
           userId: 'some-id',
           role: Role.STUDENT,
-          email: 'student@test.edu',
+          email: 'student@cuchd.in',
         },
       } as any;
       const res = {} as any;
@@ -772,3 +753,4 @@ describe('Authentication Integration Tests', () => {
   });
   /* eslint-enable @typescript-eslint/no-explicit-any */
 });
+

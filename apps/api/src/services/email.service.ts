@@ -1,7 +1,17 @@
 import { Resend } from 'resend';
 import { env, isDevelopment, isTest } from '../config/env.js';
 
-const resend = new Resend(env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+
+function getResend(): Resend {
+  if (!_resend) {
+    if (!env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not configured');
+    }
+    _resend = new Resend(env.RESEND_API_KEY);
+  }
+  return _resend;
+}
 
 export interface EmailOTPData {
   email: string;
@@ -30,7 +40,7 @@ export async function sendOTPEmail(data: EmailOTPData): Promise<void> {
     throw new Error('RESEND_API_KEY is not configured');
   }
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: env.EMAIL_FROM,
     to: email,
     subject: `Your Campus Peer Support OTP - ${roleLabel} Registration`,
@@ -98,7 +108,7 @@ export async function sendMentorApprovalEmail(email: string, approved: boolean):
     throw new Error('RESEND_API_KEY is not configured');
   }
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: env.EMAIL_FROM,
     to: email,
     subject: `Mentor Application ${statusLabel} - Campus Peer Support`,

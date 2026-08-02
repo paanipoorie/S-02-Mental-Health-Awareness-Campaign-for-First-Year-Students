@@ -1,0 +1,45 @@
+- generic [active] [ref=e1]:
+    - banner [ref=e2]:
+        - generic [ref=e4]:
+            - generic [ref=e5]: Peerly
+            - navigation [ref=e9]:
+                - link "Sign In" [ref=e10] [cursor=pointer]:
+                    - /url: /login
+                - link "Get Started" [ref=e11] [cursor=pointer]:
+                    - /url: /register
+    - main [ref=e12]:
+        - generic [ref=e13]:
+            - heading "Peerly" [level=1] [ref=e14]
+            - paragraph [ref=e15]: A simple, anonymous peer support platform for first-year students.
+            - generic [ref=e16]:
+                - link "Create Anonymous Account" [ref=e17] [cursor=pointer]:
+                    - /url: /register
+                - link "Sign In" [ref=e18] [cursor=pointer]:
+                    - /url: /login
+            - generic [ref=e19]:
+                - heading "How it works" [level=2] [ref=e20]
+                - generic [ref=e21]:
+                    - generic [ref=e26]:
+                        - heading "1. Register Anonymously" [level=3] [ref=e27]
+                        - paragraph [ref=e28]: Sign up with your university email. Your email is verified but never stored or visible on the platform.
+                    - generic [ref=e33]:
+                        - heading "2. Receive a Campus Persona" [level=3] [ref=e34]
+                        - paragraph [ref=e35]: You are assigned a persistent random name for chats, posts, and group meetings.
+                    - generic [ref=e40]:
+                        - heading "3. Talk & Get Support" [level=3] [ref=e41]
+                        - paragraph [ref=e42]: Discuss anonymously, talk to verified mentors, attend online workshops, and access local mental health resources.
+    - contentinfo [ref=e43]:
+        - generic [ref=e44]:
+            - generic [ref=e45]:
+                - generic [ref=e46]:
+                    - generic [ref=e47]: Peerly
+                    - generic [ref=e48]: '|'
+                    - generic [ref=e49]: Confidential & Safe Space
+                - generic [ref=e50]:
+                    - link "Privacy" [ref=e51] [cursor=pointer]:
+                        - /url: /privacy
+                    - link "Terms" [ref=e52] [cursor=pointer]:
+                        - /url: /terms
+                    - link "Safety" [ref=e53] [cursor=pointer]:
+                        - /url: /safety
+            - paragraph [ref=e55]: © 2026 Peerly. Strictly anonymous support for students.

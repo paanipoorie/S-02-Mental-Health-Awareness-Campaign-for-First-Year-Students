@@ -1,0 +1,35 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - link "Peerly Logo Peerly" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img "Peerly Logo" [ref=e8]
+        - generic [ref=e9]: Peerly
+      - navigation "Main Navigation"
+      - generic [ref=e11]:
+        - link "Sign In" [ref=e12] [cursor=pointer]:
+          - /url: /login
+        - link "Get Started" [ref=e13] [cursor=pointer]:
+          - /url: /register
+  - main [ref=e14]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - heading "Sign In" [level=2] [ref=e19]
+        - paragraph [ref=e20]: Access your peer support workspace anonymously.
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]: University Email Address
+          - textbox "university@college.edu" [ref=e24]
+        - generic [ref=e25]:
+          - generic [ref=e26]: Password
+          - textbox "••••••••" [ref=e27]
+        - button "Sign In" [ref=e28] [cursor=pointer]
+      - paragraph [ref=e31]:
+        - text: Don't have an account yet?
+        - link "Register now" [ref=e32] [cursor=pointer]:
+          - /url: /register
+  - contentinfo [ref=e33]:
+    - generic [ref=e34]:
+      - generic [ref=e35]: © 2026 Peerly. Strictly Confidential & Safe Space.
+      - link "Privacy Guarantee" [ref=e37] [cursor=pointer]:
+        - /url: /privacy

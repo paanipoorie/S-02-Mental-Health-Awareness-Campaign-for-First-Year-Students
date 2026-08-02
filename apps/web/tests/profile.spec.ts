@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const STUDENT_EMAIL = 'student1@university.edu';
+const STUDENT_EMAIL = 'student1@cuchd.in';
 const PASSWORD = 'Password123';
 
 async function waitHydration(page) {

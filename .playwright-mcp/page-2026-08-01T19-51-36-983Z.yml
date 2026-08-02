@@ -1,0 +1,47 @@
+- generic [active] [ref=e1]:
+    - generic [ref=e2]:
+        - banner [ref=e3]:
+            - generic [ref=e5]:
+                - link "Peerly" [ref=e7] [cursor=pointer]:
+                    - /url: /
+                - navigation "Main Navigation" [ref=e11]:
+                    - generic [ref=e12]:
+                        - link "Dashboard" [ref=e13] [cursor=pointer]:
+                            - /url: /dashboard
+                        - link "Discussions" [ref=e14] [cursor=pointer]:
+                            - /url: /posts
+                        - link "Peer Chat" [ref=e15] [cursor=pointer]:
+                            - /url: /chat
+                        - link "Events" [ref=e16] [cursor=pointer]:
+                            - /url: /events
+                - generic [ref=e18]:
+                    - button "Notifications" [ref=e21]
+                    - button "Logout" [ref=e25] [cursor=pointer]
+        - main [ref=e26]:
+            - generic [ref=e29]:
+                - generic [ref=e30]:
+                    - heading "Sign In" [level=2] [ref=e31]
+                    - paragraph [ref=e32]: Access your peer support workspace anonymously.
+                - generic [ref=e76]: User not found
+                - generic [ref=e33]:
+                    - generic [ref=e34]:
+                        - generic [ref=e35]: University Email Address
+                        - textbox "university@college.edu" [ref=e36]: student1@university.edu
+                    - generic [ref=e37]:
+                        - generic [ref=e38]: Password
+                        - textbox "••••••••" [ref=e39]: Password123
+                    - button "Sign In" [ref=e40] [cursor=pointer]
+                - paragraph [ref=e43]:
+                    - text: Don't have an account yet?
+                    - link "Register now" [ref=e44] [cursor=pointer]:
+                        - /url: /register
+        - contentinfo [ref=e45]:
+            - generic [ref=e46]:
+                - generic [ref=e47]: © 2026 Peerly. Strictly Confidential & Safe Space.
+                - link "Privacy Guarantee" [ref=e49] [cursor=pointer]:
+                    - /url: /privacy
+    - generic [ref=e52]:
+        - button [ref=e53]
+        - button [ref=e59]
+        - button [ref=e63]
+        - button [ref=e71]

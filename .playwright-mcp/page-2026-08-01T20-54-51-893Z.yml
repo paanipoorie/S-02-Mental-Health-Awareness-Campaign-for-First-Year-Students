@@ -1,0 +1,94 @@
+- generic [active] [ref=f11e1]:
+    - generic [ref=f11e2]:
+        - banner [ref=f11e3]:
+            - generic [ref=f11e5]:
+                - link "Peerly" [ref=f11e7] [cursor=pointer]:
+                    - /url: /
+                - navigation "Main Navigation" [ref=f11e11]:
+                    - generic [ref=f11e12]:
+                        - link "Dashboard" [ref=f11e13] [cursor=pointer]:
+                            - /url: /dashboard
+                        - link "Discussions" [ref=f11e14] [cursor=pointer]:
+                            - /url: /posts
+                        - link "Peer Chat" [ref=f11e15] [cursor=pointer]:
+                            - /url: /chat
+                        - link "Events" [ref=f11e16] [cursor=pointer]:
+                            - /url: /events
+                - generic [ref=f11e18]:
+                    - button "Notifications" [ref=f11e21]
+                    - button "Logout" [ref=f11e25] [cursor=pointer]
+        - main [ref=f11e26]:
+            - generic [ref=f11e29]:
+                - generic [ref=f11e36]:
+                    - heading "No Mentor Assigned" [level=2] [ref=f11e38]
+                    - paragraph [ref=f11e39]: A mentor will be assigned to you soon.
+                - generic [ref=f11e40]:
+                    - heading "Announcements" [level=3] [ref=f11e41]
+                    - generic [ref=f11e42]:
+                        - generic [ref=f11e44] [cursor=pointer]:
+                            - generic [ref=f11e45]:
+                                - heading "Welcome to Campus Peer Support" [level=4] [ref=f11e46]
+                                - paragraph [ref=f11e47]: This platform is designed to provide confidential, anonymous support for first-year students.
+                            - time [ref=f11e48]: Aug 2, 2026
+                        - generic [ref=f11e50] [cursor=pointer]:
+                            - generic [ref=f11e51]:
+                                - heading "New Resources Available" [level=4] [ref=f11e52]
+                                - paragraph [ref=f11e53]: Check out the updated Resource Hub with new self-help guides and emergency contacts.
+                            - time [ref=f11e54]: Aug 1, 2026
+                        - generic [ref=f11e56] [cursor=pointer]:
+                            - generic [ref=f11e57]:
+                                - heading "Mentor Office Hours This Week" [level=4] [ref=f11e58]
+                                - paragraph [ref=f11e59]: Several mentors are hosting office hours. Browse the Meetings section to join.
+                            - time [ref=f11e60]: Jul 31, 2026
+                - generic [ref=f11e61]:
+                    - generic [ref=f11e62]:
+                        - heading "Quick Access Resources" [level=3] [ref=f11e63]
+                        - link "View all" [ref=f11e64] [cursor=pointer]:
+                            - /url: /dashboard
+                    - generic [ref=f11e65]:
+                        - link "University Counseling Center Contacts Professional individual counseling services for students. Counseling Center" [ref=f11e66] [cursor=pointer]:
+                            - /url: /resources/cmsat7h5i000yhlnwhim7odtt
+                            - generic [ref=f11e72]:
+                                - heading "University Counseling Center Contacts" [level=4] [ref=f11e73]
+                                - paragraph [ref=f11e74]: Professional individual counseling services for students.
+                                - generic [ref=f11e75]: Counseling Center
+                        - link "Campus Security & Crisis Hotline 24/7 emergency helpline for safety and immediate support. Emergency Contacts" [ref=f11e78] [cursor=pointer]:
+                            - /url: /resources/cmsat7h5i000zhlnwxojjj8sc
+                            - generic [ref=f11e82]:
+                                - heading "Campus Security & Crisis Hotline" [level=4] [ref=f11e83]
+                                - paragraph [ref=f11e84]: 24/7 emergency helpline for safety and immediate support.
+                                - generic [ref=f11e85]: Emergency Contacts
+                        - link "Academic & Faculty Advising Program Mentorship program for curriculum guidance and course adjustment. Faculty Advisors" [ref=f11e88] [cursor=pointer]:
+                            - /url: /resources/cmsat7h5i0010hlnw8vfppzh6
+                            - generic [ref=f11e93]:
+                                - heading "Academic & Faculty Advising Program" [level=4] [ref=f11e94]
+                                - paragraph [ref=f11e95]: Mentorship program for curriculum guidance and course adjustment.
+                                - generic [ref=f11e96]: Faculty Advisors
+                        - link "Student Welfare Office Services Grants, accommodation, and general welfare assistance. Student Welfare" [ref=f11e99] [cursor=pointer]:
+                            - /url: /resources/cmsat7h5i0011hlnwkemb62n1
+                            - generic [ref=f11e106]:
+                                - heading "Student Welfare Office Services" [level=4] [ref=f11e107]
+                                - paragraph [ref=f11e108]: Grants, accommodation, and general welfare assistance.
+                                - generic [ref=f11e109]: Student Welfare
+                        - link "Campus Recreational & Peer Support Clubs Directory of student-run clubs and interest groups. Campus Clubs" [ref=f11e112] [cursor=pointer]:
+                            - /url: /resources/cmsat7h5i0012hlnwzf3qt6ub
+                            - generic [ref=f11e123]:
+                                - heading "Campus Recreational & Peer Support Clubs" [level=4] [ref=f11e124]
+                                - paragraph [ref=f11e125]: Directory of student-run clubs and interest groups.
+                                - generic [ref=f11e126]: Campus Clubs
+                        - 'link "Self-Help Resource: Coping with Anxiety A short downloadable guide on cognitive behavior tips. Self-Help PDFs" [ref=f11e129] [cursor=pointer]':
+                            - /url: https://university.edu/resources/anxiety_guide.pdf
+                            - generic [ref=f11e133]:
+                                - 'heading "Self-Help Resource: Coping with Anxiety" [level=4] [ref=f11e134]'
+                                - paragraph [ref=f11e135]: A short downloadable guide on cognitive behavior tips.
+                                - generic [ref=f11e136]: Self-Help PDFs
+        - contentinfo [ref=f11e139]:
+            - generic [ref=f11e140]:
+                - generic [ref=f11e141]: © 2026 Peerly. Strictly Confidential & Safe Space.
+                - link "Privacy Guarantee" [ref=f11e143] [cursor=pointer]:
+                    - /url: /privacy
+    - generic [ref=f11e146]:
+        - button [ref=f11e147]
+        - button [ref=f11e153]
+        - button [ref=f11e157]
+        - button [ref=f11e162]

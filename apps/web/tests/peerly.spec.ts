@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 // Define seed credentials
-const STUDENT_EMAIL = 'student1@university.edu';
-const MENTOR_EMAIL = 'mentor1@university.edu';
-const ADMIN_EMAIL = 'admin@university.edu';
+const STUDENT_EMAIL = 'student1@cuchd.in';
+const MENTOR_EMAIL = 'mentor1@cuchd.in';
+const ADMIN_EMAIL = 'admin@cuchd.in';
 const PASSWORD = 'Password123';
 
 // Helper for hydration wait
@@ -85,7 +85,7 @@ test.describe('Peerly E2E Verification Suite', () => {
       await expect(page.locator('h2').first()).toContainText('Sign In');
 
       // Enter incorrect credentials
-      await page.fill('input[type="email"]', 'wrong@university.edu');
+      await page.fill('input[type="email"]', 'wrong@cuchd.in');
       await page.fill('input[type="password"]', 'WrongPassword123');
       await page.click('button[type="submit"]');
 
@@ -292,14 +292,14 @@ test.describe('Peerly E2E Verification Suite', () => {
       await expect(
         page.locator('h1').filter({ hasText: 'Mentor Management' }).first()
       ).toBeVisible();
-      await expect(page.locator('text=mentor1@university.edu').first()).toBeVisible();
+      await expect(page.locator('text=mentor1@cuchd.in').first()).toBeVisible();
 
       // 2. Students management
       await page.goto('/admin/students');
       await expect(
         page.locator('h1').filter({ hasText: 'Student Management' }).first()
       ).toBeVisible();
-      await expect(page.locator('text=student1@university.edu').first()).toBeVisible();
+      await expect(page.locator('text=student1@cuchd.in').first()).toBeVisible();
 
       // 3. Meetings management
       await page.goto('/admin/meetings');

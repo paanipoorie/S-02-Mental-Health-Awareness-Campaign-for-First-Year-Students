@@ -1,7 +1,7 @@
 import { beforeAll, afterAll, beforeEach } from 'vitest';
 import { prisma } from '../prisma/client.js';
 import request from 'supertest';
-import type { Express } from 'express';
+import type { Application } from 'express';
 
 // Set test environment variables BEFORE any other imports
 process.env.NODE_ENV = 'test';
@@ -87,7 +87,7 @@ export function validMentorPayload(email: string) {
  * registration response body.
  */
 export async function registerViaOTP(
-  app: Express,
+  app: Application,
   email: string,
   role: 'STUDENT' | 'MENTOR' = 'STUDENT',
   password: string = testPassword
@@ -106,20 +106,29 @@ export async function registerViaOTP(
     throw new Error(`No OTP record found for ${email}`);
   }
 
-  // 3. Verify OTP
+// 3. Verify OTP
   const verifyRes = await request(app)
     .post('/api/auth/verify-otp')
     .send({ universityEmail: email, otp: otpRecord.otp })
     .expect(201);
 
-  return verifyRes.body.data;
+  const data = verifyRes.body.data;
+
+  // Normalize response to include tokens wrapper for backwards compatibility
+  return {
+    ...data,
+    tokens: {
+      accessToken: data.accessToken,
+      refreshToken: '', // Not returned in verify-otp response
+    },
+  };
 }
 
 /**
  * Login and return the login response tokens + user.
  */
 export async function loginAs(
-  app: Express,
+  app: Application,
   email: string,
   password: string = testPassword
 ) {

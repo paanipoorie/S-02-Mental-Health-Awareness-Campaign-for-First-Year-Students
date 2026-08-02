@@ -1,0 +1,129 @@
+- generic [active] [ref=f62e1]:
+  - generic [ref=f62e2]:
+    - banner [ref=f62e3]:
+      - generic [ref=f62e5]:
+        - link "Peerly Logo Peerly" [ref=f62e7] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img "Peerly Logo" [ref=f62e8]
+          - generic [ref=f62e9]: Peerly
+        - navigation "Main Navigation"
+        - generic [ref=f62e11]:
+          - button "Notifications" [ref=f62e14]
+          - button "Logout" [ref=f62e18] [cursor=pointer]
+    - main [ref=f62e19]:
+      - generic [ref=f62e20]:
+        - complementary [ref=f62e21]:
+          - generic [ref=f62e22]:
+            - generic [ref=f62e23]: Admin Portal
+            - navigation "Admin navigation" [ref=f62e26]:
+              - link "Dashboard" [ref=f62e27] [cursor=pointer]:
+                - /url: /admin/dashboard
+              - link "Mentors" [ref=f62e31] [cursor=pointer]:
+                - /url: /admin/mentors
+              - link "Students" [ref=f62e37] [cursor=pointer]:
+                - /url: /admin/students
+              - link "Meetings" [ref=f62e43] [cursor=pointer]:
+                - /url: /admin/meetings
+              - link "Workshops" [ref=f62e48] [cursor=pointer]:
+                - /url: /admin/workshops
+              - link "Resources" [ref=f62e53] [cursor=pointer]:
+                - /url: /admin/resources
+            - paragraph [ref=f62e60]: Peerly
+        - main [ref=f62e61]:
+          - generic [ref=f62e64]:
+            - generic [ref=f62e65]:
+              - heading "Dashboard" [level=1] [ref=f62e66]
+              - paragraph [ref=f62e67]: Overview of platform usage, events, and moderation reports.
+            - generic [ref=f62e68]:
+              - generic [ref=f62e70]:
+                - heading "Platform Statistics" [level=3] [ref=f62e71]
+                - generic [ref=f62e72]:
+                  - generic [ref=f62e74]:
+                    - paragraph [ref=f62e75]: Students
+                    - paragraph [ref=f62e76]: "3"
+                  - generic [ref=f62e82]:
+                    - paragraph [ref=f62e83]: Verified Mentors
+                    - paragraph [ref=f62e84]: "2"
+                  - generic [ref=f62e90]:
+                    - paragraph [ref=f62e91]: Total Posts
+                    - paragraph [ref=f62e92]: "3"
+                  - generic [ref=f62e97]:
+                    - paragraph [ref=f62e98]: Active Resources
+                    - paragraph [ref=f62e99]: "9"
+                  - generic [ref=f62e104]:
+                    - paragraph [ref=f62e105]: Upcoming Events
+                    - paragraph [ref=f62e106]: "3"
+              - generic [ref=f62e112]:
+                - heading "Events Overview" [level=3] [ref=f62e113]
+                - generic [ref=f62e114]:
+                  - generic [ref=f62e115]:
+                    - heading "Meetings (2)" [level=4] [ref=f62e116]
+                    - generic [ref=f62e119]:
+                      - 'link "Mindfulness and Stress Management Session Wed, Aug 5 Online Mentor Office Hours 2 attendees Host: MENTOR" [ref=f62e120] [cursor=pointer]':
+                        - /url: /events/cmsc5e9xs000m2ggeetnzg2dz?type=meeting
+                        - generic [ref=f62e124]:
+                          - heading "Mindfulness and Stress Management Session" [level=5] [ref=f62e125]
+                          - generic [ref=f62e126]:
+                            - generic [ref=f62e127]: Wed, Aug 5
+                            - generic [ref=f62e128]: Online
+                            - generic [ref=f62e132]: Mentor Office Hours
+                          - generic [ref=f62e133]:
+                            - generic [ref=f62e134]: 2 attendees
+                            - generic [ref=f62e140]: "Host: MENTOR"
+                      - 'link "First-Year Hostel Meetup Tue, Aug 4 In-person Social 2 attendees Host: Anonymous Gentle Otter" [ref=f62e141] [cursor=pointer]':
+                        - /url: /events/cmsc5e9y7000q2ggeg5stzrsq?type=meeting
+                        - generic [ref=f62e145]:
+                          - heading "First-Year Hostel Meetup" [level=5] [ref=f62e146]
+                          - generic [ref=f62e147]:
+                            - generic [ref=f62e148]: Tue, Aug 4
+                            - generic [ref=f62e149]: In-person
+                            - generic [ref=f62e153]: Social
+                          - generic [ref=f62e154]:
+                            - generic [ref=f62e155]: 2 attendees
+                            - generic [ref=f62e161]: "Host: Anonymous Gentle Otter"
+                  - generic [ref=f62e162]:
+                    - heading "Workshops (1)" [level=4] [ref=f62e163]
+                    - 'link "Navigating Academic Stress & Building Resilience Sat, Aug 8 In-person Stress Management 3 / 50 Mentor: Unknown Mentor" [ref=f62e167] [cursor=pointer]':
+                      - /url: /events/cmsc5e9yf000u2ggektaniizl?type=workshop
+                      - generic [ref=f62e171]:
+                        - heading "Navigating Academic Stress & Building Resilience" [level=5] [ref=f62e172]
+                        - generic [ref=f62e173]:
+                          - generic [ref=f62e174]: Sat, Aug 8
+                          - generic [ref=f62e175]: In-person
+                          - generic [ref=f62e179]: Stress Management
+                          - generic [ref=f62e180]: 3 / 50
+                        - generic [ref=f62e186]: "Mentor: Unknown Mentor"
+              - generic [ref=f62e189]:
+                - generic [ref=f62e190]:
+                  - heading "Moderation Reports" [level=3] [ref=f62e191]
+                  - generic [ref=f62e192]: "2"
+                - generic [ref=f62e193]:
+                  - generic [ref=f62e195]:
+                    - generic [ref=f62e200]:
+                      - generic [ref=f62e201]:
+                        - heading "CONTENT FLAG" [level=4] [ref=f62e202]
+                        - generic [ref=f62e203]: Pending Review
+                      - paragraph [ref=f62e204]: Inappropriate content
+                      - generic [ref=f62e205]:
+                        - generic [ref=f62e206]: POST
+                        - generic [ref=f62e210]: "#post_123"
+                    - generic [ref=f62e211]:
+                      - time [ref=f62e212]: 1h ago
+                      - button "View Details" [ref=f62e213]
+                  - generic [ref=f62e215]:
+                    - generic [ref=f62e220]:
+                      - generic [ref=f62e221]:
+                        - heading "CHAT CONCERN" [level=4] [ref=f62e222]
+                        - generic [ref=f62e223]: In Review
+                      - paragraph [ref=f62e224]: Student expressing self-harm ideation
+                      - generic [ref=f62e225]:
+                        - generic [ref=f62e226]: CHAT
+                        - generic [ref=f62e229]: "#chat_456"
+                    - generic [ref=f62e230]:
+                      - time [ref=f62e231]: 2h ago
+                      - button "View Details" [ref=f62e232]
+  - generic [ref=f62e235]:
+    - button [ref=f62e236]
+    - button [ref=f62e242]
+    - button [ref=f62e246]
+    - button [ref=f62e254]

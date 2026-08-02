@@ -1,0 +1,47 @@
+- generic [ref=f16e1]:
+  - generic [ref=f16e2]:
+    - banner [ref=f16e3]:
+      - generic [ref=f16e5]:
+        - link "Peerly Logo Peerly" [ref=f16e7] [cursor=pointer]:
+          - /url: /dashboard
+          - img "Peerly Logo" [ref=f16e8]
+          - generic [ref=f16e9]: Peerly
+        - navigation "Main Navigation" [ref=f16e10]:
+          - generic [ref=f16e11]:
+            - link "Dashboard" [ref=f16e12] [cursor=pointer]:
+              - /url: /dashboard
+            - link "Discussions" [ref=f16e13] [cursor=pointer]:
+              - /url: /posts
+            - link "Peer Chat" [ref=f16e14] [cursor=pointer]:
+              - /url: /chat
+            - link "Events" [ref=f16e15] [cursor=pointer]:
+              - /url: /events
+        - generic [ref=f16e17]:
+          - button "Notifications" [ref=f16e20]
+          - button "Logout" [ref=f16e24] [cursor=pointer]
+    - main [ref=f16e25]:
+      - generic [ref=f16e28]:
+        - link "M Mentor No messages yet" [ref=f16e32] [cursor=pointer]:
+          - /url: /chat?threadId=cmsc36nyd00011rgjo4oj3yg6
+          - generic [ref=f16e33]: M
+          - generic [ref=f16e35]:
+            - generic [ref=f16e36]: Mentor
+            - paragraph [ref=f16e38]: No messages yet
+        - generic [ref=f16e40]:
+          - generic [ref=f16e41]:
+            - generic [ref=f16e42]: M
+            - paragraph [ref=f16e44]: Mentor
+          - paragraph [ref=f16e47]: No messages yet. Say hello!
+          - generic [ref=f16e49]:
+            - textbox "Type your message..." [active] [ref=f16e50]
+            - button "Send" [disabled] [ref=f16e51]
+    - contentinfo [ref=f16e52]:
+      - generic [ref=f16e53]:
+        - generic [ref=f16e54]: © 2026 Peerly. Strictly Confidential & Safe Space.
+        - link "Privacy Guarantee" [ref=f16e56] [cursor=pointer]:
+          - /url: /privacy
+  - generic [ref=f16e59]:
+    - button [ref=f16e60]
+    - button [ref=f16e66]
+    - button [ref=f16e70]
+    - button [ref=f16e78]

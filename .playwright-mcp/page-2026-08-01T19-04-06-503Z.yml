@@ -1,0 +1,31 @@
+- generic [active] [ref=f15e1]:
+    - generic [ref=f15e2]:
+        - banner [ref=f15e3]:
+            - generic [ref=f15e5]:
+                - link "Peerly" [ref=f15e7] [cursor=pointer]:
+                    - /url: /
+                - navigation "Main Navigation" [ref=f15e11]:
+                    - generic [ref=f15e12]:
+                        - link "Dashboard" [ref=f15e13] [cursor=pointer]:
+                            - /url: /dashboard
+                        - link "Discussions" [ref=f15e14] [cursor=pointer]:
+                            - /url: /posts
+                        - link "Peer Chat" [ref=f15e15] [cursor=pointer]:
+                            - /url: /chat
+                        - link "Events" [ref=f15e16] [cursor=pointer]:
+                            - /url: /events
+                - generic [ref=f15e18]:
+                    - button "Notifications" [ref=f15e21]
+                    - button "Logout" [ref=f15e25] [cursor=pointer]
+        - main [ref=f15e26]:
+            - status "Loading dashboard" [ref=f15e29]
+        - contentinfo [ref=f15e41]:
+            - generic [ref=f15e42]:
+                - generic [ref=f15e43]: © 2026 Peerly. Strictly Confidential & Safe Space.
+                - link "Privacy Guarantee" [ref=f15e45] [cursor=pointer]:
+                    - /url: /privacy
+    - generic [ref=f15e48]:
+        - button [ref=f15e49]
+        - button [ref=f15e55]
+        - button [ref=f15e59]
+        - button [ref=f15e64]

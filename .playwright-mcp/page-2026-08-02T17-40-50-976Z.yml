@@ -1,0 +1,35 @@
+- generic [active] [ref=f15e1]:
+  - generic [ref=f15e2]:
+    - banner [ref=f15e3]:
+      - generic [ref=f15e5]:
+        - link "Peerly Logo Peerly" [ref=f15e7] [cursor=pointer]:
+          - /url: /dashboard
+          - img "Peerly Logo" [ref=f15e8]
+          - generic [ref=f15e9]: Peerly
+        - navigation "Main Navigation" [ref=f15e10]:
+          - generic [ref=f15e11]:
+            - link "Dashboard" [ref=f15e12] [cursor=pointer]:
+              - /url: /dashboard
+            - link "Discussions" [ref=f15e13] [cursor=pointer]:
+              - /url: /posts
+            - link "Peer Chat" [ref=f15e14] [cursor=pointer]:
+              - /url: /chat
+            - link "Events" [ref=f15e15] [cursor=pointer]:
+              - /url: /events
+        - generic [ref=f15e17]:
+          - button "Notifications" [ref=f15e20]
+          - button "Logout" [ref=f15e24] [cursor=pointer]
+    - main [ref=f15e25]:
+      - generic [ref=f15e47]:
+        - heading "Your Messages" [level=3] [ref=f15e50]
+        - paragraph [ref=f15e51]: Select a conversation from the list to start messaging.
+    - contentinfo [ref=f15e52]:
+      - generic [ref=f15e53]:
+        - generic [ref=f15e54]: © 2026 Peerly. Strictly Confidential & Safe Space.
+        - link "Privacy Guarantee" [ref=f15e56] [cursor=pointer]:
+          - /url: /privacy
+  - generic [ref=f15e59]:
+    - button [ref=f15e60]
+    - button [ref=f15e66]
+    - button [ref=f15e70]
+    - button [ref=f15e75]

@@ -1,0 +1,43 @@
+- generic [active] [ref=f6e1]:
+    - generic [ref=f6e2]:
+        - banner [ref=f6e3]:
+            - generic [ref=f6e5]:
+                - link "Peerly" [ref=f6e7] [cursor=pointer]:
+                    - /url: /
+                - navigation "Main Navigation"
+                - generic [ref=f6e12]:
+                    - link "Sign In" [ref=f6e13] [cursor=pointer]:
+                        - /url: /login
+                    - link "Get Started" [ref=f6e14] [cursor=pointer]:
+                        - /url: /register
+        - main [ref=f6e15]:
+            - generic [ref=f6e18]:
+                - generic [ref=f6e19]:
+                    - heading "Create Account" [level=2] [ref=f6e20]
+                    - paragraph [ref=f6e21]: Sign up with your official university email address.
+                - generic [ref=f6e22]:
+                    - generic [ref=f6e23]:
+                        - generic [ref=f6e24]: University Email
+                        - textbox "university@college.edu" [ref=f6e25]
+                        - paragraph [ref=f6e26]: Only used for verification. Real identity is never exposed.
+                    - generic [ref=f6e27]:
+                        - generic [ref=f6e28]: Password
+                        - textbox "Minimum 8 characters" [ref=f6e29]
+                    - generic [ref=f6e30]:
+                        - generic [ref=f6e31]: Confirm Password
+                        - textbox "Re-enter password" [ref=f6e32]
+                    - button "Create Account" [ref=f6e33] [cursor=pointer]
+                - paragraph [ref=f6e36]:
+                    - text: Already have an account?
+                    - link "Sign In" [ref=f6e37] [cursor=pointer]:
+                        - /url: /login
+        - contentinfo [ref=f6e38]:
+            - generic [ref=f6e39]:
+                - generic [ref=f6e40]: © 2026 Peerly. Strictly Confidential & Safe Space.
+                - link "Privacy Guarantee" [ref=f6e42] [cursor=pointer]:
+                    - /url: /privacy
+    - generic [ref=f6e45]:
+        - button [ref=f6e46]
+        - button [ref=f6e52]
+        - button [ref=f6e56]
+        - button [ref=f6e61]

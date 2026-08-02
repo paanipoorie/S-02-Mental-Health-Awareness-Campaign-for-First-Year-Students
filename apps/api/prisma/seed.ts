@@ -43,7 +43,7 @@ async function main() {
   // 1. Seed Admin
   const admin = await prisma.user.create({
     data: {
-      universityEmail: 'admin@university.edu',
+      universityEmail: 'admin@cuchd.in',
       passwordHash,
       role: Role.ADMIN,
       isActive: true,
@@ -54,7 +54,7 @@ async function main() {
   // 2. Seed Mentors
   const mentor1 = await prisma.user.create({
     data: {
-      universityEmail: 'mentor1@university.edu',
+      universityEmail: 'mentor1@cuchd.in',
       passwordHash,
       role: Role.MENTOR,
       isVerifiedMentor: true,
@@ -75,7 +75,7 @@ async function main() {
 
   const mentor2 = await prisma.user.create({
     data: {
-      universityEmail: 'mentor2@university.edu',
+      universityEmail: 'mentor2@cuchd.in',
       passwordHash,
       role: Role.MENTOR,
       isVerifiedMentor: true,
@@ -93,12 +93,24 @@ async function main() {
       mentorProfile: true,
     },
   });
+  // Pending mentor (isVerifiedMentor = false) so admins can review an application
+  const pendingMentor = await prisma.user.create({
+    data: {
+      universityEmail: 'pending.mentor@cuchd.in',
+      passwordHash,
+      role: Role.MENTOR,
+      isVerifiedMentor: false,
+      isActive: true,
+    },
+  });
+  console.log('Seeded Pending Mentor:', pendingMentor.universityEmail);
+
   console.log('Seeded Mentors:', mentor1.universityEmail, mentor2.universityEmail);
 
   // 3. Seed Students
   const student1 = await prisma.user.create({
     data: {
-      universityEmail: 'student1@university.edu',
+      universityEmail: 'student1@cuchd.in',
       passwordHash,
       role: Role.STUDENT,
       isActive: true,
@@ -116,7 +128,7 @@ async function main() {
 
   const student2 = await prisma.user.create({
     data: {
-      universityEmail: 'student2@university.edu',
+      universityEmail: 'student2@cuchd.in',
       passwordHash,
       role: Role.STUDENT,
       isActive: true,
@@ -134,7 +146,7 @@ async function main() {
 
   const student3 = await prisma.user.create({
     data: {
-      universityEmail: 'student3@university.edu',
+      universityEmail: 'student3@cuchd.in',
       passwordHash,
       role: Role.STUDENT,
       isActive: true,
@@ -333,7 +345,7 @@ async function main() {
         description: 'Professional individual counseling services for students.',
         category: ResourceCategory.COUNSELING_CENTER,
         content:
-          'Location: Student Center, 3rd Floor. Hours: Mon-Fri 9:00 AM - 5:00 PM. Email: counseling@university.edu',
+          'Location: Student Center, 3rd Floor. Hours: Mon-Fri 9:00 AM - 5:00 PM. Email: counseling@cuchd.in',
         isActive: true,
       },
       {
@@ -355,7 +367,7 @@ async function main() {
         title: 'Student Welfare Office Services',
         description: 'Grants, accommodation, and general welfare assistance.',
         category: ResourceCategory.STUDENT_WELFARE,
-        content: 'Visit student-welfare.university.edu or contact welfare@university.edu.',
+        content: 'Visit student-welfare.university.edu or contact welfare@cuchd.in.',
         isActive: true,
       },
       {

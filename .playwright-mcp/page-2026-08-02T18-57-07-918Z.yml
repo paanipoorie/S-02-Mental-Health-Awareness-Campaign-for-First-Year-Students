@@ -1,0 +1,41 @@
+- generic [ref=f50e2]:
+  - banner [ref=f50e3]:
+    - generic [ref=f50e5]:
+      - link "Peerly Logo Peerly" [ref=f50e7] [cursor=pointer]:
+        - /url: /mentor/dashboard
+        - img "Peerly Logo" [ref=f50e8]
+        - generic [ref=f50e9]: Peerly
+      - navigation "Main Navigation" [ref=f50e10]:
+        - generic [ref=f50e11]:
+          - link "Dashboard" [ref=f50e12] [cursor=pointer]:
+            - /url: /mentor/dashboard
+          - link "Discussions" [ref=f50e13] [cursor=pointer]:
+            - /url: /posts
+          - link "Peer Chat" [ref=f50e14] [cursor=pointer]:
+            - /url: /chat
+          - link "Events" [ref=f50e15] [cursor=pointer]:
+            - /url: /events
+      - generic [ref=f50e17]:
+        - button "Notifications" [ref=f50e20]
+        - button "Logout" [ref=f50e24] [cursor=pointer]
+  - main [ref=f50e25]:
+    - generic [ref=f50e26]:
+      - complementary [ref=f50e27]:
+        - generic [ref=f50e28]:
+          - generic [ref=f50e29]: Admin Portal
+          - navigation "Admin navigation" [ref=f50e32]:
+            - link "Dashboard" [ref=f50e33] [cursor=pointer]:
+              - /url: /admin/dashboard
+            - link "Mentors" [ref=f50e37] [cursor=pointer]:
+              - /url: /admin/mentors
+            - link "Students" [ref=f50e43] [cursor=pointer]:
+              - /url: /admin/students
+            - link "Meetings" [ref=f50e49] [cursor=pointer]:
+              - /url: /admin/meetings
+            - link "Workshops" [ref=f50e54] [cursor=pointer]:
+              - /url: /admin/workshops
+            - link "Resources" [ref=f50e59] [cursor=pointer]:
+              - /url: /admin/resources
+          - paragraph [ref=f50e66]: Peerly
+      - main [ref=f50e67]:
+        - status "Loading admin dashboard" [ref=f50e70]

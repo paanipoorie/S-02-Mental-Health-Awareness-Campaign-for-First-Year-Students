@@ -4,6 +4,7 @@ import { prisma } from '../prisma/client.js';
 import { createApp } from '../app.js';
 import { signAccessToken } from '../utils/jwt.js';
 import { Role } from '@campus-peer-support/shared-types';
+import { getTestEmail, registerViaOTP } from './setup.js';
 
 const app = createApp();
 
@@ -19,26 +20,20 @@ describe('Anonymity Audit - Verify No PII Leaks in Student Data', () => {
 
   beforeEach(async () => {
     // Create test users
-    const studentEmail = `audit-student-${Date.now()}@test.edu`;
-    const mentorEmail = `audit-mentor-${Date.now()}@test.edu`;
-    const adminEmail = `audit-admin-${Date.now()}@test.edu`;
+    const studentEmail = getTestEmail('audit-student');
+    const mentorEmail = getTestEmail('audit-mentor');
+    const adminEmail = getTestEmail('audit-admin');
 
-    // Register student
-    const studentReg = await request(app)
-      .post('/api/auth/register')
-      .send({ universityEmail: studentEmail, password: 'TestPass123!', role: 'STUDENT' })
-      .expect(201);
-    studentToken = studentReg.body.data.tokens.accessToken;
-    studentUserId = studentReg.body.data.user.id;
-    studentAnonId = studentReg.body.data.anonymousIdentity.id;
+// Register student via OTP
+    const studentReg = await registerViaOTP(app, studentEmail, 'STUDENT');
+    studentToken = studentReg.accessToken;
+    studentUserId = studentReg.user.id;
+    studentAnonId = studentReg.anonymousIdentity.id;
 
-    // Register mentor
-    const mentorReg = await request(app)
-      .post('/api/auth/register')
-      .send({ universityEmail: mentorEmail, password: 'TestPass123!', role: 'MENTOR' })
-      .expect(201);
-    mentorToken = mentorReg.body.data.tokens.accessToken;
-    mentorUserId = mentorReg.body.data.user.id;
+    // Register mentor via OTP
+    const mentorReg = await registerViaOTP(app, mentorEmail, 'MENTOR');
+    mentorToken = mentorReg.accessToken;
+    mentorUserId = mentorReg.user.id;
 
     // Verify mentor and create profile
     await prisma.user.update({

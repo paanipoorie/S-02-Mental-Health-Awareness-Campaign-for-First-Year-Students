@@ -1,0 +1,146 @@
+- generic [active] [ref=f5e1]:
+    - generic [ref=f5e2]:
+        - banner [ref=f5e3]:
+            - generic [ref=f5e5]:
+                - link "Peerly" [ref=f5e7] [cursor=pointer]:
+                    - /url: /
+                - navigation "Main Navigation"
+                - generic [ref=f5e12]:
+                    - link "Sign In" [ref=f5e13] [cursor=pointer]:
+                        - /url: /login
+                    - link "Get Started" [ref=f5e14] [cursor=pointer]:
+                        - /url: /register
+        - main [ref=f5e15]:
+            - generic [ref=f5e16]:
+                - heading "Peer support, verified by your university." [level=1] [ref=f5e17]
+                - paragraph [ref=f5e18]: Discuss academic pressure, stress, and isolation with upper-class mentors. Your credentials verify student status, but your identity remains anonymous to everyone.
+                - generic [ref=f5e19]:
+                    - link "Create Account" [ref=f5e20] [cursor=pointer]:
+                        - /url: /register
+                    - link "Sign In" [ref=f5e21] [cursor=pointer]:
+                        - /url: /login
+            - generic [ref=f5e22]:
+                - heading "How it works." [level=2] [ref=f5e24]
+                - generic [ref=f5e25]:
+                    - generic [ref=f5e26]:
+                        - generic [ref=f5e27]: 01 / VERIFICATION
+                        - heading "Verify Enrolment" [level=3] [ref=f5e28]
+                        - paragraph [ref=f5e29]: Verify your active student status via email. The system hashes the email for rate-limiting, then discards it immediately.
+                    - generic [ref=f5e30]:
+                        - generic [ref=f5e31]: 02 / IDENTITY
+                        - heading "Receive a Persona" [level=3] [ref=f5e32]
+                        - paragraph [ref=f5e33]: Get an anonymous avatar and display name. This remains your persistent identity for chat, forums, and workshops.
+                    - generic [ref=f5e34]:
+                        - generic [ref=f5e35]: 03 / CONNECT
+                        - heading "Access Support" [level=3] [ref=f5e36]
+                        - paragraph [ref=f5e37]: Discuss concerns in open forums, message verified upper-class mentors 1-on-1, or sign up for stress-management events.
+            - generic [ref=f5e39]:
+                - generic [ref=f5e40]:
+                    - heading "Lowering barriers." [level=2] [ref=f5e41]
+                    - paragraph [ref=f5e42]: Student support is most effective when it is immediate. By eliminating the stigma and fear of academic or personal consequences, we make it simple for students to seek guidance.
+                    - generic [ref=f5e43]: '"Early peer intervention resolves over 60% of common adjustment difficulties before clinical therapy is required."'
+                - generic [ref=f5e44]:
+                    - generic [ref=f5e45]:
+                        - heading "Eliminate Stigma" [level=3] [ref=f5e46]
+                        - paragraph [ref=f5e47]: Ask questions, discuss academic pressure, and share struggles without worrying about permanent records, labels, or social consequences.
+                    - generic [ref=f5e48]:
+                        - heading "Early Support" [level=3] [ref=f5e49]
+                        - paragraph [ref=f5e50]: Accessible text channels encourage students to find help early in the semester, preventing minor issues from escalating.
+                    - generic [ref=f5e51]:
+                        - heading "Candid Discussion" [level=3] [ref=f5e52]
+                        - paragraph [ref=f5e53]: Without identity barriers, student communication is honest, allowing peer mentors to provide practical guidance.
+                    - generic [ref=f5e54]:
+                        - heading "Mutual Trust" [level=3] [ref=f5e55]
+                        - paragraph [ref=f5e56]: Complete ownership over your participation builds immediate, respectful connections between students and mentors.
+            - generic [ref=f5e57]:
+                - heading "Core workspace features." [level=2] [ref=f5e59]
+                - generic [ref=f5e60]:
+                    - generic [ref=f5e61]:
+                        - heading "Forums & Discussions" [level=3] [ref=f5e62]
+                        - paragraph [ref=f5e63]: Post questions, share experiences, and receive support from peers in forums using your anonymous persona.
+                    - generic [ref=f5e64]:
+                        - heading "1-on-1 Peer Chat" [level=3] [ref=f5e65]
+                        - paragraph [ref=f5e66]: Message securely and privately with your assigned upper-class mentor inside the platform.
+                    - generic [ref=f5e67]:
+                        - heading "Group Events" [level=3] [ref=f5e68]
+                        - paragraph [ref=f5e69]: Sign up and participate in peer-led support groups, online workshops, and stress relief sessions.
+                    - generic [ref=f5e70]:
+                        - heading "Verified Mentors" [level=3] [ref=f5e71]
+                        - paragraph [ref=f5e72]: Receive guidance from upper-level students who are verified by university administration and trained in support.
+                    - generic [ref=f5e73]:
+                        - heading "University Resources" [level=3] [ref=f5e74]
+                        - paragraph [ref=f5e75]: Access links to campus clinics, wellness materials, and professional emergency crisis services.
+                    - generic [ref=f5e76]:
+                        - heading "Operational Controls" [level=3] [ref=f5e77]
+                        - paragraph [ref=f5e78]: Oversee system usage, verify peer mentors, manage crisis resources, and review reported content from the admin dashboard.
+            - generic [ref=f5e80]:
+                - generic [ref=f5e81]:
+                    - heading "Verified privacy." [level=2] [ref=f5e82]
+                    - paragraph [ref=f5e83]: Verify your active student status securely. The platform processes credentials to confirm enrollment, but separates verification from your persona and activities entirely.
+                - generic [ref=f5e84]:
+                    - generic [ref=f5e85]:
+                        - heading "Verification Hashing" [level=3] [ref=f5e86]
+                        - paragraph [ref=f5e87]: Student email addresses are checked for eligibility, hashed for rate-limiting, and immediately discarded. Raw email data is never saved or linked to posts.
+                    - generic [ref=f5e88]:
+                        - heading "Zero Identity Logs" [level=3] [ref=f5e89]
+                        - paragraph [ref=f5e90]: No names, student numbers, IP logs, or browser metadata are saved in our database. Your activity is completely disassociated from your real identity.
+                    - generic [ref=f5e91]:
+                        - heading "Encrypted Conversations" [level=3] [ref=f5e92]
+                        - paragraph [ref=f5e93]: All messaging history, discussions, and event bookings are encrypted. Access is protected by session tokens, keeping student history secure.
+            - generic [ref=f5e94]:
+                - heading "FAQ" [level=2] [ref=f5e96]
+                - generic [ref=f5e97]:
+                    - group [ref=f5e98]:
+                        - heading "Is my identity really anonymous?" [level=3] [ref=f5e100] [cursor=pointer]
+                    - group [ref=f5e105]:
+                        - heading "Who are the Peer Mentors?" [level=3] [ref=f5e107] [cursor=pointer]
+                    - group [ref=f5e112]:
+                        - heading "What happens in a crisis situation?" [level=3] [ref=f5e114] [cursor=pointer]
+                    - group [ref=f5e119]:
+                        - heading "How do administrators manage the platform?" [level=3] [ref=f5e121] [cursor=pointer]
+            - generic [ref=f5e127]:
+                - generic [ref=f5e128]:
+                    - generic [ref=f5e129]:
+                        - generic [ref=f5e130]: Peerly
+                        - paragraph [ref=f5e134]: A peer support network for students. Discuss pressure, stress, and isolation with verified mentors.
+                    - generic [ref=f5e135]:
+                        - heading "Workspace" [level=4] [ref=f5e136]
+                        - list [ref=f5e137]:
+                            - listitem [ref=f5e138]:
+                                - link "Sign In" [ref=f5e139] [cursor=pointer]:
+                                    - /url: /login
+                            - listitem [ref=f5e140]:
+                                - link "Register" [ref=f5e141] [cursor=pointer]:
+                                    - /url: /register
+                            - listitem [ref=f5e142]:
+                                - link "Dashboard" [ref=f5e143] [cursor=pointer]:
+                                    - /url: /dashboard
+                    - generic [ref=f5e144]:
+                        - heading "Legal" [level=4] [ref=f5e145]
+                        - list [ref=f5e146]:
+                            - listitem [ref=f5e147]:
+                                - link "Privacy Policy" [ref=f5e148] [cursor=pointer]:
+                                    - /url: /privacy
+                            - listitem [ref=f5e149]:
+                                - link "Terms of Service" [ref=f5e150] [cursor=pointer]:
+                                    - /url: /terms
+                            - listitem [ref=f5e151]:
+                                - link "Safety Guide" [ref=f5e152] [cursor=pointer]:
+                                    - /url: /safety
+                    - generic [ref=f5e153]:
+                        - heading "Resources" [level=4] [ref=f5e154]
+                        - list [ref=f5e155]:
+                            - listitem [ref=f5e156]:
+                                - link "Centers" [ref=f5e157] [cursor=pointer]:
+                                    - /url: /resources
+                            - listitem [ref=f5e158]:
+                                - link "Hotlines" [ref=f5e159] [cursor=pointer]:
+                                    - /url: /safety
+                - generic [ref=f5e160]:
+                    - paragraph [ref=f5e161]: © 2026 Peerly. Strictly anonymous student portal.
+                    - generic [ref=f5e162]: Secure cryptographic hashing. Zero persistent activity logs.
+    - generic [ref=f5e167]:
+        - button [ref=f5e168]
+        - button [ref=f5e174]
+        - button [ref=f5e178]
+        - button [ref=f5e183]

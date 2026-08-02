@@ -1,0 +1,100 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e2]:
+    - banner [ref=f9e3]:
+      - generic [ref=f9e5]:
+        - link "Peerly Logo Peerly" [ref=f9e7] [cursor=pointer]:
+          - /url: /dashboard
+          - img "Peerly Logo" [ref=f9e8]
+          - generic [ref=f9e9]: Peerly
+        - navigation "Main Navigation" [ref=f9e10]:
+          - generic [ref=f9e11]:
+            - link "Dashboard" [ref=f9e12] [cursor=pointer]:
+              - /url: /dashboard
+            - link "Discussions" [ref=f9e13] [cursor=pointer]:
+              - /url: /posts
+            - link "Peer Chat" [ref=f9e14] [cursor=pointer]:
+              - /url: /chat
+            - link "Events" [ref=f9e15] [cursor=pointer]:
+              - /url: /events
+        - generic [ref=f9e17]:
+          - button "Notifications" [ref=f9e20]
+          - button "Logout" [ref=f9e24] [cursor=pointer]
+    - main [ref=f9e25]:
+      - generic [ref=f9e26]:
+        - generic [ref=f9e27]:
+          - generic [ref=f9e28]:
+            - heading "Discussions Feed" [level=1] [ref=f9e29]
+            - paragraph [ref=f9e30]: Share your thoughts and get anonymous peer support
+          - link "+ New Post" [ref=f9e31] [cursor=pointer]:
+            - /url: /posts/new
+        - generic [ref=f9e32]:
+          - combobox [ref=f9e33] [cursor=pointer]:
+            - option "All Emotions" [selected]
+            - option "Happy"
+            - option "Excited"
+            - option "Confused"
+            - option "Homesick"
+            - option "Lonely"
+            - option "Scared"
+            - option "Anxious"
+            - option "Burnt Out"
+            - option "Overwhelmed"
+            - option "Stressed"
+          - combobox [ref=f9e34] [cursor=pointer]:
+            - option "All Categories" [selected]
+            - option "Academics"
+            - option "Hostel Life"
+            - option "Homesickness"
+            - option "Friends"
+            - option "Relationships"
+            - option "Time Management"
+            - option "Exams"
+            - option "Sleep"
+            - option "Clubs"
+            - option "Financial"
+            - option "General"
+        - generic [ref=f9e35]:
+          - link "Anonymous Calm Dolphin · Aug 2, 10:55 PM Academics Overwhelmed by academic load The midterms are approaching and I don't think I can pass the calculus courses. There is too much syllabus. ANXIOUS HIGH 1 reply" [ref=f9e36] [cursor=pointer]:
+            - /url: /posts/cmsc2mja4000h95wlqavhn82s
+            - generic [ref=f9e37]:
+              - generic [ref=f9e38]:
+                - generic [ref=f9e39]: Anonymous Calm Dolphin
+                - generic [ref=f9e40]: ·
+                - time [ref=f9e41]: Aug 2, 10:55 PM
+              - generic [ref=f9e42]: Academics
+            - heading "Overwhelmed by academic load" [level=2] [ref=f9e43]
+            - paragraph [ref=f9e44]: The midterms are approaching and I don't think I can pass the calculus courses. There is too much syllabus.
+            - generic [ref=f9e45]:
+              - generic [ref=f9e46]:
+                - generic [ref=f9e47]: ANXIOUS
+                - generic [ref=f9e48]: HIGH
+              - generic [ref=f9e49]: 1 reply
+          - link "Anonymous Brave Sparrow · Aug 2, 10:55 PM Homesickness Feeling lonely in the hostel It is my first week here and I haven't made any friends. I really miss home and family. LONELY MEDIUM 2 replies" [ref=f9e52] [cursor=pointer]:
+            - /url: /posts/cmsc2mja0000f95wlk5ubh0fy
+            - generic [ref=f9e53]:
+              - generic [ref=f9e54]:
+                - generic [ref=f9e55]: Anonymous Brave Sparrow
+                - generic [ref=f9e56]: ·
+                - time [ref=f9e57]: Aug 2, 10:55 PM
+              - generic [ref=f9e58]: Homesickness
+            - heading "Feeling lonely in the hostel" [level=2] [ref=f9e59]
+            - paragraph [ref=f9e60]: It is my first week here and I haven't made any friends. I really miss home and family.
+            - generic [ref=f9e61]:
+              - generic [ref=f9e62]:
+                - generic [ref=f9e63]: LONELY
+                - generic [ref=f9e64]: MEDIUM
+              - generic [ref=f9e65]: 2 replies
+        - generic [ref=f9e68]:
+          - button "Previous" [disabled] [ref=f9e69]
+          - generic [ref=f9e70]: Page 1 of 1
+          - button "Next" [disabled] [ref=f9e71]
+    - contentinfo [ref=f9e72]:
+      - generic [ref=f9e73]:
+        - generic [ref=f9e74]: © 2026 Peerly. Strictly Confidential & Safe Space.
+        - link "Privacy Guarantee" [ref=f9e76] [cursor=pointer]:
+          - /url: /privacy
+  - generic [ref=f9e79]:
+    - button [ref=f9e80]
+    - button [ref=f9e86]
+    - button [ref=f9e90]
+    - button [ref=f9e95]
