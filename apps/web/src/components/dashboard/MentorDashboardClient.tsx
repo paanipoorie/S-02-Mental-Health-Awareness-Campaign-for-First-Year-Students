@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { $user, $isLoading, fetchCurrentUser } from '@stores/authStore';
 import { dashboardApi } from '@lib/api';
+import { MENTOR_VERIFICATION_PENDING_PATH, isUnverifiedMentor } from '@lib/auth';
 import { WaitingChatsWidget } from './WaitingChatsWidget';
 import { AssignedStudentsWidget } from './AssignedStudentsWidget';
 import { StudentEmotionOverviewWidget } from './StudentEmotionOverviewWidget';
@@ -129,6 +130,11 @@ export function MentorDashboardClient() {
             window.location.href = '/admin/dashboard';
             return;
           }
+        }
+        // Unverified mentors only see the pending page - no dashboard data is fetched.
+        if (isUnverifiedMentor(currentUser)) {
+          window.location.href = MENTOR_VERIFICATION_PENDING_PATH;
+          return;
         }
         const data = await dashboardApi.getMentorDashboard();
         setDashboardData(data);

@@ -45,7 +45,8 @@ model AnonymousIdentity {
   createdAt             DateTime               @default(now()) @db.Timestamptz(6)
   posts                 Post[]
   emotionLogs           EmotionLog[]
-  chatThreads           ChatThread[]
+  chatThreads           ChatThread[]           @relation("StudentChatThreads")
+  peerChatThreads       ChatThread[]           @relation("PeerChatThreads")
   meetings              Meeting[]
   meetingAttendees      MeetingAttendee[]
   workshopRegistrations WorkshopRegistration[]
@@ -191,9 +192,11 @@ model PostReply {
 model ChatThread {
   id                String            @id @default(cuid())
   studentIdentityId String
-  studentIdentity   AnonymousIdentity @relation(fields: [studentIdentityId], references: [id], onDelete: Cascade)
+  studentIdentity   AnonymousIdentity @relation("StudentChatThreads", fields: [studentIdentityId], references: [id], onDelete: Cascade)
   mentorId          String?
   mentor            User?             @relation(fields: [mentorId], references: [id], onDelete: SetNull)
+  peerIdentityId    String?
+  peerIdentity      AnonymousIdentity? @relation("PeerChatThreads", fields: [peerIdentityId], references: [id], onDelete: SetNull)
   status            ChatStatus        @default(ACTIVE)
   createdAt         DateTime          @default(now()) @db.Timestamptz(6)
   messages          ChatMessage[]
@@ -313,4 +316,14 @@ model Notification {
   payload         Json?
   isRead          Boolean          @default(false)
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+}
+
+model EmailOTP {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  otp          String
+  role         Role
+  passwordHash String
+  expiresAt    DateTime @db.Timestamptz(6)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
 }

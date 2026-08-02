@@ -18,6 +18,7 @@ import adminRoutes from './routes/admin.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
 import meetingRoutes from './routes/meeting.routes.js';
 import { requestLoggerMiddleware } from './utils/logger.js';
+import profileRoutes from './routes/profile.routes.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 import {
   generalRateLimiter,
@@ -112,6 +113,7 @@ export function createApp(): Application {
   app.use(`${env.API_PREFIX}/dashboard`, dashboardRoutes);
   app.use(`${env.API_PREFIX}/admin`, adminRoutes);
   app.use(`${env.API_PREFIX}/notifications`, notificationRoutes);
+  app.use(`${env.API_PREFIX}/profiles`, profileRoutes);
   app.use(`${env.API_PREFIX}`, meetingRateLimiter, meetingRoutes);
 
   app.get(`${env.API_PREFIX}`, (_req: Request, res: Response) => {

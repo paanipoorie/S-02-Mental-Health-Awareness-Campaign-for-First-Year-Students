@@ -49,8 +49,8 @@ async function createStudentAndMentor(studentEmail: string, mentorEmail: string)
 describe('Meeting and Workshop Service Unit Tests', () => {
   it('should verify meeting scheduling, RSVP toggles, and cancellation', async () => {
     const { student, student2 } = await createStudentAndMentor(
-      'meetunit1@test.edu',
-      'meetunit2@test.edu'
+      'meetunit1@cuchd.in',
+      'meetunit2@cuchd.in'
     );
 
     // Create meeting
@@ -81,8 +81,8 @@ describe('Meeting and Workshop Service Unit Tests', () => {
 
   it('should verify workshop scheduling, registration, and attendance tracking', async () => {
     const { student, studentAnon, mentor } = await createStudentAndMentor(
-      'meetunit3@test.edu',
-      'meetunit4@test.edu'
+      'meetunit3@cuchd.in',
+      'meetunit4@cuchd.in'
     );
 
     // Create workshop

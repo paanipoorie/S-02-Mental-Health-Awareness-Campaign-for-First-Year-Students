@@ -118,10 +118,10 @@ export function NotificationList({ notifications, onMarkAsRead, onClose }: Notif
           <Container
             key={notification.id}
             {...containerProps}
-            className={`block w-full px-4 py-3 text-left transition-colors ${
+            className={`block w-full px-4 py-3 text-left border-b border-gray-200 transition-all duration-200 ${
               notification.isRead
-                ? 'bg-white hover:bg-slate-50'
-                : 'bg-amber-50/50 hover:bg-amber-50'
+                ? 'bg-transparent text-slate-400 hover:text-white hover:border-gray-300'
+                : 'bg-amber-100/5 text-slate-200 hover:text-white border-l-2 border-l-[#c96a2b]'
             }`}
           >
             <div className="flex items-start gap-3">

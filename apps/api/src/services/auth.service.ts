@@ -6,9 +6,11 @@ import {
   verifyRefreshToken,
   type TokenPayload,
 } from '../utils/jwt.js';
-import { env } from '../config/env.js';
+import { env, isDevelopment, isTest } from '../config/env.js';
 import { Role } from '@campus-peer-support/shared-types';
 import { identityService, shouldCreateAnonymousIdentity } from './identity.service.js';
+import { OTPService } from './otp.service.js';
+import { sendOTPEmail } from './email.service.js';
 
 type PrismaRole = 'STUDENT' | 'MENTOR' | 'ADMIN';
 
@@ -24,6 +26,17 @@ const toSharedRole = (role: PrismaRole): Role => {
       return Role.STUDENT;
   }
 };
+
+/**
+ * Single source of truth for university email validation.
+ * Only Chandigarh University emails are accepted:
+ *   ^[A-Za-z0-9._%+-]+@cuchd\.in$
+ */
+export const CU_EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@cuchd\.in$/;
+
+export function isUniversityEmailValid(email: string): boolean {
+  return CU_EMAIL_REGEX.test(email.toLowerCase().trim());
+}
 
 export interface RegisterInput {
   universityEmail: string;
@@ -100,10 +113,12 @@ export class AuthError extends Error {
 
 export class AuthService {
   private validateUniversityEmail(email: string): void {
-    const normalized = email.toLowerCase().trim();
-    const domain = (env.UNIVERSITY_EMAIL_DOMAIN ?? 'university.edu').toLowerCase();
-    if (!normalized.endsWith(`@${domain}`)) {
-      throw new AuthError(`Email must be a valid ${domain} address`, 'INVALID_EMAIL_DOMAIN', 400);
+    if (!isUniversityEmailValid(email)) {
+      throw new AuthError(
+        'Please use your official Chandigarh University email (@cuchd.in).',
+        'INVALID_EMAIL_DOMAIN',
+        400
+      );
     }
   }
 
@@ -131,7 +146,15 @@ export class AuthService {
     });
   }
 
-  async register(input: RegisterInput): Promise<RegisterResult> {
+  /**
+   * Step 1 of registration: validate the @cuchd.in email, generate an OTP,
+   * persist it (with the chosen role and password hash), and email it to the user.
+   *
+   * In development/test with no RESEND_API_KEY, the OTP is logged to console so
+   * tests can retrieve it from the DB directly. In production the email is always
+   * sent via Resend and OTPs are never exposed.
+   */
+  async sendOTP(input: RegisterInput): Promise<{ email: string; otp: string | null }> {
     this.validateUniversityEmail(input.universityEmail);
 
     const existingUser = await this.findUserByEmail(input.universityEmail);
@@ -142,11 +165,78 @@ export class AuthService {
     const passwordHash = await hashPassword(input.password);
     const role = input.role ?? Role.STUDENT;
 
+    // Remove any stale OTP for this email before creating a fresh one
+    await OTPService.deleteOTP(input.universityEmail);
+
+    const otp = await OTPService.createOTP({
+      email: input.universityEmail,
+      role: role === Role.MENTOR ? 'MENTOR' : 'STUDENT',
+      passwordHash,
+    });
+
+    try {
+      await sendOTPEmail({
+        email: input.universityEmail.toLowerCase().trim(),
+        otp,
+        role: role === Role.MENTOR ? 'MENTOR' : 'STUDENT',
+      });
+    } catch (error) {
+      // Never fail account setup because email delivery failed in dev/test without a key.
+      if (isDevelopment || isTest) {
+        console.log(`[OTP][DEV] OTP for ${input.universityEmail.toLowerCase().trim()}: ${otp}`);
+      } else {
+        // In production, a delivery failure is fatal — the user cannot verify.
+        await OTPService.deleteOTP(input.universityEmail);
+        throw new AuthError(
+          'Failed to send verification email. Please try again.',
+          'EMAIL_SEND_FAILED',
+          500
+        );
+      }
+    }
+
+    if (isDevelopment || isTest) {
+      console.log(`[OTP][DEV] OTP for ${input.universityEmail.toLowerCase().trim()}: ${otp}`);
+    }
+
+    return {
+      email: input.universityEmail.toLowerCase().trim(),
+      // OTP is never returned to the client in production.
+      otp: isDevelopment || isTest ? otp : null,
+    };
+  }
+
+  /**
+   * Step 2 of registration: verify the OTP. If valid, create the account
+   * (role comes from the OTP record). Never create accounts with unverified emails.
+   */
+  async verifyOTP(email: string, otp: string): Promise<RegisterResult> {
+    this.validateUniversityEmail(email);
+
+    const record = await OTPService.verifyOTP(email, otp);
+
+    if (!record) {
+      throw new AuthError('Invalid or expired OTP', 'INVALID_OTP', 400);
+    }
+
+    if (record.expiresAt < new Date()) {
+      throw new AuthError('OTP has expired. Please request a new one.', 'OTP_EXPIRED', 400);
+    }
+
+    const existingUser = await this.findUserByEmail(email);
+    if (existingUser) {
+      await OTPService.deleteOTP(email);
+      throw new AuthError('Email already registered', 'EMAIL_ALREADY_EXISTS', 409);
+    }
+
+    const prismaRole = record.role as PrismaRole;
+    const role = toSharedRole(prismaRole);
+
     const user = await prisma.user.create({
       data: {
-        universityEmail: input.universityEmail.toLowerCase().trim(),
-        passwordHash,
-        role,
+        universityEmail: email.toLowerCase().trim(),
+        passwordHash: record.passwordHash,
+        role: prismaRole,
         ...(role === Role.MENTOR ? { isVerifiedMentor: false } : {}),
       },
     });
@@ -160,6 +250,9 @@ export class AuthService {
         avatarSeed: identity.avatarSeed,
       };
     }
+
+    // OTP is single-use
+    await OTPService.deleteOTP(email);
 
     const tokens = await this.createUserTokens(
       user.id,
@@ -286,3 +379,4 @@ export class AuthService {
 }
 
 export const authService = new AuthService();
+

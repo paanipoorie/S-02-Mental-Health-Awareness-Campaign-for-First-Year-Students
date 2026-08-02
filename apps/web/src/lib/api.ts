@@ -1,4 +1,4 @@
-import { getAccessToken, clearAuthSession } from './auth';
+import { getAccessToken, clearAuthSession, MENTOR_VERIFICATION_PENDING_PATH } from './auth';
 
 const API_BASE_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:3000/api';
 
@@ -57,7 +57,8 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
   if (
     response.status === 401 &&
     !endpoint.includes('/auth/login') &&
-    !endpoint.includes('/auth/register')
+    !endpoint.includes('/auth/send-otp') &&
+    !endpoint.includes('/auth/verify-otp')
   ) {
     clearAuthSession();
   }
@@ -75,6 +76,17 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
 
   if (!response.ok || !data.success) {
     const errorBody = data as ApiErrorResponse;
+    // Unverified mentors are always redirected to the pending page rather than
+    // seeing API errors when they hit a restricted endpoint.
+    if (
+      response.status === 403 &&
+      errorBody.error?.code === 'MENTOR_VERIFICATION_PENDING' &&
+      typeof window !== 'undefined'
+    ) {
+      if (window.location.pathname !== MENTOR_VERIFICATION_PENDING_PATH) {
+        window.location.href = MENTOR_VERIFICATION_PENDING_PATH;
+      }
+    }
     throw new ClientApiError(
       response.status,
       errorBody.error?.code || 'UNKNOWN_ERROR',
@@ -190,6 +202,17 @@ export const adminApi = {
   },
   verifyMentor(mentorId: string, isVerified: boolean) {
     return api.patch(`/admin/mentors/${mentorId}/verify`, { isVerified });
+  },
+  rejectMentor(mentorId: string) {
+    return api.post(`/admin/mentors/${mentorId}/reject`);
+  },
+  getPendingMentors() {
+    return api.get<Array<{
+      id: string;
+      universityEmail: string;
+      displayName: string | null;
+      createdAt: string;
+    }>>('/admin/mentors/pending');
   },
   getMeetings(query: {
     page: number;
@@ -468,6 +491,12 @@ export interface AdminDashboardData {
     totalResources: number;
     activeResources: number;
   };
+  pendingMentors: Array<{
+    id: string;
+    displayName: string | null;
+    universityEmail: string;
+    createdAt: string;
+  }>;
   activeStudents: Array<{
     id: string;
     anonymousDisplayName: string;

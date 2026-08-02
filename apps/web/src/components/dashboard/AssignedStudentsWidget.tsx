@@ -63,7 +63,7 @@ export function AssignedStudentsWidget({
           <a
             key={student.id}
             href={`/chat?threadId=${student.id}`}
-            className="bg-background-100 flex items-start gap-4 rounded-sm border border-gray-200 p-4 transition-colors hover:bg-gray-50 focus-visible:outline-none"
+            className="bg-background-100 flex items-start gap-4 rounded-sm border border-gray-200 p-4 transition-all duration-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none"
           >
             <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-gray-700">
               <span className="text-base font-bold">
@@ -73,7 +73,14 @@ export function AssignedStudentsWidget({
 
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2">
-                <p className="text-copy-14 truncate pr-2 font-semibold text-gray-900">
+                <p 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.location.href = `/profile/${student.studentIdentityId}`;
+                  }}
+                  className="text-copy-14 truncate pr-2 font-semibold text-gray-900 hover:underline hover:text-primary cursor-pointer"
+                >
                   {student.studentDisplayName}
                 </p>
                 <div className="flex flex-shrink-0 items-center gap-2">

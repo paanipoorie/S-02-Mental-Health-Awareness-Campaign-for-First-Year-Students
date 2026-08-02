@@ -37,6 +37,20 @@ export const dashboardController = {
         throw new ApiError(403, 'Access denied: Mentor role required');
       }
 
+      // Belt-and-braces: never serve mentor data to unverified mentors.
+      const { prisma } = await import('../prisma/client.js');
+      const dbUser = await prisma.user.findUnique({
+        where: { id: user.userId },
+        select: { isVerifiedMentor: true },
+      });
+      if (!dbUser?.isVerifiedMentor) {
+        throw new ApiError(
+          403,
+          'Mentor account is pending verification',
+          'MENTOR_VERIFICATION_PENDING'
+        );
+      }
+
       const dashboard = await dashboardService.getMentorDashboard(user.userId);
 
       res.json({
@@ -73,6 +87,20 @@ export const dashboardController = {
 
       if (user.role !== 'MENTOR') {
         throw new ApiError(403, 'Access denied: Mentor role required');
+      }
+
+      // Unverified mentors cannot change their availability.
+      const { prisma } = await import('../prisma/client.js');
+      const dbUser = await prisma.user.findUnique({
+        where: { id: user.userId },
+        select: { isVerifiedMentor: true },
+      });
+      if (!dbUser?.isVerifiedMentor) {
+        throw new ApiError(
+          403,
+          'Mentor account is pending verification',
+          'MENTOR_VERIFICATION_PENDING'
+        );
       }
 
       const { availabilityStatus } = req.body;

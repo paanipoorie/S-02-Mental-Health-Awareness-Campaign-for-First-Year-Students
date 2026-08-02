@@ -23,8 +23,8 @@ async function createIdentity(email: string) {
 
 describe('Post Service Unit Tests', () => {
   it('should perform all CRUD operations on posts via service layer', async () => {
-    const studentAnon = await createIdentity('postunit1@test.edu');
-    const bystanderAnon = await createIdentity('postunit2@test.edu');
+    const studentAnon = await createIdentity('postunit1@cuchd.in');
+    const bystanderAnon = await createIdentity('postunit2@cuchd.in');
 
     // Create post
     const post = await postService.createPost(studentAnon.id, {

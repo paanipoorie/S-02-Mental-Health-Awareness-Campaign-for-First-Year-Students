@@ -390,6 +390,70 @@ export const adminService = {
     };
   },
 
+  async getPendingMentors(): Promise<
+    Array<{
+      id: string;
+      universityEmail: string;
+      displayName: string | null;
+      createdAt: Date;
+    }>
+  > {
+    const mentors = await prisma.user.findMany({
+      where: {
+        role: PrismaRole.MENTOR,
+        isVerifiedMentor: false,
+        isActive: true,
+      },
+      include: {
+        anonymousIdentity: {
+          select: { displayName: true },
+        },
+      },
+      orderBy: { createdAt: 'asc' },
+      take: 100,
+    });
+
+    return mentors.map(mentor => ({
+      id: mentor.id,
+      universityEmail: mentor.universityEmail,
+      displayName: mentor.anonymousIdentity?.displayName ?? null,
+      createdAt: mentor.createdAt,
+    }));
+  },
+
+  async rejectMentor(adminUserId: string, mentorId: string) {
+    const mentor = await prisma.user.findUnique({
+      where: { id: mentorId, role: PrismaRole.MENTOR },
+      select: { id: true, universityEmail: true, isVerifiedMentor: true },
+    });
+
+    if (!mentor) {
+      throw new Error('MENTOR_NOT_FOUND');
+    }
+
+    if (mentor.isVerifiedMentor) {
+      throw new Error('MENTOR_ALREADY_VERIFIED');
+    }
+
+    // Rejection deactivates the account so the mentor can no longer log in.
+    const updated = await prisma.user.update({
+      where: { id: mentorId },
+      data: { isActive: false, isVerifiedMentor: false },
+    });
+
+    await prisma.adminActionLog.create({
+      data: {
+        adminUserId,
+        actionType: 'MENTOR_REJECTED',
+        targetType: 'USER',
+        targetId: mentorId,
+        notes: `Mentor application for ${mentor.universityEmail} rejected by admin`,
+      },
+    });
+
+    return updated;
+  },
+
   async updateUserStatus(adminUserId: string, targetUserId: string, isActive: boolean) {
     if (adminUserId === targetUserId) {
       throw new Error('SELF_DEACTIVATION_NOT_ALLOWED');

@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { dashboardController } from '../controllers/dashboard.controller.js';
 import { validate } from '../middlewares/validate.middleware.js';
-import { authMiddleware, requireRole } from '../middlewares/index.js';
+import {
+  authMiddleware,
+  requireRole,
+  gateUnverifiedMentor,
+} from '../middlewares/index.js';
 import {
   getStudentDashboardSchema,
   getMentorDashboardSchema,
@@ -24,6 +28,7 @@ router.get(
 router.get(
   '/mentor',
   requireRole(Role.MENTOR),
+  gateUnverifiedMentor,
   validate(getMentorDashboardSchema),
   dashboardController.getMentorDashboard
 );
@@ -38,8 +43,10 @@ router.get(
 router.patch(
   '/mentor/availability',
   requireRole(Role.MENTOR),
+  gateUnverifiedMentor,
   validate(updateMentorAvailabilitySchema),
   dashboardController.updateMentorAvailability
 );
 
 export default router;
+

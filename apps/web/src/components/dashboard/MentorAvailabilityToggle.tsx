@@ -82,7 +82,7 @@ export function MentorAvailabilityToggle({
               className={`flex items-center justify-center gap-2 rounded-sm px-4 py-2.5 text-sm font-semibold transition-all ${
                 isSelected
                   ? `border ${option.style} shadow-sm`
-                  : 'bg-background-100 border border-gray-200 text-gray-700 hover:bg-gray-50'
+                  : 'bg-background-100 border border-gray-200 text-gray-700 hover:border-gray-300 hover:shadow-sm'
               } disabled:cursor-not-allowed disabled:opacity-80`}
             >
               <span className="flex-shrink-0">{option.icon}</span>

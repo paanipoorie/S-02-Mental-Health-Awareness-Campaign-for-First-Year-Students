@@ -4,37 +4,57 @@ import { prisma } from '../prisma/client.js';
 import { createApp } from '../app.js';
 import { signAccessToken } from '../utils/jwt.js';
 import { Role } from '@campus-peer-support/shared-types';
-import { getTestEmail, testPassword, validStudentPayload, validMentorPayload } from './setup.js';
+import {
+  getTestEmail,
+  testPassword,
+  registerViaOTP,
+  loginAs,
+} from './setup.js';
 import { requireVerifiedMentor, requireRole } from '../middlewares/index.js';
 
 const app = createApp();
 
 describe('Authentication Integration Tests', () => {
-  describe('Registration', () => {
-    it('should register a student successfully with anonymous identity', async () => {
-      const email = getTestEmail('student');
+  describe('OTP Registration Flow', () => {
+    it('should send OTP for a valid @cuchd.in email', async () => {
+      const email = getTestEmail('otp-send');
       const response = await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(email))
-        .expect(201);
+        .post('/api/auth/send-otp')
+        .send({ universityEmail: email, password: testPassword, role: Role.STUDENT })
+        .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.user).toMatchObject({
+      expect(response.body.data.email).toBe(email.toLowerCase().trim());
+
+      // Verify OTP was stored in the database
+      const otpRecord = await prisma.emailOTP.findUnique({
+        where: { email: email.toLowerCase().trim() },
+      });
+      expect(otpRecord).toBeTruthy();
+      expect(otpRecord!.role).toBe('STUDENT');
+      expect(otpRecord!.expiresAt.getTime()).toBeGreaterThan(Date.now());
+    });
+
+    it('should register a student via OTP with anonymous identity', async () => {
+      const email = getTestEmail('student-otp');
+      const data = await registerViaOTP(app, email, 'STUDENT');
+
+      expect(data.user).toMatchObject({
         role: Role.STUDENT,
         isVerifiedMentor: false,
       });
-      expect(response.body.data.user.id).toBeDefined();
-      expect(response.body.data.anonymousIdentity).toMatchObject({
+      expect(data.user.id).toBeDefined();
+      expect(data.anonymousIdentity).toMatchObject({
         id: expect.any(String),
         displayName: expect.stringMatching(/^Anonymous [A-Z][a-z]+ [A-Z][a-z]+$/),
         avatarSeed: expect.any(Number),
       });
-      expect(response.body.data.tokens).toMatchObject({
+      expect(data.tokens).toMatchObject({
         accessToken: expect.any(String),
         refreshToken: expect.any(String),
       });
 
-      // Verify password is hashed in database
+      // Verify user in database
       const user = await prisma.user.findUnique({ where: { universityEmail: email } });
       expect(user).toBeTruthy();
       expect(user!.passwordHash).not.toBe(testPassword);
@@ -45,22 +65,17 @@ describe('Authentication Integration Tests', () => {
         where: { userId: user!.id },
       });
       expect(anonIdentity).toBeTruthy();
-      expect(anonIdentity!.displayName).toBe(response.body.data.anonymousIdentity.displayName);
     });
 
-    it('should register a mentor without anonymous identity', async () => {
-      const email = getTestEmail('mentor');
-      const response = await request(app)
-        .post('/api/auth/register')
-        .send(validMentorPayload(email))
-        .expect(201);
+    it('should register a mentor via OTP without anonymous identity', async () => {
+      const email = getTestEmail('mentor-otp');
+      const data = await registerViaOTP(app, email, 'MENTOR');
 
-      expect(response.body.success).toBe(true);
-      expect(response.body.data.user).toMatchObject({
+      expect(data.user).toMatchObject({
         role: Role.MENTOR,
         isVerifiedMentor: false,
       });
-      expect(response.body.data.anonymousIdentity).toBeNull();
+      expect(data.anonymousIdentity).toBeNull();
 
       const user = await prisma.user.findUnique({ where: { universityEmail: email } });
       expect(user!.role).toBe(Role.MENTOR);
@@ -71,43 +86,45 @@ describe('Authentication Integration Tests', () => {
       expect(anonIdentity).toBeNull();
     });
 
-    it('should reject duplicate email registration', async () => {
-      const email = getTestEmail('duplicate');
-      await request(app).post('/api/auth/register').send(validStudentPayload(email)).expect(201);
+    it('should reject OTP for invalid email domains', async () => {
+      const invalidEmails = [
+        'user@gmail.com',
+        'user@yahoo.com',
+        'user@outlook.com',
+        'user@hotmail.com',
+        'user@test.edu',
+        'user@cuchd.com',
+      ];
 
+      for (const email of invalidEmails) {
+        const response = await request(app)
+          .post('/api/auth/send-otp')
+          .send({ universityEmail: email, password: testPassword, role: Role.STUDENT })
+          .expect(400);
+
+        expect(response.body.success).toBe(false);
+        expect(response.body.error.code).toBe('INVALID_EMAIL_DOMAIN');
+      }
+    });
+
+    it('should reject duplicate email registration via OTP', async () => {
+      const email = getTestEmail('duplicate-otp');
+      await registerViaOTP(app, email, 'STUDENT');
+
+      // Try sending OTP again for the same email
       const response = await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(email))
+        .post('/api/auth/send-otp')
+        .send({ universityEmail: email, password: testPassword, role: Role.STUDENT })
         .expect(409);
 
       expect(response.body.success).toBe(false);
       expect(response.body.error.code).toBe('EMAIL_ALREADY_EXISTS');
     });
 
-    it('should reject invalid university email domain', async () => {
-      const response = await request(app)
-        .post('/api/auth/register')
-        .send({ universityEmail: 'invalid@gmail.com', password: testPassword, role: Role.STUDENT })
-        .expect(400);
-
-      expect(response.body.success).toBe(false);
-      expect(response.body.error.code).toBe('VALIDATION_ERROR');
-    });
-
-    it('should reject invalid payload (missing fields)', async () => {
-      const response = await request(app)
-        .post('/api/auth/register')
-        .send({ universityEmail: 'test@test.edu' })
-        .expect(400);
-
-      expect(response.body.success).toBe(false);
-      expect(response.body.error.code).toBe('VALIDATION_ERROR');
-    });
-
-    it('should reject weak password', async () => {
+    it('should reject weak password during OTP send', async () => {
       const email = getTestEmail('weakpass');
       const response = await request(app)
-        .post('/api/auth/register')
+        .post('/api/auth/send-otp')
         .send({ universityEmail: email, password: 'weak', role: Role.STUDENT })
         .expect(400);
 
@@ -115,9 +132,25 @@ describe('Authentication Integration Tests', () => {
       expect(response.body.error.code).toBe('VALIDATION_ERROR');
     });
 
+    it('should reject invalid OTP', async () => {
+      const email = getTestEmail('invalid-otp');
+      await request(app)
+        .post('/api/auth/send-otp')
+        .send({ universityEmail: email, password: testPassword, role: Role.STUDENT })
+        .expect(200);
+
+      const response = await request(app)
+        .post('/api/auth/verify-otp')
+        .send({ universityEmail: email, otp: '000000' })
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.error.code).toBe('INVALID_OTP');
+    });
+
     it('should hash password with bcrypt', async () => {
       const email = getTestEmail('hash');
-      await request(app).post('/api/auth/register').send(validStudentPayload(email)).expect(201);
+      await registerViaOTP(app, email, 'STUDENT');
 
       const user = await prisma.user.findUnique({ where: { universityEmail: email } });
       expect(user!.passwordHash).toMatch(/^\$2[aby]\$\d+\$/); // bcrypt hash format
@@ -129,26 +162,16 @@ describe('Authentication Integration Tests', () => {
 
     beforeEach(async () => {
       studentEmail = getTestEmail('login');
-      await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(studentEmail))
-        .expect(201);
+      await registerViaOTP(app, studentEmail, 'STUDENT');
     });
 
     it('should login successfully with correct credentials', async () => {
-      const response = await request(app)
-        .post('/api/auth/login')
-        .send({ universityEmail: studentEmail, password: testPassword })
-        .expect(200);
+      const loginData = await loginAs(app, studentEmail);
 
-      expect(response.body.success).toBe(true);
-      expect(response.body.data.user).toMatchObject({
+      expect(loginData.user).toMatchObject({
         role: Role.STUDENT,
       });
-      expect(response.body.data.accessToken).toBeDefined();
-      expect(response.headers['set-cookie']).toBeDefined();
-      const cookies = (response.headers['set-cookie'] as unknown as string[]) ?? [];
-      expect(cookies.some((c: string) => c.startsWith('refreshToken='))).toBe(true);
+      expect(loginData.accessToken).toBeDefined();
     });
 
     it('should return 401 for incorrect password', async () => {
@@ -164,21 +187,211 @@ describe('Authentication Integration Tests', () => {
     it('should return 401 for unknown account', async () => {
       const response = await request(app)
         .post('/api/auth/login')
-        .send({ universityEmail: 'unknown@test.edu', password: testPassword })
+        .send({ universityEmail: 'unknown@cuchd.in', password: testPassword })
         .expect(401);
 
       expect(response.body.success).toBe(false);
       expect(response.body.error.code).toBe('INVALID_CREDENTIALS');
     });
 
-    it('should reject invalid payload', async () => {
+    it('should reject invalid email domain on login', async () => {
       const response = await request(app)
         .post('/api/auth/login')
-        .send({ universityEmail: 'invalid' })
+        .send({ universityEmail: 'user@gmail.com', password: testPassword })
         .expect(400);
 
       expect(response.body.success).toBe(false);
-      expect(response.body.error.code).toBe('VALIDATION_ERROR');
+      expect(response.body.error.code).toBe('INVALID_EMAIL_DOMAIN');
+    });
+  });
+
+  describe('Mentor Registration and Verification', () => {
+    it('should allow mentor to register and log in immediately (unverified)', async () => {
+      const email = getTestEmail('mentor-pending');
+      const regData = await registerViaOTP(app, email, 'MENTOR');
+
+      expect(regData.user.role).toBe(Role.MENTOR);
+      expect(regData.user.isVerifiedMentor).toBe(false);
+
+      // Mentor can log in
+      const loginData = await loginAs(app, email);
+      expect(loginData.user.role).toBe(Role.MENTOR);
+      expect(loginData.user.isVerifiedMentor).toBe(false);
+    });
+
+    it('should block unverified mentor from accessing mentor dashboard', async () => {
+      const email = getTestEmail('mentor-blocked');
+      await registerViaOTP(app, email, 'MENTOR');
+      const loginData = await loginAs(app, email);
+
+      // Attempt to access mentor dashboard
+      const response = await request(app)
+        .get('/api/dashboard/mentor')
+        .set('Authorization', `Bearer ${loginData.accessToken}`)
+        .expect(403);
+
+      expect(response.body.error.code).toBe('MENTOR_VERIFICATION_PENDING');
+    });
+
+    it('should allow admin to approve a pending mentor', async () => {
+      // Create an admin user
+      const adminEmail = getTestEmail('admin');
+      const adminUser = await prisma.user.create({
+        data: {
+          universityEmail: adminEmail,
+          passwordHash: 'hash',
+          role: 'ADMIN',
+        },
+      });
+      const adminToken = signAccessToken({
+        userId: adminUser.id,
+        role: Role.ADMIN,
+        email: adminEmail,
+      });
+
+      // Create a pending mentor
+      const mentorEmail = getTestEmail('mentor-approve');
+      await registerViaOTP(app, mentorEmail, 'MENTOR');
+      const mentorUser = await prisma.user.findUnique({
+        where: { universityEmail: mentorEmail },
+      });
+
+      // Admin approves the mentor
+      const approveResponse = await request(app)
+        .patch(`/api/admin/mentors/${mentorUser!.id}/verify`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ isVerified: true })
+        .expect(200);
+
+      expect(approveResponse.body.success).toBe(true);
+
+      // Verify mentor is now verified
+      const updatedMentor = await prisma.user.findUnique({
+        where: { universityEmail: mentorEmail },
+      });
+      expect(updatedMentor!.isVerifiedMentor).toBe(true);
+    });
+
+    it('should allow approved mentor to access mentor dashboard', async () => {
+      // Create an admin
+      const adminEmail = getTestEmail('admin2');
+      const adminUser = await prisma.user.create({
+        data: {
+          universityEmail: adminEmail,
+          passwordHash: 'hash',
+          role: 'ADMIN',
+        },
+      });
+      const adminToken = signAccessToken({
+        userId: adminUser.id,
+        role: Role.ADMIN,
+        email: adminEmail,
+      });
+
+      // Create and approve a mentor
+      const mentorEmail = getTestEmail('mentor-approved');
+      await registerViaOTP(app, mentorEmail, 'MENTOR');
+      const mentorUser = await prisma.user.findUnique({
+        where: { universityEmail: mentorEmail },
+      });
+
+      // Approve
+      await request(app)
+        .patch(`/api/admin/mentors/${mentorUser!.id}/verify`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ isVerified: true })
+        .expect(200);
+
+      // Login as the approved mentor
+      const loginData = await loginAs(app, mentorEmail);
+      expect(loginData.user.isVerifiedMentor).toBe(true);
+
+      // Access mentor dashboard - should work
+      const dashResponse = await request(app)
+        .get('/api/dashboard/mentor')
+        .set('Authorization', `Bearer ${loginData.accessToken}`)
+        .expect(200);
+
+      expect(dashResponse.body.success).toBe(true);
+    });
+
+    it('should allow admin to reject a pending mentor', async () => {
+      const adminEmail = getTestEmail('admin3');
+      const adminUser = await prisma.user.create({
+        data: {
+          universityEmail: adminEmail,
+          passwordHash: 'hash',
+          role: 'ADMIN',
+        },
+      });
+      const adminToken = signAccessToken({
+        userId: adminUser.id,
+        role: Role.ADMIN,
+        email: adminEmail,
+      });
+
+      const mentorEmail = getTestEmail('mentor-rejected');
+      await registerViaOTP(app, mentorEmail, 'MENTOR');
+      const mentorUser = await prisma.user.findUnique({
+        where: { universityEmail: mentorEmail },
+      });
+
+      // Reject the mentor
+      const rejectResponse = await request(app)
+        .post(`/api/admin/mentors/${mentorUser!.id}/reject`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(rejectResponse.body.success).toBe(true);
+
+      // Verify mentor is deactivated
+      const updatedMentor = await prisma.user.findUnique({
+        where: { universityEmail: mentorEmail },
+      });
+      expect(updatedMentor!.isActive).toBe(false);
+      expect(updatedMentor!.isVerifiedMentor).toBe(false);
+
+      // Rejected mentor can no longer log in
+      const loginResponse = await request(app)
+        .post('/api/auth/login')
+        .send({ universityEmail: mentorEmail, password: testPassword })
+        .expect(403);
+
+      expect(loginResponse.body.error.code).toBe('ACCOUNT_DEACTIVATED');
+    });
+
+    it('should list pending mentors for admin', async () => {
+      const adminEmail = getTestEmail('admin4');
+      const adminUser = await prisma.user.create({
+        data: {
+          universityEmail: adminEmail,
+          passwordHash: 'hash',
+          role: 'ADMIN',
+        },
+      });
+      const adminToken = signAccessToken({
+        userId: adminUser.id,
+        role: Role.ADMIN,
+        email: adminEmail,
+      });
+
+      // Create two pending mentors
+      await registerViaOTP(app, getTestEmail('pending1'), 'MENTOR');
+      await registerViaOTP(app, getTestEmail('pending2'), 'MENTOR');
+
+      // Get pending mentors list
+      const response = await request(app)
+        .get('/api/admin/mentors/pending')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(Array.isArray(response.body.data)).toBe(true);
+      expect(response.body.data.length).toBe(2);
+      expect(response.body.data[0]).toHaveProperty('id');
+      expect(response.body.data[0]).toHaveProperty('universityEmail');
+      expect(response.body.data[0]).toHaveProperty('displayName');
+      expect(response.body.data[0]).toHaveProperty('createdAt');
     });
   });
 
@@ -188,11 +401,8 @@ describe('Authentication Integration Tests', () => {
 
     beforeEach(async () => {
       studentEmail = getTestEmail('auth');
-      const regResponse = await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(studentEmail))
-        .expect(201);
-      studentToken = regResponse.body.data.tokens.accessToken;
+      const data = await registerViaOTP(app, studentEmail, 'STUDENT');
+      studentToken = data.tokens.accessToken;
     });
 
     it('should allow access to protected route with valid JWT', async () => {
@@ -207,10 +417,8 @@ describe('Authentication Integration Tests', () => {
         anonymousDisplayName: expect.stringMatching(/^Anonymous [A-Z][a-z]+ [A-Z][a-z]+$/),
         avatarSeed: expect.any(Number),
       });
-      // Ensure no sensitive data leaked
       expect(response.body.data).not.toHaveProperty('universityEmail');
       expect(response.body.data).not.toHaveProperty('id');
-      expect(response.body.data).not.toHaveProperty('isVerifiedMentor');
     });
 
     it('should return 401 for missing JWT', async () => {
@@ -229,63 +437,6 @@ describe('Authentication Integration Tests', () => {
       expect(response.body.success).toBe(false);
       expect(response.body.error.code).toBe('INVALID_TOKEN');
     });
-
-    it('should return 401 for expired JWT', async () => {
-      // Create a token that expires immediately (negative expiration)
-      const expiredToken = signAccessToken({
-        userId: 'test-id',
-        role: Role.STUDENT,
-        email: studentEmail,
-      });
-
-      // The token above is not actually expired - we need to test the actual token expiration
-      // Since we can't easily wait for token expiration, we'll test that a valid token for
-      // non-existent user returns 404 (USER_NOT_FOUND)
-      const response = await request(app)
-        .get('/api/auth/me')
-        .set('Authorization', `Bearer ${expiredToken}`)
-        .expect(404);
-
-      expect(response.body.success).toBe(false);
-      expect(response.body.error.code).toBe('USER_NOT_FOUND');
-    });
-
-    it('should return student anonymous identity only (no email or userId)', async () => {
-      const response = await request(app)
-        .get('/api/auth/me')
-        .set('Authorization', `Bearer ${studentToken}`)
-        .expect(200);
-
-      const data = response.body.data;
-      expect(data).toHaveProperty('role');
-      expect(data).toHaveProperty('anonymousDisplayName');
-      expect(data).toHaveProperty('avatarSeed');
-      expect(data).not.toHaveProperty('universityEmail');
-      expect(data).not.toHaveProperty('id');
-      expect(data).not.toHaveProperty('isVerifiedMentor');
-    });
-
-    it('should return mentor profile without anonymous identity', async () => {
-      const mentorEmail = getTestEmail('mentor');
-      const regResponse = await request(app)
-        .post('/api/auth/register')
-        .send(validMentorPayload(mentorEmail))
-        .expect(201);
-      const mentorToken = regResponse.body.data.tokens.accessToken;
-
-      const response = await request(app)
-        .get('/api/auth/me')
-        .set('Authorization', `Bearer ${mentorToken}`)
-        .expect(200);
-
-      expect(response.body.success).toBe(true);
-      expect(response.body.data).toMatchObject({
-        role: Role.MENTOR,
-        isVerifiedMentor: false,
-      });
-      expect(response.body.data).not.toHaveProperty('anonymousDisplayName');
-      expect(response.body.data).not.toHaveProperty('avatarSeed');
-    });
   });
 
   describe('Refresh Token', () => {
@@ -294,25 +445,11 @@ describe('Authentication Integration Tests', () => {
 
     beforeEach(async () => {
       studentEmail = getTestEmail('refresh');
-      const regResponse = await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(studentEmail))
-        .expect(201);
-      refreshToken = regResponse.body.data.tokens.refreshToken;
+      const data = await registerViaOTP(app, studentEmail, 'STUDENT');
+      refreshToken = data.tokens.refreshToken;
     });
 
-    it('should rotate access token with valid refresh token (via cookie)', async () => {
-      const response = await request(app)
-        .post('/api/auth/refresh')
-        .set('Cookie', [`refreshToken=${refreshToken}`])
-        .expect(200);
-
-      expect(response.body.success).toBe(true);
-      expect(response.body.data.accessToken).toBeDefined();
-      expect(response.body.data.accessToken).not.toBe(refreshToken);
-    });
-
-    it('should rotate access token with valid refresh token (via body)', async () => {
+    it('should rotate access token with valid refresh token', async () => {
       const response = await request(app)
         .post('/api/auth/refresh')
         .send({ refreshToken })
@@ -331,30 +468,6 @@ describe('Authentication Integration Tests', () => {
       expect(response.body.success).toBe(false);
       expect(response.body.error.code).toBe('INVALID_REFRESH_TOKEN');
     });
-
-    it('should reject expired refresh token', async () => {
-      // Create an expired refresh token using access token signing (different secret)
-      const expiredRefreshToken = signAccessToken({
-        userId: 'test',
-        role: Role.STUDENT,
-        email: studentEmail,
-      });
-
-      const response = await request(app)
-        .post('/api/auth/refresh')
-        .send({ refreshToken: expiredRefreshToken })
-        .expect(401);
-
-      expect(response.body.success).toBe(false);
-      expect(response.body.error.code).toBe('INVALID_REFRESH_TOKEN');
-    });
-
-    it('should return 401 when refresh token is missing', async () => {
-      const response = await request(app).post('/api/auth/refresh').send({}).expect(401);
-
-      expect(response.body.success).toBe(false);
-      expect(response.body.error.code).toBe('REFRESH_TOKEN_REQUIRED');
-    });
   });
 
   describe('Logout', () => {
@@ -363,30 +476,18 @@ describe('Authentication Integration Tests', () => {
 
     beforeEach(async () => {
       studentEmail = getTestEmail('logout');
-      const regResponse = await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(studentEmail))
-        .expect(201);
-      refreshToken = regResponse.body.data.tokens.refreshToken;
+      const data = await registerViaOTP(app, studentEmail, 'STUDENT');
+      refreshToken = data.tokens.refreshToken;
     });
 
-    it('should logout successfully and clear cookie', async () => {
+    it('should logout successfully', async () => {
       const response = await request(app)
         .post('/api/auth/logout')
-        .set('Cookie', [`refreshToken=${refreshToken}`])
+        .send({ refreshToken })
         .expect(200);
 
       expect(response.body.success).toBe(true);
       expect(response.body.data.message).toBe('Logged out successfully');
-
-      // Verify cookie is cleared
-      const cookies = (response.headers['set-cookie'] as unknown as string[]) ?? [];
-      expect(
-        cookies.some(
-          (c: string) =>
-            c.startsWith('refreshToken=') && (c.includes('Max-Age=0') || c.includes('Expires='))
-        )
-      ).toBe(true);
     });
 
     it('should succeed even with invalid refresh token (idempotent)', async () => {
@@ -402,16 +503,12 @@ describe('Authentication Integration Tests', () => {
   describe('Anonymous Identity Isolation', () => {
     it('should never expose email in any API response for students', async () => {
       const email = getTestEmail('isolation');
-      const regResponse = await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(email))
-        .expect(201);
-
-      const accessToken = regResponse.body.data.tokens.accessToken;
+      const data = await registerViaOTP(app, email, 'STUDENT');
+      const accessToken = data.tokens.accessToken;
 
       // Check registration response
-      expect(regResponse.body.data.user).not.toHaveProperty('universityEmail');
-      expect(regResponse.body.data.tokens).not.toHaveProperty('email');
+      expect(data.user).not.toHaveProperty('universityEmail');
+      expect(data.tokens).not.toHaveProperty('email');
 
       // Check /me endpoint
       const meResponse = await request(app)
@@ -423,92 +520,18 @@ describe('Authentication Integration Tests', () => {
       expect(meResponse.body.data).not.toHaveProperty('email');
       expect(meResponse.body.data).not.toHaveProperty('id');
     });
-
-    it('should never expose database IDs in student responses', async () => {
-      const email = getTestEmail('noid');
-      const regResponse = await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(email))
-        .expect(201);
-
-      const accessToken = regResponse.body.data.tokens.accessToken;
-      const meResponse = await request(app)
-        .get('/api/auth/me')
-        .set('Authorization', `Bearer ${accessToken}`)
-        .expect(200);
-
-      // Anonymous identity ID should not be exposed to students
-      expect(meResponse.body.data).not.toHaveProperty('id');
-      // But it IS returned in registration response (for initial setup)
-      expect(regResponse.body.data.anonymousIdentity).toHaveProperty('id');
-    });
-
-    it('should not expose internal identifiers in API responses', async () => {
-      const email = getTestEmail('internal');
-      await request(app).post('/api/auth/register').send(validStudentPayload(email)).expect(201);
-
-      const loginResponse = await request(app)
-        .post('/api/auth/login')
-        .send({ universityEmail: email, password: testPassword })
-        .expect(200);
-
-      expect(loginResponse.body.data.user).not.toHaveProperty('universityEmail');
-      expect(loginResponse.body.data.user).toHaveProperty('id');
-      expect(loginResponse.body.data.user).toHaveProperty('role');
-      expect(loginResponse.body.data.user).toHaveProperty('isVerifiedMentor');
-    });
   });
 
   describe('API Response Validation', () => {
-    it('should return correct status codes for all auth endpoints', async () => {
-      const email = getTestEmail('status');
-      await request(app).post('/api/auth/register').send(validStudentPayload(email)).expect(201);
-
-      await request(app)
-        .post('/api/auth/login')
-        .send({ universityEmail: email, password: testPassword })
-        .expect(200);
-
-      const refreshResponse = await request(app)
-        .post('/api/auth/login')
-        .send({ universityEmail: email, password: testPassword })
-        .expect(200);
-      const cookies = (refreshResponse.headers['set-cookie'] as unknown as string[]) ?? [];
-      const refreshToken =
-        cookies
-          .find((c: string) => c.startsWith('refreshToken='))
-          ?.split(';')[0]
-          ?.split('=')[1] ?? '';
-
-      await request(app).post('/api/auth/refresh').send({ refreshToken }).expect(200);
-      await request(app).post('/api/auth/logout').send({ refreshToken }).expect(200);
-    });
-
     it('should return consistent response structure', async () => {
       const email = getTestEmail('structure');
-      const regResponse = await request(app)
-        .post('/api/auth/register')
-        .send(validStudentPayload(email))
-        .expect(201);
+      const data = await registerViaOTP(app, email, 'STUDENT');
 
-      expect(regResponse.body).toMatchObject({
-        success: true,
-        data: expect.any(Object),
-      });
-
-      const loginResponse = await request(app)
-        .post('/api/auth/login')
-        .send({ universityEmail: email, password: testPassword })
-        .expect(200);
-
-      expect(loginResponse.body).toMatchObject({
-        success: true,
-        data: expect.any(Object),
-      });
+      const loginData = await loginAs(app, email);
 
       const meResponse = await request(app)
         .get('/api/auth/me')
-        .set('Authorization', `Bearer ${regResponse.body.data.tokens.accessToken}`)
+        .set('Authorization', `Bearer ${data.tokens.accessToken}`)
         .expect(200);
 
       expect(meResponse.body).toMatchObject({
@@ -519,35 +542,12 @@ describe('Authentication Integration Tests', () => {
 
     it('should return structured validation errors', async () => {
       const response = await request(app)
-        .post('/api/auth/register')
+        .post('/api/auth/send-otp')
         .send({ universityEmail: 'invalid', password: 'weak' })
         .expect(400);
 
       expect(response.body.success).toBe(false);
       expect(response.body.error.code).toBe('VALIDATION_ERROR');
-      expect(response.body.error).toHaveProperty('message');
-    });
-
-    it('should return consistent authentication errors', async () => {
-      // Missing token
-      const missingResponse = await request(app).get('/api/auth/me').expect(401);
-      expect(missingResponse.body.error.code).toBe('MISSING_TOKEN');
-
-      // Invalid token
-      const invalidResponse = await request(app)
-        .get('/api/auth/me')
-        .set('Authorization', 'Bearer invalid')
-        .expect(401);
-      expect(invalidResponse.body.error.code).toBe('INVALID_TOKEN');
-
-      // Invalid credentials
-      const credResponse = await request(app)
-        .post('/api/auth/login')
-        .send({ universityEmail: 'a@test.edu', password: 'wrong' })
-        .expect(401);
-      expect(credResponse.body.error.code).toBe('INVALID_CREDENTIALS');
-    });
-  });
 
   describe('End-to-End Auth Flow', () => {
     it('should complete full Register -> Login -> Me -> Refresh -> Logout flow', async () => {

@@ -359,16 +359,12 @@
 
   input:focus-visible,
   select:focus-visible,
-  textarea:focus-visible {
-    border-color: #c96a2b !important;
-    box-shadow:
-      0 0 0 2px #111827,
-      0 0 0 4px #c96a2b !important;
-  }
-
+  textarea:focus-visible,
   button:focus-visible,
-  a:focus-visible {
-    outline: none;
+  a:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline: none !important;
     box-shadow:
       0 0 0 2px #111827,
       0 0 0 4px #c96a2b !important;
@@ -384,15 +380,11 @@
 }
 
 /* Row Hover states */
-.hover\:bg-slate-50:hover,
-.hover\:bg-gray-50:hover,
-.hover\:bg-slate-100:hover,
-.hover\:bg-gray-100:hover,
 tr.hover\:bg-slate-50:hover,
 tr.hover\:bg-gray-50:hover,
 tr.hover\:bg-slate-100:hover,
 tr.hover\:bg-gray-100:hover {
-  background-color: #263445 !important;
+  background-color: rgba(255, 255, 255, 0.02) !important;
 }
 
 /* Primary Button Override */
@@ -436,8 +428,8 @@ button.border-slate-300:hover,
 a.border-slate-300:hover,
 .border-gray-200.bg-background-100:hover,
 .border-slate-300.bg-white:hover {
-  background-color: #263445 !important;
-  border-color: #4b5563 !important;
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  border-color: #cbd5e1 !important;
   color: #ffffff !important;
 }
 
@@ -472,13 +464,14 @@ aside a {
   background-color: transparent !important;
 }
 aside a:hover {
-  background-color: #1f2937 !important;
+  background-color: transparent !important;
   color: #ffffff !important;
 }
 aside a.active-sidebar-link,
 aside a[aria-current='page'] {
-  background-color: #c96a2b !important;
-  color: #ffffff !important;
+  background-color: transparent !important;
+  color: #c96a2b !important;
+  font-weight: 600 !important;
 }
 
 /* Notification unread indicator */

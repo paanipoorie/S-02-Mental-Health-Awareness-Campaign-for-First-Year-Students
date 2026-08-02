@@ -165,9 +165,12 @@ export function StudentEmotionOverviewWidget({
                     {index + 1}.
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-copy-14 truncate font-semibold text-gray-900">
+                    <a
+                      href={`/profile/${student.studentIdentityId}`}
+                      className="text-copy-14 truncate font-semibold text-gray-900 hover:underline hover:text-primary cursor-pointer block"
+                    >
                       {student.studentDisplayName}
-                    </p>
+                    </a>
                     <div className="mt-0.5 flex items-center gap-2">
                       <span className="text-label-12 inline-flex items-center gap-1 text-gray-600">
                         {EMOTION_ICONS[student.latestEmotion] || (

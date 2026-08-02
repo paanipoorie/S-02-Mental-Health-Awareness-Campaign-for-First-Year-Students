@@ -14,6 +14,8 @@ interface EnvConfig {
   FRONTEND_URL: string;
   RATE_LIMIT_WINDOW_MS: number;
   RATE_LIMIT_MAX_REQUESTS: number;
+  RESEND_API_KEY: string;
+  EMAIL_FROM: string;
 }
 
 function getEnv(key: string, defaultValue?: string): string {
@@ -52,10 +54,12 @@ export const env: EnvConfig = {
   JWT_REFRESH_SECRET: getEnv('JWT_REFRESH_SECRET'),
   JWT_REFRESH_EXPIRES_IN: getEnv('JWT_REFRESH_EXPIRES_IN', '7d'),
   BCRYPT_SALT_ROUNDS: getEnvNumber('BCRYPT_SALT_ROUNDS', 12),
-  UNIVERSITY_EMAIL_DOMAIN: getEnv('UNIVERSITY_EMAIL_DOMAIN', 'university.edu'),
+  UNIVERSITY_EMAIL_DOMAIN: getEnv('UNIVERSITY_EMAIL_DOMAIN', 'cuchd.in'),
   FRONTEND_URL: getEnv('FRONTEND_URL', 'http://localhost:4321'),
   RATE_LIMIT_WINDOW_MS: getEnvNumber('RATE_LIMIT_WINDOW_MS', 900000),
   RATE_LIMIT_MAX_REQUESTS: getEnvNumber('RATE_LIMIT_MAX_REQUESTS', 100),
+  RESEND_API_KEY: getEnv('RESEND_API_KEY', ''),
+  EMAIL_FROM: getEnv('EMAIL_FROM', 'noreply@cuchd.in'),
 };
 
 export const isDevelopment = env.NODE_ENV === 'development';

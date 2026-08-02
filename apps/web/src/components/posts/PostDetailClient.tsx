@@ -10,6 +10,7 @@ interface Reply {
   id: string;
   body: string;
   authorName: string;
+  authorIdentityId?: string;
   createdAt: string;
   isMentor: boolean;
   isOwn: boolean;
@@ -25,6 +26,7 @@ interface PostDetail {
   createdAt: string;
   updatedAt: string;
   anonymousDisplayName: string;
+  anonymousIdentityId: string;
   isOwn: boolean;
   replies: Reply[];
 }
@@ -194,15 +196,17 @@ export function PostDetailClient({ postId }: { postId: string }) {
       <div className="bg-background-100 rounded-sm border border-gray-200 p-6 shadow-sm sm:p-8">
         <div className="mb-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-sm font-bold text-gray-700">
-              {(post.anonymousDisplayName || 'Anonymous').charAt(0)}
-            </div>
-            <div>
-              <p className="text-copy-14 font-bold text-gray-900">
-                {post.anonymousDisplayName || 'Anonymous'}
-              </p>
-              <p className="text-label-12 font-mono text-gray-400">{timeAgo(post.createdAt)}</p>
-            </div>
+            <a href={`/profile/${post.anonymousIdentityId}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <div className="flex h-10 w-10 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-sm font-bold text-gray-700">
+                {(post.anonymousDisplayName || 'Anonymous').charAt(0)}
+              </div>
+              <div>
+                <p className="text-copy-14 font-bold text-gray-900 hover:underline">
+                  {post.anonymousDisplayName || 'Anonymous'}
+                </p>
+                <p className="text-label-12 font-mono text-gray-400">{timeAgo(post.createdAt)}</p>
+              </div>
+            </a>
           </div>
           {post.isOwn && (
             <button
@@ -277,12 +281,25 @@ export function PostDetailClient({ postId }: { postId: string }) {
               >
                 <div className="mb-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-xs font-bold text-gray-600">
-                      {reply.authorName.charAt(0)}
-                    </div>
-                    <span className="text-label-12 font-bold text-gray-900">
-                      {reply.authorName}
-                    </span>
+                    {!reply.isMentor && reply.authorIdentityId ? (
+                      <a href={`/profile/${reply.authorIdentityId}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-xs font-bold text-gray-600">
+                          {reply.authorName.charAt(0)}
+                        </div>
+                        <span className="text-label-12 font-bold text-gray-900 hover:underline">
+                          {reply.authorName}
+                        </span>
+                      </a>
+                    ) : (
+                      <>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-xs font-bold text-gray-600">
+                          {reply.authorName.charAt(0)}
+                        </div>
+                        <span className="text-label-12 font-bold text-gray-900">
+                          {reply.authorName}
+                        </span>
+                      </>
+                    )}
                     {reply.isMentor && (
                       <span className="rounded-sm border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-800">
                         Verified Mentor

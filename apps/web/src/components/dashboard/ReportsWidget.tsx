@@ -135,7 +135,7 @@ export function ReportsWidget({ reports, className = '' }: ReportsWidgetProps) {
           return (
             <div
               key={report.id}
-              className="bg-background-100 rounded-sm border border-gray-200 p-4 transition-colors hover:border-gray-300 hover:bg-gray-50"
+              className="bg-background-100 rounded-sm border border-gray-200 p-4"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex min-w-0 flex-1 items-start gap-3">

@@ -1,20 +1,18 @@
 import { z } from 'zod';
 import { Role } from '@campus-peer-support/shared-types';
 
-function getUniversityEmailDomain(): string {
-  return process.env.UNIVERSITY_EMAIL_DOMAIN ?? 'university.edu';
+const CU_EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@cuchd\.in$/;
+
+function validateCUEmail(email: string): boolean {
+  return CU_EMAIL_REGEX.test(email.toLowerCase().trim());
 }
 
-const registerBodySchema = z.object({
+const sendOTPSchema = z.object({
   universityEmail: z
     .string()
     .min(1, 'University email is required')
     .email('Invalid email format')
-    .refine(email => {
-      const domain = getUniversityEmailDomain().toLowerCase();
-      console.log(`[DEBUG REFINE] Checking email: ${email} against domain: ${domain}`);
-      return email.toLowerCase().trim().endsWith(`@${domain}`);
-    }, `Email must be a valid ${getUniversityEmailDomain()} address`),
+    .refine(validateCUEmail, 'Please use your official Chandigarh University email (@cuchd.in).'),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters')
@@ -26,15 +24,21 @@ const registerBodySchema = z.object({
   role: z.nativeEnum(Role).optional().default(Role.STUDENT),
 });
 
+const verifyOTPSchema = z.object({
+  universityEmail: z
+    .string()
+    .min(1, 'University email is required')
+    .email('Invalid email format')
+    .refine(validateCUEmail, 'Please use your official Chandigarh University email (@cuchd.in).'),
+  otp: z.string().length(6, 'OTP must be 6 digits'),
+});
+
 const loginBodySchema = z.object({
   universityEmail: z
     .string()
     .min(1, 'University email is required')
     .email('Invalid email format')
-    .refine(
-      email => email.toLowerCase().trim().endsWith(`@${getUniversityEmailDomain().toLowerCase()}`),
-      `Email must be a valid ${getUniversityEmailDomain()} address`
-    ),
+    .refine(validateCUEmail, 'Please use your official Chandigarh University email (@cuchd.in).'),
   password: z.string().min(1, 'Password is required'),
 });
 
@@ -63,10 +67,7 @@ const forgotPasswordBodySchema = z.object({
     .string()
     .min(1, 'University email is required')
     .email('Invalid email format')
-    .refine(
-      email => email.toLowerCase().trim().endsWith(`@${getUniversityEmailDomain().toLowerCase()}`),
-      `Email must be a valid ${getUniversityEmailDomain()} address`
-    ),
+    .refine(validateCUEmail, 'Please use your official Chandigarh University email (@cuchd.in).'),
 });
 
 const resetPasswordBodySchema = z.object({
@@ -81,7 +82,16 @@ const resetPasswordBodySchema = z.object({
     .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
 });
 
-export const registerSchema = z.object({ body: registerBodySchema });
+export const sendOTPSchemaExport = sendOTPSchema;
+export const verifyOTPSchemaExport = verifyOTPSchema;
+export const registerBodySchemaExport = sendOTPSchema; // Keep for backwards compatibility
+export const loginBodySchemaExport = loginBodySchema;
+export const refreshTokenBodySchemaExport = refreshTokenBodySchema;
+export const logoutBodySchemaExport = logoutBodySchema;
+
+export const sendOTPSchemaFull = z.object({ body: sendOTPSchema });
+export const verifyOTPSchemaFull = z.object({ body: verifyOTPSchema });
+export const registerSchema = z.object({ body: sendOTPSchema });
 export const loginSchema = z.object({ body: loginBodySchema });
 export const refreshTokenSchema = z
   .object({
@@ -98,12 +108,10 @@ export const forgotPasswordSchema = z.object({ body: forgotPasswordBodySchema })
 export const resetPasswordSchema = z.object({ body: resetPasswordBodySchema });
 
 // Export body schemas directly for use with validateBody middleware
-export const registerBodySchemaExport = registerBodySchema;
-export const loginBodySchemaExport = loginBodySchema;
-export const refreshTokenBodySchemaExport = refreshTokenBodySchema;
-export const logoutBodySchemaExport = logoutBodySchema;
 
-export type RegisterInput = z.infer<typeof registerBodySchema>;
+export type SendOTPInput = z.infer<typeof sendOTPSchema>;
+export type VerifyOTPInput = z.infer<typeof verifyOTPSchema>;
+export type RegisterInput = z.infer<typeof sendOTPSchema>;
 export type LoginInput = z.infer<typeof loginBodySchema>;
 export type RefreshTokenInput = z.infer<typeof refreshTokenBodySchema>;
 export type LogoutInput = z.infer<typeof logoutBodySchema>;
@@ -111,8 +119,16 @@ export type ChangePasswordInput = z.infer<typeof changePasswordBodySchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordBodySchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordBodySchema>;
 
+export function validateSendOTP(input: unknown) {
+  return sendOTPSchema.safeParse(input);
+}
+
+export function validateVerifyOTP(input: unknown) {
+  return verifyOTPSchema.safeParse(input);
+}
+
 export function validateRegister(input: unknown) {
-  return registerBodySchema.safeParse(input);
+  return sendOTPSchema.safeParse(input);
 }
 
 export function validateLogin(input: unknown) {

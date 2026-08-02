@@ -202,10 +202,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             }
 
             return `
-            <a href="/posts/${post.id}" class="block rounded-sm border border-gray-200 bg-background-100 p-5 hover:bg-gray-50 transition-colors focus-visible:outline-none">
+            <a href="/posts/${post.id}" class="block rounded-sm border border-gray-200 bg-background-100 p-5 transition-all duration-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none">
               <header class="flex items-center justify-between gap-4 mb-3">
                 <div class="flex items-center gap-2">
-                  <span class="text-label-12 font-semibold text-gray-900">${post.anonymousDisplayName || 'Anonymous'}</span>
+                  <span class="profile-link hover:underline cursor-pointer text-label-12 font-semibold text-gray-900" data-id="${post.anonymousIdentityId}">${post.anonymousDisplayName || 'Anonymous'}</span>
                   <span class="text-gray-300 font-mono text-label-12">·</span>
                   <time class="text-label-12 text-gray-400 font-mono" datetime="${post.createdAt}">${formatDate(post.createdAt)}</time>
                 </div>
@@ -240,6 +240,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       }
 
       // Event listeners
+      feedContainer.addEventListener('click', e => {
+        const profileLink = e.target.closest('.profile-link');
+        if (profileLink) {
+          e.preventDefault();
+          e.stopPropagation();
+          const id = profileLink.getAttribute('data-id');
+          window.location.href = `/profile/${id}`;
+        }
+      });
+
       emotionFilter.addEventListener('change', e => {
         selectedEmotion = e.target.value;
         currentPage = 1;

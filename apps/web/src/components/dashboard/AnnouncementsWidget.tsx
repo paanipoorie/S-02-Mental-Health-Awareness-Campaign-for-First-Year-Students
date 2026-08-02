@@ -42,7 +42,7 @@ export function AnnouncementsWidget({ announcements, className = '' }: Announcem
         {announcements.map(announcement => (
           <div
             key={announcement.id}
-            className="bg-background-100 flex cursor-pointer flex-col rounded-sm border border-gray-200 p-3 transition-colors hover:bg-gray-50"
+            className="bg-background-100 flex cursor-pointer flex-col rounded-sm border border-gray-200 p-3 transition-all duration-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 flex-1">

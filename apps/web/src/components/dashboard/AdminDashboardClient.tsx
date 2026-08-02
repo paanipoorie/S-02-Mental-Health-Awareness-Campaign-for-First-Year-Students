@@ -5,6 +5,7 @@ import { dashboardApi } from '@lib/api';
 import { PlatformStatsWidget } from './PlatformStatsWidget';
 import { EventsOverviewWidget } from './EventsOverviewWidget';
 import { ReportsWidget } from './ReportsWidget';
+import { PendingMentorRequestsWidget } from './PendingMentorRequestsWidget';
 
 interface AdminDashboardData {
   platformStats: {
@@ -23,6 +24,12 @@ interface AdminDashboardData {
     totalResources: number;
     activeResources: number;
   };
+  pendingMentors?: Array<{
+    id: string;
+    displayName: string | null;
+    universityEmail: string;
+    createdAt: string;
+  }>;
   activeStudents: Array<{
     id: string;
     anonymousDisplayName: string;
@@ -176,6 +183,10 @@ export function AdminDashboardClient({ initialData }: AdminDashboardClientProps)
               }
             }
           />
+        </div>
+
+        <div className="lg:col-span-12">
+          <PendingMentorRequestsWidget initialMentors={dashboardData?.pendingMentors || []} />
         </div>
 
         <div className="lg:col-span-12">

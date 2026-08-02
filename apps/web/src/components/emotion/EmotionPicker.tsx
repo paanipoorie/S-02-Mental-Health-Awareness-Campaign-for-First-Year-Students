@@ -42,10 +42,10 @@ export function EmotionPicker({ selectedEmotion, onSelect, className = '' }: Emo
           <button
             key={type}
             type="button"
-            className={`flex flex-col items-center gap-1.5 rounded-sm border p-3 text-xs font-medium transition-colors ${
+            className={`flex flex-col items-center gap-1.5 rounded-sm border p-3 text-xs font-medium transition-all duration-200 ${
               isSelected
                 ? 'border-gray-900 bg-gray-100 text-gray-900'
-                : 'bg-background-100 border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                : 'bg-background-100 border-gray-200 text-gray-700 hover:border-gray-300 hover:shadow-sm'
             }`}
             onClick={() => onSelect(type)}
             aria-label={label}

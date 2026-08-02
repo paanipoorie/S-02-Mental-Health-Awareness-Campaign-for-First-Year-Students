@@ -7,7 +7,7 @@ describe('Identity Service Unit Tests', () => {
   it('should create an anonymous identity for a user', async () => {
     const user = await prisma.user.create({
       data: {
-        universityEmail: 'unit-identity@test.edu',
+        universityEmail: 'unit-identity@cuchd.in',
         passwordHash: 'pass',
         role: Role.STUDENT,
       },

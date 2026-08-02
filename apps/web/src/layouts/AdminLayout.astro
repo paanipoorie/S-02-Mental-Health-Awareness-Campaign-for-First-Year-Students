@@ -69,7 +69,7 @@ const NAV_ICONS: Record<string, string> = {
                 class={`flex items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-all duration-150 ${
                   currentPage === item.href.split('/').pop()
                     ? 'active-sidebar-link shadow-sm'
-                    : 'text-slate-300 hover:bg-gray-800 hover:text-white'
+                    : 'text-slate-300 hover:text-white'
                 }`}
                 aria-current={currentPage === item.href.split('/').pop() ? 'page' : undefined}
               >
@@ -157,7 +157,7 @@ const NAV_ICONS: Record<string, string> = {
                   class={`flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-semibold transition-colors ${
                     currentPage === item.href.split('/').pop()
                       ? 'active-sidebar-link'
-                      : 'text-slate-300 hover:bg-gray-800 hover:text-white'
+                      : 'text-slate-300 hover:text-white'
                   }`}
                   aria-current={currentPage === item.href.split('/').pop() ? 'page' : undefined}
                   onclick="document.getElementById('mobile-sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-backdrop').classList.add('hidden')"

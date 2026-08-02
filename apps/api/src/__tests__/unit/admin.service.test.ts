@@ -15,17 +15,17 @@ async function createAdminUser(email: string) {
 
 describe('Admin Service Unit Tests', () => {
   it('should retrieve platform statistics and manage user states', async () => {
-    const admin = await createAdminUser('adminunit1@test.edu');
+    const admin = await createAdminUser('adminunit1@cuchd.in');
     const student = await prisma.user.create({
       data: {
-        universityEmail: 'studentunit1@test.edu',
+        universityEmail: 'studentunit1@cuchd.in',
         passwordHash: 'pass',
         role: Role.STUDENT,
       },
     });
     const mentor = await prisma.user.create({
       data: {
-        universityEmail: 'mentorunit1@test.edu',
+        universityEmail: 'mentorunit1@cuchd.in',
         passwordHash: 'pass',
         role: Role.MENTOR,
         isVerifiedMentor: false,

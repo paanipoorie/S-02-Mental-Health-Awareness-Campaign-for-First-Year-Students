@@ -66,7 +66,7 @@ export function ActiveChatsWidget({ activeChats, className = '' }: ActiveChatsWi
           <a
             key={chat.id}
             href={`/chat?threadId=${chat.id}`}
-            className="bg-background-100 flex items-center gap-4 rounded-sm border border-gray-200 p-3 transition-colors hover:bg-gray-50 focus-visible:outline-none"
+            className="bg-background-100 flex items-center gap-4 rounded-sm border border-gray-200 p-3 transition-all duration-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none"
           >
             <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-gray-700">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,7 +80,16 @@ export function ActiveChatsWidget({ activeChats, className = '' }: ActiveChatsWi
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between">
-                <p className="text-copy-14 truncate pr-2 font-semibold text-gray-900">
+                <p 
+                  onClick={(e) => {
+                    if (!chat.mentorDisplayName) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      window.location.href = `/profile/${chat.studentIdentityId}`;
+                    }
+                  }}
+                  className={`text-copy-14 truncate pr-2 font-semibold text-gray-900 ${!chat.mentorDisplayName ? 'hover:underline hover:text-primary cursor-pointer' : ''}`}
+                >
                   {chat.mentorDisplayName || chat.studentDisplayName}
                 </p>
                 {chat.unreadCount > 0 && (

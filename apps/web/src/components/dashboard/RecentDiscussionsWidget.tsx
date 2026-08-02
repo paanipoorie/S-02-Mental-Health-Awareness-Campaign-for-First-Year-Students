@@ -70,7 +70,7 @@ export function RecentDiscussionsWidget({
           <a
             key={post.id}
             href={`/posts/${post.id}`}
-            className="bg-background-100 flex flex-col rounded-sm border border-gray-200 p-3 transition-colors hover:bg-gray-50 focus-visible:outline-none"
+            className="bg-background-100 flex flex-col rounded-sm border border-gray-200 p-3 transition-all duration-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">

@@ -1,0 +1,57 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Mentor Verification Pending | Peerly"
+  description="Your mentor application is awaiting administrator approval."
+  currentRole="MENTOR"
+>
+  <div class="mx-auto flex min-h-[70vh] w-full max-w-2xl flex-col items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md rounded-sm border border-gray-200 bg-background-100 p-8 text-center shadow-sm">
+      <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-amber-200 bg-amber-50">
+        <svg
+          class="h-8 w-8 text-amber-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.8"
+            d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
+
+      <h1 class="text-heading-24 text-gray-1000 font-bold">Mentor Verification Pending</h1>
+
+      <p class="text-copy-14 mt-3 leading-relaxed text-gray-600">
+        Your mentor application is awaiting administrator approval.
+      </p>
+      <p class="text-copy-14 mt-2 leading-relaxed text-gray-600">
+        You will gain access to mentoring features once your university verifies your account.
+      </p>
+
+      <div class="mt-6 inline-flex items-center gap-2 rounded-sm border border-amber-200 bg-amber-50 px-4 py-2">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+          <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+        </span>
+        <span class="text-label-13 font-semibold text-amber-800">Status: Pending Approval</span>
+      </div>
+
+      <div class="mt-8 border-t border-gray-200 pt-6">
+        <a
+          href="/login"
+          class="text-label-13 inline-block font-medium text-gray-600 transition-colors hover:text-gray-900"
+        >
+          Log out and sign in again
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+

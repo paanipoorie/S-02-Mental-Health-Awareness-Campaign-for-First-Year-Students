@@ -34,6 +34,8 @@ router.get('/action-logs', adminController.getActionLogs);
 // User management
 router.get('/users', validate(getAdminUsersQuerySchema), adminController.getUsers);
 router.get('/mentors', validate(getAdminMentorsQuerySchema), adminController.getMentors);
+router.get('/mentors/pending', adminController.getPendingMentors);
+router.post('/mentors/:id/reject', validate(verifyMentorParamsSchema), adminController.rejectMentor);
 router.patch(
   '/users/:id/status',
   validate(updateUserStatusParamsSchema),

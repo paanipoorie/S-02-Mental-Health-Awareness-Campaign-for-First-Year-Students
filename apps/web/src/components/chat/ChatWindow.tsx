@@ -21,6 +21,8 @@ interface ChatInfo {
   id: string;
   studentIdentityId: string;
   studentDisplayName: string;
+  peerIdentityId?: string | null;
+  peerIdentity?: { displayName: string; avatarSeed: number } | null;
   mentorDisplayName: string | null;
   status: string;
   latestEmotion?: { emotion: string; urgencyLevel: string | null } | null;
@@ -177,9 +179,25 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
   };
 
   const isStudent = user?.role === 'STUDENT';
-  const otherName = isStudent
-    ? chatInfo?.mentorDisplayName || 'Mentor'
-    : chatInfo?.studentDisplayName || 'Student';
+  let otherName = 'Unknown';
+  let otherProfileId: string | null = null;
+
+  if (chatInfo) {
+    if (isStudent) {
+      if (chatInfo.peerIdentityId) {
+        const isInitiator = chatInfo.studentDisplayName === user?.anonymousDisplayName;
+        otherName = isInitiator 
+          ? chatInfo.peerIdentity?.displayName || 'Anonymous Peer' 
+          : chatInfo.studentDisplayName;
+        otherProfileId = isInitiator ? chatInfo.peerIdentityId : chatInfo.studentIdentityId;
+      } else {
+        otherName = chatInfo.mentorDisplayName || 'Mentor';
+      }
+    } else {
+      otherName = chatInfo.studentDisplayName || 'Student';
+      otherProfileId = chatInfo.studentIdentityId;
+    }
+  }
 
   if (loading) {
     return (
@@ -222,19 +240,43 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
         >
           ←
         </a>
-        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-sm font-bold text-gray-700">
-          {otherName.charAt(0)}
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-bold text-gray-900">{otherName}</p>
-          {chatInfo?.latestEmotion && (
-            <p className="mt-0.5 font-mono text-[10px] text-gray-400">
-              Mood: {chatInfo.latestEmotion.emotion}
-              {chatInfo.latestEmotion.urgencyLevel &&
-                ` · ${chatInfo.latestEmotion.urgencyLevel} Urgency`}
-            </p>
-          )}
-        </div>
+        
+        {otherProfileId ? (
+          <a
+            href={`/profile/${otherProfileId}`}
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity min-w-0 flex-1"
+          >
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-sm font-bold text-gray-700">
+              {otherName.charAt(0)}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-bold text-gray-900 hover:underline">{otherName}</p>
+              {chatInfo?.latestEmotion && (
+                <p className="mt-0.5 font-mono text-[10px] text-gray-400">
+                  Mood: {chatInfo.latestEmotion.emotion}
+                  {chatInfo.latestEmotion.urgencyLevel &&
+                    ` · ${chatInfo.latestEmotion.urgencyLevel} Urgency`}
+                </p>
+              )}
+            </div>
+          </a>
+        ) : (
+          <>
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-sm font-bold text-gray-700">
+              {otherName.charAt(0)}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-bold text-gray-900">{otherName}</p>
+              {chatInfo?.latestEmotion && (
+                <p className="mt-0.5 font-mono text-[10px] text-gray-400">
+                  Mood: {chatInfo.latestEmotion.emotion}
+                  {chatInfo.latestEmotion.urgencyLevel &&
+                    ` · ${chatInfo.latestEmotion.urgencyLevel} Urgency`}
+                </p>
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       <div ref={messagesContainerRef} className="flex-1 space-y-1 overflow-y-auto px-6 py-4">

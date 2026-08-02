@@ -127,6 +127,7 @@ export const postService = {
             createdAt: reply.createdAt,
             isDeleted: reply.isDeleted,
             authorName: anon.displayName,
+            authorIdentityId: reply.anonymousIdentityId,
             isMentor: false,
           };
         }
@@ -143,6 +144,7 @@ export const postService = {
           createdAt: reply.createdAt,
           isDeleted: reply.isDeleted,
           authorName: user?.role === 'ADMIN' ? 'Administrator' : 'Peer Mentor',
+          authorIdentityId: reply.anonymousIdentityId,
           isMentor: user?.role === 'MENTOR' ? user.isVerifiedMentor : false,
         };
       })

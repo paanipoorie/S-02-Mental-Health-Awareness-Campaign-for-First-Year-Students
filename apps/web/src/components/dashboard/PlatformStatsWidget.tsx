@@ -68,7 +68,7 @@ export function PlatformStatsWidget({ platformStats, className = '' }: PlatformS
         {stats.map(stat => (
           <div
             key={stat.key}
-            className="bg-background-100 flex items-center justify-between rounded-sm border border-gray-200 p-4 transition-colors hover:bg-gray-50"
+            className="bg-background-100 flex items-center justify-between rounded-sm border border-gray-200 p-4"
           >
             <div>
               <p className="text-label-12 font-medium leading-none text-gray-700">{stat.label}</p>

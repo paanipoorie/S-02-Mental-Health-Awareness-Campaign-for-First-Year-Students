@@ -48,7 +48,7 @@ export function ActiveUsersWidget({
             {(activeStudents || []).slice(0, 10).map(student => (
               <div
                 key={student.id}
-                className="bg-background-100 flex items-center gap-3 rounded-sm border border-gray-200 p-3 transition-colors hover:bg-gray-50"
+                className="bg-background-100 flex items-center gap-3 rounded-sm border border-gray-200 p-3"
               >
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100">
                   <span className="text-sm font-bold text-gray-700">
@@ -94,7 +94,7 @@ export function ActiveUsersWidget({
               return (
                 <div
                   key={mentor.id}
-                  className="bg-background-100 flex items-center justify-between rounded-sm border border-gray-200 p-3 transition-colors hover:bg-gray-50"
+                  className="bg-background-100 flex items-center justify-between rounded-sm border border-gray-200 p-3"
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-3">
                     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100">

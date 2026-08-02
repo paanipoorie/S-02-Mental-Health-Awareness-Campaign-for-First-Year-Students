@@ -48,6 +48,42 @@ export const adminController = {
     }
   },
 
+  async getPendingMentors(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await adminService.getPendingMentors();
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async rejectMentor(req: Request, res: Response, next: NextFunction) {
+    try {
+      const adminUserId = req.user!.userId;
+      const id = req.params.id as string;
+
+      const result = await adminService.rejectMentor(adminUserId, id);
+
+      res.json({ success: true, data: result });
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'MENTOR_NOT_FOUND') {
+          return next(new ApiError(404, 'Mentor not found', 'MENTOR_NOT_FOUND'));
+        }
+        if (error.message === 'MENTOR_ALREADY_VERIFIED') {
+          return next(
+            new ApiError(
+              400,
+              'Cannot reject a mentor that has already been verified',
+              'MENTOR_ALREADY_VERIFIED'
+            )
+          );
+        }
+      }
+      next(error);
+    }
+  },
+
   async getMentors(req: Request, res: Response, next: NextFunction) {
     try {
       const page = parseInt(req.query.page as string) || 1;

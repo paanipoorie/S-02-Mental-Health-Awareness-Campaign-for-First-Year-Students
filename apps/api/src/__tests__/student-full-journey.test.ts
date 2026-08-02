@@ -4,7 +4,7 @@ import { prisma } from '../prisma/client.js';
 import { createApp } from '../app.js';
 import { signAccessToken } from '../utils/jwt.js';
 import { Role } from '@campus-peer-support/shared-types';
-import { getTestEmail, testPassword } from './setup.js';
+import { getTestEmail, testPassword, registerViaOTP } from './setup.js';
 
 const app = createApp();
 
@@ -32,18 +32,10 @@ describe('Student Full Journey E2E Integration Test', () => {
       },
     });
 
-    // 2. Register Student
-    const registerResponse = await request(app)
-      .post('/api/auth/register')
-      .send({
-        universityEmail: studentEmail,
-        password: testPassword,
-        role: 'STUDENT',
-      })
-      .expect(201);
-
-    expect(registerResponse.body.success).toBe(true);
-    expect(registerResponse.body.data.user).toBeDefined();
+    // 2. Register Student via OTP flow
+    const registerResponse = await registerViaOTP(app, studentEmail, 'STUDENT');
+    expect(registerResponse.user).toBeDefined();
+    expect(registerResponse.user.role).toBe(Role.STUDENT);
 
     // 3. Login Student
     const loginResponse = await request(app)
@@ -126,6 +118,14 @@ describe('Student Full Journey E2E Integration Test', () => {
       .expect(201);
 
     expect(msgResponse.body.success).toBe(true);
+
+    // 10. Schedule Peer Study Meeting
+    const meetingResponse = await request(app)
+      .post('/api/meetings')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        title: 'Weekly calculus preparative group',
+        description: 'Solving homework problems together.',
 
     // 10. Schedule Peer Study Meeting
     const meetingResponse = await request(app)

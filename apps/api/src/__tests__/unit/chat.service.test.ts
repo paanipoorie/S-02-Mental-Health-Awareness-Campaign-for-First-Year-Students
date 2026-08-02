@@ -43,8 +43,8 @@ async function setupStudentAndMentor(studentEmail: string, mentorEmail: string) 
 describe('Chat Service Unit Tests', () => {
   it('should verify all chat flow service actions', async () => {
     const { student, studentAnon, mentor } = await setupStudentAndMentor(
-      'chatunit1@test.edu',
-      'chatunit2@test.edu'
+      'chatunit1@cuchd.in',
+      'chatunit2@cuchd.in'
     );
 
     // Create chat thread (should auto-assign the available mentor)

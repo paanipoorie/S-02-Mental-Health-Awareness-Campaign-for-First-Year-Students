@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const createChatSchema = z.object({
   body: z.object({
     studentIdentityId: z.string().cuid().optional(),
+    peerIdentityId: z.string().cuid().optional(),
   }),
 });
 

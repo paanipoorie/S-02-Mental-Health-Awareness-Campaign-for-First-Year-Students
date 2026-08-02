@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { api, ClientApiError } from '../../lib/api';
 import { setAuthUser } from '../../stores/authStore';
 import { Role } from '@campus-peer-support/shared-types';
+import { MENTOR_VERIFICATION_PENDING_PATH } from '../../lib/auth';
 
 interface LoginResponse {
   accessToken: string;
@@ -51,7 +52,11 @@ export const LoginForm: React.FC = () => {
       if (profile.role === Role.STUDENT) {
         window.location.href = '/dashboard';
       } else if (profile.role === Role.MENTOR) {
-        window.location.href = '/mentor/dashboard';
+        if (!profile.isVerifiedMentor) {
+          window.location.href = MENTOR_VERIFICATION_PENDING_PATH;
+        } else {
+          window.location.href = '/mentor/dashboard';
+        }
       } else if (profile.role === Role.ADMIN) {
         window.location.href = '/admin/dashboard';
       } else {

@@ -33,6 +33,7 @@ interface ChatThread {
 interface ChatListProps {
   onSelect?: (threadId: string) => void;
   compact?: boolean;
+  activeThreadId?: string | null;
 }
 
 const emotionIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -48,7 +49,7 @@ const emotionIcons: Record<string, React.ComponentType<{ className?: string }>> 
   STRESSED: Zap,
 };
 
-export function ChatList({ onSelect, compact }: ChatListProps) {
+export function ChatList({ onSelect, compact, activeThreadId }: ChatListProps) {
   const user = useStore($user);
   const [chats, setChats] = useState<ChatThread[]>([]);
   const [loading, setLoading] = useState(true);
@@ -182,6 +183,7 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
 
             const isUnread = chat.unreadCount > 0;
 
+            const isSelected = activeThreadId === chat.id;
             return (
               <a
                 key={chat.id}
@@ -194,9 +196,11 @@ export function ChatList({ onSelect, compact }: ChatListProps) {
                       }
                     : undefined
                 }
-                className={`bg-background-100 flex items-center gap-4 border-b border-gray-200 px-6 py-4 transition-colors hover:bg-gray-50 ${
-                  isUnread ? 'bg-blue-50/20' : ''
-                }`}
+                className={`flex items-center gap-4 border-b border-gray-200 px-6 py-4 transition-all duration-200 ${
+                  isSelected
+                    ? 'bg-gray-100 text-white'
+                    : 'bg-background-100 text-gray-700 hover:border-gray-300 hover:shadow-sm'
+                } ${isUnread && !isSelected ? 'bg-blue-50/10' : ''}`}
               >
                 <div className="relative flex-shrink-0">
                   <div className="flex h-10 w-10 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-sm font-bold text-gray-700">

@@ -212,6 +212,12 @@ export interface AdminDashboardData {
     totalResources: number;
     activeResources: number;
   };
+  pendingMentors: Array<{
+    id: string;
+    displayName: string | null;
+    universityEmail: string;
+    createdAt: Date;
+  }>;
   activeStudents: Array<{
     id: string;
     anonymousDisplayName: string;
@@ -528,6 +534,7 @@ export const dashboardService = {
   async getAdminDashboard(): Promise<AdminDashboardData> {
     const [
       platformStats,
+      pendingMentors,
       activeStudents,
       activeMentors,
       meetingsOverview,
@@ -535,6 +542,7 @@ export const dashboardService = {
       reports,
     ] = await Promise.all([
       this.getPlatformStats(),
+      this.getPendingMentors(),
       this.getActiveStudents(),
       this.getActiveMentors(),
       this.getMeetingsOverview(),
@@ -544,12 +552,37 @@ export const dashboardService = {
 
     return {
       platformStats,
+      pendingMentors,
       activeStudents,
       activeMentors,
       meetingsOverview,
       workshopsOverview,
       reports,
     };
+  },
+
+  async getPendingMentors() {
+    const mentors = await prisma.user.findMany({
+      where: {
+        role: PrismaRole.MENTOR,
+        isVerifiedMentor: false,
+        isActive: true,
+      },
+      include: {
+        anonymousIdentity: {
+          select: { displayName: true },
+        },
+      },
+      orderBy: { createdAt: 'asc' },
+      take: 100,
+    });
+
+    return mentors.map(mentor => ({
+      id: mentor.id,
+      displayName: mentor.anonymousIdentity?.displayName ?? null,
+      universityEmail: mentor.universityEmail,
+      createdAt: mentor.createdAt,
+    }));
   },
 
   async getAnnouncements(limit: number) {

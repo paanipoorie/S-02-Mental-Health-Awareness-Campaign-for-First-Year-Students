@@ -38,7 +38,7 @@ export function ChatPortal() {
           activeThreadId ? 'hidden h-full flex-col md:flex' : 'flex h-full flex-col'
         }`}
       >
-        <ChatList compact={true} onSelect={handleSelectThread} />
+        <ChatList compact={true} activeThreadId={activeThreadId} onSelect={handleSelectThread} />
       </div>
 
       {/* Right panel: Chat Window */}

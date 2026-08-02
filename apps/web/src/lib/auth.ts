@@ -1,4 +1,4 @@
-import type { Role } from '@campus-peer-support/shared-types';
+import { Role } from '@campus-peer-support/shared-types';
 
 export interface UserProfile {
   id?: string;
@@ -54,4 +54,37 @@ export function removeStoredUser(): void {
 export function clearAuthSession(): void {
   removeAccessToken();
   removeStoredUser();
+}
+
+export const MENTOR_VERIFICATION_PENDING_PATH = '/mentor/verification-pending';
+
+/**
+ * A mentor whose account has not yet been approved by an admin.
+ * They can log in and view the pending-verification page only.
+ */
+export function isUnverifiedMentor(user: UserProfile | null): boolean {
+  return (
+    !!user &&
+    user.role === Role.MENTOR &&
+    user.isVerifiedMentor !== true
+  );
+}
+
+/**
+ * Redirects an unverified mentor to the single "Verification Pending" page.
+ * This is the single destination for all restricted mentor routes.
+ */
+export function redirectUnverifiedMentor(user: UserProfile | null): void {
+  if (isUnverifiedMentor(user)) {
+    window.location.href = MENTOR_VERIFICATION_PENDING_PATH;
+  }
+}
+
+/** Client-side guard for pages/actions that require a verified mentor. */
+export function requireVerifiedMentorRedirect(user: UserProfile | null): boolean {
+  const unverified = isUnverifiedMentor(user);
+  if (unverified) {
+    window.location.href = MENTOR_VERIFICATION_PENDING_PATH;
+  }
+  return unverified;
 }

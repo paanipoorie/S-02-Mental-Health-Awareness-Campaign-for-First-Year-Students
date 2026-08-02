@@ -296,7 +296,7 @@ export function WorkshopListClient() {
             return (
               <div
                 key={workshop.id}
-                className="bg-background-100 flex flex-col justify-between rounded-sm border border-gray-200 p-6 transition-colors hover:bg-gray-50 focus-visible:outline-none"
+                className="bg-background-100 flex flex-col justify-between rounded-sm border border-gray-200 p-6 transition-all duration-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none"
               >
                 <div>
                   {/* Meta details */}

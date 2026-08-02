@@ -66,7 +66,13 @@ export async function gateUnverifiedMentor(
     });
 
     if (!user || user.role !== 'MENTOR' || !user.isVerifiedMentor) {
-      return next(ApiError.forbidden('Mentor account is pending verification', 'FORBIDDEN'));
+      return next(
+        new ApiError(
+          403,
+          'Mentor account is pending verification',
+          'MENTOR_VERIFICATION_PENDING'
+        )
+      );
     }
 
     next();

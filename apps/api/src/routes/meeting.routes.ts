@@ -1,7 +1,12 @@
 import { Router } from 'express';
 import { meetingController } from '../controllers/meeting.controller.js';
 import { validate } from '../middlewares/validate.middleware.js';
-import { authMiddleware, requireRole, requireVerifiedMentor } from '../middlewares/index.js';
+import {
+  authMiddleware,
+  requireRole,
+  requireVerifiedMentor,
+  gateUnverifiedMentor,
+} from '../middlewares/index.js';
 import { Role } from '@campus-peer-support/shared-types';
 import {
   createMeetingSchema,
@@ -20,6 +25,8 @@ const router: Router = Router();
 // All meeting and workshop routes require authentication
 router.use(authMiddleware);
 router.use(requireRole(Role.STUDENT, Role.MENTOR, Role.ADMIN));
+// Unverified mentors are blocked from events/meetings/workshops entirely.
+router.use(gateUnverifiedMentor);
 
 // Meeting routes
 router.post('/meetings', validate(createMeetingSchema), meetingController.createMeeting);

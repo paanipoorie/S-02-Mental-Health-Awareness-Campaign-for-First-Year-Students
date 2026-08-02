@@ -79,10 +79,10 @@ export function ResourceFilterBar({
         >
           <button
             onClick={() => onCategoryChange('')}
-            className={`rounded-sm border px-3 py-1.5 text-xs font-semibold transition-colors ${
+            className={`rounded-sm border px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${
               selectedCategory === ''
                 ? 'bg-primary border-primary text-background-100'
-                : 'bg-background-100 border-gray-200 text-gray-700 hover:bg-gray-50'
+                : 'bg-background-100 border-gray-200 text-gray-700 hover:border-gray-300 hover:shadow-sm'
             }`}
           >
             All Categories
@@ -91,10 +91,10 @@ export function ResourceFilterBar({
             <button
               key={category}
               onClick={() => onCategoryChange(category)}
-              className={`flex items-center gap-1.5 rounded-sm border px-3 py-1 text-xs font-semibold transition-colors ${
+              className={`flex items-center gap-1.5 rounded-sm border px-3 py-1 text-xs font-semibold transition-all duration-200 ${
                 selectedCategory === category
                   ? 'bg-primary border-primary text-background-100'
-                  : 'bg-background-100 border-gray-200 text-gray-700 hover:bg-gray-50'
+                  : 'bg-background-100 border-gray-200 text-gray-700 hover:border-gray-300 hover:shadow-sm'
               }`}
             >
               <ResourceCategoryBadge category={category} size="sm" />

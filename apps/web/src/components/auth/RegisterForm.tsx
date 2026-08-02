@@ -2,15 +2,50 @@ import React, { useState } from 'react';
 import { api, ClientApiError } from '../../lib/api';
 import { setAuthUser } from '../../stores/authStore';
 import { Role } from '@campus-peer-support/shared-types';
+import {
+  MENTOR_VERIFICATION_PENDING_PATH,
+} from '../../lib/auth';
+
+const CU_EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@cuchd\.in$/;
+
+const EMAIL_ERROR_MESSAGE =
+  'Please use your official Chandigarh University email (@cuchd.in).';
+
+type RoleChoice = Role.STUDENT | Role.MENTOR;
 
 export const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState<RoleChoice>(Role.STUDENT);
+  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState<1 | 2>(1); // 1 = details, 2 = OTP verification
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState(0);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const validateEmail = (value: string): string | null => {
+    const normalized = value.trim().toLowerCase();
+    if (!normalized) return 'Please enter your university email.';
+    if (!CU_EMAIL_REGEX.test(normalized)) return EMAIL_ERROR_MESSAGE;
+    return null;
+  };
+
+  const startResendCountdown = () => {
+    setCountdown(30);
+    const interval = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -29,36 +64,71 @@ export const RegisterForm: React.FC = () => {
       return;
     }
 
+    const emailError = validateEmail(email);
+    if (emailError) {
+      setError(emailError);
+      return;
+    }
+
     setLoading(true);
     try {
-      await api.post('/auth/register', {
+      await api.post('/auth/send-otp', {
         universityEmail: email.trim().toLowerCase(),
         password,
-        role: Role.STUDENT,
+        role,
       });
+      setStep(2);
+      startResendCountdown();
+    } catch (err) {
+      if (err instanceof ClientApiError) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred while sending the OTP.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      // Auto login after registration
-      const loginRes = await api.post<{ accessToken: string; role: Role }>('/auth/login', {
+  const handleVerifyOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!otp || otp.length !== 6) {
+      setError('Please enter the 6-digit OTP sent to your email.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await api.post<{
+        accessToken: string;
+        user: { role: Role; isVerifiedMentor: boolean };
+      }>('/auth/verify-otp', {
         universityEmail: email.trim().toLowerCase(),
-        password,
+        otp,
       });
 
+      // Fetch the full profile, then persist the session.
       const profile = await api.get<{
         role: Role;
+        isVerifiedMentor?: boolean;
         anonymousDisplayName?: string;
         avatarSeed?: string;
-        name?: string;
-        isVerifiedMentor?: boolean;
       }>('/auth/me', {
-        headers: { Authorization: `Bearer ${loginRes.accessToken}` },
+        headers: { Authorization: `Bearer ${res.accessToken}` },
       });
 
-      setAuthUser(profile, loginRes.accessToken);
+      setAuthUser(profile, res.accessToken);
 
       if (profile.role === Role.STUDENT) {
         window.location.href = '/dashboard';
       } else if (profile.role === Role.MENTOR) {
-        window.location.href = '/mentor/dashboard';
+        if (!profile.isVerifiedMentor) {
+          window.location.href = MENTOR_VERIFICATION_PENDING_PATH;
+        } else {
+          window.location.href = '/mentor/dashboard';
+        }
       } else if (profile.role === Role.ADMIN) {
         window.location.href = '/admin/dashboard';
       } else {
@@ -68,19 +138,45 @@ export const RegisterForm: React.FC = () => {
       if (err instanceof ClientApiError) {
         setError(err.message);
       } else {
-        setError('An unexpected error occurred during registration.');
+        setError('An unexpected error occurred while verifying the OTP.');
       }
     } finally {
       setLoading(false);
     }
   };
 
+  const handleResendOTP = async () => {
+    if (countdown > 0) return;
+    setResending(true);
+    setError(null);
+    try {
+      await api.post('/auth/send-otp', {
+        universityEmail: email.trim().toLowerCase(),
+        password,
+        role,
+      });
+      startResendCountdown();
+    } catch (err) {
+      if (err instanceof ClientApiError) {
+        setError(err.message);
+      } else {
+        setError('Failed to resend OTP. Please try again.');
+      }
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
     <div className="bg-background-100 mx-auto w-full max-w-md rounded-sm border border-gray-200 p-8 shadow-sm">
       <div className="mb-8">
-        <h2 className="text-heading-24 text-gray-1000 font-bold">Create Account</h2>
+        <h2 className="text-heading-24 text-gray-1000 font-bold">
+          {step === 1 ? 'Create Account' : 'Verify Your Email'}
+        </h2>
         <p className="text-label-13 mt-1.5 text-gray-600">
-          Sign up with your official university email address.
+          {step === 1
+            ? 'Sign up with your official Chandigarh University email address.'
+            : `We sent a 6-digit code to ${email}.`}
         </p>
       </div>
 
@@ -98,65 +194,172 @@ export const RegisterForm: React.FC = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label className="text-label-13 mb-2 block font-semibold text-gray-700">
-            University Email
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="university@college.edu"
-            className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
-            required
-          />
-          <p className="text-label-12 mt-1.5 text-gray-500">
-            Only used for verification. Real identity is never exposed.
+      {step === 1 && (
+        <form onSubmit={handleSendOTP} className="space-y-5">
+          {/* Role selection */}
+          <div>
+            <label className="text-label-13 mb-2 block font-semibold text-gray-700">
+              I am registering as
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setRole(Role.STUDENT)}
+                className={`cursor-pointer rounded-sm border p-3 text-left transition-colors ${
+                  role === Role.STUDENT
+                    ? 'border-gray-900 bg-gray-100'
+                    : 'border-gray-300 bg-background-100 hover:border-gray-400'
+                }`}
+              >
+                <span className="text-label-14 block font-semibold text-gray-900">Student</span>
+                <span className="text-label-12 mt-0.5 block text-gray-500">
+                  Seek anonymous peer support
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole(Role.MENTOR)}
+                className={`cursor-pointer rounded-sm border p-3 text-left transition-colors ${
+                  role === Role.MENTOR
+                    ? 'border-gray-900 bg-gray-100'
+                    : 'border-gray-300 bg-background-100 hover:border-gray-400'
+                }`}
+              >
+                <span className="text-label-14 block font-semibold text-gray-900">Peer Mentor</span>
+                <span className="text-label-12 mt-0.5 block text-gray-500">
+                  Support first-year students
+                </span>
+              </button>
+            </div>
+            {role === Role.MENTOR && (
+              <p className="text-label-12 mt-2 text-amber-700">
+                Your mentor account will be reviewed by an administrator before you can access
+                mentoring features.
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="text-label-13 mb-2 block font-semibold text-gray-700">
+              University Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="25bcs10067@cuchd.in"
+              className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
+              required
+            />
+            <p className="text-label-12 mt-1.5 text-gray-500">
+              Only Chandigarh University emails (@cuchd.in) are accepted.
+            </p>
+          </div>
+
+          <div>
+            <label className="text-label-13 mb-2 block font-semibold text-gray-700">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="Minimum 8 characters"
+              className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="text-label-13 mb-2 block font-semibold text-gray-700">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              placeholder="Re-enter password"
+              className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-primary text-button-14 text-background-100 mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm px-4 py-2.5 font-semibold transition-colors hover:bg-gray-800 disabled:opacity-50"
+          >
+            {loading ? (
+              <>
+                <div className="border-background-100/30 border-t-background-100 h-4 w-4 animate-spin rounded-full border-2"></div>
+                <span>Sending OTP...</span>
+              </>
+            ) : (
+              <span>Send Verification Code</span>
+            )}
+          </button>
+
+          <p className="text-label-12 text-center text-gray-500">
+            Your account is created only after you verify the code sent to your email.
           </p>
-        </div>
+        </form>
+      )}
 
-        <div>
-          <label className="text-label-13 mb-2 block font-semibold text-gray-700">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Minimum 8 characters"
-            className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
-            required
-          />
-        </div>
+      {step === 2 && (
+        <form onSubmit={handleVerifyOTP} className="space-y-5">
+          <div>
+            <label className="text-label-13 mb-2 block font-semibold text-gray-700">
+              Verification Code
+            </label>
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={6}
+              value={otp}
+              onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
+              placeholder="••••••"
+              className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 text-center text-xl tracking-[0.5em] placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
+              required
+            />
+            <p className="text-label-12 mt-1.5 text-gray-500">Enter the 6-digit code from your email.</p>
+          </div>
 
-        <div>
-          <label className="text-label-13 mb-2 block font-semibold text-gray-700">
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
-            placeholder="Re-enter password"
-            className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
-            required
-          />
-        </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-primary text-button-14 text-background-100 mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm px-4 py-2.5 font-semibold transition-colors hover:bg-gray-800 disabled:opacity-50"
+          >
+            {loading ? (
+              <>
+                <div className="border-background-100/30 border-t-background-100 h-4 w-4 animate-spin rounded-full border-2"></div>
+                <span>Verifying...</span>
+              </>
+            ) : (
+              <span>Verify & Create Account</span>
+            )}
+          </button>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-primary text-button-14 text-background-100 mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-sm px-4 py-2.5 font-semibold transition-colors hover:bg-gray-800 disabled:opacity-50"
-        >
-          {loading ? (
-            <>
-              <div className="border-background-100/30 border-t-background-100 h-4 w-4 animate-spin rounded-full border-2"></div>
-              <span>Creating Account...</span>
-            </>
-          ) : (
-            <span>Create Account</span>
-          )}
-        </button>
-      </form>
+          <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              className="text-label-13 cursor-pointer font-medium text-gray-600 hover:text-gray-900"
+            >
+              ← Edit details
+            </button>
+            <button
+              type="button"
+              onClick={handleResendOTP}
+              disabled={countdown > 0 || resending}
+              className="text-label-13 cursor-pointer font-semibold text-blue-700 hover:underline disabled:cursor-not-allowed disabled:text-gray-400 disabled:hover:no-underline"
+            >
+              {resending
+                ? 'Resending...'
+                : countdown > 0
+                  ? `Resend code in ${countdown}s`
+                  : 'Resend code'}
+            </button>
+          </div>
+        </form>
+      )}
 
       <div className="mt-8 border-t border-gray-200 pt-6 text-center">
         <p className="text-label-13 text-gray-600">
@@ -169,3 +372,4 @@ export const RegisterForm: React.FC = () => {
     </div>
   );
 };
+
