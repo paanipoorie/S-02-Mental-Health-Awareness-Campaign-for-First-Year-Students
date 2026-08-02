@@ -51,7 +51,7 @@ async function main() {
   });
   console.log('Seeded Admin:', admin.universityEmail);
 
-  // 2. Seed Mentors
+// 2. Seed Mentors
   const mentor1 = await prisma.user.create({
     data: {
       universityEmail: 'mentor1@cuchd.in',
@@ -93,6 +93,27 @@ async function main() {
       mentorProfile: true,
     },
   });
+
+  // Simple demo mentor account
+  const demoMentor = await prisma.user.create({
+    data: {
+      universityEmail: 'mentor@cuchd.in',
+      passwordHash,
+      role: Role.MENTOR,
+      isVerifiedMentor: true,
+      isActive: true,
+      mentorProfile: {
+        create: {
+          department: 'Peer Support',
+          bio: 'Demo mentor account for testing.',
+          specialties: ['general support', 'academics'],
+          availabilityStatus: MentorAvailabilityStatus.AVAILABLE,
+        },
+      },
+    },
+  });
+  console.log('Seeded Demo Mentor:', demoMentor.universityEmail);
+
   // Pending mentor (isVerifiedMentor = false) so admins can review an application
   const pendingMentor = await prisma.user.create({
     data: {
@@ -105,7 +126,12 @@ async function main() {
   });
   console.log('Seeded Pending Mentor:', pendingMentor.universityEmail);
 
-  console.log('Seeded Mentors:', mentor1.universityEmail, mentor2.universityEmail);
+console.log(
+    'Seeded Mentors:',
+    mentor1.universityEmail,
+    mentor2.universityEmail,
+    demoMentor.universityEmail
+  );
 
   // 3. Seed Students
   const student1 = await prisma.user.create({
@@ -161,11 +187,28 @@ async function main() {
       anonymousIdentity: true,
     },
   });
+
+  // Simple demo student account
+  const demoStudent = await prisma.user.create({
+    data: {
+      universityEmail: 'student@cuchd.in',
+      passwordHash,
+      role: Role.STUDENT,
+      isActive: true,
+      anonymousIdentity: {
+        create: {
+          displayName: 'Anonymous Curious Fox',
+          avatarSeed: 1004,
+        },
+      },
+    },
+  });
   console.log(
     'Seeded Students:',
     student1.universityEmail,
     student2.universityEmail,
-    student3.universityEmail
+    student3.universityEmail,
+    demoStudent.universityEmail
   );
 
   const student1IdentityId = student1.anonymousIdentity!.id;
