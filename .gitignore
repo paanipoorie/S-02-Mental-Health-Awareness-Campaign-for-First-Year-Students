@@ -49,9 +49,7 @@ apps/**/pnpm-lock.yaml
 apps/**/.vite/
 
 # Prisma
-prisma/migrations/
 apps/api/node_modules/.prisma/
-apps/**/prisma/migrations/
 
 # TypeScript
 *.tsbuildinfo
