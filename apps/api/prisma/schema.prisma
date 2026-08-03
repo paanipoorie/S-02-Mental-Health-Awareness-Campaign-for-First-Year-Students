@@ -330,19 +330,11 @@ model EmailOTP {
   createdAt    DateTime @default(now()) @db.Timestamptz(6)
 }
 
-enum AssignmentStatus {
-  ACTIVE
-  INACTIVE
-}
-
 model MentorAssignment {
-  id         String           @id @default(cuid())
-  studentId  String
-  student    User             @relation("StudentAssignments", fields: [studentId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  studentId  String   @unique
+  student    User     @relation("StudentAssignments", fields: [studentId], references: [id], onDelete: Cascade)
   mentorId   String
-  mentor     User             @relation("MentorAssignments", fields: [mentorId], references: [id], onDelete: Cascade)
-  assignedAt DateTime         @default(now()) @db.Timestamptz(6)
-  status     AssignmentStatus @default(ACTIVE)
-
-  @@unique([studentId, status])
+  mentor     User     @relation("MentorAssignments", fields: [mentorId], references: [id], onDelete: Cascade)
+  assignedAt DateTime @default(now()) @db.Timestamptz(6)
 }

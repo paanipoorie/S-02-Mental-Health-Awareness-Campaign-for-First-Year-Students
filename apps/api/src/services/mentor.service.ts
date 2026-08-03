@@ -287,4 +287,58 @@ export const mentorService = {
       totalPages: Math.ceil(total / limit),
     };
   },
+
+  async getMyStudents(mentorId: string) {
+    const assignments = await prisma.mentorAssignment.findMany({
+      where: {
+        mentorId,
+      },
+      include: {
+        student: {
+          include: {
+            anonymousIdentity: {
+              select: {
+                id: true,
+                displayName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const studentIdentityIds = assignments
+      .map(a => a.student.anonymousIdentity?.id)
+      .filter(Boolean) as string[];
+
+    const chatThreads = await prisma.chatThread.findMany({
+      where: {
+        studentIdentityId: { in: studentIdentityIds },
+        mentorId,
+        peerIdentityId: null,
+      },
+      include: {
+        messages: {
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+          select: { createdAt: true },
+        },
+      },
+    });
+
+    const threadsMap = new Map<string, Date | null>(
+      chatThreads.map(t => [t.studentIdentityId, t.messages[0]?.createdAt || null])
+    );
+
+    return assignments.map(a => {
+      const studentIdentity = a.student.anonymousIdentity;
+      const anonymousName = studentIdentity?.displayName || 'Anonymous Student';
+      const lastMessageAt = studentIdentity ? (threadsMap.get(studentIdentity.id) || null) : null;
+      return {
+        anonymousName,
+        assignedAt: a.assignedAt,
+        lastMessageAt,
+      };
+    });
+  },
 };

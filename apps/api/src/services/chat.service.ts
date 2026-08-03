@@ -20,9 +20,7 @@ async function findAvailableMentor() {
       createdAt: 'asc',
     },
     include: {
-      mentorAssignments: {
-        where: { status: 'ACTIVE' },
-      },
+      mentorAssignments: true,
     },
   });
 
@@ -103,10 +101,9 @@ export const chatService = {
       }
 
       // 1. Check if the student has an active MentorAssignment
-      let activeAssignment = await prisma.mentorAssignment.findFirst({
+      let activeAssignment = await prisma.mentorAssignment.findUnique({
         where: {
           studentId: userId,
-          status: 'ACTIVE',
         },
       });
 
@@ -132,7 +129,6 @@ export const chatService = {
           data: {
             studentId: userId,
             mentorId: assignedMentorId,
-            status: 'ACTIVE',
           },
         });
         console.log(`[ChatService] Created ACTIVE MentorAssignment: Student ${userId} -> Mentor ${assignedMentorId}`);
@@ -209,10 +205,9 @@ export const chatService = {
       const studentUserId = studentIdentity.userId;
 
       // 1. Check if student already has an active assignment
-      let activeAssignment = await prisma.mentorAssignment.findFirst({
+      let activeAssignment = await prisma.mentorAssignment.findUnique({
         where: {
           studentId: studentUserId,
-          status: 'ACTIVE',
         },
       });
 
@@ -226,7 +221,6 @@ export const chatService = {
         const activeCount = await prisma.mentorAssignment.count({
           where: {
             mentorId: userId,
-            status: 'ACTIVE',
           },
         });
 
@@ -239,7 +233,6 @@ export const chatService = {
           data: {
             studentId: studentUserId,
             mentorId: userId,
-            status: 'ACTIVE',
           },
         });
         console.log(`[ChatService] Mentor initiated assignment: Student ${studentUserId} -> Mentor ${userId}`);

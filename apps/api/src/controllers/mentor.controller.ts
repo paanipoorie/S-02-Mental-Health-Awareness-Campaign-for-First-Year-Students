@@ -103,4 +103,19 @@ export const mentorController = {
       next(error);
     }
   },
+
+  async getMyStudents(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = req.user!.userId;
+
+      const students = await mentorService.getMyStudents(userId);
+
+      res.json({
+        success: true,
+        data: students,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };

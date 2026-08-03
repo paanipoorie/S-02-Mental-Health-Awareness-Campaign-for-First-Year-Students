@@ -35,6 +35,12 @@ router.patch(
   mentorController.updateAvailability
 );
 router.get(
+  '/me/students',
+  requireRole(Role.MENTOR),
+  requireVerifiedMentor,
+  mentorController.getMyStudents
+);
+router.get(
   '/priority-feed',
   requireRole(Role.MENTOR),
   requireVerifiedMentor,

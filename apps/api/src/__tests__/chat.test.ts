@@ -155,4 +155,50 @@ describe('Chat Support Integration Tests', () => {
     });
     expect(message?.readAt).not.toBeNull();
   });
+
+  it('should list all students assigned to the authenticated mentor', async () => {
+    const student = await createTestUser(Role.STUDENT);
+    const mentor = await createTestUser(Role.MENTOR, true);
+
+    // Create assignment
+    await prisma.mentorAssignment.create({
+      data: {
+        studentId: student.user.id,
+        mentorId: mentor.user.id,
+      },
+    });
+
+    // Student starts chat and sends a message to update lastMessageAt
+    const thread = await prisma.chatThread.create({
+      data: {
+        studentIdentityId: student.anon.id,
+        mentorId: mentor.user.id,
+        status: 'ACTIVE',
+      },
+    });
+
+    await prisma.chatMessage.create({
+      data: {
+        chatThreadId: thread.id,
+        senderId: student.anon.id,
+        senderType: 'ANONYMOUS',
+        body: 'Message for test',
+      },
+    });
+
+    // Get assigned students as mentor
+    const response = await request(app)
+      .get('/api/mentors/me/students')
+      .set('Authorization', `Bearer ${mentor.token}`)
+      .expect(200);
+
+    expect(response.body.success).toBe(true);
+    expect(response.body.data.length).toBe(1);
+    expect(response.body.data[0]).toMatchObject({
+      anonymousName: student.anon.displayName,
+    });
+    expect(response.body.data[0].assignedAt).toBeDefined();
+    expect(response.body.data[0].lastMessageAt).toBeDefined();
+    expect(new Date(response.body.data[0].lastMessageAt).getTime()).toBeGreaterThan(0);
+  });
 });
