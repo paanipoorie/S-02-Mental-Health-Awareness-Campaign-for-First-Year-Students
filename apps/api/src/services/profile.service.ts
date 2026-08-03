@@ -1,9 +1,9 @@
 import { prisma } from '../prisma/client.js';
 
 export const profileService = {
-  async getAnonymousProfile(anonymousIdentityId: string) {
-    const identity = await prisma.anonymousIdentity.findUnique({
-      where: { id: anonymousIdentityId },
+  async getAnonymousProfile(idOrUserId: string) {
+    let identity = await prisma.anonymousIdentity.findUnique({
+      where: { id: idOrUserId },
       include: {
         posts: {
           where: { isDeleted: false },
@@ -25,8 +25,34 @@ export const profileService = {
     });
 
     if (!identity) {
+      identity = await prisma.anonymousIdentity.findUnique({
+        where: { userId: idOrUserId },
+        include: {
+          posts: {
+            where: { isDeleted: false },
+            orderBy: { createdAt: 'desc' },
+            select: {
+              id: true,
+              title: true,
+              category: true,
+              emotion: true,
+              urgencyLevel: true,
+              createdAt: true,
+              replies: {
+                where: { isDeleted: false },
+                select: { id: true }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    if (!identity) {
       return null;
     }
+
+    const anonymousIdentityId = identity.id;
 
     // Count replies authored by this identity
     const replyCount = await prisma.postReply.count({
@@ -65,6 +91,7 @@ export const profileService = {
 
     return {
       anonymousId: identity.id,
+      userId: identity.userId,
       displayName: identity.displayName,
       joinedAt: identity.createdAt,
       avatarSeed: identity.avatarSeed,

@@ -14,32 +14,33 @@ import type {
 const prisma = new PrismaClient();
 
 export interface PaginatedUsers {
-  users: Array<{
-    id: string;
-    universityEmail: string;
-    role: Role;
-    isActive: boolean;
-    isVerifiedMentor: boolean;
-    createdAt: Date;
-    anonymousDisplayName: string | null;
-    avatarSeed: number | null;
-    department: string | null;
-    bio: string | null;
-    specialties: string[];
-    availabilityStatus: MentorAvailabilityStatus | null;
-    lastSeenAt: Date | null;
-    _count: {
-      posts: number;
-      chatThreads: number;
-      meetings: number;
-      workshops: number;
-    };
-  }>;
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
+   users: Array<{
+     id: string;
+     universityEmail: string;
+     role: Role;
+     isActive: boolean;
+     isVerifiedMentor: boolean;
+     createdAt: Date;
+     displayName: string;
+     anonymousDisplayName: string | null;
+     avatarSeed: number | null;
+     department: string | null;
+     bio: string | null;
+     specialties: string[];
+     availabilityStatus: MentorAvailabilityStatus | null;
+     lastSeenAt: Date | null;
+     _count: {
+       posts: number;
+       chatThreads: number;
+       meetings: number;
+       workshops: number;
+     };
+   }>;
+   total: number;
+   page: number;
+   limit: number;
+   totalPages: number;
+ }
 
 export interface PaginatedMeetings {
   meetings: Array<{
@@ -260,6 +261,7 @@ export const adminService = {
           isActive: user.isActive,
           isVerifiedMentor: user.isVerifiedMentor,
           createdAt: user.createdAt,
+          displayName: user.universityEmail,
           anonymousDisplayName: user.anonymousIdentity?.displayName ?? null,
           avatarSeed: user.anonymousIdentity?.avatarSeed ?? null,
           department: user.mentorProfile?.department ?? null,
@@ -370,6 +372,7 @@ export const adminService = {
           isActive: user.isActive,
           isVerifiedMentor: user.isVerifiedMentor,
           createdAt: user.createdAt,
+          displayName: user.universityEmail,
           anonymousDisplayName: user.anonymousIdentity?.displayName ?? null,
           avatarSeed: user.anonymousIdentity?.avatarSeed ?? null,
           department: user.mentorProfile?.department ?? null,
@@ -416,7 +419,7 @@ export const adminService = {
     return mentors.map(mentor => ({
       id: mentor.id,
       universityEmail: mentor.universityEmail,
-      displayName: mentor.anonymousIdentity?.displayName ?? null,
+      displayName: mentor.universityEmail,
       createdAt: mentor.createdAt,
     }));
   },

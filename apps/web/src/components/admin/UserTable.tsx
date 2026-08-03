@@ -417,14 +417,14 @@ export function UserTable({
                     >
                       {getAvatarSeed(user.avatarSeed)}
                     </span>
-                    <div>
-                      <p className="font-semibold text-gray-900">
-                        {user.anonymousDisplayName || 'Anonymous'}
-                      </p>
-                      <p className="max-w-xs truncate text-xs font-medium text-gray-500">
-                        {user.universityEmail}
-                      </p>
-                    </div>
+<div>
+                        <p className="font-semibold text-gray-900">
+                          {user.displayName}
+                        </p>
+                        <p className="max-w-xs truncate text-xs font-medium text-gray-500">
+                          {user.universityEmail}
+                        </p>
+                      </div>
                   </div>
                 </td>
                 <td className="px-4 py-4">

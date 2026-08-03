@@ -201,4 +201,40 @@ describe('Chat Support Integration Tests', () => {
     expect(response.body.data[0].lastMessageAt).toBeDefined();
     expect(new Date(response.body.data[0].lastMessageAt).getTime()).toBeGreaterThan(0);
   });
+
+  it('should allow mentor to start a chat with student using the student\'s AnonymousIdentity ID', async () => {
+    const student = await createTestUser(Role.STUDENT);
+    const mentor = await createTestUser(Role.MENTOR, true);
+
+    const chatResponse = await request(app)
+      .post('/api/chats')
+      .set('Authorization', `Bearer ${mentor.token}`)
+      .send({ studentIdentityId: student.anon.id })
+      .expect(201);
+
+    expect(chatResponse.body.success).toBe(true);
+    expect(chatResponse.body.data).toMatchObject({
+      studentIdentityId: student.anon.id,
+      mentorId: mentor.user.id,
+      status: 'ACTIVE',
+    });
+  });
+
+  it('should allow mentor to start a chat with student using the student\'s User ID', async () => {
+    const student = await createTestUser(Role.STUDENT);
+    const mentor = await createTestUser(Role.MENTOR, true);
+
+    const chatResponse = await request(app)
+      .post('/api/chats')
+      .set('Authorization', `Bearer ${mentor.token}`)
+      .send({ studentIdentityId: student.user.id })
+      .expect(201);
+
+    expect(chatResponse.body.success).toBe(true);
+    expect(chatResponse.body.data).toMatchObject({
+      studentIdentityId: student.anon.id,
+      mentorId: mentor.user.id,
+      status: 'ACTIVE',
+    });
+  });
 });

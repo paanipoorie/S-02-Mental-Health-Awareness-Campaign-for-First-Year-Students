@@ -194,15 +194,22 @@ export const chatService = {
         throw new Error('STUDENT_IDENTITY_ID_REQUIRED');
       }
 
-      const studentIdentity = await prisma.anonymousIdentity.findUnique({
+      let studentIdentity = await prisma.anonymousIdentity.findUnique({
         where: { id: data.studentIdentityId },
       });
+
+      if (!studentIdentity) {
+        studentIdentity = await prisma.anonymousIdentity.findUnique({
+          where: { userId: data.studentIdentityId },
+        });
+      }
 
       if (!studentIdentity) {
         throw new Error('STUDENT_IDENTITY_NOT_FOUND');
       }
 
       const studentUserId = studentIdentity.userId;
+      const studentIdentityId = studentIdentity.id;
 
       // 1. Check if student already has an active assignment
       let activeAssignment = await prisma.mentorAssignment.findUnique({
@@ -241,7 +248,7 @@ export const chatService = {
       // Check if there's already an active chat thread
       const existingChat = await prisma.chatThread.findFirst({
         where: {
-          studentIdentityId: data.studentIdentityId,
+          studentIdentityId: studentIdentityId,
           mentorId: userId,
           peerIdentityId: null,
           status: 'ACTIVE',
@@ -254,7 +261,7 @@ export const chatService = {
 
       const chat = await prisma.chatThread.create({
         data: {
-          studentIdentityId: data.studentIdentityId,
+          studentIdentityId: studentIdentityId,
           mentorId: userId,
           status: 'ACTIVE',
         },

@@ -19,6 +19,7 @@ interface RecentPost {
 
 interface ProfileData {
   anonymousId: string;
+  userId: string;
   displayName: string;
   joinedAt: string;
   avatarSeed: number;
@@ -65,7 +66,8 @@ export default function ProfileClient({ anonymousIdentityId }: ProfileClientProp
       if (user?.role === 'STUDENT') {
         payload.peerIdentityId = anonymousIdentityId;
       } else if (user?.role === 'MENTOR') {
-        payload.studentIdentityId = anonymousIdentityId;
+        if (!profile) return;
+        payload.studentIdentityId = profile.userId;
       } else {
         toast.error('Only students and mentors can message other users');
         return;

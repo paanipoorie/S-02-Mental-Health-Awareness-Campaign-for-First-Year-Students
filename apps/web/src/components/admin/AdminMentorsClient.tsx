@@ -7,6 +7,7 @@ interface MentorData {
   data: Array<{
     id: string;
     universityEmail: string;
+    displayName: string;
     role: string;
     isActive: boolean;
     isVerifiedMentor: boolean;
