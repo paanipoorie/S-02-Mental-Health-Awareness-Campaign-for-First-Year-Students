@@ -9,6 +9,7 @@
     "dev:api": "pnpm --filter api dev",
     "build": "pnpm --filter web build && pnpm --filter api build",
     "build:web": "pnpm --filter @campus-peer-support/shared-types build && pnpm --filter web build",
+    "build:vercel": "pnpm --filter @campus-peer-support/shared-types build && pnpm --filter web build && mkdir -p .vercel && rm -rf .vercel/output && mv apps/web/.vercel/output .vercel/output",
     "build:api": "pnpm --filter api build",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.astro",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx,.astro --fix",
