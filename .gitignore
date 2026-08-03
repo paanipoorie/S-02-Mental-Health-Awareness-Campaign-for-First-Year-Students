@@ -38,7 +38,7 @@ pnpm-debug.log*
 docs/
 
 # pnpm
-pnpm-lock.yaml
+# pnpm-lock.yaml is committed at the root for production deployment
 apps/**/pnpm-lock.yaml
 
 # Turbo
