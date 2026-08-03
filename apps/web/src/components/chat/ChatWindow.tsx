@@ -55,15 +55,19 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
   }, []);
 
   const fetchChatInfo = async () => {
+    console.log(`[ChatWindow] fetchChatInfo: threadId = ${threadId}`);
     const data = await api.get<ChatInfo>(`/chats/${threadId}`);
+    console.log(`[ChatWindow] fetchChatInfo successful:`, data);
     setChatInfo(data);
   };
 
   const fetchMessages = async (pageNum: number = 1, append: boolean = false) => {
+    console.log(`[ChatWindow] fetchMessages: threadId = ${threadId}, pageNum = ${pageNum}, append = ${append}`);
     const res = await api.get<{
       data: Message[];
       pagination: { page: number; totalPages: number };
     }>(`/chats/${threadId}/messages?page=${pageNum}&limit=50`);
+    console.log(`[ChatWindow] fetchMessages successful: loaded ${res.data.length} messages`);
     if (append) {
       setMessages(prev => [...res.data, ...prev]);
     } else {
@@ -76,6 +80,7 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
   };
 
   const loadData = async () => {
+    console.log(`[ChatWindow] loadData: threadId = ${threadId}`);
     setLoading(true);
     setError(null);
     try {
@@ -84,6 +89,7 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
       }
       await Promise.all([fetchChatInfo(), fetchMessages(1, false)]);
     } catch (err: any) {
+      console.error(`[ChatWindow] loadData failed for threadId = ${threadId}:`, err);
       setError(err.message || 'Failed to load chat');
       toast.error(err.message || 'Failed to load chat');
     } finally {
@@ -221,12 +227,20 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
       <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
         <h3 className="text-heading-18 text-red-600 font-bold">Failed to load chat</h3>
         <p className="text-copy-14 mt-2 text-gray-500">{error}</p>
-        <button
-          onClick={loadData}
-          className="bg-primary text-background-100 mt-6 inline-block rounded-sm px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-800"
-        >
-          Retry
-        </button>
+        <div className="mt-6 flex flex-col items-center gap-3">
+          <button
+            onClick={loadData}
+            className="bg-primary text-background-100 rounded-sm px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-gray-800"
+          >
+            Retry
+          </button>
+          <a
+            href="/chat"
+            className="text-primary hover:underline text-sm font-semibold"
+          >
+            Back to Messages
+          </a>
+        </div>
       </div>
     );
   }

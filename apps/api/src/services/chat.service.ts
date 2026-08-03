@@ -46,6 +46,7 @@ async function getStudentIdentityId(userId: string): Promise<string | null> {
 
 export const chatService = {
   async createChat(userId: string, role: Role, data: CreateChatInput) {
+    console.log(`[ChatService] createChat: userId=${userId}, role=${role}, peerIdentityId=${data.peerIdentityId}, studentIdentityId=${data.studentIdentityId}`);
     if (role === 'STUDENT') {
       const studentIdentityId = await getStudentIdentityId(userId);
       if (!studentIdentityId) {
@@ -226,6 +227,7 @@ export const chatService = {
   },
 
   async getChats(userId: string, role: Role, query: GetChatsQuery) {
+    console.log(`[ChatService] getChats (sidebar fetch): userId=${userId}, role=${role}`);
     const { page, limit } = query;
     const skip = (page - 1) * limit;
 
@@ -396,6 +398,7 @@ export const chatService = {
   },
 
   async getChatById(chatId: string, userId: string, role: Role) {
+    console.log(`[ChatService] getChatById (thread lookup): chatId=${chatId}, userId=${userId}, role=${role}`);
     const chat = await prisma.chatThread.findUnique({
       where: { id: chatId },
       include: {
@@ -413,6 +416,7 @@ export const chatService = {
     });
 
     if (!chat) {
+      console.log(`[ChatService] getChatById: Chat not found: chatId=${chatId}`);
       return null;
     }
 
@@ -422,13 +426,21 @@ export const chatService = {
     const isMentor = role === 'MENTOR' && chat.mentorId === userId;
 
     if (!isStudent && !isMentor) {
+      console.log(`[ChatService] getChatById: FORBIDDEN for userId=${userId}, chatId=${chatId}`);
       throw new Error('FORBIDDEN');
     }
 
-    return chat;
+    console.log(`[ChatService] getChatById: Found chat ${chatId}. Mapping displayName properties...`);
+    return {
+      ...chat,
+      studentDisplayName: chat.studentIdentity?.displayName || null,
+      peerDisplayName: chat.peerIdentity?.displayName || null,
+      mentorDisplayName: chat.mentor ? 'Mentor' : null,
+    };
   },
 
   async getMessages(chatId: string, userId: string, role: Role, query: GetMessagesQuery) {
+    console.log(`[ChatService] getMessages (message fetch): chatId=${chatId}, userId=${userId}, page=${query.page}, limit=${query.limit}`);
     const { page, limit } = query;
     const skip = (page - 1) * limit;
 

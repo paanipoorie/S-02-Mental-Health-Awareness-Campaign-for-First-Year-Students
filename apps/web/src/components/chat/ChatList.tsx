@@ -25,6 +25,8 @@ interface ChatThread {
   createdAt: string;
   studentDisplayName: string;
   mentorDisplayName: string | null;
+  otherDisplayName?: string;
+  otherAvatarSeed?: number;
   unreadCount: number;
   lastMessage: { body: string; createdAt: string } | null;
   latestEmotion?: { emotion: string; urgencyLevel: string | null } | null;
@@ -56,13 +58,16 @@ export function ChatList({ onSelect, compact, activeThreadId }: ChatListProps) {
   const [error, setError] = useState<string | null>(null);
 
   const fetchChats = async () => {
+    console.log('[ChatList] fetchChats: Loading sidebar conversations...');
     setLoading(true);
     setError(null);
     try {
       if (!user) await fetchCurrentUser();
       const res = await api.get<{ data: ChatThread[] }>('/chats');
+      console.log(`[ChatList] fetchChats successful: loaded ${res.data.length} threads`);
       setChats(res.data);
     } catch (err: any) {
+      console.error('[ChatList] fetchChats failed:', err);
       setError(err.message || 'Failed to load chats');
       toast.error(err.message || 'Failed to load chats');
     } finally {
@@ -174,9 +179,7 @@ export function ChatList({ onSelect, compact, activeThreadId }: ChatListProps) {
       ) : (
         <div className={`${compact ? '' : 'flex-1 overflow-y-auto'}`}>
           {chats.map(chat => {
-            const displayName = isStudent
-              ? chat.mentorDisplayName || 'Mentor'
-              : chat.studentDisplayName;
+            const displayName = chat.otherDisplayName || 'Anonymous';
             const otherInitial = displayName.charAt(0);
             const EmotionIconComponent =
               isMentor && chat.latestEmotion ? emotionIcons[chat.latestEmotion.emotion] : undefined;

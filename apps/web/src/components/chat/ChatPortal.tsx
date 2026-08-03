@@ -12,11 +12,15 @@ export function ChatPortal() {
       return params.get('threadId');
     };
 
-    setActiveThreadId(getThreadIdFromUrl());
+    const initialId = getThreadIdFromUrl();
+    console.log(`[ChatPortal] mount: initial activeThreadId from URL query param = ${initialId}`);
+    setActiveThreadId(initialId);
 
     // Listen for history popstate events (e.g. browser back/forward buttons)
     const handlePopState = () => {
-      setActiveThreadId(getThreadIdFromUrl());
+      const poppedId = getThreadIdFromUrl();
+      console.log(`[ChatPortal] popstate event: setting activeThreadId = ${poppedId}`);
+      setActiveThreadId(poppedId);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -24,6 +28,7 @@ export function ChatPortal() {
   }, []);
 
   const handleSelectThread = (id: string) => {
+    console.log(`[ChatPortal] handleSelectThread: user clicked thread ${id}`);
     const params = new URLSearchParams(window.location.search);
     params.set('threadId', id);
     window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
