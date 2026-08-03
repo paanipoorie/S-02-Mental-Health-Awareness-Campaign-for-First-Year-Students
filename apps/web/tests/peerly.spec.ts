@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 const STUDENT_EMAIL = 'student1@cuchd.in';
 const MENTOR_EMAIL = 'mentor1@cuchd.in';
 const ADMIN_EMAIL = 'admin@cuchd.in';
-const PASSWORD = 'Password123';
+const PASSWORD = 'Password123!';
 
 // Helper for hydration wait
 async function waitHydration(page) {

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const MENTOR_EMAIL = 'mentor1@cuchd.in';
-const PASSWORD = 'Password123';
+const PASSWORD = 'Password123!';
 
 async function waitHydration(page) {
   await page.waitForTimeout(1500);

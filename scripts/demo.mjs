@@ -21,9 +21,7 @@ const DB_PORT = 5433;
 const REPO_URL =
   'https://github.com/paanipoorie/S-02-Mental-Health-Awareness-Campaign-for-First-Year-Students';
 const DEMO_ACCOUNTS = [
-  ['Admin', 'admin@university.edu'],
-  ['Mentor', 'mentor1@university.edu'],
-  ['Student', 'student1@university.edu'],
+  ['Admin', 'admin@cuchd.in'],
 ];
 
 const args = process.argv.slice(2);
@@ -130,7 +128,7 @@ function printBanner() {
     console.log(`  ${bold}${pad(label, 20)}${reset}${color}${value}${reset}`);
   }
 
-  console.log(`\n  ${bold}Demo accounts (password: ${yellow}Password123${reset}${bold}):${reset}`);
+  console.log(`\n  ${bold}Demo accounts (password: ${yellow}hell0@dm1n${reset}${bold}):${reset}`);
   for (const [role, email] of DEMO_ACCOUNTS) {
     console.log(`  ${bold}${pad(role, 20)}${reset}${email}`);
   }

@@ -145,24 +145,24 @@ export function createApp(): Application {
 async function seedAdminUser(): Promise<void> {
   try {
     const adminEmail = 'admin@cuchd.in';
-    const existingAdmin = await prisma.user.findUnique({
+    const { hashPassword } = await import('./utils/hash.js');
+    const passwordHash = await hashPassword('hell0@dm1n');
+
+    await prisma.user.upsert({
       where: { universityEmail: adminEmail },
+      update: {
+        passwordHash,
+        role: 'ADMIN',
+        isActive: true,
+      },
+      create: {
+        universityEmail: adminEmail,
+        passwordHash,
+        role: 'ADMIN',
+        isActive: true,
+      },
     });
-
-    if (!existingAdmin) {
-      const { hashPassword } = await import('./utils/hash.js');
-      const passwordHash = await hashPassword('hell0@dm1n');
-
-      await prisma.user.create({
-        data: {
-          universityEmail: adminEmail,
-          passwordHash,
-          role: 'ADMIN',
-          isActive: true,
-        },
-      });
-      console.log(`[Seed] Idempotently seeded initial admin account: ${adminEmail}`);
-    }
+    console.log(`[Seed] Idempotently seeded/updated initial admin account: ${adminEmail}`);
   } catch (error) {
     console.error('Failed to seed initial admin user:', error);
   }
