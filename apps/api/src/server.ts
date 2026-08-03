@@ -16,6 +16,8 @@ const shutdown = (signal: string): void => {
 
 const startServer = async (): Promise<void> => {
   try {
+    console.log('[DEBUG server.ts] process.env.NODE_ENV:', process.env.NODE_ENV);
+    console.log('[DEBUG server.ts] env.NODE_ENV:', env.NODE_ENV);
     await connectDatabase();
 
     // Initialize Socket.io

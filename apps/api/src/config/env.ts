@@ -1,4 +1,7 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+console.log('[DEBUG env.ts] process.env.NODE_ENV on load:', process.env.NODE_ENV);
+dotenv.config();
+console.log('[DEBUG env.ts] process.env.NODE_ENV after dotenv:', process.env.NODE_ENV);
 
 interface EnvConfig {
   NODE_ENV: string;
