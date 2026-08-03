@@ -51,4 +51,38 @@ describe('Admin Service Unit Tests', () => {
     expect(verifiedMentor).toBeDefined();
     expect(verifiedMentor.isVerifiedMentor).toBe(true);
   });
+
+  it('should idempotently seed the initial admin account on connectDatabase', async () => {
+    const { connectDatabase } = await import('../../app.js');
+    const { comparePassword } = await import('../../utils/hash.js');
+
+    // Remove any seeded admin user to start from clean state
+    await prisma.user.deleteMany({
+      where: { universityEmail: 'admin@cuchd.in' },
+    });
+
+    // 1. Connect and trigger seed
+    await connectDatabase();
+
+    // Verify admin was created
+    const admin = await prisma.user.findUnique({
+      where: { universityEmail: 'admin@cuchd.in' },
+    });
+    expect(admin).toBeDefined();
+    expect(admin?.role).toBe(Role.ADMIN);
+    expect(admin?.isActive).toBe(true);
+
+    // Verify password was hashed correctly using comparePassword
+    const isPasswordCorrect = await comparePassword('hell0@dm1n', admin!.passwordHash);
+    expect(isPasswordCorrect).toBe(true);
+
+    // 2. Run connect/seed again to test idempotency
+    await connectDatabase();
+
+    // Verify there is still only one admin@cuchd.in
+    const adminsCount = await prisma.user.count({
+      where: { universityEmail: 'admin@cuchd.in' },
+    });
+    expect(adminsCount).toBe(1);
+  });
 });

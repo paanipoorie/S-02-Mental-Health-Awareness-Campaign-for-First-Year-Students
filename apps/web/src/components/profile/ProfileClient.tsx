@@ -67,7 +67,7 @@ export default function ProfileClient({ anonymousIdentityId }: ProfileClientProp
         payload.peerIdentityId = anonymousIdentityId;
       } else if (user?.role === 'MENTOR') {
         if (!profile) return;
-        payload.studentIdentityId = profile.userId;
+        payload.studentIdentityId = profile.anonymousId;
       } else {
         toast.error('Only students and mentors can message other users');
         return;

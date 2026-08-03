@@ -15,9 +15,15 @@ export const profileController = {
         return next(new ApiError(404, 'Anonymous identity not found'));
       }
 
+      // Preserve anonymity by stripping the underlying userId for student roles
+      const sanitizedProfile = { ...profile };
+      if (req.user?.role === 'STUDENT') {
+        delete (sanitizedProfile as any).userId;
+      }
+
       res.status(200).json({
         success: true,
-        data: profile,
+        data: sanitizedProfile,
       });
     } catch (error) {
       next(error);

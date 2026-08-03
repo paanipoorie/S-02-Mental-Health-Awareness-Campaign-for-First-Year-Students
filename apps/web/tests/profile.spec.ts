@@ -52,7 +52,7 @@ test.describe('Anonymous Profile & Peer Messaging E2E Tests', () => {
       await expect(page.locator('p.truncate.text-sm.font-bold')).toContainText(profileName || '');
       
       // Type and send a message to verify chat functions
-      await page.fill('textarea[placeholder="Type a confidential message..."]', 'Hello, this is a peer message!');
+      await page.fill('textarea[placeholder="Type your message..."]', 'Hello, this is a peer message!');
       await page.click('button:has-text("Send")');
       
       // Verify message is sent and visible

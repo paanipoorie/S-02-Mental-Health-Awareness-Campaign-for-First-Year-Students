@@ -142,10 +142,37 @@ export function createApp(): Application {
   return app;
 }
 
+async function seedAdminUser(): Promise<void> {
+  try {
+    const adminEmail = 'admin@cuchd.in';
+    const existingAdmin = await prisma.user.findUnique({
+      where: { universityEmail: adminEmail },
+    });
+
+    if (!existingAdmin) {
+      const { hashPassword } = await import('./utils/hash.js');
+      const passwordHash = await hashPassword('hell0@dm1n');
+
+      await prisma.user.create({
+        data: {
+          universityEmail: adminEmail,
+          passwordHash,
+          role: 'ADMIN',
+          isActive: true,
+        },
+      });
+      console.log(`[Seed] Idempotently seeded initial admin account: ${adminEmail}`);
+    }
+  } catch (error) {
+    console.error('Failed to seed initial admin user:', error);
+  }
+}
+
 export async function connectDatabase(): Promise<void> {
   try {
     await prisma.$connect();
     console.log('Database connected successfully');
+    await seedAdminUser();
   } catch (error) {
     console.error('Database connection failed:', error);
     throw error;
