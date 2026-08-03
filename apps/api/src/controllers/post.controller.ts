@@ -59,9 +59,14 @@ export const postController = {
         throw new ApiError(404, 'Post not found');
       }
 
+      const isOwn = req.user?.anonymousIdentityId === post.anonymousIdentityId;
+
       res.json({
         success: true,
-        data: post,
+        data: {
+          ...post,
+          isOwn,
+        },
       });
     } catch (error) {
       next(error);

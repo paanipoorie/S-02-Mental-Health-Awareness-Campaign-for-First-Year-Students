@@ -89,7 +89,7 @@ export const postService = {
 
   async getPostById(id: string) {
     const post = await prisma.post.findUnique({
-      where: { id },
+      where: { id, isDeleted: false },
       include: {
         anonymousIdentity: {
           select: {
@@ -103,10 +103,6 @@ export const postService = {
         },
       },
     });
-
-    if (post && post.isDeleted) {
-      return null;
-    }
 
     if (!post) {
       return null;
