@@ -14,6 +14,7 @@
   "dependencies": {
     "@astrojs/node": "^11.0.3",
     "@astrojs/react": "^6.0.1",
+    "@astrojs/vercel": "^11.0.4",
     "@campus-peer-support/shared-types": "workspace:*",
     "@nanostores/react": "^1.1.0",
     "@tailwindcss/vite": "^4.3.2",
