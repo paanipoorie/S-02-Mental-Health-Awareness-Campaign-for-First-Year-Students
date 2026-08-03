@@ -23,6 +23,7 @@ export const RegisterForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [countdown, setCountdown] = useState(0);
 
   const validateEmail = (value: string): string | null => {
@@ -30,6 +31,21 @@ export const RegisterForm: React.FC = () => {
     if (!normalized) return 'Please enter your university email.';
     if (!CU_EMAIL_REGEX.test(normalized)) return EMAIL_ERROR_MESSAGE;
     return null;
+  };
+
+  const mapFieldErrors = (details?: unknown): Record<string, string> => {
+    if (!Array.isArray(details)) return {};
+    const mapped: Record<string, string> = {};
+    for (const item of details) {
+      if (item && typeof item === 'object' && 'field' in item && 'message' in item) {
+        const field = String(item.field);
+        const message = String(item.message);
+        if (field === 'universityEmail') mapped.email = message;
+        else if (field === 'password') mapped.password = message;
+        else if (field === 'role') mapped.role = message;
+      }
+    }
+    return mapped;
   };
 
   const startResendCountdown = () => {
@@ -51,22 +67,26 @@ export const RegisterForm: React.FC = () => {
 
     if (!email || !password || !confirmPassword) {
       setError('Please fill in all fields.');
+      setFieldErrors({});
       return;
     }
 
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
+      setFieldErrors({});
       return;
     }
 
     if (password.length < 8) {
       setError('Password must be at least 8 characters long.');
+      setFieldErrors({});
       return;
     }
 
     const emailError = validateEmail(email);
     if (emailError) {
       setError(emailError);
+      setFieldErrors({});
       return;
     }
 
@@ -79,11 +99,20 @@ export const RegisterForm: React.FC = () => {
       });
       setStep(2);
       startResendCountdown();
+      setFieldErrors({});
+      setError(null);
     } catch (err) {
       if (err instanceof ClientApiError) {
-        setError(err.message);
+        if (err.code === 'VALIDATION_ERROR' && err.details) {
+          setFieldErrors(mapFieldErrors(err.details));
+          setError(null);
+        } else {
+          setError(err.message);
+          setFieldErrors({});
+        }
       } else {
         setError('An unexpected error occurred while sending the OTP.');
+        setFieldErrors({});
       }
     } finally {
       setLoading(false);
@@ -96,6 +125,7 @@ export const RegisterForm: React.FC = () => {
 
     if (!otp || otp.length !== 6) {
       setError('Please enter the 6-digit OTP sent to your email.');
+      setFieldErrors({});
       return;
     }
 
@@ -136,9 +166,16 @@ export const RegisterForm: React.FC = () => {
       }
     } catch (err) {
       if (err instanceof ClientApiError) {
-        setError(err.message);
+        if (err.code === 'VALIDATION_ERROR' && err.details) {
+          setFieldErrors(mapFieldErrors(err.details));
+          setError(null);
+        } else {
+          setError(err.message);
+          setFieldErrors({});
+        }
       } else {
         setError('An unexpected error occurred while verifying the OTP.');
+        setFieldErrors({});
       }
     } finally {
       setLoading(false);
@@ -158,9 +195,16 @@ export const RegisterForm: React.FC = () => {
       startResendCountdown();
     } catch (err) {
       if (err instanceof ClientApiError) {
-        setError(err.message);
+        if (err.code === 'VALIDATION_ERROR' && err.details) {
+          setFieldErrors(mapFieldErrors(err.details));
+          setError(null);
+        } else {
+          setError(err.message);
+          setFieldErrors({});
+        }
       } else {
         setError('Failed to resend OTP. Please try again.');
+        setFieldErrors({});
       }
     } finally {
       setResending(false);
@@ -197,90 +241,153 @@ export const RegisterForm: React.FC = () => {
       {step === 1 && (
         <form onSubmit={handleSendOTP} className="space-y-5">
           {/* Role selection */}
-          <div>
-            <label className="text-label-13 mb-2 block font-semibold text-gray-700">
-              I am registering as
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setRole(Role.STUDENT)}
-                className={`cursor-pointer rounded-sm border p-3 text-left transition-colors ${
-                  role === Role.STUDENT
-                    ? 'border-gray-900 bg-gray-100'
-                    : 'border-gray-300 bg-background-100 hover:border-gray-400'
-                }`}
-              >
+<div>
+             <label className="text-label-13 mb-2 block font-semibold text-gray-700">
+               I am registering as
+             </label>
+             <div className="grid grid-cols-2 gap-3">
+               <button
+                 type="button"
+                 onClick={() => {
+                   setRole(Role.STUDENT);
+                   setFieldErrors(prev => {
+                     const next = { ...prev };
+                     delete next.role;
+                     return next;
+                   });
+                 }}
+                 className={`cursor-pointer rounded-sm border p-3 text-left transition-colors ${
+                   role === Role.STUDENT
+                     ? 'border-gray-900 bg-gray-100'
+                     : 'border-gray-300 bg-background-100 hover:border-gray-400'
+                 }`}
+               >
                 <span className="text-label-14 block font-semibold text-gray-900">Student</span>
                 <span className="text-label-12 mt-0.5 block text-gray-500">
                   Seek anonymous peer support
                 </span>
               </button>
-              <button
-                type="button"
-                onClick={() => setRole(Role.MENTOR)}
-                className={`cursor-pointer rounded-sm border p-3 text-left transition-colors ${
-                  role === Role.MENTOR
-                    ? 'border-gray-900 bg-gray-100'
-                    : 'border-gray-300 bg-background-100 hover:border-gray-400'
-                }`}
-              >
+<button
+                 type="button"
+                 onClick={() => {
+                   setRole(Role.MENTOR);
+                   setFieldErrors(prev => {
+                     const next = { ...prev };
+                     delete next.role;
+                     return next;
+                   });
+                 }}
+                 className={`cursor-pointer rounded-sm border p-3 text-left transition-colors ${
+                   role === Role.MENTOR
+                     ? 'border-gray-900 bg-gray-100'
+                     : 'border-gray-300 bg-background-100 hover:border-gray-400'
+                 }`}
+               >
                 <span className="text-label-14 block font-semibold text-gray-900">Peer Mentor</span>
                 <span className="text-label-12 mt-0.5 block text-gray-500">
                   Support first-year students
                 </span>
               </button>
             </div>
-            {role === Role.MENTOR && (
-              <p className="text-label-12 mt-2 text-amber-700">
-                Your mentor account will be reviewed by an administrator before you can access
-                mentoring features.
-              </p>
-            )}
-          </div>
+{role === Role.MENTOR && (
+               <p className="text-label-12 mt-2 text-amber-700">
+                 Your mentor account will be reviewed by an administrator before you can access
+                 mentoring features.
+               </p>
+             )}
+             {fieldErrors.role && (
+               <p className="text-label-12 mt-2 text-red-600">
+                 {fieldErrors.role}
+               </p>
+             )}
+           </div>
 
-          <div>
-            <label className="text-label-13 mb-2 block font-semibold text-gray-700">
-              University Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="25bcs10067@cuchd.in"
-              className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
-              required
-            />
-            <p className="text-label-12 mt-1.5 text-gray-500">
-              Only Chandigarh University emails (@cuchd.in) are accepted.
-            </p>
-          </div>
+<div>
+             <label className="text-label-13 mb-2 block font-semibold text-gray-700">
+               University Email
+             </label>
+             <input
+               type="email"
+               value={email}
+               onChange={e => {
+                 setEmail(e.target.value);
+                 setFieldErrors(prev => {
+                   const next = { ...prev };
+                   delete next.email;
+                   return next;
+                 });
+               }}
+               placeholder="25bcs10067@cuchd.in"
+               className={`text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border px-3 py-2 placeholder-gray-400 focus-visible:outline-none ${
+                 fieldErrors.email
+                   ? 'border-red-500 focus-visible:border-red-500'
+                   : 'border-gray-300 focus-visible:border-blue-700'
+               }`}
+               required
+             />
+             {fieldErrors.email && (
+               <p className="text-label-12 mt-1.5 text-red-600">{fieldErrors.email}</p>
+             )}
+             <p className="text-label-12 mt-1.5 text-gray-500">
+               Only Chandigarh University emails (@cuchd.in) are accepted.
+             </p>
+           </div>
 
-          <div>
-            <label className="text-label-13 mb-2 block font-semibold text-gray-700">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Minimum 8 characters"
-              className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
-              required
-            />
-          </div>
+<div>
+             <label className="text-label-13 mb-2 block font-semibold text-gray-700">Password</label>
+             <input
+               type="password"
+               value={password}
+               onChange={e => {
+                 setPassword(e.target.value);
+                 setFieldErrors(prev => {
+                   const next = { ...prev };
+                   delete next.password;
+                   return next;
+                 });
+               }}
+               placeholder="Minimum 8 characters"
+               className={`text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border px-3 py-2 placeholder-gray-400 focus-visible:outline-none ${
+                 fieldErrors.password
+                   ? 'border-red-500 focus-visible:border-red-500'
+                   : 'border-gray-300 focus-visible:border-blue-700'
+               }`}
+               required
+             />
+             {fieldErrors.password && (
+               <p className="text-label-12 mt-1.5 text-red-600">{fieldErrors.password}</p>
+             )}
+           </div>
 
-          <div>
-            <label className="text-label-13 mb-2 block font-semibold text-gray-700">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
-              placeholder="Re-enter password"
-              className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
-              required
-            />
-          </div>
+<div>
+             <label className="text-label-13 mb-2 block font-semibold text-gray-700">
+               Confirm Password
+             </label>
+             <input
+               type="password"
+               value={confirmPassword}
+               onChange={e => {
+                 setConfirmPassword(e.target.value);
+                 setFieldErrors(prev => {
+                   const next = { ...prev };
+                   delete next.confirmPassword;
+                   return next;
+                 });
+               }}
+               placeholder="Re-enter password"
+               className={`text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border px-3 py-2 placeholder-gray-400 focus-visible:outline-none ${
+                 fieldErrors.confirmPassword
+                   ? 'border-red-500 focus-visible:border-red-500'
+                   : 'border-gray-300 focus-visible:border-blue-700'
+               }`}
+               required
+             />
+             {fieldErrors.confirmPassword && (
+               <p className="text-label-12 mt-1.5 text-red-600">
+                 {fieldErrors.confirmPassword}
+               </p>
+             )}
+           </div>
 
           <button
             type="submit"
@@ -309,13 +416,16 @@ export const RegisterForm: React.FC = () => {
             <label className="text-label-13 mb-2 block font-semibold text-gray-700">
               Verification Code
             </label>
-            <input
-              type="text"
-              inputMode="numeric"
-              maxLength={6}
-              value={otp}
-              onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
-              placeholder="••••••"
+<input
+               type="text"
+               inputMode="numeric"
+               maxLength={6}
+               value={otp}
+               onChange={e => {
+                 setOtp(e.target.value.replace(/\D/g, ''));
+                 setFieldErrors({});
+               }}
+               placeholder="••••••"
               className="text-label-14 bg-background-100 text-primary h-10 w-full rounded-sm border border-gray-300 px-3 py-2 text-center text-xl tracking-[0.5em] placeholder-gray-400 focus-visible:border-blue-700 focus-visible:outline-none"
               required
             />

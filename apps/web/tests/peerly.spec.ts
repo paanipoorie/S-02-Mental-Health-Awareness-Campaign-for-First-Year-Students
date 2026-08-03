@@ -280,7 +280,7 @@ test.describe('Peerly E2E Verification Suite', () => {
 
   test.describe('Admin Flows', () => {
     test.beforeEach(async ({ page }) => {
-      await login(page, ADMIN_EMAIL, PASSWORD, '**/admin/dashboard');
+      await login(page, ADMIN_EMAIL, 'hell0@dm1n', '**/admin/dashboard');
     });
 
     test('Verify Admin Dashboard & Management views', async ({ page }) => {

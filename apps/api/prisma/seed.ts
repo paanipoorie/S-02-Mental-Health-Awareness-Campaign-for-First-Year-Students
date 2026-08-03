@@ -39,12 +39,19 @@ async function main() {
   console.log('Database reset complete. Seeding data...');
 
   const passwordHash = await bcrypt.hash('Password123', 12);
+  const adminPasswordHash = await bcrypt.hash('hell0@dm1n', 12);
 
   // 1. Seed Admin
-  const admin = await prisma.user.create({
-    data: {
+  const admin = await prisma.user.upsert({
+    where: { universityEmail: 'admin@cuchd.in' },
+    update: {
+      passwordHash: adminPasswordHash,
+      role: Role.ADMIN,
+      isActive: true,
+    },
+    create: {
       universityEmail: 'admin@cuchd.in',
-      passwordHash,
+      passwordHash: adminPasswordHash,
       role: Role.ADMIN,
       isActive: true,
     },
