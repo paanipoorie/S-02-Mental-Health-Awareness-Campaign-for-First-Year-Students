@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+const publicApiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001/api';
 ---
 
 <BaseLayout title="Anonymous Discussions | Peerly">
-  <div class="posts-page mx-auto max-w-3xl px-4 py-10">
+  <div class="posts-page mx-auto max-w-3xl px-4 py-10" data-api-url={publicApiUrl}>
     <header
       class="page-header mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
     >
@@ -130,6 +131,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         });
       }
 
+      const postsPageEl = document.querySelector('.posts-page');
+      const apiUrl = postsPageEl ? postsPageEl.getAttribute('data-api-url') : 'http://localhost:3001/api';
+
       async function fetchPosts() {
         feedContainer.innerHTML =
           '<div class="py-12 text-center text-gray-500 font-medium">Loading posts...</div>';
@@ -142,7 +146,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         if (selectedCategory) params.append('category', selectedCategory);
 
         try {
-          const res = await fetch(`http://localhost:3001/api/posts?${params.toString()}`, {
+          const res = await fetch(`${apiUrl}/posts?${params.toString()}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

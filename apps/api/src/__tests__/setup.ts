@@ -119,7 +119,7 @@ export async function registerViaOTP(
     ...data,
     tokens: {
       accessToken: data.accessToken,
-      refreshToken: '', // Not returned in verify-otp response
+      refreshToken: data.refreshToken,
     },
   };
 }

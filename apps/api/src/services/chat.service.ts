@@ -538,11 +538,12 @@ export const chatService = {
         });
         if (otherIdentity?.userId) {
           const senderIdentity = await prisma.anonymousIdentity.findUnique({
-            where: { id: studentIdentityId },
+            where: { id: studentIdentityId! },
             select: { displayName: true }
           });
+          const recipientUserId = otherIdentity.userId as string;
           await emitNotification(
-            otherIdentity.userId,
+            recipientUserId,
             'NEW_CHAT_MESSAGE',
             'New Message from Peer',
             `${senderIdentity?.displayName || 'A peer'} sent: "${messageSnippet}"`,

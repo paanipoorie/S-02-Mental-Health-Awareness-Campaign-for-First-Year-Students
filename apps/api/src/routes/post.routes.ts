@@ -8,6 +8,7 @@ import {
   getPostParamsSchema,
   createReplySchema,
   replyParamsSchema,
+  updatePostSchema,
 } from '../validators/post.validator.js';
 
 const router: Router = Router();
@@ -23,7 +24,7 @@ router.get('/:id', validate(getPostParamsSchema), postController.getPostById);
 router.patch(
   '/:id',
   validate(getPostParamsSchema),
-  validate(createPostSchema),
+  validate(updatePostSchema),
   postController.updatePost
 );
 

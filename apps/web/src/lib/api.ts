@@ -95,11 +95,18 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
     );
   }
 
-  if ('pagination' in data) {
-    return {
-      data: (data as any).data,
-      pagination: (data as any).pagination,
-    } as unknown as T;
+  if (typeof data === 'object' && data !== null && 'data' in data) {
+    const successData = data as ApiSuccessResponse<T> & Record<string, unknown>;
+    const extraEntries = Object.entries(successData).filter(
+      ([key]) => key !== 'success' && key !== 'data'
+    );
+
+    if (extraEntries.length > 0) {
+      return {
+        data: successData.data,
+        ...Object.fromEntries(extraEntries),
+      } as unknown as T;
+    }
   }
 
   return (data as ApiSuccessResponse<T>).data;

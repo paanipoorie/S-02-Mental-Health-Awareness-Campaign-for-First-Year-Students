@@ -154,4 +154,29 @@ describe('Posts (Forum) Integration Tests', () => {
 
     expect(deleteResponse.body.success).toBe(true);
   });
+
+  it('should allow partial post updates for the post author', async () => {
+    const student = await createTestUser(Role.STUDENT);
+
+    const post = await prisma.post.create({
+      data: {
+        title: 'Original title for editing',
+        body: 'Original body content for edit validation.',
+        category: 'GENERAL',
+        anonymousIdentityId: student.anon.id,
+      },
+    });
+
+    const updateResponse = await request(app)
+      .patch(`/api/posts/${post.id}`)
+      .set('Authorization', `Bearer ${student.token}`)
+      .send({
+        title: 'Updated title only',
+      })
+      .expect(200);
+
+    expect(updateResponse.body.success).toBe(true);
+    expect(updateResponse.body.data.title).toBe('Updated title only');
+    expect(updateResponse.body.data.body).toBe('Original body content for edit validation.');
+  });
 });

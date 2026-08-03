@@ -11,8 +11,7 @@ const sendOTPSchema = z.object({
   universityEmail: z
     .string()
     .min(1, 'University email is required')
-    .email('Invalid email format')
-    .refine(validateCUEmail, 'Please use your official Chandigarh University email (@cuchd.in).'),
+    .email('Invalid email format'),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters')
@@ -28,8 +27,7 @@ const verifyOTPSchema = z.object({
   universityEmail: z
     .string()
     .min(1, 'University email is required')
-    .email('Invalid email format')
-    .refine(validateCUEmail, 'Please use your official Chandigarh University email (@cuchd.in).'),
+    .email('Invalid email format'),
   otp: z.string().length(6, 'OTP must be 6 digits'),
 });
 
@@ -37,8 +35,7 @@ const loginBodySchema = z.object({
   universityEmail: z
     .string()
     .min(1, 'University email is required')
-    .email('Invalid email format')
-    .refine(validateCUEmail, 'Please use your official Chandigarh University email (@cuchd.in).'),
+    .email('Invalid email format'),
   password: z.string().min(1, 'Password is required'),
 });
 

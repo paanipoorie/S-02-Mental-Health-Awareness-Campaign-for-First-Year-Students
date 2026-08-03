@@ -47,6 +47,7 @@ export class AuthController {
           },
           anonymousIdentity: result.anonymousIdentity,
           accessToken: result.tokens.accessToken,
+          refreshToken: result.tokens.refreshToken,
         },
       });
     } catch (error) {

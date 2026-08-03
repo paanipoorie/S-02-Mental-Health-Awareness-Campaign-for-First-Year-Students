@@ -6,6 +6,9 @@ export const profileController = {
   async getAnonymousProfile(req: Request, res: Response, next: NextFunction) {
     try {
       const { anonymousIdentityId } = req.params;
+      if (!anonymousIdentityId) {
+        return next(new ApiError(400, 'Anonymous identity ID is required'));
+      }
       const profile = await profileService.getAnonymousProfile(anonymousIdentityId);
 
       if (!profile) {
