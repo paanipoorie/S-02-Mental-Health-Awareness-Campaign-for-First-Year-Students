@@ -20,20 +20,22 @@ enum MentorAvailabilityStatus {
 }
 
 model User {
-  id                String             @id @default(cuid())
-  universityEmail   String             @unique
-  passwordHash      String
-  role              Role               @default(STUDENT)
-  isVerifiedMentor  Boolean            @default(false)
-  isActive          Boolean            @default(true)
-  createdAt         DateTime           @default(now()) @db.Timestamptz(6)
-  anonymousIdentity AnonymousIdentity?
-  mentorProfile     MentorProfile?
-  chatThreads       ChatThread[]
-  meetings          Meeting[]
-  workshops         Workshop[]
-  adminLogs         AdminActionLog[]
-  notifications     Notification[]
+  id                 String             @id @default(cuid())
+  universityEmail    String             @unique
+  passwordHash       String
+  role               Role               @default(STUDENT)
+  isVerifiedMentor   Boolean            @default(false)
+  isActive           Boolean            @default(true)
+  createdAt          DateTime           @default(now()) @db.Timestamptz(6)
+  anonymousIdentity  AnonymousIdentity?
+  mentorProfile      MentorProfile?
+  chatThreads        ChatThread[]
+  meetings           Meeting[]
+  workshops          Workshop[]
+  adminLogs          AdminActionLog[]
+  notifications      Notification[]
+  studentAssignments MentorAssignment[] @relation("StudentAssignments")
+  mentorAssignments  MentorAssignment[] @relation("MentorAssignments")
 }
 
 model AnonymousIdentity {
@@ -326,4 +328,21 @@ model EmailOTP {
   passwordHash String
   expiresAt    DateTime @db.Timestamptz(6)
   createdAt    DateTime @default(now()) @db.Timestamptz(6)
+}
+
+enum AssignmentStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model MentorAssignment {
+  id         String           @id @default(cuid())
+  studentId  String
+  student    User             @relation("StudentAssignments", fields: [studentId], references: [id], onDelete: Cascade)
+  mentorId   String
+  mentor     User             @relation("MentorAssignments", fields: [mentorId], references: [id], onDelete: Cascade)
+  assignedAt DateTime         @default(now()) @db.Timestamptz(6)
+  status     AssignmentStatus @default(ACTIVE)
+
+  @@unique([studentId, status])
 }

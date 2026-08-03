@@ -31,6 +31,15 @@ export const chatController = {
         if (error.message === 'STUDENT_IDENTITY_ID_REQUIRED') {
           return next(new ApiError(400, 'Student identity ID required for mentor-initiated chat'));
         }
+        if (error.message === 'ALL_MENTORS_AT_CAPACITY') {
+          return next(new ApiError(422, "All peer mentors are currently at capacity. You'll be assigned a mentor as soon as one becomes available."));
+        }
+        if (error.message === 'STUDENT_ASSIGNED_TO_DIFFERENT_MENTOR') {
+          return next(new ApiError(400, 'This student is assigned to a different mentor'));
+        }
+        if (error.message === 'MENTOR_AT_CAPACITY') {
+          return next(new ApiError(422, 'You have reached your maximum capacity of 15 active students'));
+        }
       }
       next(error);
     }

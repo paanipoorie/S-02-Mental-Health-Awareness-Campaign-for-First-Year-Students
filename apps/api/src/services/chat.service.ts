@@ -15,25 +15,18 @@ async function findAvailableMentor() {
     where: {
       role: 'MENTOR',
       isVerifiedMentor: true,
-      mentorProfile: {
-        availabilityStatus: 'AVAILABLE',
-      },
+    },
+    orderBy: {
+      createdAt: 'asc',
     },
     include: {
-      mentorProfile: true,
-      chatThreads: {
+      mentorAssignments: {
         where: { status: 'ACTIVE' },
       },
     },
-    orderBy: {
-      chatThreads: {
-        _count: 'asc',
-      },
-    },
-    take: 1,
   });
 
-  return mentors[0] || null;
+  return mentors.find(m => m.mentorAssignments.length < 15) || null;
 }
 
 async function getStudentIdentityId(userId: string): Promise<string | null> {
@@ -109,26 +102,61 @@ export const chatService = {
         return chat;
       }
 
-      // Check if there's already an active student-to-mentor chat for this student
+      // 1. Check if the student has an active MentorAssignment
+      let activeAssignment = await prisma.mentorAssignment.findFirst({
+        where: {
+          studentId: userId,
+          status: 'ACTIVE',
+        },
+      });
+
+      let assignedMentorId: string;
+
+      if (activeAssignment) {
+        assignedMentorId = activeAssignment.mentorId;
+        console.log(`[ChatService] Student ${userId} already assigned to Mentor ${assignedMentorId}`);
+      } else {
+        // 2. Assign a new mentor if none is assigned
+        console.log(`[ChatService] No active assignment for Student ${userId}. Looking for available mentor...`);
+        const availableMentor = await findAvailableMentor();
+
+        if (!availableMentor) {
+          console.log(`[ChatService] All peer mentors are currently at capacity.`);
+          throw new Error('ALL_MENTORS_AT_CAPACITY');
+        }
+
+        assignedMentorId = availableMentor.id;
+
+        // Create the MentorAssignment
+        await prisma.mentorAssignment.create({
+          data: {
+            studentId: userId,
+            mentorId: assignedMentorId,
+            status: 'ACTIVE',
+          },
+        });
+        console.log(`[ChatService] Created ACTIVE MentorAssignment: Student ${userId} -> Mentor ${assignedMentorId}`);
+      }
+
+      // 3. Create or reuse the existing chat thread with the assigned mentor
       const existingChat = await prisma.chatThread.findFirst({
         where: {
           studentIdentityId,
-          mentorId: { not: null },
+          mentorId: assignedMentorId,
           peerIdentityId: null,
           status: 'ACTIVE',
         },
       });
 
       if (existingChat) {
+        console.log(`[ChatService] Reusing existing chat thread ${existingChat.id} for Student ${userId} and Mentor ${assignedMentorId}`);
         return existingChat;
       }
-
-      const availableMentor = await findAvailableMentor();
 
       const chat = await prisma.chatThread.create({
         data: {
           studentIdentityId,
-          mentorId: availableMentor?.id ?? null,
+          mentorId: assignedMentorId,
           status: 'ACTIVE',
         },
         include: {
@@ -151,20 +179,18 @@ export const chatService = {
         },
       });
 
-      // Notify the mentor if one was assigned
-      if (availableMentor) {
-        const studentIdentity = await prisma.anonymousIdentity.findUnique({
-          where: { id: studentIdentityId },
-          select: { displayName: true },
-        });
-        await emitNotification(
-          availableMentor.id,
-          'MENTOR_ASSIGNED',
-          'New Student Assigned',
-          `${studentIdentity?.displayName || 'A student'} has been assigned to you for support.`,
-          { chatId: chat.id, studentIdentityId }
-        );
-      }
+      // Notify the mentor
+      const studentIdentity = await prisma.anonymousIdentity.findUnique({
+        where: { id: studentIdentityId },
+        select: { displayName: true },
+      });
+      await emitNotification(
+        assignedMentorId,
+        'MENTOR_ASSIGNED',
+        'New Student Assigned',
+        `${studentIdentity?.displayName || 'A student'} has been assigned to you for support.`,
+        { chatId: chat.id, studentIdentityId }
+      );
 
       return chat;
     } else if (role === 'MENTOR') {
@@ -180,7 +206,46 @@ export const chatService = {
         throw new Error('STUDENT_IDENTITY_NOT_FOUND');
       }
 
-      // Check if there's already an active chat
+      const studentUserId = studentIdentity.userId;
+
+      // 1. Check if student already has an active assignment
+      let activeAssignment = await prisma.mentorAssignment.findFirst({
+        where: {
+          studentId: studentUserId,
+          status: 'ACTIVE',
+        },
+      });
+
+      if (activeAssignment && activeAssignment.mentorId !== userId) {
+        throw new Error('STUDENT_ASSIGNED_TO_DIFFERENT_MENTOR');
+      }
+
+      if (!activeAssignment) {
+        // Assign this mentor to the student!
+        // First check if this mentor has capacity
+        const activeCount = await prisma.mentorAssignment.count({
+          where: {
+            mentorId: userId,
+            status: 'ACTIVE',
+          },
+        });
+
+        if (activeCount >= 15) {
+          throw new Error('MENTOR_AT_CAPACITY');
+        }
+
+        // Create assignment
+        await prisma.mentorAssignment.create({
+          data: {
+            studentId: studentUserId,
+            mentorId: userId,
+            status: 'ACTIVE',
+          },
+        });
+        console.log(`[ChatService] Mentor initiated assignment: Student ${studentUserId} -> Mentor ${userId}`);
+      }
+
+      // Check if there's already an active chat thread
       const existingChat = await prisma.chatThread.findFirst({
         where: {
           studentIdentityId: data.studentIdentityId,
