@@ -55,6 +55,6 @@ test.describe('Mentor Initiating Chat from Anonymous Profile E2E Tests', () => {
     await page.click('button:has-text("Send")');
     
     // Verify message is visible
-    await expect(page.locator('text=Hello, I am your assigned mentor.')).toBeVisible();
+    await expect(page.locator('text=Hello, I am your assigned mentor.').first()).toBeVisible();
   });
 });

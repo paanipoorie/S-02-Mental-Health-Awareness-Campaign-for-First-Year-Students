@@ -136,24 +136,34 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
           href="/events"
           className="text-label-14 text-tertiary flex items-center gap-1.5 font-semibold transition-colors hover:underline"
         >
-          &larr; Back to Events
+          ← Back to Events
         </a>
       </div>
 
       {/* Main card */}
       <div className="bg-background-100 rounded-sm border border-gray-200 p-6 shadow-sm sm:p-8">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-700">
-            {meeting.category.replace('_', ' ')}
-          </span>
-          <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-700">
-            {meeting.meetingType === 'ONLINE' ? (
-              <Globe className="h-3 w-3 text-gray-600" />
-            ) : (
-              <MapPin className="h-3 w-3 text-gray-600" />
-            )}{' '}
-            {meeting.meetingType === 'ONLINE' ? 'Online' : 'Offline'}
-          </span>
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-700">
+              {meeting.category.replace('_', ' ')}
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-sm border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-700">
+              {meeting.meetingType === 'ONLINE' ? (
+                <Globe className="h-3 w-3 text-gray-600" />
+              ) : (
+                <MapPin className="h-3 w-3 text-gray-600" />
+              )}{' '}
+              {meeting.meetingType === 'ONLINE' ? 'Online' : 'Offline'}
+            </span>
+          </div>
+          {(isHost || user?.role === 'ADMIN') && (
+            <button
+              onClick={handleCancelMeeting}
+              className="text-label-12 rounded-sm border border-red-200 px-3 py-1.5 font-semibold text-red-600 transition-colors hover:bg-red-50"
+            >
+              Delete
+            </button>
+          )}
         </div>
 
         <h1 className="text-heading-28 sm:text-heading-32 text-gray-1000 font-bold leading-tight">
@@ -253,15 +263,6 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
             attending
           </div>
           <div className="flex gap-3">
-            {(isHost || user?.role === 'ADMIN') && (
-              <button
-                type="button"
-                onClick={handleCancelMeeting}
-                className="rounded-sm border border-red-300 bg-red-50 px-5 py-2.5 text-sm font-semibold text-red-800 transition-colors hover:bg-red-100"
-              >
-                Cancel Meeting
-              </button>
-            )}
             <button
               type="button"
               onClick={handleRSVP}

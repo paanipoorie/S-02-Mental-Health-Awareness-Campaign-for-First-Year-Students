@@ -21,6 +21,7 @@ import { chatService } from './chat.service.js';
 import { meetingService } from './meeting.service.js';
 import { resourceService } from './resource.service.js';
 import { mentorService } from './mentor.service.js';
+import { getMentorIdentity } from '../utils/anonymousIdentity.js';
 
 const prisma = new PrismaClient();
 
@@ -372,10 +373,19 @@ export const dashboardService = {
       },
     });
 
+    let displayName = 'Assigned Mentor';
+    let universityEmail = '';
+    if (activeChat?.mentor) {
+      const mentorIdent = await getMentorIdentity(activeChat.mentor.id);
+      displayName = mentorIdent.displayName;
+      universityEmail = activeChat.mentor.universityEmail;
+    }
+
     const assignedMentor = activeChat?.mentor
       ? {
           id: activeChat.mentor.id,
-          displayName: activeChat.mentor.anonymousIdentity?.displayName || 'Assigned Mentor',
+          displayName,
+          universityEmail,
           availabilityStatus: activeChat.mentor.mentorProfile?.availabilityStatus || 'OFFLINE',
           isVerifiedMentor: activeChat.mentor.isVerifiedMentor,
           chatThreadId: activeChat.id,

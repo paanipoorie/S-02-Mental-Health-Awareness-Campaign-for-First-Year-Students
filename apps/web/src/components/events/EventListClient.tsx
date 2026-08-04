@@ -262,22 +262,10 @@ export function EventListClient() {
   const paginatedEvents = filteredEvents.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   if (activeEventId && activeEventType) {
-    return (
-      <div className="bg-background-100 mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-4">
-          <a
-            href="/events"
-            className="text-copy-14 inline-flex items-center gap-1.5 font-semibold text-gray-700 transition-colors hover:text-gray-900"
-          >
-            ← Back to Events
-          </a>
-        </div>
-        {activeEventType === 'MEETING' ? (
-          <MeetingDetailClient meetingId={activeEventId} />
-        ) : (
-          <WorkshopDetailClient workshopId={activeEventId} />
-        )}
-      </div>
+    return activeEventType === 'MEETING' ? (
+      <MeetingDetailClient meetingId={activeEventId} />
+    ) : (
+      <WorkshopDetailClient workshopId={activeEventId} />
     );
   }
 
