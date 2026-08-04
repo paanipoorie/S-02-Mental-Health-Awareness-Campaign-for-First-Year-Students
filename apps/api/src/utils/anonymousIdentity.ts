@@ -123,12 +123,12 @@ function capitalize(word: string | undefined): string {
 
 /**
  * Generates a random anonymous identity name.
- * Format: "Anonymous [Adjective] [Noun]"
+ * Format: "[Adjective] [Noun]"
  */
 export function generateAnonymousName(): string {
   const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
   const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
-  return `Anonymous ${capitalize(adj)} ${capitalize(noun)}`;
+  return `${capitalize(adj)} ${capitalize(noun)}`;
 }
 
 export async function getMentorIdentity(mentorUserId: string): Promise<{ displayName: string; uid: string }> {
