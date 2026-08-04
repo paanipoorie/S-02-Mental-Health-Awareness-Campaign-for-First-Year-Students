@@ -22,7 +22,7 @@
     "docker:up": "docker compose -f docker/docker-compose.yml up -d",
     "docker:down": "docker compose -f docker/docker-compose.yml down",
     "docker:logs": "docker compose -f docker/docker-compose.yml logs -f",
-    "prepare": "husky install"
+    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production') { try { require('husky') } catch (e) { process.exit(0) } require('child_process').execSync('husky', { stdio: 'inherit' }) }\""
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.0.0",
