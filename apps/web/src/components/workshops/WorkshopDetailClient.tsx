@@ -108,8 +108,7 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
 
     try {
       await api.delete(`/workshops/${workshop.id}`);
-      toast.success('Workshop cancelled successfully.');
-      window.location.href = '/events';
+      window.location.href = '/events?deleted=true';
     } catch (err: any) {
       toast.error(err.message || 'Failed to cancel workshop');
     }

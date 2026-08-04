@@ -21,7 +21,7 @@ interface MeetingDetail {
   hostDisplayName: string | null;
   hostUserId: string | null;
   hostIdentityId: string | null;
-  mentorUid?: string | null;
+  hostEmail?: string | null;
   date: string;
   time: string;
   durationMinutes: number;
@@ -93,8 +93,7 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
 
     try {
       await api.delete(`/meetings/${meeting.id}`);
-      toast.success('Meeting has been cancelled.');
-      window.location.href = '/events';
+      window.location.href = '/events?deleted=true';
     } catch (err: any) {
       toast.error(err.message || 'Failed to cancel meeting');
     }
@@ -127,10 +126,7 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
     );
   }
 
-  const isHost =
-    user?.role === 'STUDENT'
-      ? meeting.hostIdentityId === user?.anonymousIdentityId
-      : meeting.hostUserId === user?.userId;
+  const isHost = user?.role === 'MENTOR' && meeting.hostUserId === user?.userId;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
@@ -225,15 +221,21 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
           <div>
             <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400">Hosted by</div>
             <div className="text-sm font-bold text-gray-900">{meeting.hostDisplayName || 'Anonymous'}</div>
-            {meeting.mentorUid && (
-              <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                <span className="text-xs font-mono text-gray-500">Mentor UID: {meeting.mentorUid}</span>
-                <span className="rounded-sm border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-800">
-                  Verified Peer Mentor
-                </span>
+            {meeting.hostType === 'MENTOR' && (
+              <div className="mt-1 flex flex-col gap-1">
+                {meeting.hostEmail && (
+                  <div className="text-xs text-gray-600">
+                    Email: <span className="font-semibold text-gray-800">{meeting.hostEmail}</span>
+                  </div>
+                )}
+                <div>
+                  <span className="rounded-sm border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-800">
+                    Verified Peer Mentor
+                  </span>
+                </div>
               </div>
             )}
-            {!meeting.mentorUid && (
+            {meeting.hostType !== 'MENTOR' && (
               <span className="mt-1 inline-block rounded-sm border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-[10px] font-semibold text-gray-600">
                 Peer Student
               </span>

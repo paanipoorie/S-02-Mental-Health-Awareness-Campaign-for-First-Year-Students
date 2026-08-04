@@ -147,7 +147,7 @@ export async function getMentorIdentity(mentorUserId: string): Promise<{ display
   }
   const num = index + 1;
   return {
-    displayName: `Peer ${num}`,
+    displayName: `Mentor ${num}`,
     uid: `MTR-${String(num).padStart(4, '0')}`,
   };
 }

@@ -147,7 +147,7 @@ export const meetingService = {
         where,
         include: {
           hostIdentity: { select: { displayName: true } },
-          hostUser: { select: { anonymousIdentity: { select: { displayName: true } } } },
+          hostUser: { select: { universityEmail: true, anonymousIdentity: { select: { displayName: true } } } },
           _count: { select: { attendees: true } },
           attendees: anonId ? { where: { anonymousIdentityId: anonId } } : false,
         },
@@ -161,9 +161,13 @@ export const meetingService = {
     const meetingsWithHost = await Promise.all(
       meetings.map(async m => {
         let hostDisplayName = m.hostIdentity?.displayName ?? m.hostUser?.anonymousIdentity?.displayName ?? null;
+        let hostEmail = null;
         if (!hostDisplayName && m.hostUserId) {
           const mentorIdent = await getMentorIdentity(m.hostUserId);
           hostDisplayName = mentorIdent.displayName;
+        }
+        if (m.hostType === 'MENTOR') {
+          hostEmail = m.hostUser?.universityEmail ?? null;
         }
         return {
           id: m.id,
@@ -181,6 +185,7 @@ export const meetingService = {
           category: m.category,
           createdAt: m.createdAt,
           hostDisplayName,
+          hostEmail,
           attendeeCount: m._count.attendees,
           isAttending: anonId ? m.attendees.length > 0 : false,
         };
@@ -203,7 +208,7 @@ export const meetingService = {
       where: { id },
       include: {
         hostIdentity: { select: { displayName: true } },
-        hostUser: { select: { anonymousIdentity: { select: { displayName: true } } } },
+        hostUser: { select: { universityEmail: true, anonymousIdentity: { select: { displayName: true } } } },
         attendees: { include: { anonymousIdentity: { select: { displayName: true } } } },
         _count: { select: { attendees: true } },
       },
@@ -217,17 +222,19 @@ export const meetingService = {
     }
 
     let hostDisplayName = meeting.hostIdentity?.displayName ?? meeting.hostUser?.anonymousIdentity?.displayName ?? null;
-    let mentorUid = null;
+    let hostEmail = null;
     if (!hostDisplayName && meeting.hostUserId) {
       const mentorIdent = await getMentorIdentity(meeting.hostUserId);
       hostDisplayName = mentorIdent.displayName;
-      mentorUid = mentorIdent.uid;
+    }
+    if (meeting.hostType === 'MENTOR') {
+      hostEmail = meeting.hostUser?.universityEmail ?? null;
     }
 
     return {
       ...meeting,
       hostDisplayName,
-      mentorUid,
+      hostEmail,
       isAttending,
     };
   },
@@ -249,16 +256,17 @@ export const meetingService = {
     return { rsvped: true };
   },
 
-  async cancelMeeting(meetingId: string, userId: string, userRole: string) {
+  async cancelMeeting(meetingId: string, userId: string, userRole?: string) {
     const meeting = await prisma.meeting.findUnique({ where: { id: meetingId } });
     if (!meeting) throw new Error('Meeting not found');
 
     let isHost = false;
-    if (userRole === 'ADMIN') {
-      isHost = true;
-    } else if (userRole === 'STUDENT') {
-      const hostAnonId = await getAnonId(userId);
-      isHost = meeting.hostIdentityId === hostAnonId;
+    if (userRole) {
+      if (userRole === 'ADMIN') {
+        isHost = true;
+      } else if (userRole === 'MENTOR') {
+        isHost = meeting.hostUserId === userId;
+      }
     } else {
       isHost = meeting.hostUserId === userId;
     }
@@ -278,7 +286,7 @@ export const meetingService = {
       },
       include: {
         hostIdentity: { select: { displayName: true } },
-        hostUser: { select: { anonymousIdentity: { select: { displayName: true } } } },
+        hostUser: { select: { universityEmail: true, anonymousIdentity: { select: { displayName: true } } } },
         _count: { select: { attendees: true } },
       },
       orderBy: { date: 'asc' },
@@ -288,9 +296,13 @@ export const meetingService = {
     const meetingsWithHost = await Promise.all(
       meetings.map(async m => {
         let hostDisplayName = m.hostIdentity?.displayName ?? m.hostUser?.anonymousIdentity?.displayName ?? null;
+        let hostEmail = null;
         if (!hostDisplayName && m.hostUserId) {
           const mentorIdent = await getMentorIdentity(m.hostUserId);
           hostDisplayName = mentorIdent.displayName;
+        }
+        if (m.hostType === 'MENTOR') {
+          hostEmail = m.hostUser?.universityEmail ?? null;
         }
         return {
           id: m.id,
@@ -305,6 +317,7 @@ export const meetingService = {
           location: m.location,
           category: m.category,
           hostDisplayName,
+          hostEmail,
           attendeeCount: m._count.attendees,
           isAttending: true,
         };
@@ -331,7 +344,7 @@ export const meetingService = {
       include: {
         workshop: {
           include: {
-            mentor: { select: { anonymousIdentity: { select: { displayName: true } } } },
+            mentor: { select: { universityEmail: true, anonymousIdentity: { select: { displayName: true } } } },
             _count: { select: { registrations: true } },
           },
         },
@@ -358,6 +371,7 @@ export const meetingService = {
           resources: r.workshop.resources,
           createdAt: r.workshop.createdAt,
           mentorDisplayName: mentorIdent.displayName,
+          mentorEmail: r.workshop.mentor.universityEmail ?? null,
           registrationCount: r.workshop._count.registrations,
           userRegistrationStatus: r.status,
         };
@@ -493,7 +507,7 @@ export const workshopService = {
       prisma.workshop.findMany({
         where,
         include: {
-          mentor: { select: { anonymousIdentity: { select: { displayName: true } } } },
+          mentor: { select: { universityEmail: true, anonymousIdentity: { select: { displayName: true } } } },
           _count: { select: { registrations: true } },
           registrations: anonId ? { where: { anonymousIdentityId: anonId } } : false,
         },
@@ -523,6 +537,7 @@ export const workshopService = {
           resources: w.resources,
           createdAt: w.createdAt,
           mentorDisplayName: mentorIdent.displayName,
+          mentorEmail: w.mentor.universityEmail ?? null,
           registrationCount: w._count.registrations,
           userRegistrationStatus: anonId ? (w.registrations[0]?.status ?? null) : null,
         };
@@ -544,7 +559,7 @@ export const workshopService = {
     const workshop = await prisma.workshop.findUnique({
       where: { id },
       include: {
-        mentor: { select: { anonymousIdentity: { select: { displayName: true } } } },
+        mentor: { select: { universityEmail: true, anonymousIdentity: { select: { displayName: true } } } },
         registrations: { include: { anonymousIdentity: { select: { displayName: true } } } },
         _count: { select: { registrations: true } },
       },
@@ -562,7 +577,7 @@ export const workshopService = {
     return {
       ...workshop,
       mentorDisplayName: mentorIdent.displayName,
-      mentorUid: mentorIdent.uid,
+      mentorEmail: workshop.mentor.universityEmail ?? null,
       userRegistration,
     };
   },
@@ -641,11 +656,13 @@ export const workshopService = {
     });
   },
 
-  async cancelWorkshop(workshopId: string, userId: string, userRole: string) {
+  async cancelWorkshop(workshopId: string, userId: string, userRole?: string) {
     const workshop = await prisma.workshop.findUnique({ where: { id: workshopId } });
     if (!workshop) throw new Error('Workshop not found');
 
-    const isAuthorized = userRole === 'ADMIN' || workshop.mentorId === userId;
+    const isAuthorized = userRole
+      ? userRole === 'ADMIN' || (userRole === 'MENTOR' && workshop.mentorId === userId)
+      : workshop.mentorId === userId;
     if (!isAuthorized) throw new Error('You are not authorized to cancel this workshop');
 
     await prisma.workshop.delete({ where: { id: workshopId } });

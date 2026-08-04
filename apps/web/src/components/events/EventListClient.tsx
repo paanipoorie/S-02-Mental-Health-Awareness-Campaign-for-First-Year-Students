@@ -99,6 +99,12 @@ export function EventListClient() {
         setActiveEventId(null);
         setActiveEventType(null);
       }
+
+      if (params.get('deleted') === 'true') {
+        toast.success('Event deleted successfully.');
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, '', cleanUrl);
+      }
     };
 
     handleLocationChange();

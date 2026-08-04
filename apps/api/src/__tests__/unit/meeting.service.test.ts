@@ -74,8 +74,13 @@ describe('Meeting and Workshop Service Unit Tests', () => {
     const rsvpResult = await meetingService.rsvpMeeting(meeting.id, student2.id);
     expect(rsvpResult.rsvped).toBe(true);
 
-    // Cancel Meeting
-    const cancelResult = await meetingService.cancelMeeting(meeting.id, student.id, Role.STUDENT);
+    // Cancel Meeting as STUDENT should fail
+    await expect(
+      meetingService.cancelMeeting(meeting.id, student.id, Role.STUDENT)
+    ).rejects.toThrow('You are not authorized to cancel this meeting');
+
+    // Cancel Meeting as ADMIN should succeed
+    const cancelResult = await meetingService.cancelMeeting(meeting.id, student.id, Role.ADMIN);
     expect(cancelResult.deleted).toBe(true);
   });
 
