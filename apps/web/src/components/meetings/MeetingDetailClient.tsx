@@ -278,29 +278,6 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
         </div>
       </div>
 
-      {/* Attendees list section */}
-      <div className="bg-background-100 rounded-sm border border-gray-200 p-6 shadow-sm">
-        <h3 className="text-heading-18 mb-4 font-bold text-gray-900">Attendees List</h3>
-        {meeting.attendees.length === 0 ? (
-          <p className="text-sm italic text-gray-400">
-            No one has RSVP'd yet. Be the first to join!
-          </p>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-            {meeting.attendees.map(attendee => (
-              <div
-                key={attendee.id}
-                className="flex items-center gap-2 rounded-sm border border-gray-200 bg-gray-50 p-3 text-sm font-semibold text-gray-700"
-              >
-                <User className="h-4 w-4 flex-shrink-0 text-gray-500" />
-                <span className="truncate">
-                  {attendee.anonymousIdentity?.displayName || 'Anonymous Student'}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   );
 }

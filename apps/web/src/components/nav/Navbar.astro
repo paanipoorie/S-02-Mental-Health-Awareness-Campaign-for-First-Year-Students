@@ -21,7 +21,7 @@ const { currentRole = null } = Astro.props;
         <!-- Student Links -->
         <div
           id="nav-links-student"
-          class={`items-center gap-1 ${currentRole === 'STUDENT' ? 'flex' : 'hidden'}`}
+          class="hidden items-center gap-1"
         >
           <a
             href="/dashboard"
@@ -52,7 +52,7 @@ const { currentRole = null } = Astro.props;
         <!-- Mentor Links -->
         <div
           id="nav-links-mentor"
-          class={`items-center gap-1 ${currentRole === 'MENTOR' ? 'flex' : 'hidden'}`}
+          class="hidden items-center gap-1"
         >
           <a
             href="/mentor/dashboard"
@@ -82,8 +82,17 @@ const { currentRole = null } = Astro.props;
       </nav>
 
       <div class="flex items-center gap-3">
+        <!-- Loading Placeholder -->
+        <div
+          id="nav-loading-placeholder"
+          class="flex items-center gap-3"
+        >
+          <div class="h-4 w-12 animate-pulse rounded-sm bg-gray-200"></div>
+          <div class="h-4 w-16 animate-pulse rounded-sm bg-gray-200"></div>
+        </div>
+
         <!-- Logged-in Controls -->
-        <div id="nav-user-controls" class={`items-center gap-3 ${currentRole ? 'flex' : 'hidden'}`}>
+        <div id="nav-user-controls" class="hidden items-center gap-3">
           <NotificationBell client:load />
           <button
             id="logout-btn"
@@ -96,7 +105,7 @@ const { currentRole = null } = Astro.props;
         <!-- Logged-out Controls -->
         <div
           id="nav-guest-controls"
-          class={`items-center gap-2 ${!currentRole ? 'flex' : 'hidden'}`}
+          class="hidden items-center gap-2"
         >
           <a
             href="/login"
@@ -116,8 +125,9 @@ const { currentRole = null } = Astro.props;
       <script is:inline>
         (function () {
           const rawUser = localStorage.getItem('caps_user_profile');
+          const hasToken = !!localStorage.getItem('caps_access_token');
           let role = null;
-          if (rawUser) {
+          if (hasToken && rawUser) {
             try {
               role = JSON.parse(rawUser).role;
             } catch (e) {}
@@ -143,6 +153,8 @@ const { currentRole = null } = Astro.props;
             document.getElementById('nav-links-mentor')?.classList.remove('flex');
             document.getElementById('nav-guest-controls')?.classList.add('hidden');
             document.getElementById('nav-guest-controls')?.classList.remove('flex');
+            document.getElementById('nav-loading-placeholder')?.classList.add('hidden');
+            document.getElementById('nav-loading-placeholder')?.classList.remove('flex');
 
             if (role === 'STUDENT') {
               const studentNav = document.getElementById('nav-links-student');
@@ -164,6 +176,10 @@ const { currentRole = null } = Astro.props;
               userControls.classList.add('flex');
             }
           } else {
+            // Logged out
+            document.getElementById('nav-loading-placeholder')?.classList.add('hidden');
+            document.getElementById('nav-loading-placeholder')?.classList.remove('flex');
+            
             const userControls = document.getElementById('nav-user-controls');
             if (userControls) {
               userControls.classList.add('hidden');
@@ -183,12 +199,96 @@ const { currentRole = null } = Astro.props;
 </header>
 
 <!-- Notification Toast -->
-{currentRole && <NotificationToast client:load />}
+<NotificationToast client:load />
 
 <script>
-  import { clearAuthUser } from '../../stores/authStore';
+  import { $user, $isLoading, fetchCurrentUser, clearAuthUser } from '../../stores/authStore';
   import { api } from '../../lib/api';
 
+  const studentNav = document.getElementById('nav-links-student');
+  const mentorNav = document.getElementById('nav-links-mentor');
+  const userControls = document.getElementById('nav-user-controls');
+  const guestControls = document.getElementById('nav-guest-controls');
+  const loadingPlaceholder = document.getElementById('nav-loading-placeholder');
+  const brandLink = document.getElementById('brand-link');
+
+  function updateNavbar(user: any, loading: boolean) {
+    if (loading) {
+      loadingPlaceholder?.classList.remove('hidden');
+      loadingPlaceholder?.classList.add('flex');
+      
+      studentNav?.classList.add('hidden');
+      studentNav?.classList.remove('flex');
+      mentorNav?.classList.add('hidden');
+      mentorNav?.classList.remove('flex');
+      userControls?.classList.add('hidden');
+      userControls?.classList.remove('flex');
+      guestControls?.classList.add('hidden');
+      guestControls?.classList.remove('flex');
+      return;
+    }
+
+    loadingPlaceholder?.classList.add('hidden');
+    loadingPlaceholder?.classList.remove('flex');
+
+    if (user) {
+      guestControls?.classList.add('hidden');
+      guestControls?.classList.remove('flex');
+
+      if (user.role === 'STUDENT') {
+        studentNav?.classList.remove('hidden');
+        studentNav?.classList.add('flex');
+        mentorNav?.classList.add('hidden');
+        mentorNav?.classList.remove('flex');
+        if (brandLink) brandLink.setAttribute('href', '/dashboard');
+      } else if (user.role === 'MENTOR') {
+        mentorNav?.classList.remove('hidden');
+        mentorNav?.classList.add('flex');
+        studentNav?.classList.add('hidden');
+        studentNav?.classList.remove('flex');
+        if (brandLink) brandLink.setAttribute('href', '/mentor/dashboard');
+      } else if (user.role === 'ADMIN') {
+        studentNav?.classList.add('hidden');
+        studentNav?.classList.remove('flex');
+        mentorNav?.classList.add('hidden');
+        mentorNav?.classList.remove('flex');
+        if (brandLink) brandLink.setAttribute('href', '/admin/dashboard');
+      }
+
+      userControls?.classList.remove('hidden');
+      userControls?.classList.add('flex');
+    } else {
+      studentNav?.classList.add('hidden');
+      studentNav?.classList.remove('flex');
+      mentorNav?.classList.add('hidden');
+      mentorNav?.classList.remove('flex');
+      userControls?.classList.add('hidden');
+      userControls?.classList.remove('flex');
+
+      guestControls?.classList.remove('hidden');
+      guestControls?.classList.add('flex');
+      if (brandLink) brandLink.setAttribute('href', '/');
+    }
+  }
+
+  // Subscribe to changes
+  $user.subscribe(user => {
+    updateNavbar(user, $isLoading.get());
+  });
+
+  $isLoading.subscribe(loading => {
+    updateNavbar($user.get(), loading);
+  });
+
+  // Verify token Validity on load
+  const hasToken = !!localStorage.getItem('caps_access_token');
+  if (hasToken) {
+    fetchCurrentUser();
+  } else {
+    clearAuthUser();
+  }
+
+  // Logout action
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {

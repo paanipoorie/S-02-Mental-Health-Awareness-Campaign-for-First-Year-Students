@@ -308,32 +308,6 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
           </div>
         </div>
       </div>
-
-      {/* Registrations List (Only visible to host mentor or admin) */}
-      {(isHost || isAdmin) && (
-        <div className="bg-background-100 rounded-sm border border-gray-200 p-6 shadow-sm">
-          <h3 className="text-heading-18 mb-4 font-bold text-gray-900">
-            Registered Attendees ({activeRegistrations.length})
-          </h3>
-          {activeRegistrations.length === 0 ? (
-            <p className="text-sm italic text-gray-400">No registrations yet.</p>
-          ) : (
-            <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-              {activeRegistrations.map(reg => (
-                <div
-                  key={reg.id}
-                  className="flex items-center gap-2 rounded-sm border border-gray-200 bg-gray-50 p-3 text-sm font-semibold text-gray-700"
-                >
-                  <User className="h-4 w-4 flex-shrink-0 text-gray-500" />
-                  <span className="truncate">
-                    {reg.anonymousIdentity?.displayName || 'Anonymous Student'}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
