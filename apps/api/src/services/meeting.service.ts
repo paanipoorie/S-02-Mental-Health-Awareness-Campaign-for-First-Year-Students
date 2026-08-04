@@ -6,6 +6,7 @@ import type {
   WorkshopCategory,
 } from '@prisma/client';
 import { PrismaClient, WorkshopRegistrationStatus } from '@prisma/client';
+import { getMentorIdentity } from '../utils/anonymousIdentity.js';
 
 const prisma = new PrismaClient();
 
@@ -157,27 +158,37 @@ export const meetingService = {
       prisma.meeting.count({ where }),
     ]);
 
+    const meetingsWithHost = await Promise.all(
+      meetings.map(async m => {
+        let hostDisplayName = m.hostIdentity?.displayName ?? m.hostUser?.anonymousIdentity?.displayName ?? null;
+        if (!hostDisplayName && m.hostUserId) {
+          const mentorIdent = await getMentorIdentity(m.hostUserId);
+          hostDisplayName = mentorIdent.displayName;
+        }
+        return {
+          id: m.id,
+          title: m.title,
+          description: m.description,
+          hostType: m.hostType,
+          hostIdentityId: m.hostIdentityId,
+          hostUserId: m.hostUserId,
+          date: m.date,
+          time: m.time,
+          durationMinutes: m.durationMinutes,
+          meetingType: m.meetingType,
+          meetingLink: m.meetingLink,
+          location: m.location,
+          category: m.category,
+          createdAt: m.createdAt,
+          hostDisplayName,
+          attendeeCount: m._count.attendees,
+          isAttending: anonId ? m.attendees.length > 0 : false,
+        };
+      })
+    );
+
     return {
-      meetings: meetings.map(m => ({
-        id: m.id,
-        title: m.title,
-        description: m.description,
-        hostType: m.hostType,
-        hostIdentityId: m.hostIdentityId,
-        hostUserId: m.hostUserId,
-        date: m.date,
-        time: m.time,
-        durationMinutes: m.durationMinutes,
-        meetingType: m.meetingType,
-        meetingLink: m.meetingLink,
-        location: m.location,
-        category: m.category,
-        createdAt: m.createdAt,
-        hostDisplayName:
-          m.hostIdentity?.displayName ?? m.hostUser?.anonymousIdentity?.displayName ?? null,
-        attendeeCount: m._count.attendees,
-        isAttending: anonId ? m.attendees.length > 0 : false,
-      })),
+      meetings: meetingsWithHost,
       total,
       page,
       limit,
@@ -205,12 +216,18 @@ export const meetingService = {
       isAttending = meeting.attendees.some(a => a.anonymousIdentityId === anonId);
     }
 
+    let hostDisplayName = meeting.hostIdentity?.displayName ?? meeting.hostUser?.anonymousIdentity?.displayName ?? null;
+    let mentorUid = null;
+    if (!hostDisplayName && meeting.hostUserId) {
+      const mentorIdent = await getMentorIdentity(meeting.hostUserId);
+      hostDisplayName = mentorIdent.displayName;
+      mentorUid = mentorIdent.uid;
+    }
+
     return {
       ...meeting,
-      hostDisplayName:
-        meeting.hostIdentity?.displayName ??
-        meeting.hostUser?.anonymousIdentity?.displayName ??
-        null,
+      hostDisplayName,
+      mentorUid,
       isAttending,
     };
   },
@@ -237,14 +254,16 @@ export const meetingService = {
     if (!meeting) throw new Error('Meeting not found');
 
     let isHost = false;
-    if (userRole === 'STUDENT') {
+    if (userRole === 'ADMIN') {
+      isHost = true;
+    } else if (userRole === 'STUDENT') {
       const hostAnonId = await getAnonId(userId);
       isHost = meeting.hostIdentityId === hostAnonId;
     } else {
       isHost = meeting.hostUserId === userId;
     }
 
-    if (!isHost) throw new Error('Only host can cancel meeting');
+    if (!isHost) throw new Error('You are not authorized to cancel this meeting');
 
     await prisma.meeting.delete({ where: { id: meetingId } });
     return { deleted: true };
@@ -266,24 +285,34 @@ export const meetingService = {
       take: 10,
     });
 
+    const meetingsWithHost = await Promise.all(
+      meetings.map(async m => {
+        let hostDisplayName = m.hostIdentity?.displayName ?? m.hostUser?.anonymousIdentity?.displayName ?? null;
+        if (!hostDisplayName && m.hostUserId) {
+          const mentorIdent = await getMentorIdentity(m.hostUserId);
+          hostDisplayName = mentorIdent.displayName;
+        }
+        return {
+          id: m.id,
+          title: m.title,
+          description: m.description,
+          hostType: m.hostType,
+          date: m.date,
+          time: m.time,
+          durationMinutes: m.durationMinutes,
+          meetingType: m.meetingType,
+          meetingLink: m.meetingLink,
+          location: m.location,
+          category: m.category,
+          hostDisplayName,
+          attendeeCount: m._count.attendees,
+          isAttending: true,
+        };
+      })
+    );
+
     return {
-      meetings: meetings.map(m => ({
-        id: m.id,
-        title: m.title,
-        description: m.description,
-        hostType: m.hostType,
-        date: m.date,
-        time: m.time,
-        durationMinutes: m.durationMinutes,
-        meetingType: m.meetingType,
-        meetingLink: m.meetingLink,
-        location: m.location,
-        category: m.category,
-        hostDisplayName:
-          m.hostIdentity?.displayName ?? m.hostUser?.anonymousIdentity?.displayName ?? null,
-        attendeeCount: m._count.attendees,
-        isAttending: true,
-      })),
+      meetings: meetingsWithHost,
       total: meetings.length,
       page: 1,
       limit: 10,
@@ -311,25 +340,32 @@ export const meetingService = {
       take: 10,
     });
 
+    const workshopsWithMentor = await Promise.all(
+      registrations.map(async r => {
+        const mentorIdent = await getMentorIdentity(r.workshop.mentorId);
+        return {
+          id: r.workshop.id,
+          title: r.workshop.title,
+          description: r.workshop.description,
+          date: r.workshop.date,
+          time: r.workshop.time,
+          durationMinutes: r.workshop.durationMinutes,
+          meetingType: r.workshop.meetingType,
+          meetingLink: r.workshop.meetingLink,
+          location: r.workshop.location,
+          category: r.workshop.category,
+          maxAttendees: r.workshop.maxAttendees,
+          resources: r.workshop.resources,
+          createdAt: r.workshop.createdAt,
+          mentorDisplayName: mentorIdent.displayName,
+          registrationCount: r.workshop._count.registrations,
+          userRegistrationStatus: r.status,
+        };
+      })
+    );
+
     return {
-      workshops: registrations.map(r => ({
-        id: r.workshop.id,
-        title: r.workshop.title,
-        description: r.workshop.description,
-        date: r.workshop.date,
-        time: r.workshop.time,
-        durationMinutes: r.workshop.durationMinutes,
-        meetingType: r.workshop.meetingType,
-        meetingLink: r.workshop.meetingLink,
-        location: r.workshop.location,
-        category: r.workshop.category,
-        maxAttendees: r.workshop.maxAttendees,
-        resources: r.workshop.resources,
-        createdAt: r.workshop.createdAt,
-        mentorDisplayName: r.workshop.mentor.anonymousIdentity?.displayName ?? 'Unknown Mentor',
-        registrationCount: r.workshop._count.registrations,
-        userRegistrationStatus: r.status,
-      })),
+      workshops: workshopsWithMentor,
       total: registrations.length,
       page: 1,
       limit: 10,
@@ -468,26 +504,33 @@ export const workshopService = {
       prisma.workshop.count({ where }),
     ]);
 
+    const workshopsWithMentor = await Promise.all(
+      workshops.map(async w => {
+        const mentorIdent = await getMentorIdentity(w.mentorId);
+        return {
+          id: w.id,
+          title: w.title,
+          description: w.description,
+          mentorId: w.mentorId,
+          date: w.date,
+          time: w.time,
+          durationMinutes: w.durationMinutes,
+          meetingType: w.meetingType,
+          meetingLink: w.meetingLink,
+          location: w.location,
+          category: w.category,
+          maxAttendees: w.maxAttendees,
+          resources: w.resources,
+          createdAt: w.createdAt,
+          mentorDisplayName: mentorIdent.displayName,
+          registrationCount: w._count.registrations,
+          userRegistrationStatus: anonId ? (w.registrations[0]?.status ?? null) : null,
+        };
+      })
+    );
+
     return {
-      workshops: workshops.map(w => ({
-        id: w.id,
-        title: w.title,
-        description: w.description,
-        mentorId: w.mentorId,
-        date: w.date,
-        time: w.time,
-        durationMinutes: w.durationMinutes,
-        meetingType: w.meetingType,
-        meetingLink: w.meetingLink,
-        location: w.location,
-        category: w.category,
-        maxAttendees: w.maxAttendees,
-        resources: w.resources,
-        createdAt: w.createdAt,
-        mentorDisplayName: w.mentor.anonymousIdentity?.displayName ?? 'Unknown Mentor',
-        registrationCount: w._count.registrations,
-        userRegistrationStatus: anonId ? (w.registrations[0]?.status ?? null) : null,
-      })),
+      workshops: workshopsWithMentor,
       total,
       page,
       limit,
@@ -514,9 +557,12 @@ export const workshopService = {
       userRegistration = workshop.registrations.find(r => r.anonymousIdentityId === anonId) ?? null;
     }
 
+    const mentorIdent = await getMentorIdentity(workshop.mentorId);
+
     return {
       ...workshop,
-      mentorDisplayName: workshop.mentor.anonymousIdentity?.displayName ?? 'Unknown Mentor',
+      mentorDisplayName: mentorIdent.displayName,
+      mentorUid: mentorIdent.uid,
       userRegistration,
     };
   },
@@ -595,10 +641,12 @@ export const workshopService = {
     });
   },
 
-  async cancelWorkshop(workshopId: string, mentorId: string) {
+  async cancelWorkshop(workshopId: string, userId: string, userRole: string) {
     const workshop = await prisma.workshop.findUnique({ where: { id: workshopId } });
     if (!workshop) throw new Error('Workshop not found');
-    if (workshop.mentorId !== mentorId) throw new Error('Only mentor can cancel workshop');
+
+    const isAuthorized = userRole === 'ADMIN' || workshop.mentorId === userId;
+    if (!isAuthorized) throw new Error('You are not authorized to cancel this workshop');
 
     await prisma.workshop.delete({ where: { id: workshopId } });
     return { deleted: true };

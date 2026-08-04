@@ -6,6 +6,7 @@ import {
   requireRole,
   requireVerifiedMentor,
   gateUnverifiedMentor,
+  createCustomRateLimiter,
 } from '../middlewares/index.js';
 import { Role } from '@campus-peer-support/shared-types';
 import {
@@ -22,6 +23,13 @@ import {
 
 const router: Router = Router();
 
+const meetingRateLimiter = createCustomRateLimiter(
+  60000,
+  5,
+  'Too many meetings created',
+  'MEETING_RATE_LIMIT'
+);
+
 // All meeting and workshop routes require authentication
 router.use(authMiddleware);
 router.use(requireRole(Role.STUDENT, Role.MENTOR, Role.ADMIN));
@@ -29,7 +37,7 @@ router.use(requireRole(Role.STUDENT, Role.MENTOR, Role.ADMIN));
 router.use(gateUnverifiedMentor);
 
 // Meeting routes
-router.post('/meetings', validate(createMeetingSchema), meetingController.createMeeting);
+router.post('/meetings', meetingRateLimiter, validate(createMeetingSchema), meetingController.createMeeting);
 
 router.get('/meetings', validate(getMeetingsQuerySchema), meetingController.getMeetings);
 
@@ -46,6 +54,7 @@ router.delete('/meetings/:id', validate(getMeetingParamsSchema), meetingControll
 // Workshop routes
 router.post(
   '/workshops',
+  meetingRateLimiter,
   requireVerifiedMentor,
   validate(createWorkshopSchema),
   meetingController.createWorkshop

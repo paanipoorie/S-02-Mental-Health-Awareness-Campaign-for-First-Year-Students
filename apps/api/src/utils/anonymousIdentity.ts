@@ -130,3 +130,24 @@ export function generateAnonymousName(): string {
   const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
   return `Anonymous ${capitalize(adj)} ${capitalize(noun)}`;
 }
+
+export async function getMentorIdentity(mentorUserId: string): Promise<{ displayName: string; uid: string }> {
+  const { prisma } = await import('../prisma/client.js');
+  const mentors = await prisma.user.findMany({
+    where: { role: 'MENTOR' },
+    orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+    select: { id: true },
+  });
+  const index = mentors.findIndex(m => m.id === mentorUserId);
+  if (index === -1) {
+    return {
+      displayName: 'Anonymous',
+      uid: 'MTR-0000',
+    };
+  }
+  const num = index + 1;
+  return {
+    displayName: `Peer ${num}`,
+    uid: `MTR-${String(num).padStart(4, '0')}`,
+  };
+}

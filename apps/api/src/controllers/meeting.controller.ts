@@ -318,15 +318,20 @@ export const meetingController = {
   async cancelWorkshop(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.user!;
-      if (user.role !== 'MENTOR') {
-        throw new ApiError(403, 'Only mentors can cancel workshops');
+      if (user.role !== 'MENTOR' && user.role !== 'ADMIN') {
+        throw new ApiError(403, 'You are not authorized to cancel this workshop');
       }
 
       const { id } = req.params as GetWorkshopParams;
-      await workshopService.cancelWorkshop(id, user.userId);
+      await workshopService.cancelWorkshop(id, user.userId, user.role);
       res.json({ success: true, data: { deleted: true } });
     } catch (error) {
-      if (error instanceof Error && error.message.includes('Only mentor')) {
+      if (
+        error instanceof Error &&
+        (error.message.includes('not authorized') ||
+          error.message.includes('Only mentor') ||
+          error.message.includes('unauthorized'))
+      ) {
         return next(new ApiError(403, error.message));
       }
       next(error);

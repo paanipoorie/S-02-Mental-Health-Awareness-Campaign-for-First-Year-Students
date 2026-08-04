@@ -102,13 +102,6 @@ export function createApp(): Application {
     'Too many chat messages',
     'CHAT_RATE_LIMIT'
   );
-  const meetingRateLimiter = createCustomRateLimiter(
-    60000,
-    5,
-    'Too many meetings created',
-    'MEETING_RATE_LIMIT'
-  );
-
   app.use(`${env.API_PREFIX}/health`, healthRoutes);
   app.use(`${env.API_PREFIX}/auth`, authRateLimiter, authRoutes);
   app.use(`${env.API_PREFIX}/emotions`, emotionRoutes);
@@ -120,7 +113,7 @@ export function createApp(): Application {
   app.use(`${env.API_PREFIX}/admin`, adminRoutes);
   app.use(`${env.API_PREFIX}/notifications`, notificationRoutes);
   app.use(`${env.API_PREFIX}/profiles`, profileRoutes);
-  app.use(`${env.API_PREFIX}`, meetingRateLimiter, meetingRoutes);
+  app.use(`${env.API_PREFIX}`, meetingRoutes);
 
   app.get(`${env.API_PREFIX}`, (_req: Request, res: Response) => {
     res.json({

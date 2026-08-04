@@ -6,6 +6,7 @@ import type {
   CreateReplyInput,
 } from '../validators/post.validator.js';
 import { emitNotification } from './notificationHelper.js';
+import { getMentorIdentity } from '../utils/anonymousIdentity.js';
 
 const prisma = new PrismaClient();
 
@@ -133,13 +134,21 @@ export const postService = {
           select: { role: true, isVerifiedMentor: true },
         });
 
+        let authorName = 'Peer Mentor';
+        if (user?.role === 'ADMIN') {
+          authorName = 'Administrator';
+        } else if (user?.role === 'MENTOR') {
+          const mentorIdent = await getMentorIdentity(reply.anonymousIdentityId);
+          authorName = mentorIdent.displayName;
+        }
+
         return {
           id: reply.id,
           postId: reply.postId,
           body: reply.body,
           createdAt: reply.createdAt,
           isDeleted: reply.isDeleted,
-          authorName: user?.role === 'ADMIN' ? 'Administrator' : 'Peer Mentor',
+          authorName,
           authorIdentityId: reply.anonymousIdentityId,
           isMentor: user?.role === 'MENTOR' ? user.isVerifiedMentor : false,
         };

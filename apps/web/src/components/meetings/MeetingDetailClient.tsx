@@ -21,6 +21,7 @@ interface MeetingDetail {
   hostDisplayName: string | null;
   hostUserId: string | null;
   hostIdentityId: string | null;
+  mentorUid?: string | null;
   date: string;
   time: string;
   durationMinutes: number;
@@ -216,6 +217,30 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
           </div>
         </div>
 
+        {/* Creator Section */}
+        <div className="mt-6 flex items-center gap-3 border-t border-gray-150 pt-6">
+          <div className="flex h-10 w-10 items-center justify-center rounded-sm border border-blue-100 bg-blue-50 text-base font-bold text-blue-800">
+            {(meeting.hostDisplayName || 'Anonymous').charAt(0)}
+          </div>
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400">Hosted by</div>
+            <div className="text-sm font-bold text-gray-900">{meeting.hostDisplayName || 'Anonymous'}</div>
+            {meeting.mentorUid && (
+              <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                <span className="text-xs font-mono text-gray-500">Mentor UID: {meeting.mentorUid}</span>
+                <span className="rounded-sm border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-800">
+                  Verified Peer Mentor
+                </span>
+              </div>
+            )}
+            {!meeting.mentorUid && (
+              <span className="mt-1 inline-block rounded-sm border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-[10px] font-semibold text-gray-600">
+                Peer Student
+              </span>
+            )}
+          </div>
+        </div>
+
         {/* Action Panel */}
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 pt-6">
           <div className="flex items-center gap-1.5 text-sm text-gray-500">
@@ -226,7 +251,7 @@ export function MeetingDetailClient({ meetingId }: { meetingId: string }) {
             attending
           </div>
           <div className="flex gap-3">
-            {isHost && (
+            {(isHost || user?.role === 'ADMIN') && (
               <button
                 type="button"
                 onClick={handleCancelMeeting}

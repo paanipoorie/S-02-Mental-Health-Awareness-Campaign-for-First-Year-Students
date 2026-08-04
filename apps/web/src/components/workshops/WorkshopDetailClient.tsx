@@ -20,6 +20,7 @@ interface WorkshopDetail {
   description: string;
   mentorId: string;
   mentorDisplayName: string;
+  mentorUid?: string;
   date: string;
   time: string;
   durationMinutes: number;
@@ -216,7 +217,7 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
               <span>Mentor:</span>
               <strong className="text-gray-900">{workshop.mentorDisplayName}</strong>
             </div>
-            {workshop.meetingType === 'ONLINE' ? (
+            {!workshop.meetingType || workshop.meetingType === 'ONLINE' ? (
               <div className="flex items-center gap-2 truncate">
                 <Link className="h-4 w-4 flex-shrink-0 text-gray-500" />
                 <span>Link:</span>
@@ -240,6 +241,23 @@ export function WorkshopDetailClient({ workshopId }: { workshopId: string }) {
                 <strong className="text-gray-900">{workshop.location || 'Campus'}</strong>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Creator Section */}
+        <div className="mt-6 flex items-center gap-3 border-t border-gray-150 pt-6">
+          <div className="flex h-10 w-10 items-center justify-center rounded-sm border border-blue-100 bg-blue-50 text-base font-bold text-blue-800">
+            {(workshop.mentorDisplayName || 'Anonymous').charAt(0)}
+          </div>
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-gray-400">Hosted by</div>
+            <div className="text-sm font-bold text-gray-900">{workshop.mentorDisplayName || 'Anonymous'}</div>
+            <div className="mt-1 flex flex-wrap items-center gap-1.5">
+              <span className="text-xs font-mono text-gray-500">Mentor UID: {workshop.mentorUid || 'MTR-0000'}</span>
+              <span className="rounded-sm border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-800">
+                Verified Peer Mentor
+              </span>
+            </div>
           </div>
         </div>
 

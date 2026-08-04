@@ -66,3 +66,4 @@ apps/**/*.tsbuildinfo
 
 # Docker
 .docker/.playwright-mcp/
+.env*
