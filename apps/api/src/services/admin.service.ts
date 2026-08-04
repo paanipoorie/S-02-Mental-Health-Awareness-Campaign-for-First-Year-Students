@@ -11,6 +11,8 @@ import type {
   WorkshopCategory,
 } from '@campus-peer-support/shared-types';
 
+import { getMentorIdentity } from '../utils/anonymousIdentity.js';
+
 const prisma = new PrismaClient();
 
 export interface PaginatedUsers {
@@ -595,26 +597,37 @@ export const adminService = {
       prisma.meeting.count({ where }),
     ]);
 
+    const formattedMeetings = await Promise.all(
+      meetings.map(async m => {
+        let hostDisplayName = null;
+        if (m.hostType === MeetingHostType.STUDENT) {
+          hostDisplayName = m.hostIdentity?.displayName ?? null;
+        } else if (m.hostUserId) {
+          const mentorIdent = await getMentorIdentity(m.hostUserId);
+          hostDisplayName = mentorIdent.displayName;
+        }
+
+        return {
+          id: m.id,
+          title: m.title,
+          description: m.description,
+          hostType: m.hostType,
+          hostDisplayName,
+          date: m.date,
+          time: m.time,
+          durationMinutes: m.durationMinutes,
+          meetingType: m.meetingType,
+          meetingLink: m.meetingLink,
+          location: m.location,
+          category: m.category as MeetingCategory,
+          attendeeCount: m._count.attendees,
+          createdAt: m.createdAt,
+        };
+      })
+    );
+
     return {
-      meetings: meetings.map(m => ({
-        id: m.id,
-        title: m.title,
-        description: m.description,
-        hostType: m.hostType,
-        hostDisplayName:
-          m.hostType === MeetingHostType.STUDENT
-            ? (m.hostIdentity?.displayName ?? null)
-            : (m.hostUser?.anonymousIdentity?.displayName ?? null),
-        date: m.date,
-        time: m.time,
-        durationMinutes: m.durationMinutes,
-        meetingType: m.meetingType,
-        meetingLink: m.meetingLink,
-        location: m.location,
-        category: m.category as MeetingCategory,
-        attendeeCount: m._count.attendees,
-        createdAt: m.createdAt,
-      })),
+      meetings: formattedMeetings,
       total,
       page,
       limit,
@@ -703,26 +716,33 @@ export const adminService = {
       prisma.workshop.count({ where }),
     ]);
 
+    const formattedWorkshops = await Promise.all(
+      workshops.map(async w => {
+        const mentorIdent = await getMentorIdentity(w.mentorId);
+        return {
+          id: w.id,
+          title: w.title,
+          description: w.description,
+          mentorId: w.mentorId,
+          mentorDisplayName: mentorIdent.displayName,
+          date: w.date,
+          time: w.time,
+          durationMinutes: w.durationMinutes,
+          meetingType: w.meetingType,
+          meetingLink: w.meetingLink,
+          location: w.location,
+          category: w.category as WorkshopCategory,
+          maxAttendees: w.maxAttendees,
+          registrationCount: w._count.registrations,
+          resources: w.resources,
+          createdAt: w.createdAt,
+          updatedAt: w.updatedAt,
+        };
+      })
+    );
+
     return {
-      workshops: workshops.map(w => ({
-        id: w.id,
-        title: w.title,
-        description: w.description,
-        mentorId: w.mentorId,
-        mentorDisplayName: w.mentor.anonymousIdentity?.displayName ?? 'Unknown Mentor',
-        date: w.date,
-        time: w.time,
-        durationMinutes: w.durationMinutes,
-        meetingType: w.meetingType,
-        meetingLink: w.meetingLink,
-        location: w.location,
-        category: w.category as WorkshopCategory,
-        maxAttendees: w.maxAttendees,
-        registrationCount: w._count.registrations,
-        resources: w.resources,
-        createdAt: w.createdAt,
-        updatedAt: w.updatedAt,
-      })),
+      workshops: formattedWorkshops,
       total,
       page,
       limit,

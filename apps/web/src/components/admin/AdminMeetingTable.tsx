@@ -403,13 +403,21 @@ export function AdminMeetingTable({
                   {meeting.attendeeCount}
                 </td>
                 <td className="px-4 py-4 text-right">
-                  <button
-                    type="button"
-                    onClick={() => onDelete(meeting.id)}
-                    className="rounded-sm border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition-colors hover:bg-red-100"
-                  >
-                    Force Delete
-                  </button>
+                  <div className="flex justify-end gap-2">
+                    <a
+                      href={`/meetings/${meeting.id}`}
+                      className="bg-background-100 rounded-sm border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50 inline-block text-center"
+                    >
+                      View Details
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(meeting.id)}
+                      className="rounded-sm border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 transition-colors hover:bg-red-100"
+                    >
+                      Force Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
