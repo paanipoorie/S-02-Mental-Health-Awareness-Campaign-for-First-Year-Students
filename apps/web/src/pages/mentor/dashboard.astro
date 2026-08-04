@@ -3,6 +3,6 @@ import MentorLayout from '@layouts/MentorLayout.astro';
 import MentorDashboardClient from '@components/dashboard/MentorDashboardClient';
 ---
 
-<MentorLayout title="Dashboard | Mentor Portal" mentorName="Peer Mentor" isVerified={true}>
+<MentorLayout title="Dashboard | Mentor Portal" isVerified={true}>
   <MentorDashboardClient client:load />
 </MentorLayout>

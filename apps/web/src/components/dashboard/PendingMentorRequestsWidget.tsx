@@ -92,7 +92,7 @@ export function PendingMentorRequestsWidget({
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <h4 className="text-copy-14 font-semibold text-gray-900">
-                    {mentor.displayName || 'Unknown Name'}
+{mentor.displayName || 'Not available'}
                   </h4>
                   <span className="inline-flex items-center rounded-sm bg-amber-50 border border-amber-200 px-1.5 py-0.5 text-[10px] font-bold text-amber-700">
                     <Clock className="mr-0.5 h-3 w-3" /> Pending Review

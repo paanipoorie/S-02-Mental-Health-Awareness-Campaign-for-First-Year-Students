@@ -9,6 +9,7 @@ import type {
 } from '../validators/chat.validator.js';
 import type { Role } from '@campus-peer-support/shared-types';
 import { emitNotification } from './notificationHelper.js';
+import { getMentorIdentity } from '../utils/anonymousIdentity.js';
 
 async function findAvailableMentor() {
   const mentors = await prisma.user.findMany({
@@ -356,30 +357,39 @@ export const chatService = {
         }),
       ]);
 
-      const mappedChats = chats.map(c => {
-        let otherDisplayName = 'Unknown';
-        let otherAvatarSeed = 0;
-        const isOwn = c.studentIdentityId === studentIdentityId;
+const mappedChats = await Promise.all(
+        chats.map(async c => {
+          let otherDisplayName = c.studentIdentity?.displayName || 'Anonymous';
+          let otherAvatarSeed = 0;
+          const isOwn = c.studentIdentityId === studentIdentityId;
 
-        if (c.peerIdentityId) {
-          const peer = isOwn ? c.peerIdentity : c.studentIdentity;
-          otherDisplayName = peer?.displayName || 'Anonymous';
-          otherAvatarSeed = peer?.avatarSeed || 0;
-        } else if (c.mentor) {
-          otherDisplayName = 'Mentor';
-        }
+          if (c.peerIdentityId) {
+            const peer = isOwn ? c.peerIdentity : c.studentIdentity;
+            otherDisplayName = peer?.displayName || 'Anonymous';
+            otherAvatarSeed = peer?.avatarSeed || 0;
+          } else if (c.mentor) {
+            const mentorIdent = await getMentorIdentity(c.mentor.id);
+            otherDisplayName = mentorIdent.displayName;
+          }
 
-        return {
-          ...c,
-          studentDisplayName: c.studentIdentity?.displayName,
-          peerDisplayName: c.peerIdentity?.displayName,
-          mentorDisplayName: c.mentor ? 'Mentor' : null,
-          otherDisplayName,
-          otherAvatarSeed,
-          unreadCount: c._count.messages,
-          lastMessage: c.messages[0] || null,
-        };
-      });
+          let mentorDisplayName = null;
+          if (c.mentor) {
+            const mentorIdent = await getMentorIdentity(c.mentor.id);
+            mentorDisplayName = mentorIdent.displayName;
+          }
+
+          return {
+            ...c,
+            studentDisplayName: c.studentIdentity?.displayName,
+            peerDisplayName: c.peerIdentity?.displayName,
+            mentorDisplayName,
+            otherDisplayName,
+            otherAvatarSeed,
+            unreadCount: c._count.messages,
+            lastMessage: c.messages[0] || null,
+          };
+        })
+      );
 
       return {
         chats: mappedChats,
@@ -434,18 +444,25 @@ export const chatService = {
         prisma.chatThread.count({ where: { mentorId: userId, peerIdentityId: null } }),
       ]);
 
-      const mappedChats = chats.map(c => {
-        return {
-          ...c,
-          studentDisplayName: c.studentIdentity?.displayName,
-          peerDisplayName: c.peerIdentity?.displayName,
-          mentorDisplayName: c.mentor ? 'Mentor' : null,
-          otherDisplayName: c.studentIdentity?.displayName || 'Anonymous',
-          otherAvatarSeed: c.studentIdentity?.avatarSeed || 0,
-          unreadCount: c._count.messages,
-          lastMessage: c.messages[0] || null,
-        };
-      });
+      const mappedChats = await Promise.all(
+        chats.map(async c => {
+          let mentorDisplayName = null;
+          if (c.mentor) {
+            const mentorIdent = await getMentorIdentity(c.mentor.id);
+            mentorDisplayName = mentorIdent.displayName;
+          }
+          return {
+            ...c,
+            studentDisplayName: c.studentIdentity?.displayName,
+            peerDisplayName: c.peerIdentity?.displayName,
+            mentorDisplayName,
+            otherDisplayName: c.studentIdentity?.displayName || 'Anonymous',
+            otherAvatarSeed: c.studentIdentity?.avatarSeed || 0,
+            unreadCount: c._count.messages,
+            lastMessage: c.messages[0] || null,
+          };
+        })
+      );
 
       return {
         chats: mappedChats,
@@ -496,11 +513,16 @@ export const chatService = {
     }
 
     console.log(`[ChatService] getChatById: Found chat ${chatId}. Mapping displayName properties...`);
+    let mentorDisplayName = null;
+    if (chat.mentor) {
+      const mentorIdent = await getMentorIdentity(chat.mentor.id);
+      mentorDisplayName = mentorIdent.displayName;
+    }
     return {
       ...chat,
       studentDisplayName: chat.studentIdentity?.displayName || null,
       peerDisplayName: chat.peerIdentity?.displayName || null,
-      mentorDisplayName: chat.mentor ? 'Mentor' : null,
+      mentorDisplayName,
     };
   },
 
@@ -539,22 +561,25 @@ export const chatService = {
       prisma.chatMessage.count({ where: { chatThreadId: chatId } }),
     ]);
 
-    const mappedMessages = messages.map(m => {
-      let senderName = 'Unknown';
-      if (m.senderType === 'ANONYMOUS') {
-        if (m.senderId === chat.studentIdentityId) {
-          senderName = chat.studentIdentity.displayName;
-        } else if (m.senderId === chat.peerIdentityId) {
-          senderName = chat.peerIdentity?.displayName || 'Anonymous';
+const mappedMessages = await Promise.all(
+      messages.map(async m => {
+        let senderName = chat.studentIdentity?.displayName || 'Anonymous';
+        if (m.senderType === 'ANONYMOUS') {
+          if (m.senderId === chat.studentIdentityId) {
+            senderName = chat.studentIdentity.displayName;
+          } else if (m.senderId === chat.peerIdentityId) {
+            senderName = chat.peerIdentity?.displayName || 'Anonymous';
+          }
+        } else {
+          const mentorIdent = await getMentorIdentity(m.senderId);
+          senderName = mentorIdent.displayName;
         }
-      } else {
-        senderName = 'Mentor';
-      }
-      return {
-        ...m,
-        senderName,
-      };
-    });
+        return {
+          ...m,
+          senderName,
+        };
+      })
+    );
 
     return {
       messages: mappedMessages.reverse(),

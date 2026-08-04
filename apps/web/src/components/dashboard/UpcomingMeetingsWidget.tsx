@@ -86,7 +86,7 @@ export function UpcomingMeetingsWidget({
         {upcomingMeetings.slice(0, 4).map(meeting => (
           <a
             key={meeting.id}
-            href={`/events/${meeting.id}?type=meeting`}
+href={`/events?id=${meeting.id}&type=meeting`}
             className="bg-background-100 flex items-start gap-4 rounded-sm border border-gray-200 p-4 transition-all duration-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-none"
           >
             <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100 text-gray-700">

@@ -252,31 +252,38 @@ export const adminService = {
 
     const postCountMap = new Map(postCounts.map(p => [p.anonymousIdentityId, p._count]));
 
-    return {
-      users: users.map(user => {
-        const anonId = user.anonymousIdentity?.id;
-        const postCount = anonId ? (postCountMap.get(anonId) ?? 0) : 0;
-        return {
-          id: user.id,
-          universityEmail: user.universityEmail,
-          role: user.role as Role,
-          isActive: user.isActive,
-          isVerifiedMentor: user.isVerifiedMentor,
-          createdAt: user.createdAt,
-          displayName: user.universityEmail,
-          anonymousDisplayName: user.anonymousIdentity?.displayName ?? null,
-          avatarSeed: user.anonymousIdentity?.avatarSeed ?? null,
-          department: user.mentorProfile?.department ?? null,
-          bio: user.mentorProfile?.bio ?? null,
-          specialties: user.mentorProfile?.specialties ?? [],
-          availabilityStatus: user.mentorProfile?.availabilityStatus ?? null,
-          lastSeenAt: user.mentorProfile?.lastSeenAt ?? null,
-          _count: {
-            ...user._count,
-            posts: postCount,
-          },
-        };
-      }),
+return {
+      users: await Promise.all(
+        users.map(async user => {
+          const anonId = user.anonymousIdentity?.id;
+          const postCount = anonId ? (postCountMap.get(anonId) ?? 0) : 0;
+          let displayName = user.universityEmail;
+          if (user.role === PrismaRole.MENTOR) {
+            const mentorIdent = await getMentorIdentity(user.id);
+            displayName = mentorIdent.displayName;
+          }
+          return {
+            id: user.id,
+            universityEmail: user.universityEmail,
+            role: user.role as Role,
+            isActive: user.isActive,
+            isVerifiedMentor: user.isVerifiedMentor,
+            createdAt: user.createdAt,
+            displayName,
+            anonymousDisplayName: user.anonymousIdentity?.displayName ?? null,
+            avatarSeed: user.anonymousIdentity?.avatarSeed ?? null,
+            department: user.mentorProfile?.department ?? null,
+            bio: user.mentorProfile?.bio ?? null,
+            specialties: user.mentorProfile?.specialties ?? [],
+            availabilityStatus: user.mentorProfile?.availabilityStatus ?? null,
+            lastSeenAt: user.mentorProfile?.lastSeenAt ?? null,
+            _count: {
+              ...user._count,
+              posts: postCount,
+            },
+          };
+        })
+      ),
       total,
       page,
       limit,
@@ -363,31 +370,34 @@ export const adminService = {
     // Filter out users without mentor profile if availabilityStatus filter was applied
     const filteredUsers = availabilityStatus ? users.filter(u => u.mentorProfile) : users;
 
-    return {
-      users: filteredUsers.map(user => {
-        const anonId = user.anonymousIdentity?.id;
-        const postCount = anonId ? (postCountMap.get(anonId) ?? 0) : 0;
-        return {
-          id: user.id,
-          universityEmail: user.universityEmail,
-          role: user.role as Role,
-          isActive: user.isActive,
-          isVerifiedMentor: user.isVerifiedMentor,
-          createdAt: user.createdAt,
-          displayName: user.universityEmail,
-          anonymousDisplayName: user.anonymousIdentity?.displayName ?? null,
-          avatarSeed: user.anonymousIdentity?.avatarSeed ?? null,
-          department: user.mentorProfile?.department ?? null,
-          bio: user.mentorProfile?.bio ?? null,
-          specialties: user.mentorProfile?.specialties ?? [],
-          availabilityStatus: user.mentorProfile?.availabilityStatus ?? null,
-          lastSeenAt: user.mentorProfile?.lastSeenAt ?? null,
-          _count: {
-            ...user._count,
-            posts: postCount,
-          },
-        };
-      }),
+return {
+      users: await Promise.all(
+        filteredUsers.map(async user => {
+          const anonId = user.anonymousIdentity?.id;
+          const postCount = anonId ? (postCountMap.get(anonId) ?? 0) : 0;
+          const mentorIdent = await getMentorIdentity(user.id);
+          return {
+            id: user.id,
+            universityEmail: user.universityEmail,
+            role: user.role as Role,
+            isActive: user.isActive,
+            isVerifiedMentor: user.isVerifiedMentor,
+            createdAt: user.createdAt,
+            displayName: mentorIdent.displayName,
+            anonymousDisplayName: user.anonymousIdentity?.displayName ?? null,
+            avatarSeed: user.anonymousIdentity?.avatarSeed ?? null,
+            department: user.mentorProfile?.department ?? null,
+            bio: user.mentorProfile?.bio ?? null,
+            specialties: user.mentorProfile?.specialties ?? [],
+            availabilityStatus: user.mentorProfile?.availabilityStatus ?? null,
+            lastSeenAt: user.mentorProfile?.lastSeenAt ?? null,
+            _count: {
+              ...user._count,
+              posts: postCount,
+            },
+          };
+        })
+      ),
       total,
       page,
       limit,
@@ -395,7 +405,7 @@ export const adminService = {
     };
   },
 
-  async getPendingMentors(): Promise<
+async getPendingMentors(): Promise<
     Array<{
       id: string;
       universityEmail: string;
@@ -418,12 +428,17 @@ export const adminService = {
       take: 100,
     });
 
-    return mentors.map(mentor => ({
-      id: mentor.id,
-      universityEmail: mentor.universityEmail,
-      displayName: mentor.universityEmail,
-      createdAt: mentor.createdAt,
-    }));
+    return Promise.all(
+      mentors.map(async mentor => {
+        const mentorIdent = await getMentorIdentity(mentor.id);
+        return {
+          id: mentor.id,
+          universityEmail: mentor.universityEmail,
+          displayName: mentorIdent.displayName,
+          createdAt: mentor.createdAt,
+        };
+      })
+    );
   },
 
   async rejectMentor(adminUserId: string, mentorId: string) {

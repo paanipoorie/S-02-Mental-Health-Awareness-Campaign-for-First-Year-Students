@@ -284,7 +284,7 @@ interface Props {
                   <div class="flex items-center gap-2">
                     {getHostTypeBadge(meeting.hostType)}
                     <span class="text-sm text-slate-600">
-                      {meeting.hostDisplayName || 'Unknown'}
+                      {meeting.hostDisplayName || meeting.hostType}
                     </span>
                   </div>
                 </td>

@@ -16,7 +16,7 @@ describe('Identity Service Unit Tests', () => {
     const identity = await identityService.createAnonymousIdentity(user.id);
     expect(identity).toBeDefined();
     expect(identity.userId).toBe(user.id);
-    expect(identity.displayName).toMatch(/^Anonymous [A-Z][a-z]+ [A-Z][a-z]+$/);
+    expect(identity.displayName).toMatch(/^[A-Z][a-z]+ [A-Z][a-z]+$/);
     expect(identity.avatarSeed).toBeGreaterThanOrEqual(0);
 
     const fetchedByUserId = await identityService.getAnonymousIdentityByUserId(user.id);

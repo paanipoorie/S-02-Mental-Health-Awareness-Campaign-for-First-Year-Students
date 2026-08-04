@@ -123,7 +123,7 @@ describe('Anonymity Audit - Verify No PII Leaks in Student Data', () => {
       assertNoStudentPII(response.body, 'POST /api/posts');
       // Should contain anonymous display name
       expect(response.body.data.anonymousIdentity.displayName).toMatch(
-        /^Anonymous [A-Z][a-z]+ [A-Z][a-z]+$/
+        /^[A-Z][a-z]+ [A-Z][a-z]+$/
       );
       expect(response.body.data.anonymousIdentity.userId).toBeUndefined();
     });
@@ -214,7 +214,7 @@ describe('Anonymity Audit - Verify No PII Leaks in Student Data', () => {
       assertNoStudentPII(response.body, 'GET /api/chats/:id/messages');
       for (const msg of response.body.data) {
         if (msg.senderType === 'ANONYMOUS') {
-          expect(msg.senderName).toMatch(/^Anonymous [A-Z][a-z]+ [A-Z][a-z]+$/);
+          expect(msg.senderName).toMatch(/^[A-Z][a-z]+ [A-Z][a-z]+$/);
           expect(msg.senderEmail).toBeUndefined();
           expect(msg.senderUserId).toBeUndefined();
         }

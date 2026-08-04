@@ -129,12 +129,12 @@ export const postService = {
           };
         }
 
-        const user = await prisma.user.findUnique({
+const user = await prisma.user.findUnique({
           where: { id: reply.anonymousIdentityId },
           select: { role: true, isVerifiedMentor: true },
         });
 
-        let authorName = 'Peer Mentor';
+        let authorName = 'Anonymous';
         if (user?.role === 'ADMIN') {
           authorName = 'Administrator';
         } else if (user?.role === 'MENTOR') {

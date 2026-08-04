@@ -179,7 +179,7 @@ export function ChatList({ onSelect, compact, activeThreadId }: ChatListProps) {
       ) : (
         <div className={`${compact ? '' : 'flex-1 overflow-y-auto'}`}>
           {chats.map(chat => {
-            const displayName = chat.otherDisplayName || 'Anonymous';
+            const displayName = chat.otherDisplayName || chat.mentorDisplayName || chat.studentDisplayName || 'Anonymous';
             const otherInitial = displayName.charAt(0);
             const EmotionIconComponent =
               isMentor && chat.latestEmotion ? emotionIcons[chat.latestEmotion.emotion] : undefined;

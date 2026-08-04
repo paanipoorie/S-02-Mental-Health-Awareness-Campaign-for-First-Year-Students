@@ -76,7 +76,7 @@ export function EventsOverviewWidget({
             {(meetingsOverview || []).slice(0, 10).map(meeting => (
               <a
                 key={meeting.id}
-                href={`/events/${meeting.id}?type=meeting`}
+href={`/events?id=${meeting.id}&type=meeting`}
                 className="bg-background-100 flex items-start gap-3 rounded-sm border border-gray-200 p-3 transition-all duration-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5"
               >
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100">
@@ -159,7 +159,7 @@ export function EventsOverviewWidget({
             {(workshopsOverview || []).slice(0, 10).map(workshop => (
               <a
                 key={workshop.id}
-                href={`/events/${workshop.id}?type=workshop`}
+href={`/events?id=${workshop.id}&type=workshop`}
                 className="bg-background-100 flex items-start gap-3 rounded-sm border border-gray-200 p-3 transition-all duration-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5"
               >
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm border border-gray-200 bg-gray-100">

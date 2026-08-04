@@ -371,7 +371,7 @@ export function AdminMeetingTable({
                   <div className="flex items-center gap-2">
                     {getHostTypeBadge(meeting.hostType)}
                     <span className="text-xs font-semibold text-gray-700">
-                      {meeting.hostDisplayName || 'Unknown'}
+                      {meeting.hostDisplayName || meeting.hostType}
                     </span>
                   </div>
                 </td>

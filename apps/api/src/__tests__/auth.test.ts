@@ -46,7 +46,7 @@ describe('Authentication Integration Tests', () => {
       expect(data.user.id).toBeDefined();
       expect(data.anonymousIdentity).toMatchObject({
         id: expect.any(String),
-        displayName: expect.stringMatching(/^Anonymous [A-Z][a-z]+ [A-Z][a-z]+$/),
+        displayName: expect.stringMatching(/^[A-Z][a-z]+ [A-Z][a-z]+$/),
         avatarSeed: expect.any(Number),
       });
       expect(data.tokens).toMatchObject({
@@ -414,7 +414,7 @@ describe('Authentication Integration Tests', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data).toMatchObject({
         role: Role.STUDENT,
-        anonymousDisplayName: expect.stringMatching(/^Anonymous [A-Z][a-z]+ [A-Z][a-z]+$/),
+        anonymousDisplayName: expect.stringMatching(/^[A-Z][a-z]+ [A-Z][a-z]+$/),
         avatarSeed: expect.any(Number),
       });
       expect(response.body.data).not.toHaveProperty('universityEmail');

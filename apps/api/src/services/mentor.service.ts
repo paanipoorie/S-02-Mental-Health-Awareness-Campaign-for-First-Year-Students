@@ -5,6 +5,7 @@ import type {
   EmotionType,
   UrgencyLevel,
 } from '@campus-peer-support/shared-types/enums';
+import { getMentorIdentity } from '../utils/anonymousIdentity.js';
 
 const prisma = new PrismaClient();
 
@@ -86,6 +87,7 @@ export const mentorService = {
       return null;
     }
 
+    const mentorIdent = await getMentorIdentity(userId);
     return {
       id: profile.id,
       userId: profile.userId,
@@ -95,7 +97,7 @@ export const mentorService = {
       availabilityStatus: profile.availabilityStatus,
       lastSeenAt: profile.lastSeenAt,
       isVerifiedMentor: profile.user.isVerifiedMentor,
-      displayName: profile.user.anonymousIdentity?.displayName ?? 'Unknown Mentor',
+      displayName: mentorIdent.displayName,
     };
   },
 
@@ -184,17 +186,24 @@ export const mentorService = {
       }),
     ]);
 
+    const mentorsWithIdentity = await Promise.all(
+      mentors.map(async m => {
+        const mentorIdent = await getMentorIdentity(m.userId);
+        return {
+          id: m.id,
+          displayName: mentorIdent.displayName,
+          department: m.department,
+          bio: m.bio,
+          specialties: m.specialties,
+          availabilityStatus: m.availabilityStatus,
+          isVerifiedMentor: m.user.isVerifiedMentor,
+          lastSeenAt: m.lastSeenAt,
+        };
+      })
+    );
+
     return {
-      mentors: mentors.map(mentor => ({
-        id: mentor.id,
-        displayName: mentor.user.anonymousIdentity?.displayName ?? 'Unknown Mentor',
-        department: mentor.department,
-        bio: mentor.bio,
-        specialties: mentor.specialties,
-        availabilityStatus: mentor.availabilityStatus,
-        isVerifiedMentor: mentor.user.isVerifiedMentor,
-        lastSeenAt: mentor.lastSeenAt,
-      })),
+      mentors: mentorsWithIdentity,
       total,
       page,
       limit,

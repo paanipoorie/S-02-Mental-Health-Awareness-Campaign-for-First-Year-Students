@@ -66,9 +66,9 @@ function getNotificationLink(notification: Notification): string | null {
     case 'MENTOR_ASSIGNED':
       return payload.chatId ? `/chat?threadId=${payload.chatId}` : null;
     case 'MEETING_REMINDER':
-      return payload.meetingId ? `/events/${payload.meetingId}?type=meeting` : null;
+      return payload.meetingId ? `/events?id=${payload.meetingId}&type=meeting` : null;
     case 'WORKSHOP_REMINDER':
-      return payload.workshopId ? `/events/${payload.workshopId}?type=workshop` : null;
+      return payload.workshopId ? `/events?id=${payload.workshopId}&type=workshop` : null;
     default:
       return null;
   }

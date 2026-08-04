@@ -185,25 +185,27 @@ export function ChatWindow({ threadId }: ChatWindowProps) {
   };
 
   const isStudent = user?.role === 'STUDENT';
-  let otherName = 'Unknown';
+  let otherName = '';
   let otherProfileId: string | null = null;
 
   if (chatInfo) {
     if (isStudent) {
       if (chatInfo.peerIdentityId) {
         const isInitiator = chatInfo.studentDisplayName === user?.anonymousDisplayName;
-        otherName = isInitiator 
-          ? chatInfo.peerIdentity?.displayName || 'Anonymous Peer' 
-          : chatInfo.studentDisplayName;
+        otherName = isInitiator
+          ? chatInfo.peerIdentity?.displayName || chatInfo.studentDisplayName || ''
+          : chatInfo.studentDisplayName || '';
         otherProfileId = isInitiator ? chatInfo.peerIdentityId : chatInfo.studentIdentityId;
       } else {
-        otherName = chatInfo.mentorDisplayName || 'Mentor';
+        otherName = chatInfo.mentorDisplayName || chatInfo.studentDisplayName || '';
       }
     } else {
-      otherName = chatInfo.studentDisplayName || 'Student';
+      otherName = chatInfo.studentDisplayName || '';
       otherProfileId = chatInfo.studentIdentityId;
     }
   }
+
+  if (!otherName) otherName = 'Anonymous';
 
   if (loading) {
     return (

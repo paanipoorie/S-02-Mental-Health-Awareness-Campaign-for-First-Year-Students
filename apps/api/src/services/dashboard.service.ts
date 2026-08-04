@@ -338,7 +338,7 @@ export const dashboardService = {
       status: c.status,
       createdAt: c.createdAt,
       studentDisplayName: c.studentIdentity.displayName,
-      mentorDisplayName: c.mentor ? `Mentor` : null,
+      mentorDisplayName: c.mentorDisplayName || null,
       unreadCount: c._count.messages,
       lastMessage: c.messages[0]
         ? { body: c.messages[0].body, createdAt: c.messages[0].createdAt }
@@ -367,30 +367,23 @@ export const dashboardService = {
         mentor: {
           include: {
             mentorProfile: true,
-            anonymousIdentity: true,
           },
         },
       },
     });
 
-    let displayName = 'Assigned Mentor';
-    let universityEmail = '';
+    let assignedMentor: StudentDashboardData['assignedMentor'] = null;
     if (activeChat?.mentor) {
       const mentorIdent = await getMentorIdentity(activeChat.mentor.id);
-      displayName = mentorIdent.displayName;
-      universityEmail = activeChat.mentor.universityEmail;
+      assignedMentor = {
+        id: activeChat.mentor.id,
+        displayName: mentorIdent.displayName,
+        availabilityStatus:
+          activeChat.mentor.mentorProfile?.availabilityStatus || 'OFFLINE',
+        isVerifiedMentor: activeChat.mentor.isVerifiedMentor,
+        chatThreadId: activeChat.id,
+      };
     }
-
-    const assignedMentor = activeChat?.mentor
-      ? {
-          id: activeChat.mentor.id,
-          displayName,
-          universityEmail,
-          availabilityStatus: activeChat.mentor.mentorProfile?.availabilityStatus || 'OFFLINE',
-          isVerifiedMentor: activeChat.mentor.isVerifiedMentor,
-          chatThreadId: activeChat.id,
-        }
-      : null;
 
     return {
       currentEmotion: currentEmotion
@@ -800,17 +793,24 @@ export const dashboardService = {
       take: 20,
     });
 
-    return mentors.map(m => ({
-      id: m.id,
-      displayName: m.anonymousIdentity?.displayName || 'Unknown Mentor',
-      department: m.mentorProfile?.department || '',
-      isVerifiedMentor: m.isVerifiedMentor,
-      availabilityStatus: m.mentorProfile?.availabilityStatus || MentorAvailabilityStatus.OFFLINE,
-      activeChats: m._count.chatThreads,
-      hostedMeetings: m._count.meetings,
-      hostedWorkshops: m._count.workshops,
-      lastSeenAt: m.mentorProfile?.lastSeenAt || null,
-    }));
+const result = await Promise.all(
+      mentors.map(async m => {
+        const mentorIdent = await getMentorIdentity(m.id);
+        return {
+          id: m.id,
+          displayName: mentorIdent.displayName,
+          department: m.mentorProfile?.department || '',
+          isVerifiedMentor: m.isVerifiedMentor,
+          availabilityStatus:
+            m.mentorProfile?.availabilityStatus || MentorAvailabilityStatus.OFFLINE,
+          activeChats: m._count.chatThreads,
+          hostedMeetings: m._count.meetings,
+          hostedWorkshops: m._count.workshops,
+          lastSeenAt: m.mentorProfile?.lastSeenAt || null,
+        };
+      })
+    );
+    return result;
   },
 
   async getMeetingsOverview() {
@@ -828,19 +828,26 @@ export const dashboardService = {
       take: 20,
     });
 
-    return meetings.map(m => ({
-      id: m.id,
-      title: m.title,
-      hostType: m.hostType,
-      hostDisplayName:
-        m.hostType === MeetingHostType.STUDENT
-          ? (m.hostIdentity?.displayName ?? null)
-          : (m.hostUser?.anonymousIdentity?.displayName ?? null),
-      date: m.date,
-      meetingType: m.meetingType,
-      category: m.category,
-      attendeeCount: m._count.attendees,
-    }));
+    const result = await Promise.all(
+      meetings.map(async m => {
+        let hostDisplayName = m.hostIdentity?.displayName ?? null;
+        if (m.hostType === MeetingHostType.MENTOR && m.hostUserId) {
+          const mentorIdent = await getMentorIdentity(m.hostUserId);
+          hostDisplayName = mentorIdent.displayName;
+        }
+        return {
+          id: m.id,
+          title: m.title,
+          hostType: m.hostType,
+          hostDisplayName,
+          date: m.date,
+          meetingType: m.meetingType,
+          category: m.category,
+          attendeeCount: m._count.attendees,
+        };
+      })
+    );
+    return result;
   },
 
   async getWorkshopsOverview() {
@@ -857,16 +864,22 @@ export const dashboardService = {
       take: 20,
     });
 
-    return workshops.map(w => ({
-      id: w.id,
-      title: w.title,
-      mentorDisplayName: w.mentor.anonymousIdentity?.displayName || 'Unknown Mentor',
-      date: w.date,
-      meetingType: w.meetingType,
-      category: w.category,
-      maxAttendees: w.maxAttendees,
-      registrationCount: w._count.registrations,
-    }));
+    const result = await Promise.all(
+      workshops.map(async w => {
+        const mentorIdent = await getMentorIdentity(w.mentorId);
+        return {
+          id: w.id,
+          title: w.title,
+          mentorDisplayName: mentorIdent.displayName,
+          date: w.date,
+          meetingType: w.meetingType,
+          category: w.category,
+          maxAttendees: w.maxAttendees,
+          registrationCount: w._count.registrations,
+        };
+      })
+    );
+    return result;
   },
 
   async getReports() {

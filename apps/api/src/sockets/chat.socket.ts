@@ -1,6 +1,7 @@
 import type { Server, Socket } from 'socket.io';
 import { prisma } from '../prisma/client.js';
 import { emotionService } from '../services/emotion.service.js';
+import { getMentorIdentity } from '../utils/anonymousIdentity.js';
 
 interface AuthenticatedSocket extends Socket {
   data: {
@@ -132,13 +133,8 @@ export function handleChatSocket(io: Server, socket: AuthenticatedSocket) {
         });
         senderName = identity?.displayName || 'Anonymous';
       } else {
-        const mentor = await prisma.user.findUnique({
-          where: { id: userId },
-          select: { mentorProfile: { select: { department: true } } },
-        });
-        senderName = mentor?.mentorProfile
-          ? `Mentor (${mentor.mentorProfile.department})`
-          : 'Mentor';
+        const mentorIdent = await getMentorIdentity(userId);
+        senderName = mentorIdent.displayName;
       }
 
       // Broadcast message to room

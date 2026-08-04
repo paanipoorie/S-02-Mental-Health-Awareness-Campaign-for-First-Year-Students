@@ -140,9 +140,12 @@ export async function getMentorIdentity(mentorUserId: string): Promise<{ display
   });
   const index = mentors.findIndex(m => m.id === mentorUserId);
   if (index === -1) {
+    // Fallback: deterministic stable alias even if the user row is missing.
+    const hash = [...mentorUserId].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+    const num = (hash % 999) + 1;
     return {
-      displayName: 'Anonymous',
-      uid: 'MTR-0000',
+      displayName: `Mentor ${num}`,
+      uid: `MTR-${String(num).padStart(4, '0')}`,
     };
   }
   const num = index + 1;
