@@ -65,3 +65,17 @@ export const env: EnvConfig = {
 export const isDevelopment = env.NODE_ENV === 'development';
 export const isProduction = env.NODE_ENV === 'production';
 export const isTest = env.NODE_ENV === 'test';
+
+export function isOriginAllowed(origin: string | undefined): boolean {
+  if (!origin) return true;
+  const cleanOrigin = origin.trim().replace(/\/$/, '');
+  const allowedOrigins = env.FRONTEND_URL
+    ? env.FRONTEND_URL.split(',').map(o => o.trim().replace(/\/$/, ''))
+    : [];
+  return (
+    allowedOrigins.includes(cleanOrigin) ||
+    cleanOrigin === 'https://peerly-bay.vercel.app' ||
+    cleanOrigin.endsWith('.vercel.app')
+  );
+}
+

@@ -2,6 +2,7 @@ import type { Server as HttpServer } from 'http';
 import type { Socket } from 'socket.io';
 import { Server } from 'socket.io';
 import { verifyAccessToken, type TokenPayload } from '../utils/jwt.js';
+import { isOriginAllowed } from '../config/env.js';
 import { prisma } from '../prisma/client.js';
 import { handleChatSocket } from './chat.socket.js';
 import { handlePresenceSocket } from './presence.socket.js';
@@ -11,7 +12,13 @@ import { setSocketIO } from '../services/notificationHelper.js';
 export function createSocketServer(httpServer: HttpServer): Server {
   const io = new Server(httpServer, {
     cors: {
-      origin: process.env.FRONTEND_URL || 'http://localhost:4321',
+      origin: (origin, callback) => {
+        if (isOriginAllowed(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error(`Origin ${origin} not allowed by CORS`));
+        }
+      },
       credentials: true,
       methods: ['GET', 'POST'],
     },

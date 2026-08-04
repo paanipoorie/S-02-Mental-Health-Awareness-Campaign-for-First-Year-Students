@@ -106,6 +106,9 @@ export const RegisterForm: React.FC = () => {
         if (err.code === 'VALIDATION_ERROR' && err.details) {
           setFieldErrors(mapFieldErrors(err.details));
           setError(null);
+        } else if (err.statusCode === 500 || err.code === 'INTERNAL_SERVER_ERROR') {
+          setError('An unexpected error occurred while sending the OTP.');
+          setFieldErrors({});
         } else {
           setError(err.message);
           setFieldErrors({});
@@ -169,6 +172,9 @@ export const RegisterForm: React.FC = () => {
         if (err.code === 'VALIDATION_ERROR' && err.details) {
           setFieldErrors(mapFieldErrors(err.details));
           setError(null);
+        } else if (err.statusCode === 500 || err.code === 'INTERNAL_SERVER_ERROR') {
+          setError('An unexpected error occurred while verifying the OTP.');
+          setFieldErrors({});
         } else {
           setError(err.message);
           setFieldErrors({});
@@ -198,6 +204,9 @@ export const RegisterForm: React.FC = () => {
         if (err.code === 'VALIDATION_ERROR' && err.details) {
           setFieldErrors(mapFieldErrors(err.details));
           setError(null);
+        } else if (err.statusCode === 500 || err.code === 'INTERNAL_SERVER_ERROR') {
+          setError('Failed to resend OTP. Please try again.');
+          setFieldErrors({});
         } else {
           setError(err.message);
           setFieldErrors({});

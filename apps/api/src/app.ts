@@ -4,7 +4,7 @@ import cors from 'cors';
 import express, { type Application, type Request, type Response } from 'express';
 import helmet from 'helmet';
 
-import { env, isDevelopment } from './config/env.js';
+import { env, isDevelopment, isOriginAllowed } from './config/env.js';
 import { prisma } from './prisma/client.js';
 import healthRoutes from './routes/health.routes.js';
 import authRoutes from './routes/auth.routes.js';
@@ -60,7 +60,13 @@ export function createApp(): Application {
 
   app.use(
     cors({
-      origin: env.FRONTEND_URL,
+      origin: (origin, callback) => {
+        if (isOriginAllowed(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error(`Origin ${origin} not allowed by CORS`));
+        }
+      },
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
