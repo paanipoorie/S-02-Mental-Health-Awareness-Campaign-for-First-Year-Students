@@ -586,9 +586,6 @@ Each service includes health checks and ordered startup (database → API → we
 | Admin moderation & audit logging | Done |
 | Security hardening & 71-test integration suite | Done |
 | Production Docker Compose & Vercel deployment | Done |
-| **In Progress** | &nbsp; |
-| Structured evaluation of support outcomes | In progress |
-| Engagement design to combat low peer-support uptake | In progress |
 | **Future** | &nbsp; |
 | SSO / OIDC with university identity providers | Planned |
 | Multi-factor authentication for mentors & admins | Planned |
