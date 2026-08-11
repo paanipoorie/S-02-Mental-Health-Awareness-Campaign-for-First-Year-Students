@@ -7,6 +7,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   workers: 1, // Run sequentially to avoid DB lock/clash on shared seed data
+  timeout: 60000,
   reporter: 'list',
   use: {
     baseURL: 'http://localhost:4321',

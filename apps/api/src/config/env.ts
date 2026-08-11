@@ -68,6 +68,7 @@ export const isTest = env.NODE_ENV === 'test';
 
 export function isOriginAllowed(origin: string | undefined): boolean {
   if (!origin) return true;
+  if (isDevelopment) return true;
   const cleanOrigin = origin.trim().replace(/\/$/, '');
   const allowedOrigins = env.FRONTEND_URL
     ? env.FRONTEND_URL.split(',').map(o => o.trim().replace(/\/$/, ''))

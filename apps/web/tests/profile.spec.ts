@@ -15,6 +15,7 @@ async function login(page, email, password, targetUrl) {
   await page.fill('input[type="password"]', password);
   await page.click('button[type="submit"]');
   await page.waitForURL(targetUrl);
+  await page.waitForTimeout(1000);
 }
 
 test.describe('Anonymous Profile & Peer Messaging E2E Tests', () => {
