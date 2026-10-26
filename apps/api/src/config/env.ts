@@ -44,11 +44,20 @@ function getEnvNumber(key: string, defaultValue?: number): number {
   return parsed;
 }
 
+function getDatabaseUrl(): string {
+  let url = getEnv('DATABASE_URL');
+  if (url.includes('.render.com') && !url.includes('sslmode')) {
+    url += (url.includes('?') ? '&' : '?') + 'sslmode=require';
+    process.env.DATABASE_URL = url;
+  }
+  return url;
+}
+
 export const env: EnvConfig = {
   NODE_ENV: getEnv('NODE_ENV', 'development'),
   PORT: getEnvNumber('PORT', 3001),
   API_PREFIX: getEnv('API_PREFIX', '/api'),
-  DATABASE_URL: getEnv('DATABASE_URL'),
+  DATABASE_URL: getDatabaseUrl(),
   JWT_SECRET: getEnv('JWT_SECRET'),
   JWT_EXPIRES_IN: getEnv('JWT_EXPIRES_IN', '15m'),
   JWT_REFRESH_SECRET: getEnv('JWT_REFRESH_SECRET'),

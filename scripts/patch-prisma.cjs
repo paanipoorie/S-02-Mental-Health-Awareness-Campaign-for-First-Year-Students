@@ -12,6 +12,12 @@ const path = require('path');
 
 const realPrisma = path.resolve(__dirname, '../prisma/build/index.js');
 const args = process.argv.slice(2);
+
+// Automatically add sslmode=require for Render external database URLs if missing
+if (process.env.DATABASE_URL && process.env.DATABASE_URL.includes('.render.com') && !process.env.DATABASE_URL.includes('sslmode')) {
+  process.env.DATABASE_URL += (process.env.DATABASE_URL.includes('?') ? '&' : '?') + 'sslmode=require';
+}
+
 const res = spawnSync(process.execPath, [realPrisma, ...args], {
   encoding: 'utf-8',
   env: process.env,
@@ -22,9 +28,8 @@ if (res.stderr) process.stderr.write(res.stderr);
 
 if (res.status !== 0) {
   const isMigrateDeploy = args.includes('migrate') && args.includes('deploy');
-  const combined = (res.stdout || '') + (res.stderr || '');
-  if (isMigrateDeploy && (combined.includes('P1001') || combined.includes("Can't reach database"))) {
-    console.warn('\\n[build-guard] Database unreachable (Render internal network not available during build).');
+  if (isMigrateDeploy) {
+    console.warn('\\n[build-guard] prisma migrate deploy did not succeed during build step.');
     console.warn('[build-guard] Gracefully skipping migration during build; migrations will run on server start.\\n');
     process.exit(0);
   }

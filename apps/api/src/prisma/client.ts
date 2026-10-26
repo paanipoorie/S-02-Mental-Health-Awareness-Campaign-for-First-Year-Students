@@ -1,5 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 
+if (
+  process.env.DATABASE_URL &&
+  process.env.DATABASE_URL.includes('.render.com') &&
+  !process.env.DATABASE_URL.includes('sslmode')
+) {
+  process.env.DATABASE_URL +=
+    (process.env.DATABASE_URL.includes('?') ? '&' : '?') + 'sslmode=require';
+}
+
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
