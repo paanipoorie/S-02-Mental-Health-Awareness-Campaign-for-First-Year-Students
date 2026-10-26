@@ -9,7 +9,7 @@
     "dev:api": "pnpm --filter api dev",
     "build": "pnpm --filter web build && pnpm --filter api build",
     "build:web": "pnpm --filter @campus-peer-support/shared-types build && pnpm --filter web build",
-    "build:api": "pnpm --filter api build",
+    "build:api": "pnpm --filter @campus-peer-support/shared-types build && pnpm --filter api prisma:generate && pnpm --filter api build",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.astro",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx,.astro --fix",
     "format": "prettier --write .",
