@@ -23,9 +23,13 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    ssr: {
-      noExternal: true,
-    },
+    ssr: process.env.VERCEL
+      ? {
+          noExternal: true,
+        }
+      : {
+          external: ['cookie'],
+        },
     server: {
       fs: {
         strict: false,

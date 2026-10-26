@@ -63,6 +63,7 @@ apps/**/*.tsbuildinfo
 # Test
 .nyc_output/
 .vercel
+.playwright-mcp/
 
 # Docker
 .docker/.playwright-mcp/
